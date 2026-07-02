@@ -129,6 +129,30 @@ body {
   outline: none;
 }
 .slicer-select:focus { border-color: var(--c-blue); }
+.ms-wrap { position: relative; }
+.ms-trigger {
+  width: 100%; background: #FFFFFF; border: 1px solid rgba(0,0,0,0.15);
+  color: var(--c-text); padding: 5px 8px; border-radius: 4px;
+  font-size: 12px; cursor: pointer; text-align: left; outline: none;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+.ms-trigger:focus { border-color: var(--c-blue); }
+.ms-dropdown {
+  display: none; position: absolute; top: calc(100% + 2px); left: 0; right: 0;
+  background: #FFFFFF; border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+  z-index: 100; max-height: 160px; overflow-y: auto;
+}
+.ms-wrap.open .ms-dropdown { display: block; }
+.ms-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 8px; font-size: 12px; color: var(--c-text);
+  cursor: pointer; user-select: none;
+}
+.ms-item:hover { background: rgba(0,0,0,0.04); }
+.ms-item input[type="checkbox"] { margin: 0; cursor: pointer; }
+.ms-sep { border: none; border-top: 1px solid rgba(0,0,0,0.08); margin: 2px 0; }
 .panel-sep { border: none; border-top: 1px solid var(--c-border); margin: 6px 0; }
 .subnav-heading {
   font-size: 9.5px; font-weight: 700; color: var(--c-muted);
@@ -596,15 +620,19 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
       </select>
     </div>
     <div>
-      <span class="slicer-label">Product</span>
-      <select class="slicer-select" onchange="handleSlicerChange()">
-        <option>— All Products —</option>
-        <option>Mascara - Multi-purpose</option>
-        <option>Foundation - Liquid</option>
-        <option>Serum - Anti-aging</option>
-        <option>Cleanser - Foaming</option>
-        <option>Moisturizer - SPF</option>
-      </select>
+      <span class="slicer-label">Product Category</span>
+      <div class="ms-wrap" id="ms-prodcat">
+        <button class="ms-trigger" id="ms-prodcat-trigger" onclick="toggleMS('ms-prodcat')">All Product Categories</button>
+        <div class="ms-dropdown">
+          <label class="ms-item"><input type="checkbox" id="ms-prodcat-all" onchange="toggleAllMS('ms-prodcat')" checked> All</label>
+          <hr class="ms-sep">
+          <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Mascara - Multi-purpose" checked> Mascara - Multi-purpose</label>
+          <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Foundation - Liquid" checked> Foundation - Liquid</label>
+          <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Serum - Anti-aging" checked> Serum - Anti-aging</label>
+          <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Cleanser - Foaming" checked> Cleanser - Foaming</label>
+          <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Moisturizer - SPF" checked> Moisturizer - SPF</label>
+        </div>
+      </div>
     </div>
     <div>
       <span class="slicer-label">Job Type</span>
@@ -2110,6 +2138,44 @@ function goBack() {
 }
 
 function handleSlicerChange() { /* Slicers synced — would filter data in real Power BI */ }
+
+function toggleMS(id) {
+  const wrap = document.getElementById(id);
+  const isOpen = wrap.classList.toggle('open');
+  if (isOpen) {
+    const close = e => {
+      if (!wrap.contains(e.target)) {
+        wrap.classList.remove('open');
+        document.removeEventListener('click', close);
+      }
+    };
+    setTimeout(() => document.addEventListener('click', close), 0);
+  }
+}
+
+function toggleAllMS(id) {
+  const allCb  = document.getElementById(id + '-all');
+  const opts   = document.querySelectorAll('.' + id + '-opt');
+  opts.forEach(cb => { cb.checked = allCb.checked; });
+  updateMSTrigger(id);
+}
+
+function updateMSTrigger(id) {
+  const opts    = [...document.querySelectorAll('.' + id + '-opt')];
+  const allCb   = document.getElementById(id + '-all');
+  const checked = opts.filter(cb => cb.checked);
+  allCb.checked       = checked.length === opts.length;
+  allCb.indeterminate = checked.length > 0 && checked.length < opts.length;
+  const trigger = document.getElementById(id + '-trigger');
+  if (checked.length === 0 || checked.length === opts.length) {
+    trigger.textContent = 'All Product Categories';
+  } else if (checked.length === 1) {
+    trigger.textContent = checked[0].value;
+  } else {
+    trigger.textContent = checked.length + ' selected';
+  }
+  handleSlicerChange();
+}
 
 /* ─── INIT ───────────────────────────────────────────── */
 window.addEventListener('load', () => {
