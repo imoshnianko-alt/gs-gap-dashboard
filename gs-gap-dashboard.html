@@ -890,7 +890,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
               <tr>
                 <th>Month</th><th>Plant</th><th>Resource</th>
                 <th>SKU / Product Category</th>
-                <th class="r">Planned Vol (units)</th>
+                <th class="r" id="th-pred-vol">Planned Vol (units)</th>
                 <th class="r"># POs</th>
               </tr>
             </thead>
@@ -1420,12 +1420,12 @@ const IMPACT = [
   {region:'EMEA',plant:'Zaventem', prodCat:'Moisturizer - SPF',        line:'L72', total:16200,priority:5, impact:10400,area:'speed'},
 ];
 const PRED = [
-  {month:'Jul 26',plant:'Oevel',   res:'L67', sku:'Mascara - Multi-purpose / SKU-101', vol:145000, pos:12},
-  {month:'Jul 26',plant:'Oevel',   res:'L68', sku:'Foundation - Liquid / SKU-203',     vol:98000,  pos:8 },
-  {month:'Aug 26',plant:'Oevel',   res:'L67', sku:'Mascara - Multi-purpose / SKU-102', vol:162000, pos:14},
-  {month:'Aug 26',plant:'Zaventem',res:'L72', sku:'Moisturizer - SPF / SKU-501',       vol:87000,  pos:7 },
-  {month:'Sep 26',plant:'Oevel',   res:'L67', sku:'Serum - Anti-aging / SKU-301',      vol:110000, pos:9 },
-  {month:'Sep 26',plant:'Oevel',   res:'L68', sku:'Cleanser - Foaming / SKU-401',      vol:74000,  pos:6 },
+  {month:'Jul 26',plant:'Oevel',   res:'L67', sku:'Mascara - Multi-purpose / SKU-101', vol:145000, pos:12, gapUSD:18500},
+  {month:'Jul 26',plant:'Oevel',   res:'L68', sku:'Foundation - Liquid / SKU-203',     vol:98000,  pos:8,  gapUSD:9300 },
+  {month:'Aug 26',plant:'Oevel',   res:'L67', sku:'Mascara - Multi-purpose / SKU-102', vol:162000, pos:14, gapUSD:20700},
+  {month:'Aug 26',plant:'Zaventem',res:'L72', sku:'Moisturizer - SPF / SKU-501',       vol:87000,  pos:7,  gapUSD:7600 },
+  {month:'Sep 26',plant:'Oevel',   res:'L67', sku:'Serum - Anti-aging / SKU-301',      vol:110000, pos:9,  gapUSD:12300},
+  {month:'Sep 26',plant:'Oevel',   res:'L68', sku:'Cleanser - Foaming / SKU-401',      vol:74000,  pos:6,  gapUSD:7800 },
 ];
 const PO_SPEED = [
   {po:'PO-2026-001',sku:'Mascara - Multi-purpose / SKU-101', res:'L67', actual:82, gs:100,rs:88, gapRS:4800, gapGS:8200},
@@ -1455,6 +1455,14 @@ const PO_SCRAP = [
   {po:'PO-2026-003',sku:'Foundation - Liquid / SKU-201',     res:'L67',actual:3.9,gs:2.5,fixed:1.8,variable:2.1,totalUSD:2900},
   {po:'PO-2026-005',sku:'Cleanser - Foaming / SKU-401',      res:'L72',actual:3.8,gs:2.5,fixed:1.8,variable:2.0,totalUSD:2600},
 ];
+
+// Schedule chart — shared constants for initPredictionsCharts + % ↔ $ toggle
+const SCHED_COLORS = ['#1565C0','#2E7D32','#E65100','#6A1B9A','#06B6D4'];
+const SCHED_FAMS   = ['Mascara - Multi-purpose','Foundation - Liquid','Serum - Anti-aging','Cleanser - Foaming','Moisturizer - SPF'];
+const SCHED_SEED   = [145,98,110,87,74,120,155,90,105,130,80,95];
+const SCHED_GAP_PER_UNIT = [0.128, 0.095, 0.112, 0.105, 0.087];
+const SCHEDULE_UNITS = SCHED_FAMS.map((_,i) => SCHED_SEED.map((v,j) => Math.max(40000, Math.round((v+i*12+j*8)*1050))));
+const SCHEDULE_USD   = SCHEDULE_UNITS.map((arr,i) => arr.map(u => Math.round(u * SCHED_GAP_PER_UNIT[i])));
 
 /* ─── CHART HELPERS ──────────────────────────────────── */
 
@@ -1514,13 +1522,10 @@ function initResultsCharts() {
 }
 
 function initPredictionsCharts() {
-  const colors = [CC.blue, CC.actual, CC.rs, CC.purple, '#06B6D4'];
-  const fams   = ['Mascara - Multi-purpose','Foundation - Liquid','Serum - Anti-aging','Cleanser - Foaming','Moisturizer - SPF'];
-  const seed   = [145,98,110,87,74,120,155,90,105,130,80,95];
-  const datasets = fams.map((f,i) => ({
+  const datasets = SCHED_FAMS.map((f,i) => ({
     label:f,
-    data:seed.map((v,j) => Math.max(40000, Math.round((v+i*12+j*8)*1050))),
-    backgroundColor:colors[i]+'aa', borderRadius:2,
+    data:SCHEDULE_UNITS[i].slice(),
+    backgroundColor:SCHED_COLORS[i]+'aa', borderRadius:2,
   }));
   init('ch-schedule',{
     type:'bar', data:{labels:MONTHS12, datasets},
@@ -1631,9 +1636,12 @@ const fmt  = n => '$' + n.toLocaleString();
 const fmtN = n => n.toLocaleString();
 
 function renderPred() {
+  const isUSD = viewTypes.pred === 'usd';
+  const thEl = $$('th-pred-vol');
+  if (thEl) thEl.textContent = isUSD ? 'Est. Gap Cost ($)' : 'Planned Vol (units)';
   $$('tb-pred').innerHTML = PRED.map(r=>`<tr>
     <td>${r.month}</td><td>${r.plant}</td><td>${r.res}</td>
-    <td>${r.sku}</td><td class="r">${fmtN(r.vol)}</td><td class="r">${r.pos}</td>
+    <td>${r.sku}</td><td class="r">${isUSD ? fmt(r.gapUSD) : fmtN(r.vol)}</td><td class="r">${r.pos}</td>
   </tr>`).join('');
 }
 function renderPlanAhead() {
@@ -2051,6 +2059,23 @@ function setViewType(page, type) {
         deltaEl.className = `kpi-delta ${d.cls}`;
       }
     });
+  }
+
+  // Predictions: swap chart between planned units (%) and projected gap cost ($)
+  if (page === 'pred') {
+    const chart = REG['ch-schedule'];
+    if (chart) {
+      const isUSD = type === 'usd';
+      chart.data.datasets.forEach((ds, i) => {
+        ds.data = isUSD ? SCHEDULE_USD[i] : SCHEDULE_UNITS[i];
+      });
+      chart.options.scales.y.title = {
+        display: true, text: isUSD ? '$ Gap Cost' : 'Units',
+        color: CC.text, font: { size: 10 }
+      };
+      chart.update();
+    }
+    renderPred();
   }
 
   // Scrap deep-view trend chart: swap between % and $ data
