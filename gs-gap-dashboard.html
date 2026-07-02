@@ -337,7 +337,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
 .it { display:inline-block; padding:2px 8px; border-radius:3px; font-size:10px; font-weight:700; }
 .it.speed  { background:rgba(46,125,50,0.12);  color:#2E7D32; }
 .it.oee    { background:rgba(230,81,0,0.12);   color:#BF360C; }
-.it.labour { background:rgba(21,101,192,0.12); color:#1565C0; }
+.it.labor  { background:rgba(21,101,192,0.12); color:#1565C0; }
 .it.scrap  { background:rgba(198,40,40,0.12);  color:#C62828; }
 
 /* Gap $ color helper */
@@ -992,7 +992,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
                 <th class="r">OEE Saving ($)</th>
                 <th class="r">Scrap Saving ($)</th>
                 <th class="r">Speed Saving ($)</th>
-                <th class="r">Labour Saving ($)</th>
+                <th class="r">Labor Saving ($)</th>
                 <th class="r" style="font-weight:800;">Total Saving ($)</th>
               </tr>
             </thead>
@@ -1406,18 +1406,18 @@ const SCRAP_VAR   = [2.7,2.0,2.4,3.2,2.1,2.3];
 const SCRAP_USD   = [4100,3200,3900,5200,3300,2600]; // monthly scrap $ gap to GS
 
 const PLAN_AHEAD = [
-  {region:'EMEA',plant:'Oevel',    fam:'Mascara - Multi-purpose',  line:'L67', oee:12400, scrap:5600,  speed:18200, labour:9800,  total:46000},
-  {region:'EMEA',plant:'Oevel',    fam:'Foundation - Liquid',      line:'L67', oee:8900,  scrap:4200,  speed:14500, labour:7300,  total:34900},
-  {region:'EMEA',plant:'Oevel',    fam:'Serum - Anti-aging',       line:'L68', oee:7200,  scrap:3800,  speed:11200, labour:6500,  total:28700},
-  {region:'EMEA',plant:'Oevel',    fam:'Cleanser - Foaming',       line:'L72', oee:5400,  scrap:2900,  speed:8600,  labour:4200,  total:21100},
-  {region:'EMEA',plant:'Zaventem', fam:'Moisturizer - SPF',        line:'L72', oee:4100,  scrap:2100,  speed:6800,  labour:3200,  total:16200},
+  {region:'EMEA',plant:'Oevel',    prodCat:'Mascara - Multi-purpose',  line:'L67', oee:12400, scrap:5600,  speed:18200, labor:9800,  total:46000},
+  {region:'EMEA',plant:'Oevel',    prodCat:'Foundation - Liquid',      line:'L67', oee:8900,  scrap:4200,  speed:14500, labor:7300,  total:34900},
+  {region:'EMEA',plant:'Oevel',    prodCat:'Serum - Anti-aging',       line:'L68', oee:7200,  scrap:3800,  speed:11200, labor:6500,  total:28700},
+  {region:'EMEA',plant:'Oevel',    prodCat:'Cleanser - Foaming',       line:'L72', oee:5400,  scrap:2900,  speed:8600,  labor:4200,  total:21100},
+  {region:'EMEA',plant:'Zaventem', prodCat:'Moisturizer - SPF',        line:'L72', oee:4100,  scrap:2100,  speed:6800,  labor:3200,  total:16200},
 ];
 const IMPACT = [
-  {region:'EMEA',plant:'Oevel',    fam:'Mascara - Multi-purpose',  line:'L67', total:46000,priority:1, impact:32100,area:'speed'},
-  {region:'EMEA',plant:'Oevel',    fam:'Foundation - Liquid',      line:'L67', total:34900,priority:2, impact:24500,area:'oee'},
-  {region:'EMEA',plant:'Oevel',    fam:'Serum - Anti-aging',       line:'L68', total:28700,priority:3, impact:18200,area:'labour'},
-  {region:'EMEA',plant:'Oevel',    fam:'Cleanser - Foaming',       line:'L72', total:21100,priority:4, impact:14800,area:'scrap'},
-  {region:'EMEA',plant:'Zaventem', fam:'Moisturizer - SPF',        line:'L72', total:16200,priority:5, impact:10400,area:'speed'},
+  {region:'EMEA',plant:'Oevel',    prodCat:'Mascara - Multi-purpose',  line:'L67', total:46000,priority:1, impact:32100,area:'speed'},
+  {region:'EMEA',plant:'Oevel',    prodCat:'Foundation - Liquid',      line:'L67', total:34900,priority:2, impact:24500,area:'oee'},
+  {region:'EMEA',plant:'Oevel',    prodCat:'Serum - Anti-aging',       line:'L68', total:28700,priority:3, impact:18200,area:'labor'},
+  {region:'EMEA',plant:'Oevel',    prodCat:'Cleanser - Foaming',       line:'L72', total:21100,priority:4, impact:14800,area:'scrap'},
+  {region:'EMEA',plant:'Zaventem', prodCat:'Moisturizer - SPF',        line:'L72', total:16200,priority:5, impact:10400,area:'speed'},
 ];
 const PRED = [
   {month:'Jul 26',plant:'Oevel',   res:'L67', sku:'Mascara - Multi-purpose / SKU-101', vol:145000, pos:12},
@@ -1641,18 +1641,18 @@ function renderPlanAhead() {
     const gapPct = Math.round((r.total / (r.total + 50000)) * 100);
     const seg = getSegment(gapPct);
     return `<tr>
-      <td>${r.region}</td><td>${r.plant}</td><td>${r.fam}</td><td>${r.line}</td>
+      <td>${r.region}</td><td>${r.plant}</td><td>${r.prodCat}</td><td>${r.line}</td>
       <td><span class="seg-badge ${seg}">${seg.charAt(0).toUpperCase()+seg.slice(1)}</span></td>
       <td class="r">${fmt(r.oee)}</td><td class="r">${fmt(r.scrap)}</td>
-      <td class="r">${fmt(r.speed)}</td><td class="r">${fmt(r.labour)}</td>
+      <td class="r">${fmt(r.speed)}</td><td class="r">${fmt(r.labor)}</td>
       <td class="r bold">${fmt(r.total)}</td>
     </tr>`;
   }).join('');
-  const tot = PLAN_AHEAD.reduce((a,r)=>({oee:a.oee+r.oee,scrap:a.scrap+r.scrap,speed:a.speed+r.speed,labour:a.labour+r.labour,total:a.total+r.total}),{oee:0,scrap:0,speed:0,labour:0,total:0});
+  const tot = PLAN_AHEAD.reduce((a,r)=>({oee:a.oee+r.oee,scrap:a.scrap+r.scrap,speed:a.speed+r.speed,labor:a.labor+r.labor,total:a.total+r.total}),{oee:0,scrap:0,speed:0,labor:0,total:0});
   $$('tb-plan-ahead').innerHTML = rows + `<tr class="total-row">
     <td colspan="5">TOTAL</td>
     <td class="r">${fmt(tot.oee)}</td><td class="r">${fmt(tot.scrap)}</td>
-    <td class="r">${fmt(tot.speed)}</td><td class="r">${fmt(tot.labour)}</td>
+    <td class="r">${fmt(tot.speed)}</td><td class="r">${fmt(tot.labor)}</td>
     <td class="r bold" style="color:#7FCDFF;">${fmt(tot.total)}</td>
   </tr>`;
 }
@@ -1660,8 +1660,8 @@ function renderImpact() {
   $$('tb-impact').innerHTML = IMPACT.map(r=>{
     const gapPct = r.priority <= 2 ? 3 : r.priority <= 3 ? 9 : 18;
     const seg = getSegment(gapPct);
-    return `<tr onclick="drillThrough('${r.plant}','${r.line}','${r.fam}','${r.area}')" style="cursor:pointer;" title="Click to drill through to Deep View — ${r.area}">
-      <td>${r.region}</td><td>${r.plant}</td><td>${r.fam}</td><td>${r.line}</td>
+    return `<tr onclick="drillThrough('${r.plant}','${r.line}','${r.prodCat}','${r.area}')" style="cursor:pointer;" title="Click to drill through to Deep View — ${r.area}">
+      <td>${r.region}</td><td>${r.plant}</td><td>${r.prodCat}</td><td>${r.line}</td>
       <td><span class="seg-badge ${seg}">${seg.charAt(0).toUpperCase()+seg.slice(1)}</span></td>
       <td class="r bold">${fmt(r.total)}</td>
       <td style="text-align:center;"><span class="pri">${r.priority}</span></td>
@@ -2070,13 +2070,12 @@ function setViewType(page, type) {
   }
 }
 
-function drillThrough(plant, line, fam, area) {
-  const normArea = area === 'labour' ? 'labor' : area;
+function drillThrough(plant, line, prodCat, area) {
   showPage('dv');
   const ctx = $$('dv-ctx');
   ctx.style.display = 'inline-flex';
-  ctx.textContent = `Drill-through: ${plant} › ${line} › ${fam}`;
-  showSubTab(normArea);
+  ctx.textContent = `Drill-through: ${plant} › ${line} › ${prodCat}`;
+  showSubTab(area);
 }
 
 function goBack() {
@@ -2106,7 +2105,7 @@ window.addEventListener('load', () => {
   </div>
   <div class="chat-history" id="chat-history">
     <div class="chat-msg user">What is the most effective order size for Mascara?</div>
-    <div class="chat-msg bot">Based on FY25 GS data, <strong>Large POs (≥2,000 units)</strong> on L67 show the lowest Labour/1000 units (avg 3.2 vs 5.1 for Small). OEE also improves: 71% vs 58%. Suggested: batch Mascara orders on L67 at ≥2,000 units where scheduling allows.</div>
+    <div class="chat-msg bot">Based on FY25 GS data, <strong>Large POs (≥2,000 units)</strong> on L67 show the lowest Labor hrs/1000u (avg 3.2 vs 5.1 for Small). OEE also improves: 71% vs 58%. Suggested: batch Mascara orders on L67 at ≥2,000 units where scheduling allows.</div>
     <div class="chat-msg user">Which line works best with small POs for 15 ml products?</div>
     <div class="chat-msg bot"><strong>L68</strong> shows the highest OEE for Small POs on 15 ml products (avg 64% vs 51% on L72). Speed gap to GS is also smallest on L68 (−8 UPM vs −18 UPM). Note: L72 has insufficient n for this segment (n=7, threshold is 12).</div>
     <div class="chat-msg user">Compare speed performance for 30 ml runs on L67 vs L68</div>
