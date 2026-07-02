@@ -685,23 +685,23 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
       <div class="kpi-row">
         <div class="kpi-card">
           <span class="kpi-label">Speed</span>
-          <span class="kpi-value">82 <small>UPM</small></span>
-          <span class="kpi-delta neg">▼ &minus;12 UPM vs RS</span>
+          <span class="kpi-value" id="kpi-speed-val">82 <small>UPM</small></span>
+          <span class="kpi-delta neg" id="kpi-speed-delta">▼ &minus;12 UPM vs RS</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Labor hrs / 1000u</span>
-          <span class="kpi-value">9 <small>#</small></span>
-          <span class="kpi-delta neg">▲ +2 vs GS</span>
+          <span class="kpi-value" id="kpi-labor-val">9 <small>#</small></span>
+          <span class="kpi-delta neg" id="kpi-labor-delta">▲ +2 vs GS</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">OEE</span>
-          <span class="kpi-value">62 <small>%</small></span>
-          <span class="kpi-delta neg">▼ &minus;8% vs RS</span>
+          <span class="kpi-value" id="kpi-oee-val">62 <small>%</small></span>
+          <span class="kpi-delta neg" id="kpi-oee-delta">▼ &minus;8% vs RS</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Scrap</span>
-          <span class="kpi-value">4.2 <small>%</small></span>
-          <span class="kpi-delta neg">▲ +1.4% vs GS</span>
+          <span class="kpi-value" id="kpi-scrap-val">4.2 <small>%</small></span>
+          <span class="kpi-delta neg" id="kpi-scrap-delta">▲ +1.4% vs GS</span>
         </div>
       </div>
 
@@ -1403,6 +1403,7 @@ const OEE         = { actual:[58,62,65,60,63,67], gs:[80,80,80,80,80,80],     rs
 const SCRAP       = { actual:[4.5,3.8,4.2,5.0,3.9,4.1], gs:[2.5,2.5,2.5,2.5,2.5,2.5], rs:[3.0,3.0,3.0,3.0,3.0,3.0] };
 const SCRAP_FIXED = [1.8,1.8,1.8,1.8,1.8,1.8];
 const SCRAP_VAR   = [2.7,2.0,2.4,3.2,2.1,2.3];
+const SCRAP_USD   = [4100,3200,3900,5200,3300,2600]; // monthly scrap $ gap to GS
 
 const PLAN_AHEAD = [
   {region:'EMEA',plant:'Oevel',    fam:'Mascara - Multi-purpose',  line:'L67', oee:12400, scrap:5600,  speed:18200, labour:9800,  total:46000},
@@ -1430,7 +1431,7 @@ const PO_SPEED = [
   {po:'PO-2026-001',sku:'Mascara - Multi-purpose / SKU-101', res:'L67', actual:82, gs:100,rs:88, gapRS:4800, gapGS:8200},
   {po:'PO-2026-004',sku:'Serum - Anti-aging / SKU-301',      res:'L68', actual:74, gs:100,rs:88, gapRS:6200, gapGS:10800},
   {po:'PO-2026-002',sku:'Mascara - Multi-purpose / SKU-102', res:'L67', actual:78, gs:100,rs:88, gapRS:5500, gapGS:9100},
-  {po:'PO-2026-005',sku:'Cleanser - Foaming / SKU-401',      res:'L72', actual:118,gs:140,rs:125,gapRS:3400, gapGS:7800},
+  {po:'PO-2026-005',sku:'Cleanser - Foaming / SKU-401',      res:'L72', actual:74, gs:100,rs:88, gapRS:5200, gapGS:9800},
   {po:'PO-2026-003',sku:'Foundation - Liquid / SKU-201',     res:'L67', actual:90, gs:100,rs:88, gapRS:0,    gapGS:5200},
 ];
 const PO_LABOR = [
@@ -1507,7 +1508,7 @@ function init(id, config) {
 
 function initResultsCharts() {
   init('ch-speed-res',  comboConfig(PRODS, SPEED.actual, SPEED.gs, SPEED.rs, 'UPM'));
-  init('ch-crew-res',   comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Headcount'));
+  init('ch-crew-res',   comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Hrs/1000u'));
   init('ch-oee-res',    comboConfig(MONTHS, OEE.actual,  OEE.gs,  OEE.rs,  'OEE %'));
   init('ch-scrap-res',  comboConfig(MONTHS, SCRAP.actual,SCRAP.gs,SCRAP.rs,'Scrap %'));
 }
@@ -1576,7 +1577,7 @@ function initDVSpeedCharts() {
   init('ch-dv-speed-prod',  comboConfig(PRODS,  SPEED.actual,       SPEED.gs,       SPEED.rs,       'UPM'));
 }
 function initDVLaborCharts() {
-  init('ch-dv-labor-trend', comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Headcount'));
+  init('ch-dv-labor-trend', comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Hrs/1000u'));
   const lines=['L67','L68','L72','L61','L55'], actuals=[10,9,8,11,9], gsLine=[7,7,7,7,7];
   init('ch-dv-labor-res',{
     type:'bar',
@@ -1584,7 +1585,7 @@ function initDVLaborCharts() {
       {type:'bar',  label:'Actual Hrs/1000u', data:actuals, backgroundColor:CC.actual+'cc', borderRadius:3, indexAxis:'y'},
       {type:'line', label:'GS Hrs/1000u',     data:gsLine,  borderColor:CC.gs, borderDash:[6,3], borderWidth:2.5, pointRadius:4, fill:false, indexAxis:'y'},
     ]},
-    options:{...baseOpts('Headcount'), indexAxis:'y'}
+    options:{...baseOpts('Hrs/1000u'), indexAxis:'y'}
   });
 }
 function initDVOEECharts() {
@@ -1780,11 +1781,11 @@ function applyThresholds() {
 /* ─── WHAT-IF DATA & CHARTS ──────────────────────────── */
 
 const WHATIF_DATA = [
-  {res:'L67', sku:'Mascara / SKU-101', vol:48000, gsSpeed:95, actSpeed:82, speedUSD:4200, gsOEE:75, actOEE:62, oeeUSD:5800, gsCrew:8, actCrew:10, laborUSD:3200, gsScrap:2.5, actScrap:4.2, scrapUSD:2900, total:16100},
-  {res:'L67', sku:'Foundation / SKU-202', vol:36000, gsSpeed:95, actSpeed:80, speedUSD:3800, gsOEE:75, actOEE:66, oeeUSD:4200, gsCrew:8, actCrew:9,  laborUSD:2100, gsScrap:2.5, actScrap:3.9, scrapUSD:2400, total:12500},
-  {res:'L68', sku:'Serum 15ml / SKU-303', vol:22000, gsSpeed:90, actSpeed:74, speedUSD:3100, gsOEE:75, actOEE:58, oeeUSD:3900, gsCrew:7, actCrew:9,  laborUSD:2800, gsScrap:2.5, actScrap:4.5, scrapUSD:1800, total:11600},
-  {res:'L68', sku:'Cleanser / SKU-401', vol:18000, gsSpeed:90, actSpeed:71, speedUSD:2800, gsOEE:75, actOEE:61, oeeUSD:3200, gsCrew:7, actCrew:8,  laborUSD:1400, gsScrap:2.5, actScrap:3.8, scrapUSD:1600, total:9000},
-  {res:'L72', sku:'Moisturizer / SKU-502', vol:29000, gsSpeed:100, actSpeed:86, speedUSD:3500, gsOEE:75, actOEE:67, oeeUSD:3800, gsCrew:9, actCrew:10, laborUSD:1800, gsScrap:2.5, actScrap:4.1, scrapUSD:2200, total:11300},
+  {res:'L67', sku:'Mascara / SKU-101', vol:48000, gsSpeed:95, actSpeed:82, speedUSD:4200, gsOEE:75, actOEE:62, oeeUSD:5800, gsLabor:7, actLabor:10, laborUSD:3200, gsScrap:2.5, actScrap:4.2, scrapUSD:2900, total:16100},
+  {res:'L67', sku:'Foundation / SKU-202', vol:36000, gsSpeed:95, actSpeed:80, speedUSD:3800, gsOEE:75, actOEE:66, oeeUSD:4200, gsLabor:7, actLabor:9,  laborUSD:2100, gsScrap:2.5, actScrap:3.9, scrapUSD:2400, total:12500},
+  {res:'L68', sku:'Serum 15ml / SKU-303', vol:22000, gsSpeed:90, actSpeed:74, speedUSD:3100, gsOEE:75, actOEE:58, oeeUSD:3900, gsLabor:7, actLabor:9,  laborUSD:2800, gsScrap:2.5, actScrap:4.5, scrapUSD:1800, total:11600},
+  {res:'L68', sku:'Cleanser / SKU-401', vol:18000, gsSpeed:90, actSpeed:71, speedUSD:2800, gsOEE:75, actOEE:61, oeeUSD:3200, gsLabor:7, actLabor:8,  laborUSD:1400, gsScrap:2.5, actScrap:3.8, scrapUSD:1600, total:9000},
+  {res:'L72', sku:'Moisturizer / SKU-502', vol:29000, gsSpeed:100, actSpeed:86, speedUSD:3500, gsOEE:75, actOEE:67, oeeUSD:3800, gsLabor:8, actLabor:10, laborUSD:1800, gsScrap:2.5, actScrap:4.1, scrapUSD:2200, total:11300},
 ];
 
 function renderWhatIfTable() {
@@ -1793,7 +1794,7 @@ function renderWhatIfTable() {
     <td>${r.res}</td><td>${r.sku}</td><td class="r">${fmtN(r.vol)}</td>
     <td class="r">${r.gsSpeed}</td><td class="r">${r.actSpeed}</td><td class="r c-neg">${fmt(r.speedUSD)}</td>
     <td class="r">${r.gsOEE}%</td><td class="r">${r.actOEE}%</td><td class="r c-neg">${fmt(r.oeeUSD)}</td>
-    <td class="r">${r.gsCrew}</td><td class="r">${r.actCrew}</td><td class="r c-neg">${fmt(r.laborUSD)}</td>
+    <td class="r">${r.gsLabor}</td><td class="r">${r.actLabor}</td><td class="r c-neg">${fmt(r.laborUSD)}</td>
     <td class="r">${r.gsScrap}%</td><td class="r">${r.actScrap}%</td><td class="r c-neg">${fmt(r.scrapUSD)}</td>
     <td class="r bold">${fmt(r.total)}</td>
   </tr>`).join('');
@@ -2003,6 +2004,21 @@ function pickTime(btn, groupId) {
 
 const viewTypes = { results:'pct', pred:'pct', scrap:'pct' };
 
+// Dollar-gap totals for Results KPI cards ($ mode)
+const KPI_USD_GAP = {
+  speed: { val:'$17.4K', unit:'', delta:'▼ speed gap cost/period' },
+  labor: { val:'$11.3K', unit:'', delta:'▲ excess labor hrs cost' },
+  oee:   { val:'$20.9K', unit:'', delta:'▼ lost throughput value' },
+  scrap: { val:'$10.9K', unit:'', delta:'▲ scrap material cost' },
+};
+// Metric values for Results KPI cards (% mode)
+const KPI_PCT_VAL = {
+  speed: { val:'82', unit:'UPM',  delta:'▼ &minus;12 UPM vs RS', cls:'neg' },
+  labor: { val:'9',  unit:'#',    delta:'▲ +2 vs GS',            cls:'neg' },
+  oee:   { val:'62', unit:'%',    delta:'▼ &minus;8% vs RS',     cls:'neg' },
+  scrap: { val:'4.2',unit:'%',    delta:'▲ +1.4% vs GS',         cls:'neg' },
+};
+
 function setViewType(page, type) {
   viewTypes[page] = type;
   const map = {
@@ -2016,6 +2032,42 @@ function setViewType(page, type) {
     const el = $$(id);
     if (el) el.classList.toggle('active', t === type);
   });
+
+  // Results KPI cards: swap between metric values (%) and dollar gaps ($)
+  if (page === 'results') {
+    ['speed','labor','oee','scrap'].forEach(kpi => {
+      const valEl   = $$('kpi-' + kpi + '-val');
+      const deltaEl = $$('kpi-' + kpi + '-delta');
+      if (!valEl || !deltaEl) return;
+      if (type === 'usd') {
+        const d = KPI_USD_GAP[kpi];
+        valEl.innerHTML   = d.val + (d.unit ? ` <small>${d.unit}</small>` : '');
+        deltaEl.innerHTML = d.delta;
+        deltaEl.className = 'kpi-delta neg';
+      } else {
+        const d = KPI_PCT_VAL[kpi];
+        valEl.innerHTML   = d.val + ` <small>${d.unit}</small>`;
+        deltaEl.innerHTML = d.delta;
+        deltaEl.className = `kpi-delta ${d.cls}`;
+      }
+    });
+  }
+
+  // Scrap deep-view trend chart: swap between % and $ data
+  if (page === 'scrap') {
+    const chart = REG['ch-dv-scrap-trend'];
+    if (!chart) return;
+    if (type === 'usd') {
+      chart.data.datasets[0].data = SCRAP_USD;
+      chart.options.scales.y.title.text  = 'Scrap $';
+      chart.options.scales.y.title.display = true;
+    } else {
+      chart.data.datasets[0].data = SCRAP.actual;
+      chart.options.scales.y.title.text  = 'Scrap %';
+      chart.options.scales.y.title.display = true;
+    }
+    chart.update();
+  }
 }
 
 function drillThrough(plant, line, fam, area) {
