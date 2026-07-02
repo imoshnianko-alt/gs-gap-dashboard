@@ -596,21 +596,14 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
       </select>
     </div>
     <div>
-      <span class="slicer-label">Product Category</span>
+      <span class="slicer-label">Product</span>
       <select class="slicer-select" onchange="handleSlicerChange()">
-        <option>— All Categories —</option>
-        <option>Moisturizer</option>
-        <option>Serum</option>
-        <option>Cleanser</option>
-      </select>
-    </div>
-    <div>
-      <span class="slicer-label">PO Size Bucket</span>
-      <select class="slicer-select" onchange="handleSlicerChange()">
-        <option>— All —</option>
-        <option>Small</option>
-        <option>Medium</option>
-        <option>Large</option>
+        <option>— All Products —</option>
+        <option>Mascara - Multi-purpose</option>
+        <option>Foundation - Liquid</option>
+        <option>Serum - Anti-aging</option>
+        <option>Cleanser - Foaming</option>
+        <option>Moisturizer - SPF</option>
       </select>
     </div>
     <div>
@@ -620,14 +613,6 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
         <option>End-to-end</option>
         <option>Front-end</option>
         <option>Back-end</option>
-      </select>
-    </div>
-    <div>
-      <span class="slicer-label">Product Lifecycle</span>
-      <select class="slicer-select" onchange="handleSlicerChange()">
-        <option>— All —</option>
-        <option>NPL</option>
-        <option>Basic Business</option>
       </select>
     </div>
     <div>
@@ -647,45 +632,15 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
     <div>
       <span class="slicer-label">Gold Standard Type</span>
       <select id="slicer-gs-type" class="slicer-select" onchange="handleGSTypeChange()">
-        <option value="governed" selected>🔒 Governed (FY25 — Locked)</option>
-        <option value="baseline">📊 Operating Baseline</option>
+        <option value="governed" selected>🔒 Governed GS (FY25 — Locked)</option>
+        <option value="baseline-12m">📊 Operating Baseline — 12 Month</option>
+        <option value="baseline-6m">📊 Operating Baseline — 6 Month</option>
       </select>
-      <div id="baseline-months-grp" style="display:none; margin-top:5px;">
-        <span class="slicer-label">Baseline Period <span class="baseline-pill">DYNAMIC</span></span>
-        <select id="slicer-baseline-months" class="slicer-select" onchange="handleGSTypeChange()">
-          <option value="6">Last 6 Months</option>
-          <option value="9" selected>Last 9 Months</option>
-          <option value="12">Last 12 Months</option>
-        </select>
+      <div id="baseline-months-grp" style="display:none;"></div>
+      <div style="font-size:9px;color:var(--c-muted);margin-top:4px;line-height:1.45;">
+        Governed = Official reporting &amp; compensation<br>
+        Operating Baselines = Analysis only (rolling window)
       </div>
-    </div>
-
-    <!-- PERFORMANCE SEGMENT -->
-    <div>
-      <span class="slicer-label">Performance Segment</span>
-      <select id="slicer-segment" class="slicer-select" onchange="handleSlicerChange()">
-        <option value="all">— All Segments —</option>
-        <option value="gold">★ Gold</option>
-        <option value="silver">◆ Silver</option>
-        <option value="bronze">▲ Bronze</option>
-        <option value="other">○ Other</option>
-      </select>
-    </div>
-
-    <!-- MASS ATTRIBUTES -->
-    <div>
-      <span class="slicer-label">Mass Attributes</span>
-      <select id="slicer-mass" class="slicer-select" onchange="handleSlicerChange()">
-        <option value="all">— All —</option>
-        <option value="visc1">Viscosity 1 (Very Low)</option>
-        <option value="visc2">Viscosity 2 (Low)</option>
-        <option value="visc3">Viscosity 3 (Medium)</option>
-        <option value="visc4">Viscosity 4 (High)</option>
-        <option value="visc5">Viscosity 5 (Very High)</option>
-        <option value="sg-low">Sp. Gravity &lt; 0.95</option>
-        <option value="sg-med">Sp. Gravity 0.95–1.05</option>
-        <option value="sg-high">Sp. Gravity &gt; 1.05</option>
-      </select>
     </div>
 
     <!-- Deep View sub-navigation (shown only on DV page) -->
@@ -714,20 +669,27 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
     <!-- ─── TAB: RESULTS ─────────────────────────────────── -->
     <div id="pane-results" class="pane active">
 
-      <!-- GS Type status bar -->
-      <div id="gs-status-bar" class="gs-type-badge governed" style="align-self:flex-start;">
-        🔒 <span id="gs-status-label">Governed Gold Standard active (FY25: Jul 2024 – Jun 2025) — LOCKED for official reporting &amp; compensation</span>
+      <!-- GS Type status bar + view toggle row -->
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+        <div id="gs-status-bar" class="gs-type-badge governed">
+          🔒 <span id="gs-status-label">Governed Gold Standard active (FY25: Jul 2024 – Jun 2025) — LOCKED for official reporting &amp; compensation</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:5px;">
+          <span style="font-size:9.5px;color:var(--c-muted);font-weight:700;">VIEW:</span>
+          <button id="tog-res-pct" class="time-btn active" onclick="setViewType('results','pct')">% Percentage</button>
+          <button id="tog-res-usd" class="time-btn" onclick="setViewType('results','usd')">$ Dollar</button>
+        </div>
       </div>
 
       <!-- KPI Row -->
       <div class="kpi-row">
         <div class="kpi-card">
           <span class="kpi-label">Speed</span>
-          <span class="kpi-value">82 <small>ppm</small></span>
-          <span class="kpi-delta neg">▼ &minus;12 ppm vs RS</span>
+          <span class="kpi-value">82 <small>UPM</small></span>
+          <span class="kpi-delta neg">▼ &minus;12 UPM vs RS</span>
         </div>
         <div class="kpi-card">
-          <span class="kpi-label">Crew Size</span>
+          <span class="kpi-label">Labor hrs / 1000u</span>
           <span class="kpi-value">9 <small>#</small></span>
           <span class="kpi-delta neg">▲ +2 vs GS</span>
         </div>
@@ -749,10 +711,10 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
         <!-- Speed chart -->
         <div class="card">
           <div class="flex-row">
-            <span class="card-title">Speed</span>
+            <span class="card-title">Speed: UPM (Units per minute)</span>
             <span style="font-size:10px;color:var(--c-muted);font-weight:600;">PRODUCT SEGMENTATION — by unit size</span>
           </div>
-          <div class="card-subtitle">Compare cycle speed vs nameplate (GS) and reference standard (RS) to identify opportunities. Gap to RS = realistic improvement potential; gap RS→GS = design/engineering opportunity.</div>
+          <div class="card-subtitle">Compare cycle speed (UPM) vs nameplate gold standard (single resource line) and reference standard (RS). Gap to RS = realistic improvement potential; gap RS→GS = design/engineering opportunity.</div>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-speed-res"></canvas></div>
           <div class="legend-row">
             <span class="legend-item"><span class="legend-icon">⚙</span> GS = nameplate speed</span>
@@ -766,13 +728,13 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
           <div class="chart-note">Gap to RS = realistic improvement potential; gap RS→GS = design / engineering opportunity.</div>
         </div>
 
-        <!-- Crew Size chart -->
+        <!-- Labor hours per 1000 units chart -->
         <div class="card">
-          <span class="card-title">Crew Size</span>
-          <div class="card-subtitle">Actual crew size vs. best demonstrated (GS) and reference (RS)</div>
+          <span class="card-title">Labor hours per 1000 units</span>
+          <div class="card-subtitle">Actual labor hours/1000u vs. best demonstrated (GS) and reference (RS)</div>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-crew-res"></canvas></div>
           <div class="legend-row">
-            <span class="legend-item"><span class="leg-line actual"></span> Actual Crew</span>
+            <span class="legend-item"><span class="leg-line actual"></span> Actual Hrs/1000u</span>
             <span class="legend-item"><span class="leg-line gs"></span> GS (best demonstrated)</span>
             <span class="legend-item"><span class="leg-line rs"></span> RS (reference)</span>
           </div>
@@ -863,7 +825,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
           <table class="sku-comp-tbl">
             <thead>
               <tr>
-                <th>SKU / Family</th>
+                <th>SKU / Product Category</th>
                 <th>Line L67 — Segment</th>
                 <th>Line L68 — Segment</th>
                 <th>Line L72 — Segment</th>
@@ -871,11 +833,11 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
               </tr>
             </thead>
             <tbody>
-              <tr><td>Mascara Multi-Purpose / SKU-101</td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$8,400</td></tr>
-              <tr><td>Foundation 30ml / SKU-202</td><td><span class="seg-badge silver">◆ Silver</span></td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$5,200</td></tr>
-              <tr><td>Serum 15ml / SKU-303</td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$3,100</td></tr>
-              <tr><td>Cleanser Fam-04 / SKU-401</td><td><span class="seg-badge other">○ Other</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$6,700</td></tr>
-              <tr><td>Moisturizer 50ml / SKU-502</td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$2,900</td></tr>
+              <tr><td>Mascara - Multi-purpose / SKU-101</td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$8,400</td></tr>
+              <tr><td>Foundation - Liquid / SKU-202</td><td><span class="seg-badge silver">◆ Silver</span></td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$5,200</td></tr>
+              <tr><td>Serum - Anti-aging / SKU-303</td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$3,100</td></tr>
+              <tr><td>Cleanser - Foaming / SKU-401</td><td><span class="seg-badge other">○ Other</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$6,700</td></tr>
+              <tr><td>Moisturizer - SPF / SKU-502</td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$2,900</td></tr>
             </tbody>
           </table>
         </div>
@@ -887,7 +849,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
         <div class="info-item"><strong>Gold Standard (GS) — Governed:</strong> FY25 (Jul 2024–Jun 2025) locked baseline. Used for official reporting &amp; compensation.</div>
         <div class="info-item"><strong>Gold Standard (GS) — Operating Baseline:</strong> Rolling 6/9/12-month window. For operational analysis only — not official metrics.</div>
         <div class="info-item"><strong>Reference Standard (RS):</strong> Realistic speed adjusted for unit size; best performing product in same size group.</div>
-        <div class="info-item"><strong>Crew Size (not "Labor Efficiency"):</strong> Absolute headcount per run, compared to best demonstrated minimum (confirmed Jun 23).</div>
+        <div class="info-item"><strong>Labor hours per 1000 units:</strong> Total labor hours ÷ 1,000 units produced, compared to best demonstrated (GS) and reference (RS).</div>
         <div class="info-item"><strong>Performance above GS:</strong> ✨ Celebrated — not flagged as an anomaly. Indicates genuine improvement beyond the baseline.</div>
         <div class="info-item"><strong>KPI GS Methodology:</strong> <strong>Line Speed</strong> = Nameplate (static). <strong>OEE</strong> = 75th percentile (n≥12 orders). <strong>Labor / Scrap</strong> = Best demonstrated performance.</div>
       </div>
@@ -899,17 +861,24 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
 
       <div class="flex-row">
         <span class="sec-heading">📅 Planned Production (Next 12 Months)</span>
-        <div class="time-grp" id="tg-pred">
-          <button class="time-btn" onclick="pickTime(this,'tg-pred')">1 Month</button>
-          <button class="time-btn" onclick="pickTime(this,'tg-pred')">1 Week</button>
-          <button class="time-btn active" onclick="pickTime(this,'tg-pred')">2 Week</button>
-          <button class="time-btn" onclick="pickTime(this,'tg-pred')">3 Month</button>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="font-size:9.5px;color:var(--c-muted);font-weight:700;">VIEW:</span>
+            <button id="tog-pred-pct" class="time-btn active" onclick="setViewType('pred','pct')">% Percentage</button>
+            <button id="tog-pred-usd" class="time-btn" onclick="setViewType('pred','usd')">$ Dollar</button>
+          </div>
+          <div class="time-grp" id="tg-pred">
+            <button class="time-btn" onclick="pickTime(this,'tg-pred')">1 Week</button>
+            <button class="time-btn" onclick="pickTime(this,'tg-pred')">3 Weeks</button>
+            <button class="time-btn active" onclick="pickTime(this,'tg-pred')">1 Month</button>
+            <button class="time-btn" onclick="pickTime(this,'tg-pred')">3 Months</button>
+          </div>
         </div>
       </div>
 
       <div class="card">
         <span class="card-title">Planned production (next 12 months)</span>
-        <div class="card-subtitle">Volume by product family/SKU per month. Use to prioritize improvement efforts.</div>
+        <div class="card-subtitle">Volume by Product Category per month. Use to prioritize improvement efforts.</div>
         <div class="chart-wrap" style="height:240px;"><canvas id="ch-schedule"></canvas></div>
       </div>
 
@@ -920,7 +889,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
             <thead>
               <tr>
                 <th>Month</th><th>Plant</th><th>Resource</th>
-                <th>SKU / Family</th>
+                <th>SKU / Product Category</th>
                 <th class="r">Planned Vol (units)</th>
                 <th class="r"># POs</th>
               </tr>
@@ -961,18 +930,18 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
         <div class="card" style="justify-content:space-between; min-width:130px;">
           <span style="font-size:9.5px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.5px;">Time Window</span>
           <div class="time-grp" id="tg-gap" style="flex-direction:column; gap:5px;">
-            <button class="time-btn" onclick="pickTime(this,'tg-gap')">1 Month</button>
             <button class="time-btn" onclick="pickTime(this,'tg-gap')">1 Week</button>
-            <button class="time-btn active" onclick="pickTime(this,'tg-gap')">2 Week</button>
-            <button class="time-btn" onclick="pickTime(this,'tg-gap')">3 Month</button>
+            <button class="time-btn" onclick="pickTime(this,'tg-gap')">3 Weeks</button>
+            <button class="time-btn active" onclick="pickTime(this,'tg-gap')">1 Month</button>
+            <button class="time-btn" onclick="pickTime(this,'tg-gap')">3 Months</button>
           </div>
         </div>
       </div>
 
       <!-- Waterfall chart -->
       <div class="card">
-        <span class="card-title">Savings Opportunity Breakdown ($)</span>
-        <div class="card-subtitle">Opportunity split by parameter. Totals avoid double-counting.</div>
+        <span class="card-title">Savings Opportunity by Resource &amp; KPI ($)</span>
+        <div class="card-subtitle">Stacked by KPI: Speed UPM · OEE · Labor hrs/1000u · Scrap. Totals avoid double-counting.</div>
         <div class="chart-wrap" style="height:200px;"><canvas id="ch-waterfall"></canvas></div>
       </div>
 
@@ -1004,7 +973,8 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
             <tbody>
               <tr><td>Jul 1, 2025</td><td>System</td><td>FY25 GS baseline locked for current fiscal year</td><td>Annual cycle</td></tr>
               <tr><td>Apr 15, 2026</td><td>S. De Muyer</td><td>Speed GS updated for L72 following capital investment</td><td>Capital improvement completed</td></tr>
-              <tr><td>Jun 23, 2026</td><td>Workshop</td><td>"Labor Efficiency" renamed to "Crew Size" across all reports</td><td>Terminology alignment</td></tr>
+              <tr><td>Jun 23, 2026</td><td>Workshop</td><td>"Labor Efficiency" renamed to "Labor hours per 1000 units" across all reports</td><td>Terminology alignment</td></tr>
+              <tr><td>Jul 2, 2026</td><td>Phase 2</td><td>Product Category replaces Family; GS filter 3 options; stacked savings chart; % / $ toggles; RDS deferred</td><td>Phase 2 requirements</td></tr>
             </tbody>
           </table>
         </div>
@@ -1017,7 +987,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
           <table class="gs-tbl">
             <thead>
               <tr>
-                <th>Region</th><th>Plant</th><th>Family</th><th>Line</th>
+                <th>Region</th><th>Plant</th><th>Product Category</th><th>Line</th>
                 <th>Seg</th>
                 <th class="r">OEE Saving ($)</th>
                 <th class="r">Scrap Saving ($)</th>
@@ -1039,7 +1009,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
           <table class="gs-tbl">
             <thead>
               <tr>
-                <th>Region</th><th>Plant</th><th>Family</th><th>Line</th>
+                <th>Region</th><th>Plant</th><th>Product Category</th><th>Line</th>
                 <th>Seg</th>
                 <th class="r" style="font-weight:800;">Total Saving ($)</th>
                 <th>Priority</th>
@@ -1152,7 +1122,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
                 <th>Resource</th><th>SKU</th><th class="r">Plan Vol</th>
                 <th class="r">GS Speed</th><th class="r">Act Speed</th><th class="r">Speed $</th>
                 <th class="r">GS OEE%</th><th class="r">Act OEE%</th><th class="r">OEE $</th>
-                <th class="r">GS Crew</th><th class="r">Act Crew</th><th class="r">Labor $</th>
+                <th class="r">GS Hrs/1000u</th><th class="r">Act Hrs/1000u</th><th class="r">Labor $</th>
                 <th class="r">GS Scrap%</th><th class="r">Act Scrap%</th><th class="r">Scrap $</th>
                 <th class="r" style="font-weight:800;">Total Potential $</th>
               </tr>
@@ -1208,9 +1178,9 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
             <thead>
               <tr>
                 <th>PO Number</th><th>SKU</th><th>Resource</th>
-                <th class="r">Cycle Speed (ppm)</th>
-                <th class="r">GS Nameplate (ppm)</th>
-                <th class="r">RS Reference (ppm)</th>
+                <th class="r">Cycle Speed (UPM)</th>
+                <th class="r">GS Nameplate (UPM)</th>
+                <th class="r">RS Reference (UPM)</th>
                 <th class="r">Gap to RS ($)</th>
                 <th class="r">Gap RS→GS ($)</th>
               </tr>
@@ -1225,17 +1195,17 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
 
     <!-- ─── SUB-TAB: LABOR ─────────────────────────────────── -->
     <div id="pane-labor" class="pane">
-      <div class="sec-heading">👥 Labor (Crew Size) — Deep View</div>
+      <div class="sec-heading">👥 Labor hours per 1000 units — Deep View</div>
 
       <div class="charts-grid">
         <div class="card">
-          <span class="card-title">Actual crew size vs. GS and RS over time</span>
-          <div class="card-subtitle">Headcount (#) — not labor efficiency %</div>
+          <span class="card-title">Actual hrs/1000u vs. GS and RS over time</span>
+          <div class="card-subtitle">Labor hours per 1,000 units produced</div>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-labor-trend"></canvas></div>
         </div>
         <div class="card">
-          <span class="card-title">Crew size by line (sorted by gap to GS)</span>
-          <div class="card-subtitle">Lines with highest excess crew appear first</div>
+          <span class="card-title">Hrs/1000u by line (sorted by gap to GS)</span>
+          <div class="card-subtitle">Lines with highest excess labor hrs/1000u appear first</div>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-labor-res"></canvas></div>
         </div>
       </div>
@@ -1247,9 +1217,9 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
             <thead>
               <tr>
                 <th>PO Number</th><th>SKU</th><th>Resource</th>
-                <th class="r">Actual Crew (#)</th>
-                <th class="r">GS Crew (#)</th>
-                <th class="r">RS Crew (#)</th>
+                <th class="r">Actual Hrs/1000u</th>
+                <th class="r">GS Hrs/1000u</th>
+                <th class="r">RS Hrs/1000u</th>
                 <th class="r">Gap $ (excess × rate)</th>
               </tr>
             </thead>
@@ -1297,7 +1267,14 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
 
     <!-- ─── SUB-TAB: SCRAP ─────────────────────────────────── -->
     <div id="pane-scrap" class="pane">
-      <div class="sec-heading">♻ Scrap — Deep View</div>
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+        <div class="sec-heading" style="margin-bottom:0;">♻ Scrap — Deep View</div>
+        <div style="display:flex; align-items:center; gap:5px;">
+          <span style="font-size:9.5px;color:var(--c-muted);font-weight:700;">VIEW:</span>
+          <button id="tog-scrap-pct" class="time-btn active" onclick="setViewType('scrap','pct')">% Percentage</button>
+          <button id="tog-scrap-usd" class="time-btn" onclick="setViewType('scrap','usd')">$ Dollar</button>
+        </div>
+      </div>
 
       <div class="charts-grid">
         <div class="card">
@@ -1312,7 +1289,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
       </div>
 
       <div class="card">
-        <span class="card-title">Scrap $ by SKU / Family (ranked)</span>
+        <span class="card-title">Scrap $ by SKU / Product Category (ranked)</span>
         <div class="chart-wrap" style="height:190px;"><canvas id="ch-dv-scrap-sku"></canvas></div>
       </div>
 
@@ -1346,10 +1323,9 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
         <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:4px;">
           <span class="gov-chip approved">✅ LIMS — Connected (in progress)</span>
           <span class="gov-chip deferred">↗ PDS — Future integration</span>
-          <span class="gov-chip deferred">↗ RDS — Feasibility TBD</span>
           <span class="gov-chip deferred">↗ Component supplier data — Stretch goal</span>
         </div>
-        <div class="info-item" style="margin-top:8px;"><strong>Statistical note:</strong> Correlation analysis requires ≥ 50 runs per Family–Resource pair. Families with insufficient data are flagged below.</div>
+        <div class="info-item" style="margin-top:8px;"><strong>Statistical note:</strong> Correlation analysis requires ≥ 50 runs per Product Category–Resource pair. Product Categories with insufficient data are flagged below.</div>
       </div>
 
       <!-- Run Sequence Heatmap -->
@@ -1363,7 +1339,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
           <table class="hm-table" id="hm-runseq">
             <thead>
               <tr>
-                <th>PO #</th><th>SKU / Family</th><th>Resource</th>
+                <th>PO #</th><th>SKU / Product Category</th><th>Resource</th>
                 <th style="text-align:center;">Viscosity</th>
                 <th class="r">Sp. Gravity</th>
                 <th class="r">Fill Vol (ml)</th>
@@ -1375,7 +1351,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
             <tbody id="tb-hm-runseq"></tbody>
           </table>
         </div>
-        <div class="note-box" style="margin-top:8px;">⚠ Flagged: Fam-04 (Cleanser) — only 7 runs available on L72. Percentile methodology TBD for n &lt; 12.</div>
+        <div class="note-box" style="margin-top:8px;">⚠ Flagged: Cleanser - Foaming — only 7 runs available on L72. Percentile methodology TBD for n &lt; 12.</div>
       </div>
 
       <!-- Correlation Matrix -->
@@ -1418,8 +1394,8 @@ const PRODS = ['Prod A','Prod B','Prod C','Prod D','Prod E','Prod F','Prod G','P
 
 const SPEED = {
   actual: [82, 78, 90, 74, 85, 118, 115, 108],
-  gs:     [100,100,100,100,100,140,140,140],
-  rs:     [88, 88, 88, 88, 88, 125,125,125]
+  gs:     [100,100,100,100,100,100,100,100],
+  rs:     [88, 88, 88, 88, 88, 88, 88, 88]
 };
 const SPEED_TREND = { actual:[80,82,79,83,81,82], gs:[100,100,100,100,100,100], rs:[88,88,88,88,88,88] };
 const CREW        = { actual:[10,9,11,10,9,9],    gs:[7,7,7,7,7,7],           rs:[8,8,8,8,8,8] };
@@ -1429,54 +1405,54 @@ const SCRAP_FIXED = [1.8,1.8,1.8,1.8,1.8,1.8];
 const SCRAP_VAR   = [2.7,2.0,2.4,3.2,2.1,2.3];
 
 const PLAN_AHEAD = [
-  {region:'EMEA',plant:'Oevel',    fam:'Fam-01',line:'L67', oee:12400, scrap:5600,  speed:18200, labour:9800,  total:46000},
-  {region:'EMEA',plant:'Oevel',    fam:'Fam-02',line:'L67', oee:8900,  scrap:4200,  speed:14500, labour:7300,  total:34900},
-  {region:'EMEA',plant:'Oevel',    fam:'Fam-03',line:'L68', oee:7200,  scrap:3800,  speed:11200, labour:6500,  total:28700},
-  {region:'EMEA',plant:'Oevel',    fam:'Fam-04',line:'L72', oee:5400,  scrap:2900,  speed:8600,  labour:4200,  total:21100},
-  {region:'EMEA',plant:'Zaventem', fam:'Fam-05',line:'L72', oee:4100,  scrap:2100,  speed:6800,  labour:3200,  total:16200},
+  {region:'EMEA',plant:'Oevel',    fam:'Mascara - Multi-purpose',  line:'L67', oee:12400, scrap:5600,  speed:18200, labour:9800,  total:46000},
+  {region:'EMEA',plant:'Oevel',    fam:'Foundation - Liquid',      line:'L67', oee:8900,  scrap:4200,  speed:14500, labour:7300,  total:34900},
+  {region:'EMEA',plant:'Oevel',    fam:'Serum - Anti-aging',       line:'L68', oee:7200,  scrap:3800,  speed:11200, labour:6500,  total:28700},
+  {region:'EMEA',plant:'Oevel',    fam:'Cleanser - Foaming',       line:'L72', oee:5400,  scrap:2900,  speed:8600,  labour:4200,  total:21100},
+  {region:'EMEA',plant:'Zaventem', fam:'Moisturizer - SPF',        line:'L72', oee:4100,  scrap:2100,  speed:6800,  labour:3200,  total:16200},
 ];
 const IMPACT = [
-  {region:'EMEA',plant:'Oevel',    fam:'Fam-01',line:'L67', total:46000,priority:1, impact:32100,area:'speed'},
-  {region:'EMEA',plant:'Oevel',    fam:'Fam-02',line:'L67', total:34900,priority:2, impact:24500,area:'oee'},
-  {region:'EMEA',plant:'Oevel',    fam:'Fam-03',line:'L68', total:28700,priority:3, impact:18200,area:'labour'},
-  {region:'EMEA',plant:'Oevel',    fam:'Fam-04',line:'L72', total:21100,priority:4, impact:14800,area:'scrap'},
-  {region:'EMEA',plant:'Zaventem', fam:'Fam-05',line:'L72', total:16200,priority:5, impact:10400,area:'speed'},
+  {region:'EMEA',plant:'Oevel',    fam:'Mascara - Multi-purpose',  line:'L67', total:46000,priority:1, impact:32100,area:'speed'},
+  {region:'EMEA',plant:'Oevel',    fam:'Foundation - Liquid',      line:'L67', total:34900,priority:2, impact:24500,area:'oee'},
+  {region:'EMEA',plant:'Oevel',    fam:'Serum - Anti-aging',       line:'L68', total:28700,priority:3, impact:18200,area:'labour'},
+  {region:'EMEA',plant:'Oevel',    fam:'Cleanser - Foaming',       line:'L72', total:21100,priority:4, impact:14800,area:'scrap'},
+  {region:'EMEA',plant:'Zaventem', fam:'Moisturizer - SPF',        line:'L72', total:16200,priority:5, impact:10400,area:'speed'},
 ];
 const PRED = [
-  {month:'Jul 26',plant:'Oevel',   res:'L67', sku:'Fam-01 / SKU-101', vol:145000, pos:12},
-  {month:'Jul 26',plant:'Oevel',   res:'L68', sku:'Fam-02 / SKU-203', vol:98000,  pos:8 },
-  {month:'Aug 26',plant:'Oevel',   res:'L67', sku:'Fam-01 / SKU-102', vol:162000, pos:14},
-  {month:'Aug 26',plant:'Zaventem',res:'L72', sku:'Fam-05 / SKU-501', vol:87000,  pos:7 },
-  {month:'Sep 26',plant:'Oevel',   res:'L67', sku:'Fam-03 / SKU-301', vol:110000, pos:9 },
-  {month:'Sep 26',plant:'Oevel',   res:'L68', sku:'Fam-04 / SKU-401', vol:74000,  pos:6 },
+  {month:'Jul 26',plant:'Oevel',   res:'L67', sku:'Mascara - Multi-purpose / SKU-101', vol:145000, pos:12},
+  {month:'Jul 26',plant:'Oevel',   res:'L68', sku:'Foundation - Liquid / SKU-203',     vol:98000,  pos:8 },
+  {month:'Aug 26',plant:'Oevel',   res:'L67', sku:'Mascara - Multi-purpose / SKU-102', vol:162000, pos:14},
+  {month:'Aug 26',plant:'Zaventem',res:'L72', sku:'Moisturizer - SPF / SKU-501',       vol:87000,  pos:7 },
+  {month:'Sep 26',plant:'Oevel',   res:'L67', sku:'Serum - Anti-aging / SKU-301',      vol:110000, pos:9 },
+  {month:'Sep 26',plant:'Oevel',   res:'L68', sku:'Cleanser - Foaming / SKU-401',      vol:74000,  pos:6 },
 ];
 const PO_SPEED = [
-  {po:'PO-2026-001',sku:'Fam-01/SKU-101',res:'L67', actual:82, gs:100,rs:88, gapRS:4800, gapGS:8200},
-  {po:'PO-2026-004',sku:'Fam-03/SKU-301',res:'L68', actual:74, gs:100,rs:88, gapRS:6200, gapGS:10800},
-  {po:'PO-2026-002',sku:'Fam-01/SKU-102',res:'L67', actual:78, gs:100,rs:88, gapRS:5500, gapGS:9100},
-  {po:'PO-2026-005',sku:'Fam-04/SKU-401',res:'L72', actual:118,gs:140,rs:125,gapRS:3400, gapGS:7800},
-  {po:'PO-2026-003',sku:'Fam-02/SKU-201',res:'L67', actual:90, gs:100,rs:88, gapRS:0,    gapGS:5200},
+  {po:'PO-2026-001',sku:'Mascara - Multi-purpose / SKU-101', res:'L67', actual:82, gs:100,rs:88, gapRS:4800, gapGS:8200},
+  {po:'PO-2026-004',sku:'Serum - Anti-aging / SKU-301',      res:'L68', actual:74, gs:100,rs:88, gapRS:6200, gapGS:10800},
+  {po:'PO-2026-002',sku:'Mascara - Multi-purpose / SKU-102', res:'L67', actual:78, gs:100,rs:88, gapRS:5500, gapGS:9100},
+  {po:'PO-2026-005',sku:'Cleanser - Foaming / SKU-401',      res:'L72', actual:118,gs:140,rs:125,gapRS:3400, gapGS:7800},
+  {po:'PO-2026-003',sku:'Foundation - Liquid / SKU-201',     res:'L67', actual:90, gs:100,rs:88, gapRS:0,    gapGS:5200},
 ];
 const PO_LABOR = [
-  {po:'PO-2026-003',sku:'Fam-02/SKU-201',res:'L67',actual:11,gs:7,rs:8,gapUSD:11800},
-  {po:'PO-2026-001',sku:'Fam-01/SKU-101',res:'L67',actual:10,gs:7,rs:8,gapUSD:9200},
-  {po:'PO-2026-004',sku:'Fam-03/SKU-301',res:'L68',actual:9, gs:7,rs:8,gapUSD:5600},
-  {po:'PO-2026-002',sku:'Fam-01/SKU-102',res:'L67',actual:9, gs:7,rs:8,gapUSD:5400},
-  {po:'PO-2026-005',sku:'Fam-04/SKU-401',res:'L72',actual:8, gs:7,rs:8,gapUSD:3100},
+  {po:'PO-2026-003',sku:'Foundation - Liquid / SKU-201',     res:'L67',actual:11,gs:7,rs:8,gapUSD:11800},
+  {po:'PO-2026-001',sku:'Mascara - Multi-purpose / SKU-101', res:'L67',actual:10,gs:7,rs:8,gapUSD:9200},
+  {po:'PO-2026-004',sku:'Serum - Anti-aging / SKU-301',      res:'L68',actual:9, gs:7,rs:8,gapUSD:5600},
+  {po:'PO-2026-002',sku:'Mascara - Multi-purpose / SKU-102', res:'L67',actual:9, gs:7,rs:8,gapUSD:5400},
+  {po:'PO-2026-005',sku:'Cleanser - Foaming / SKU-401',      res:'L72',actual:8, gs:7,rs:8,gapUSD:3100},
 ];
 const PO_OEE = [
-  {po:'PO-2026-005',sku:'Fam-04/SKU-401',res:'L72',poSz:'Small', actual:49,gs:80,gapUSD:22300},
-  {po:'PO-2026-002',sku:'Fam-01/SKU-102',res:'L67',poSz:'Small', actual:54,gs:80,gapUSD:18600},
-  {po:'PO-2026-004',sku:'Fam-03/SKU-301',res:'L68',poSz:'Medium',actual:58,gs:80,gapUSD:14200},
-  {po:'PO-2026-001',sku:'Fam-01/SKU-101',res:'L67',poSz:'Medium',actual:62,gs:80,gapUSD:12400},
-  {po:'PO-2026-003',sku:'Fam-02/SKU-201',res:'L67',poSz:'Large', actual:71,gs:80,gapUSD:6800},
+  {po:'PO-2026-005',sku:'Cleanser - Foaming / SKU-401',      res:'L72',poSz:'Small', actual:49,gs:80,gapUSD:22300},
+  {po:'PO-2026-002',sku:'Mascara - Multi-purpose / SKU-102', res:'L67',poSz:'Small', actual:54,gs:80,gapUSD:18600},
+  {po:'PO-2026-004',sku:'Serum - Anti-aging / SKU-301',      res:'L68',poSz:'Medium',actual:58,gs:80,gapUSD:14200},
+  {po:'PO-2026-001',sku:'Mascara - Multi-purpose / SKU-101', res:'L67',poSz:'Medium',actual:62,gs:80,gapUSD:12400},
+  {po:'PO-2026-003',sku:'Foundation - Liquid / SKU-201',     res:'L67',poSz:'Large', actual:71,gs:80,gapUSD:6800},
 ];
 const PO_SCRAP = [
-  {po:'PO-2026-002',sku:'Fam-01/SKU-102',res:'L67',actual:5.0,gs:2.5,fixed:1.8,variable:3.2,totalUSD:5200},
-  {po:'PO-2026-004',sku:'Fam-03/SKU-301',res:'L68',actual:4.5,gs:2.5,fixed:1.8,variable:2.7,totalUSD:4100},
-  {po:'PO-2026-001',sku:'Fam-01/SKU-101',res:'L67',actual:4.2,gs:2.5,fixed:1.8,variable:2.4,totalUSD:3800},
-  {po:'PO-2026-003',sku:'Fam-02/SKU-201',res:'L67',actual:3.9,gs:2.5,fixed:1.8,variable:2.1,totalUSD:2900},
-  {po:'PO-2026-005',sku:'Fam-04/SKU-401',res:'L72',actual:3.8,gs:2.5,fixed:1.8,variable:2.0,totalUSD:2600},
+  {po:'PO-2026-002',sku:'Mascara - Multi-purpose / SKU-102', res:'L67',actual:5.0,gs:2.5,fixed:1.8,variable:3.2,totalUSD:5200},
+  {po:'PO-2026-004',sku:'Serum - Anti-aging / SKU-301',      res:'L68',actual:4.5,gs:2.5,fixed:1.8,variable:2.7,totalUSD:4100},
+  {po:'PO-2026-001',sku:'Mascara - Multi-purpose / SKU-101', res:'L67',actual:4.2,gs:2.5,fixed:1.8,variable:2.4,totalUSD:3800},
+  {po:'PO-2026-003',sku:'Foundation - Liquid / SKU-201',     res:'L67',actual:3.9,gs:2.5,fixed:1.8,variable:2.1,totalUSD:2900},
+  {po:'PO-2026-005',sku:'Cleanser - Foaming / SKU-401',      res:'L72',actual:3.8,gs:2.5,fixed:1.8,variable:2.0,totalUSD:2600},
 ];
 
 /* ─── CHART HELPERS ──────────────────────────────────── */
@@ -1530,7 +1506,7 @@ function init(id, config) {
 /* ─── CHART INIT FUNCTIONS (lazy) ───────────────────── */
 
 function initResultsCharts() {
-  init('ch-speed-res',  comboConfig(PRODS, SPEED.actual, SPEED.gs, SPEED.rs, 'ppm'));
+  init('ch-speed-res',  comboConfig(PRODS, SPEED.actual, SPEED.gs, SPEED.rs, 'UPM'));
   init('ch-crew-res',   comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Headcount'));
   init('ch-oee-res',    comboConfig(MONTHS, OEE.actual,  OEE.gs,  OEE.rs,  'OEE %'));
   init('ch-scrap-res',  comboConfig(MONTHS, SCRAP.actual,SCRAP.gs,SCRAP.rs,'Scrap %'));
@@ -1538,7 +1514,7 @@ function initResultsCharts() {
 
 function initPredictionsCharts() {
   const colors = [CC.blue, CC.actual, CC.rs, CC.purple, '#06B6D4'];
-  const fams   = ['Fam-01','Fam-02','Fam-03','Fam-04','Fam-05'];
+  const fams   = ['Mascara - Multi-purpose','Foundation - Liquid','Serum - Anti-aging','Cleanser - Foaming','Moisturizer - SPF'];
   const seed   = [145,98,110,87,74,120,155,90,105,130,80,95];
   const datasets = fams.map((f,i) => ({
     label:f,
@@ -1559,29 +1535,45 @@ function initPredictionsCharts() {
 }
 
 function initGapCharts() {
-  const vals   = [45200,28500,32100,18900,124700];
-  const labels = ['Speed','Labor','OEE','Scrap','Total'];
-  const bColors= [CC.actual+'cc',CC.blue+'cc',CC.rs+'cc',CC.purple+'cc',CC.actual+'cc'];
+  // Stacked bar: resources (L67 / L68 / L72) × KPIs (Speed UPM $, OEE $, Labor hrs/1000u $, Scrap $)
+  const resources = ['L67','L68','L72'];
+  const kpis = [
+    { label:'Speed UPM $',       color:CC.actual+'cc', data:[18200,11200,8600] },
+    { label:'OEE $',             color:CC.blue+'cc',   data:[12400,7200,5400]  },
+    { label:'Labor hrs/1000u $', color:CC.rs+'cc',     data:[9800, 6500,4200]  },
+    { label:'Scrap $',           color:CC.purple+'cc', data:[5600, 3800,2900]  },
+  ];
+  const datasets = kpis.map(k => ({
+    label: k.label,
+    data: k.data,
+    backgroundColor: k.color,
+    borderRadius: 2,
+  }));
   init('ch-waterfall',{
     type:'bar',
-    data:{labels, datasets:[{label:'Savings $',data:vals,backgroundColor:bColors,borderRadius:5}]},
+    data:{ labels:resources, datasets },
     options:{
-      ...baseOpts('$ Savings'),
+      ...baseOpts('$ Savings Opportunity'),
       plugins:{
-        legend:{display:false},
+        legend:{ display:true, labels:{color:CC.text, font:{size:10}, boxWidth:12} },
         tooltip:{
           backgroundColor:'#FFFFFF',borderColor:'rgba(0,0,0,0.15)',borderWidth:1,
           titleColor:'#1A2B3C',bodyColor:'#4A6580',padding:10,
-          callbacks:{label:ctx=>'$'+ctx.parsed.y.toLocaleString()}
+          callbacks:{label:ctx=>' '+ctx.dataset.label+': $'+ctx.parsed.y.toLocaleString()}
         }
+      },
+      scales:{
+        x:{ stacked:true, grid:{color:CC.grid}, ticks:{color:CC.text,font:{size:10}} },
+        y:{ stacked:true, grid:{color:CC.grid}, ticks:{color:CC.text,font:{size:10}},
+            title:{display:true,text:'$ Savings Opportunity',color:CC.text,font:{size:10}} }
       }
     }
   });
 }
 
 function initDVSpeedCharts() {
-  init('ch-dv-speed-trend', comboConfig(MONTHS, SPEED_TREND.actual, SPEED_TREND.gs, SPEED_TREND.rs, 'ppm'));
-  init('ch-dv-speed-prod',  comboConfig(PRODS,  SPEED.actual,       SPEED.gs,       SPEED.rs,       'ppm'));
+  init('ch-dv-speed-trend', comboConfig(MONTHS, SPEED_TREND.actual, SPEED_TREND.gs, SPEED_TREND.rs, 'UPM'));
+  init('ch-dv-speed-prod',  comboConfig(PRODS,  SPEED.actual,       SPEED.gs,       SPEED.rs,       'UPM'));
 }
 function initDVLaborCharts() {
   init('ch-dv-labor-trend', comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Headcount'));
@@ -1589,8 +1581,8 @@ function initDVLaborCharts() {
   init('ch-dv-labor-res',{
     type:'bar',
     data:{labels:lines, datasets:[
-      {type:'bar',  label:'Actual Crew', data:actuals, backgroundColor:CC.actual+'cc', borderRadius:3, indexAxis:'y'},
-      {type:'line', label:'GS Crew',     data:gsLine,  borderColor:CC.gs, borderDash:[6,3], borderWidth:2.5, pointRadius:4, fill:false, indexAxis:'y'},
+      {type:'bar',  label:'Actual Hrs/1000u', data:actuals, backgroundColor:CC.actual+'cc', borderRadius:3, indexAxis:'y'},
+      {type:'line', label:'GS Hrs/1000u',     data:gsLine,  borderColor:CC.gs, borderDash:[6,3], borderWidth:2.5, pointRadius:4, fill:false, indexAxis:'y'},
     ]},
     options:{...baseOpts('Headcount'), indexAxis:'y'}
   });
@@ -1623,7 +1615,7 @@ function initDVScrapCharts() {
       }
     }
   });
-  const skus=['Fam-01/SKU-102','Fam-04/SKU-401','Fam-03/SKU-301','Fam-01/SKU-101','Fam-02/SKU-201'];
+  const skus=['Mascara - Multi-purpose / SKU-102','Cleanser - Foaming / SKU-401','Serum - Anti-aging / SKU-301','Mascara - Multi-purpose / SKU-101','Foundation - Liquid / SKU-201'];
   init('ch-dv-scrap-sku',{
     type:'bar',
     data:{labels:skus, datasets:[{label:'Total Scrap $',data:[5200,4100,4100,3800,2900],backgroundColor:CC.neg+'bb',borderRadius:3,indexAxis:'y'}]},
@@ -1725,27 +1717,32 @@ function getSegment(gapPct) {
 function handleGSTypeChange() {
   const sel = $$('slicer-gs-type');
   activeGSType = sel ? sel.value : 'governed';
-  const mgrp = $$('baseline-months-grp');
-  if (mgrp) mgrp.style.display = activeGSType === 'baseline' ? 'block' : 'none';
-  const bmSel = $$('slicer-baseline-months');
-  if (bmSel) baselineMonths = parseInt(bmSel.value) || 9;
 
-  const label = activeGSType === 'governed'
-    ? 'Governed GS · FY25'
-    : `Operating Baseline · ${baselineMonths}mo`;
-  const cls = activeGSType === 'governed' ? 'governed' : 'baseline';
-  const icon = activeGSType === 'governed' ? '🔒' : '📊';
+  const isGoverned = activeGSType === 'governed';
+  const is12m      = activeGSType === 'baseline-12m';
+  const is6m       = activeGSType === 'baseline-6m';
+
+  let label, statusText;
+  if (isGoverned) {
+    label      = 'Governed GS · FY25';
+    statusText = 'Governed Gold Standard active (FY25: Jul 2024 – Jun 2025) — LOCKED for official reporting & compensation';
+  } else if (is12m) {
+    label      = 'Operating Baseline · 12 Month';
+    statusText = 'Operating Baseline active (rolling 12 months) — DYNAMIC · For operational analysis only';
+  } else {
+    label      = 'Operating Baseline · 6 Month';
+    statusText = 'Operating Baseline active (rolling 6 months) — DYNAMIC · For operational analysis only';
+  }
+  const cls  = isGoverned ? 'governed' : 'baseline';
 
   ['gs-type-indicator','gs-status-bar','gap-gs-badge','whatif-gs-badge'].forEach(id => {
     const el = $$(id);
     if (!el) return;
     el.className = 'gs-type-badge ' + cls;
-    if (id === 'gs-type-indicator' || id === 'gap-gs-badge' || id === 'whatif-gs-badge') {
-      if (id !== 'gs-type-indicator') {
-        el.style.background = 'rgba(255,255,255,0.15)';
-        el.style.borderColor = 'rgba(255,255,255,0.4)';
-        el.style.color = '#fff';
-      }
+    if (id !== 'gs-type-indicator') {
+      el.style.background   = isGoverned ? '' : 'rgba(255,255,255,0.15)';
+      el.style.borderColor  = isGoverned ? '' : 'rgba(255,255,255,0.4)';
+      el.style.color        = isGoverned ? '' : '#fff';
     }
   });
 
@@ -1755,11 +1752,7 @@ function handleGSTypeChange() {
   if (gapLbEl) gapLbEl.textContent = label;
 
   const statusLbEl = $$('gs-status-label');
-  if (statusLbEl) {
-    statusLbEl.textContent = activeGSType === 'governed'
-      ? 'Governed Gold Standard active (FY25: Jul 2024 – Jun 2025) — LOCKED for official reporting & compensation'
-      : `Operating Baseline active (last ${baselineMonths} months) — DYNAMIC · For operational analysis only`;
-  }
+  if (statusLbEl) statusLbEl.textContent = statusText;
 }
 
 function openThreshConfig() {
@@ -2008,6 +2001,23 @@ function pickTime(btn, groupId) {
   btn.classList.add('active');
 }
 
+const viewTypes = { results:'pct', pred:'pct', scrap:'pct' };
+
+function setViewType(page, type) {
+  viewTypes[page] = type;
+  const map = {
+    results: { pct:'tog-res-pct',   usd:'tog-res-usd'   },
+    pred:    { pct:'tog-pred-pct',  usd:'tog-pred-usd'  },
+    scrap:   { pct:'tog-scrap-pct', usd:'tog-scrap-usd' },
+  };
+  const btns = map[page];
+  if (!btns) return;
+  Object.entries(btns).forEach(([t, id]) => {
+    const el = $$(id);
+    if (el) el.classList.toggle('active', t === type);
+  });
+}
+
 function drillThrough(plant, line, fam, area) {
   const normArea = area === 'labour' ? 'labor' : area;
   showPage('dv');
@@ -2046,9 +2056,9 @@ window.addEventListener('load', () => {
     <div class="chat-msg user">What is the most effective order size for Mascara?</div>
     <div class="chat-msg bot">Based on FY25 GS data, <strong>Large POs (≥2,000 units)</strong> on L67 show the lowest Labour/1000 units (avg 3.2 vs 5.1 for Small). OEE also improves: 71% vs 58%. Suggested: batch Mascara orders on L67 at ≥2,000 units where scheduling allows.</div>
     <div class="chat-msg user">Which line works best with small POs for 15 ml products?</div>
-    <div class="chat-msg bot"><strong>L68</strong> shows the highest OEE for Small POs on 15 ml products (avg 64% vs 51% on L72). Speed gap to GS is also smallest on L68 (−8 ppm vs −18 ppm). Note: L72 has insufficient n for this segment (n=7, threshold is 12).</div>
+    <div class="chat-msg bot"><strong>L68</strong> shows the highest OEE for Small POs on 15 ml products (avg 64% vs 51% on L72). Speed gap to GS is also smallest on L68 (−8 UPM vs −18 UPM). Note: L72 has insufficient n for this segment (n=7, threshold is 12).</div>
     <div class="chat-msg user">Compare speed performance for 30 ml runs on L67 vs L68</div>
-    <div class="chat-msg bot">L67 averages <strong>82 ppm</strong> (GS=95), L68 averages <strong>78 ppm</strong> (GS=95). L67 has a smaller speed gap (−13 ppm vs −17 ppm). However, L67 shows higher scrap variability (σ=1.2 vs 0.6). For speed-critical 30 ml runs, L67 is preferred; for scrap consistency, L68 is preferred.</div>
+    <div class="chat-msg bot">L67 averages <strong>82 UPM</strong> (GS=95), L68 averages <strong>78 UPM</strong> (GS=95). L67 has a smaller speed gap (−13 UPM vs −17 UPM). However, L67 shows higher scrap variability (σ=1.2 vs 0.6). For speed-critical 30 ml runs, L67 is preferred; for scrap consistency, L68 is preferred.</div>
   </div>
   <div class="chat-input-row">
     <input class="chat-input" id="chat-input" type="text" placeholder="Ask about GS, orders, performance…" onkeydown="if(event.key==='Enter')sendChat()">
