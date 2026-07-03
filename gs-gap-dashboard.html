@@ -733,16 +733,16 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
             <span class="card-title">Speed: UPM (Units per minute)</span>
             <span style="font-size:10px;color:var(--c-muted);font-weight:600;">PRODUCT SEGMENTATION — by unit size</span>
           </div>
-          <div class="card-subtitle">Compare cycle speed (UPM) vs nameplate gold standard (single resource line) and reference standard (RS). Gap to RS = realistic improvement potential; gap RS→GS = design/engineering opportunity.</div>
+          <div class="card-subtitle">Compare the cycle speed against nameplate speed to identify opportunities. Set CE KPI target vs reference speed that respects unit size (and viscosity).</div>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-speed-res"></canvas></div>
           <div class="legend-row">
-            <span class="legend-item"><span class="legend-icon">⚙</span> GS = nameplate speed</span>
-            <span class="legend-item"><span class="legend-icon">🐇</span> RS = best speed per size</span>
-            <span class="legend-item"><span class="legend-icon">💡</span> RS = realistically achievable</span>
+            <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2.5px solid #1A5F56;vertical-align:middle;"></span> GS = nameplate speed</span>
+            <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2px dashed #2D9B8F;vertical-align:middle;"></span> RS 30ml</span>
+            <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2px dashed #E89C3C;vertical-align:middle;"></span> RS 15ml = best per size</span>
           </div>
           <div class="size-tags">
-            <span class="size-tag">30 ml: Prod A–E</span>
-            <span class="size-tag">15 ml: Prod F–H</span>
+            <span class="size-tag" style="background:rgba(45,155,143,0.10);border-color:rgba(45,155,143,0.3);color:#1A5F56;">30 ml: Prod A–E</span>
+            <span class="size-tag" style="background:rgba(232,156,60,0.10);border-color:rgba(232,156,60,0.3);color:#A05C10;">15 ml: Prod A–C</span>
           </div>
           <div class="chart-note">Gap to RS = realistic improvement potential; gap RS→GS = design / engineering opportunity.</div>
         </div>
@@ -1182,9 +1182,9 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
           <span class="card-title">Speed by Product (grouped by unit size)</span>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-speed-prod"></canvas></div>
           <div class="legend-row">
-            <span class="legend-item"><span class="legend-icon">⚙</span> GS = nameplate</span>
-            <span class="legend-item"><span class="legend-icon">🐇</span> RS = best per size</span>
-            <span class="legend-item"><span class="legend-icon">💡</span> RS = realistically achievable</span>
+            <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2.5px solid #1A5F56;vertical-align:middle;"></span> GS = nameplate</span>
+            <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2px dashed #2D9B8F;vertical-align:middle;"></span> RS 30ml</span>
+            <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2px dashed #E89C3C;vertical-align:middle;"></span> RS 15ml</span>
           </div>
           <div class="chart-note">Gap to RS = realistic improvement potential; gap RS→GS = design / engineering opportunity.</div>
         </div>
@@ -1416,6 +1416,15 @@ const SPEED = {
   gs:     [100,100,100,100,100,100,100,100],
   rs:     [88, 88, 88, 88, 88, 88, 88, 88]
 };
+// Segmented speed data: 5 × 30ml (left, green) + 3 × 15ml (right, orange)
+const SPEED_SEG = {
+  labels:    ['Prod A','Prod B','Prod C','Prod D','Prod E',  'Prod A','Prod B','Prod C'],
+  actual:    [95, 88, 112, 82, 105,                           52, 48, 57],
+  barColors: ['#2D9B8F','#2D9B8F','#2D9B8F','#2D9B8F','#2D9B8F',  '#E89C3C','#E89C3C','#E89C3C'],
+  gs:        [105,105,105,105,105,                             105,105,105],
+  rs30:      [100,100,100,100,100,                             null,null,null],
+  rs15:      [null,null,null,null,null,                        52,52,52],
+};
 const SPEED_TREND = { actual:[80,82,79,83,81,82], gs:[100,100,100,100,100,100], rs:[88,88,88,88,88,88] };
 const CREW        = { actual:[10,9,11,10,9,9],    gs:[7,7,7,7,7,7],           rs:[8,8,8,8,8,8] };
 const OEE         = { actual:[58,62,65,60,63,67], gs:[80,80,80,80,80,80],     rs:[70,70,70,70,70,70] };
@@ -1523,6 +1532,45 @@ function comboConfig(labels, bars, l1, l2, yLabel) {
   };
 }
 
+function speedSegConfig() {
+  const segBgPlugin = {
+    id: 'speedSegBg',
+    beforeDraw(chart) {
+      const {ctx, chartArea} = chart;
+      if (!chartArea) return;
+      const {left, right, top, bottom} = chartArea;
+      const n30 = 5, total = 8;
+      const slotW = (right - left) / total;
+      const divX = left + slotW * n30;
+      ctx.save();
+      ctx.fillStyle = 'rgba(232,240,238,0.55)';
+      ctx.fillRect(left, top, divX - left, bottom - top);
+      ctx.fillStyle = 'rgba(255,244,224,0.55)';
+      ctx.fillRect(divX, top, right - divX, bottom - top);
+      ctx.font = 'bold 10px sans-serif';
+      ctx.fillStyle = 'rgba(74,101,128,0.65)';
+      ctx.textAlign = 'center';
+      ctx.fillText('30 ml', left + (divX - left) / 2, top + 14);
+      ctx.fillText('15 ml', divX + (right - divX) / 2, top + 14);
+      ctx.restore();
+    }
+  };
+  return {
+    type: 'bar',
+    data: {
+      labels: SPEED_SEG.labels,
+      datasets: [
+        {type:'bar',  label:'Actual',          data:SPEED_SEG.actual,  backgroundColor:SPEED_SEG.barColors, borderRadius:3, order:2},
+        {type:'line', label:'GS (Nameplate)',   data:SPEED_SEG.gs,      borderColor:'#1A5F56', borderDash:[],    borderWidth:2.5, pointRadius:0, fill:false, tension:0, order:1},
+        {type:'line', label:'RS 30ml',          data:SPEED_SEG.rs30,    borderColor:'#2D9B8F', borderDash:[5,3], borderWidth:2,   pointRadius:0, fill:false, tension:0, spanGaps:false, order:1},
+        {type:'line', label:'RS 15ml',          data:SPEED_SEG.rs15,    borderColor:'#E89C3C', borderDash:[5,3], borderWidth:2,   pointRadius:0, fill:false, tension:0, spanGaps:false, order:1},
+      ]
+    },
+    options: baseOpts('UPM'),
+    plugins: [segBgPlugin]
+  };
+}
+
 const REG = {};
 function init(id, config) {
   if (REG[id]) return;
@@ -1534,7 +1582,7 @@ function init(id, config) {
 /* ─── CHART INIT FUNCTIONS (lazy) ───────────────────── */
 
 function initResultsCharts() {
-  init('ch-speed-res',  comboConfig(PRODS, SPEED.actual, SPEED.gs, SPEED.rs, 'UPM'));
+  init('ch-speed-res',  speedSegConfig());
   init('ch-crew-res',   comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Hrs/1000u'));
   init('ch-oee-res',    comboConfig(MONTHS, OEE.actual,  OEE.gs,  OEE.rs,  'OEE %'));
   init('ch-scrap-res',  comboConfig(MONTHS, SCRAP.actual,SCRAP.gs,SCRAP.rs,'Scrap %'));
@@ -1598,7 +1646,7 @@ function initGapCharts() {
 
 function initDVSpeedCharts() {
   init('ch-dv-speed-trend', comboConfig(MONTHS, SPEED_TREND.actual, SPEED_TREND.gs, SPEED_TREND.rs, 'UPM'));
-  init('ch-dv-speed-prod',  comboConfig(PRODS,  SPEED.actual,       SPEED.gs,       SPEED.rs,       'UPM'));
+  init('ch-dv-speed-prod',  speedSegConfig());
 }
 function initDVLaborCharts() {
   init('ch-dv-labor-trend', comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Hrs/1000u'));
