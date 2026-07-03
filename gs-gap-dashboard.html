@@ -635,15 +635,6 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
       </div>
     </div>
     <div>
-      <span class="slicer-label">Job Type</span>
-      <select class="slicer-select" onchange="handleSlicerChange()">
-        <option>— All —</option>
-        <option>End-to-end</option>
-        <option>Front-end</option>
-        <option>Back-end</option>
-      </select>
-    </div>
-    <div>
       <span class="slicer-label">Time Period</span>
       <select id="slicer-time" class="slicer-select" onchange="handleSlicerChange()">
         <option value="week">Week</option>
@@ -861,11 +852,11 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
               </tr>
             </thead>
             <tbody>
-              <tr><td>Mascara - Multi-purpose / SKU-101</td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$8,400</td></tr>
-              <tr><td>Foundation - Liquid / SKU-202</td><td><span class="seg-badge silver">◆ Silver</span></td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$5,200</td></tr>
-              <tr><td>Serum - Anti-aging / SKU-303</td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$3,100</td></tr>
-              <tr><td>Cleanser - Foaming / SKU-401</td><td><span class="seg-badge other">○ Other</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$6,700</td></tr>
-              <tr><td>Moisturizer - SPF / SKU-502</td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$2,900</td></tr>
+              <tr><td>SKU-101 / Mascara - Multi-purpose</td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$8,400</td></tr>
+              <tr><td>SKU-202 / Foundation - Liquid</td><td><span class="seg-badge silver">◆ Silver</span></td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$5,200</td></tr>
+              <tr><td>SKU-303 / Serum - Anti-aging</td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$3,100</td></tr>
+              <tr><td>SKU-401 / Cleanser - Foaming</td><td><span class="seg-badge other">○ Other</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$6,700</td></tr>
+              <tr><td>SKU-502 / Moisturizer - SPF</td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$2,900</td></tr>
             </tbody>
           </table>
         </div>
@@ -1448,40 +1439,40 @@ const IMPACT = [
   {region:'EMEA',plant:'Zaventem', prodCat:'Moisturizer - SPF',        line:'L72', total:16200,priority:5, impact:10400,area:'speed'},
 ];
 const PRED = [
-  {month:'Jul 26',plant:'Oevel',   res:'L67', sku:'Mascara - Multi-purpose / SKU-101', vol:145000, pos:12, gapUSD:18500},
-  {month:'Jul 26',plant:'Oevel',   res:'L68', sku:'Foundation - Liquid / SKU-203',     vol:98000,  pos:8,  gapUSD:9300 },
-  {month:'Aug 26',plant:'Oevel',   res:'L67', sku:'Mascara - Multi-purpose / SKU-102', vol:162000, pos:14, gapUSD:20700},
-  {month:'Aug 26',plant:'Zaventem',res:'L72', sku:'Moisturizer - SPF / SKU-501',       vol:87000,  pos:7,  gapUSD:7600 },
-  {month:'Sep 26',plant:'Oevel',   res:'L67', sku:'Serum - Anti-aging / SKU-301',      vol:110000, pos:9,  gapUSD:12300},
-  {month:'Sep 26',plant:'Oevel',   res:'L68', sku:'Cleanser - Foaming / SKU-401',      vol:74000,  pos:6,  gapUSD:7800 },
+  {month:'Jul 26',plant:'Oevel',   res:'L67', sku:'SKU-101 / Mascara - Multi-purpose', vol:145000, pos:12, gapUSD:18500},
+  {month:'Jul 26',plant:'Oevel',   res:'L68', sku:'SKU-203 / Foundation - Liquid',     vol:98000,  pos:8,  gapUSD:9300 },
+  {month:'Aug 26',plant:'Oevel',   res:'L67', sku:'SKU-102 / Mascara - Multi-purpose', vol:162000, pos:14, gapUSD:20700},
+  {month:'Aug 26',plant:'Zaventem',res:'L72', sku:'SKU-501 / Moisturizer - SPF',       vol:87000,  pos:7,  gapUSD:7600 },
+  {month:'Sep 26',plant:'Oevel',   res:'L67', sku:'SKU-301 / Serum - Anti-aging',      vol:110000, pos:9,  gapUSD:12300},
+  {month:'Sep 26',plant:'Oevel',   res:'L68', sku:'SKU-401 / Cleanser - Foaming',      vol:74000,  pos:6,  gapUSD:7800 },
 ];
 const PO_SPEED = [
-  {po:'PO-2026-001',sku:'Mascara - Multi-purpose / SKU-101', res:'L67', actual:82, gs:100,rs:88, gapRS:4800, gapGS:8200},
-  {po:'PO-2026-004',sku:'Serum - Anti-aging / SKU-301',      res:'L68', actual:74, gs:100,rs:88, gapRS:6200, gapGS:10800},
-  {po:'PO-2026-002',sku:'Mascara - Multi-purpose / SKU-102', res:'L67', actual:78, gs:100,rs:88, gapRS:5500, gapGS:9100},
-  {po:'PO-2026-005',sku:'Cleanser - Foaming / SKU-401',      res:'L72', actual:74, gs:100,rs:88, gapRS:5200, gapGS:9800},
-  {po:'PO-2026-003',sku:'Foundation - Liquid / SKU-201',     res:'L67', actual:90, gs:100,rs:88, gapRS:0,    gapGS:5200},
+  {po:'PO-2026-001',sku:'SKU-101 / Mascara - Multi-purpose', res:'L67', actual:82, gs:100,rs:88, gapRS:4800, gapGS:8200},
+  {po:'PO-2026-004',sku:'SKU-301 / Serum - Anti-aging',      res:'L68', actual:74, gs:100,rs:88, gapRS:6200, gapGS:10800},
+  {po:'PO-2026-002',sku:'SKU-102 / Mascara - Multi-purpose', res:'L67', actual:78, gs:100,rs:88, gapRS:5500, gapGS:9100},
+  {po:'PO-2026-005',sku:'SKU-401 / Cleanser - Foaming',      res:'L72', actual:74, gs:100,rs:88, gapRS:5200, gapGS:9800},
+  {po:'PO-2026-003',sku:'SKU-201 / Foundation - Liquid',     res:'L67', actual:90, gs:100,rs:88, gapRS:0,    gapGS:5200},
 ];
 const PO_LABOR = [
-  {po:'PO-2026-003',sku:'Foundation - Liquid / SKU-201',     res:'L67',actual:11,gs:7,rs:8,gapUSD:11800},
-  {po:'PO-2026-001',sku:'Mascara - Multi-purpose / SKU-101', res:'L67',actual:10,gs:7,rs:8,gapUSD:9200},
-  {po:'PO-2026-004',sku:'Serum - Anti-aging / SKU-301',      res:'L68',actual:9, gs:7,rs:8,gapUSD:5600},
-  {po:'PO-2026-002',sku:'Mascara - Multi-purpose / SKU-102', res:'L67',actual:9, gs:7,rs:8,gapUSD:5400},
-  {po:'PO-2026-005',sku:'Cleanser - Foaming / SKU-401',      res:'L72',actual:8, gs:7,rs:8,gapUSD:3100},
+  {po:'PO-2026-003',sku:'SKU-201 / Foundation - Liquid',     res:'L67',actual:11,gs:7,rs:8,gapUSD:11800},
+  {po:'PO-2026-001',sku:'SKU-101 / Mascara - Multi-purpose', res:'L67',actual:10,gs:7,rs:8,gapUSD:9200},
+  {po:'PO-2026-004',sku:'SKU-301 / Serum - Anti-aging',      res:'L68',actual:9, gs:7,rs:8,gapUSD:5600},
+  {po:'PO-2026-002',sku:'SKU-102 / Mascara - Multi-purpose', res:'L67',actual:9, gs:7,rs:8,gapUSD:5400},
+  {po:'PO-2026-005',sku:'SKU-401 / Cleanser - Foaming',      res:'L72',actual:8, gs:7,rs:8,gapUSD:3100},
 ];
 const PO_OEE = [
-  {po:'PO-2026-005',sku:'Cleanser - Foaming / SKU-401',      res:'L72',poSz:'Small', actual:49,gs:80,gapUSD:22300},
-  {po:'PO-2026-002',sku:'Mascara - Multi-purpose / SKU-102', res:'L67',poSz:'Small', actual:54,gs:80,gapUSD:18600},
-  {po:'PO-2026-004',sku:'Serum - Anti-aging / SKU-301',      res:'L68',poSz:'Medium',actual:58,gs:80,gapUSD:14200},
-  {po:'PO-2026-001',sku:'Mascara - Multi-purpose / SKU-101', res:'L67',poSz:'Medium',actual:62,gs:80,gapUSD:12400},
-  {po:'PO-2026-003',sku:'Foundation - Liquid / SKU-201',     res:'L67',poSz:'Large', actual:71,gs:80,gapUSD:6800},
+  {po:'PO-2026-005',sku:'SKU-401 / Cleanser - Foaming',      res:'L72',poSz:'Small', actual:49,gs:80,gapUSD:22300},
+  {po:'PO-2026-002',sku:'SKU-102 / Mascara - Multi-purpose', res:'L67',poSz:'Small', actual:54,gs:80,gapUSD:18600},
+  {po:'PO-2026-004',sku:'SKU-301 / Serum - Anti-aging',      res:'L68',poSz:'Medium',actual:58,gs:80,gapUSD:14200},
+  {po:'PO-2026-001',sku:'SKU-101 / Mascara - Multi-purpose', res:'L67',poSz:'Medium',actual:62,gs:80,gapUSD:12400},
+  {po:'PO-2026-003',sku:'SKU-201 / Foundation - Liquid',     res:'L67',poSz:'Large', actual:71,gs:80,gapUSD:6800},
 ];
 const PO_SCRAP = [
-  {po:'PO-2026-002',sku:'Mascara - Multi-purpose / SKU-102', res:'L67',actual:5.0,gs:2.5,fixed:1.8,variable:3.2,totalUSD:5200},
-  {po:'PO-2026-004',sku:'Serum - Anti-aging / SKU-301',      res:'L68',actual:4.5,gs:2.5,fixed:1.8,variable:2.7,totalUSD:4100},
-  {po:'PO-2026-001',sku:'Mascara - Multi-purpose / SKU-101', res:'L67',actual:4.2,gs:2.5,fixed:1.8,variable:2.4,totalUSD:3800},
-  {po:'PO-2026-003',sku:'Foundation - Liquid / SKU-201',     res:'L67',actual:3.9,gs:2.5,fixed:1.8,variable:2.1,totalUSD:2900},
-  {po:'PO-2026-005',sku:'Cleanser - Foaming / SKU-401',      res:'L72',actual:3.8,gs:2.5,fixed:1.8,variable:2.0,totalUSD:2600},
+  {po:'PO-2026-002',sku:'SKU-102 / Mascara - Multi-purpose', res:'L67',actual:5.0,gs:2.5,fixed:1.8,variable:3.2,totalUSD:5200},
+  {po:'PO-2026-004',sku:'SKU-301 / Serum - Anti-aging',      res:'L68',actual:4.5,gs:2.5,fixed:1.8,variable:2.7,totalUSD:4100},
+  {po:'PO-2026-001',sku:'SKU-101 / Mascara - Multi-purpose', res:'L67',actual:4.2,gs:2.5,fixed:1.8,variable:2.4,totalUSD:3800},
+  {po:'PO-2026-003',sku:'SKU-201 / Foundation - Liquid',     res:'L67',actual:3.9,gs:2.5,fixed:1.8,variable:2.1,totalUSD:2900},
+  {po:'PO-2026-005',sku:'SKU-401 / Cleanser - Foaming',      res:'L72',actual:3.8,gs:2.5,fixed:1.8,variable:2.0,totalUSD:2600},
 ];
 
 // Schedule chart — shared constants for initPredictionsCharts + % ↔ $ toggle
@@ -1649,7 +1640,7 @@ function initDVScrapCharts() {
       }
     }
   });
-  const skus=['Mascara - Multi-purpose / SKU-102','Cleanser - Foaming / SKU-401','Serum - Anti-aging / SKU-301','Mascara - Multi-purpose / SKU-101','Foundation - Liquid / SKU-201'];
+  const skus=['SKU-102 / Mascara - Multi-purpose','SKU-401 / Cleanser - Foaming','SKU-301 / Serum - Anti-aging','SKU-101 / Mascara - Multi-purpose','SKU-201 / Foundation - Liquid'];
   init('ch-dv-scrap-sku',{
     type:'bar',
     data:{labels:skus, datasets:[{label:'Total Scrap $',data:[5200,4100,4100,3800,2900],backgroundColor:CC.neg+'bb',borderRadius:3,indexAxis:'y'}]},
@@ -1817,11 +1808,11 @@ function applyThresholds() {
 /* ─── WHAT-IF DATA & CHARTS ──────────────────────────── */
 
 const WHATIF_DATA = [
-  {res:'L67', sku:'Mascara / SKU-101', vol:48000, gsSpeed:95, actSpeed:82, speedUSD:4200, gsOEE:75, actOEE:62, oeeUSD:5800, gsLabor:7, actLabor:10, laborUSD:3200, gsScrap:2.5, actScrap:4.2, scrapUSD:2900, total:16100},
-  {res:'L67', sku:'Foundation / SKU-202', vol:36000, gsSpeed:95, actSpeed:80, speedUSD:3800, gsOEE:75, actOEE:66, oeeUSD:4200, gsLabor:7, actLabor:9,  laborUSD:2100, gsScrap:2.5, actScrap:3.9, scrapUSD:2400, total:12500},
+  {res:'L67', sku:'SKU-101 / Mascara - Multi-purpose', vol:48000, gsSpeed:95, actSpeed:82, speedUSD:4200, gsOEE:75, actOEE:62, oeeUSD:5800, gsLabor:7, actLabor:10, laborUSD:3200, gsScrap:2.5, actScrap:4.2, scrapUSD:2900, total:16100},
+  {res:'L67', sku:'SKU-202 / Foundation - Liquid', vol:36000, gsSpeed:95, actSpeed:80, speedUSD:3800, gsOEE:75, actOEE:66, oeeUSD:4200, gsLabor:7, actLabor:9,  laborUSD:2100, gsScrap:2.5, actScrap:3.9, scrapUSD:2400, total:12500},
   {res:'L68', sku:'Serum 15ml / SKU-303', vol:22000, gsSpeed:90, actSpeed:74, speedUSD:3100, gsOEE:75, actOEE:58, oeeUSD:3900, gsLabor:7, actLabor:9,  laborUSD:2800, gsScrap:2.5, actScrap:4.5, scrapUSD:1800, total:11600},
-  {res:'L68', sku:'Cleanser / SKU-401', vol:18000, gsSpeed:90, actSpeed:71, speedUSD:2800, gsOEE:75, actOEE:61, oeeUSD:3200, gsLabor:7, actLabor:8,  laborUSD:1400, gsScrap:2.5, actScrap:3.8, scrapUSD:1600, total:9000},
-  {res:'L72', sku:'Moisturizer / SKU-502', vol:29000, gsSpeed:100, actSpeed:86, speedUSD:3500, gsOEE:75, actOEE:67, oeeUSD:3800, gsLabor:8, actLabor:10, laborUSD:1800, gsScrap:2.5, actScrap:4.1, scrapUSD:2200, total:11300},
+  {res:'L68', sku:'SKU-401 / Cleanser - Foaming', vol:18000, gsSpeed:90, actSpeed:71, speedUSD:2800, gsOEE:75, actOEE:61, oeeUSD:3200, gsLabor:7, actLabor:8,  laborUSD:1400, gsScrap:2.5, actScrap:3.8, scrapUSD:1600, total:9000},
+  {res:'L72', sku:'SKU-502 / Moisturizer - SPF', vol:29000, gsSpeed:100, actSpeed:86, speedUSD:3500, gsOEE:75, actOEE:67, oeeUSD:3800, gsLabor:8, actLabor:10, laborUSD:1800, gsScrap:2.5, actScrap:4.1, scrapUSD:2200, total:11300},
 ];
 
 function renderWhatIfTable() {
@@ -1894,21 +1885,21 @@ function initWhatIfCharts() {
 /* ─── MASS ATTRIBUTES DATA & RENDERERS ───────────────── */
 
 const HM_DATA = [
-  {po:'PO-2026-001',sku:'Mascara / SKU-101',res:'L67',visc:2,sg:0.98,fill:30,speedGap:-8,oeeGap:-12,scrap:4.2},
-  {po:'PO-2026-002',sku:'Foundation / SKU-202',res:'L68',visc:3,sg:1.01,fill:30,speedGap:-15,oeeGap:-9, scrap:3.8},
-  {po:'PO-2026-003',sku:'Serum / SKU-303',res:'L67',visc:1,sg:0.92,fill:15,speedGap:-5, oeeGap:-7, scrap:3.1},
-  {po:'PO-2026-004',sku:'Cleanser / SKU-401',res:'L72',visc:4,sg:1.05,fill:50,speedGap:-22,oeeGap:-18,scrap:5.2},
-  {po:'PO-2026-005',sku:'Moisturizer / SKU-502',res:'L67',visc:3,sg:0.99,fill:50,speedGap:-10,oeeGap:-14,scrap:4.5},
-  {po:'PO-2026-006',sku:'Mascara / SKU-101',res:'L68',visc:2,sg:0.97,fill:30,speedGap:-17,oeeGap:-11,scrap:3.9},
-  {po:'PO-2026-007',sku:'Serum / SKU-303',res:'L72',visc:1,sg:0.91,fill:15,speedGap:-8, oeeGap:-6, scrap:2.9},
-  {po:'PO-2026-008',sku:'Foundation / SKU-202',res:'L67',visc:4,sg:1.04,fill:30,speedGap:-18,oeeGap:-16,scrap:4.8},
-  {po:'PO-2026-009',sku:'Cleanser / SKU-401',res:'L68',visc:5,sg:1.10,fill:50,speedGap:-28,oeeGap:-22,scrap:6.1},
-  {po:'PO-2026-010',sku:'Mascara / SKU-101',res:'L67',visc:2,sg:0.98,fill:30,speedGap:-7, oeeGap:-10,scrap:3.7},
-  {po:'PO-2026-011',sku:'Moisturizer / SKU-502',res:'L68',visc:3,sg:1.00,fill:50,speedGap:-12,oeeGap:-13,scrap:4.3},
-  {po:'PO-2026-012',sku:'Foundation / SKU-202',res:'L72',visc:3,sg:1.02,fill:30,speedGap:-14,oeeGap:-11,scrap:4.0},
-  {po:'PO-2026-013',sku:'Serum / SKU-303',res:'L67',visc:1,sg:0.93,fill:15,speedGap:-4, oeeGap:-8, scrap:3.0},
-  {po:'PO-2026-014',sku:'Cleanser / SKU-401',res:'L67',visc:4,sg:1.06,fill:50,speedGap:-20,oeeGap:-17,scrap:5.5},
-  {po:'PO-2026-015',sku:'Mascara / SKU-101',res:'L68',visc:2,sg:0.96,fill:30,speedGap:-16,oeeGap:-12,scrap:4.1},
+  {po:'PO-2026-001',sku:'SKU-101 / Mascara - Multi-purpose',res:'L67',visc:2,sg:0.98,fill:30,speedGap:-8,oeeGap:-12,scrap:4.2},
+  {po:'PO-2026-002',sku:'SKU-202 / Foundation - Liquid',res:'L68',visc:3,sg:1.01,fill:30,speedGap:-15,oeeGap:-9, scrap:3.8},
+  {po:'PO-2026-003',sku:'SKU-303 / Serum - Anti-aging',res:'L67',visc:1,sg:0.92,fill:15,speedGap:-5, oeeGap:-7, scrap:3.1},
+  {po:'PO-2026-004',sku:'SKU-401 / Cleanser - Foaming',res:'L72',visc:4,sg:1.05,fill:50,speedGap:-22,oeeGap:-18,scrap:5.2},
+  {po:'PO-2026-005',sku:'SKU-502 / Moisturizer - SPF',res:'L67',visc:3,sg:0.99,fill:50,speedGap:-10,oeeGap:-14,scrap:4.5},
+  {po:'PO-2026-006',sku:'SKU-101 / Mascara - Multi-purpose',res:'L68',visc:2,sg:0.97,fill:30,speedGap:-17,oeeGap:-11,scrap:3.9},
+  {po:'PO-2026-007',sku:'SKU-303 / Serum - Anti-aging',res:'L72',visc:1,sg:0.91,fill:15,speedGap:-8, oeeGap:-6, scrap:2.9},
+  {po:'PO-2026-008',sku:'SKU-202 / Foundation - Liquid',res:'L67',visc:4,sg:1.04,fill:30,speedGap:-18,oeeGap:-16,scrap:4.8},
+  {po:'PO-2026-009',sku:'SKU-401 / Cleanser - Foaming',res:'L68',visc:5,sg:1.10,fill:50,speedGap:-28,oeeGap:-22,scrap:6.1},
+  {po:'PO-2026-010',sku:'SKU-101 / Mascara - Multi-purpose',res:'L67',visc:2,sg:0.98,fill:30,speedGap:-7, oeeGap:-10,scrap:3.7},
+  {po:'PO-2026-011',sku:'SKU-502 / Moisturizer - SPF',res:'L68',visc:3,sg:1.00,fill:50,speedGap:-12,oeeGap:-13,scrap:4.3},
+  {po:'PO-2026-012',sku:'SKU-202 / Foundation - Liquid',res:'L72',visc:3,sg:1.02,fill:30,speedGap:-14,oeeGap:-11,scrap:4.0},
+  {po:'PO-2026-013',sku:'SKU-303 / Serum - Anti-aging',res:'L67',visc:1,sg:0.93,fill:15,speedGap:-4, oeeGap:-8, scrap:3.0},
+  {po:'PO-2026-014',sku:'SKU-401 / Cleanser - Foaming',res:'L67',visc:4,sg:1.06,fill:50,speedGap:-20,oeeGap:-17,scrap:5.5},
+  {po:'PO-2026-015',sku:'SKU-101 / Mascara - Multi-purpose',res:'L68',visc:2,sg:0.96,fill:30,speedGap:-16,oeeGap:-12,scrap:4.1},
 ];
 
 const CORR_DATA = {
