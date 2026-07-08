@@ -563,6 +563,228 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
   background: rgba(255,152,0,0.15); color: #E65100;
   padding: 1px 6px; border-radius: 3px; margin-left: auto;
 }
+
+/* =====================================================
+   MODULE TOGGLE
+   ===================================================== */
+.module-toggle { display:flex; align-items:center; gap:6px; }
+.module-btn {
+  background:transparent; border:1.5px solid rgba(255,255,255,0.45);
+  color:rgba(255,255,255,0.75); padding:5px 16px; border-radius:5px;
+  cursor:pointer; font-size:12px; font-weight:600; transition:all .15s; letter-spacing:.3px;
+}
+.module-btn.active { background:#007BFF; border-color:#007BFF; color:#fff; }
+.module-btn:hover:not(.active) { background:rgba(255,255,255,0.12); color:#fff; }
+.module-sep { color:rgba(255,255,255,0.25); font-size:15px; user-select:none; }
+
+/* =====================================================
+   OVERFILL: KPI TILES
+   ===================================================== */
+.ov-kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.ov-kpi-card {
+  background:var(--c-card); border:1px solid var(--c-border); border-radius:8px;
+  padding:16px 18px; display:flex; flex-direction:column; gap:4px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.ov-kpi-label { font-size:10px; font-weight:700; color:var(--c-muted); text-transform:uppercase; letter-spacing:.5px; }
+.ov-kpi-value { font-size:30px; font-weight:700; line-height:1; color:var(--c-text); }
+.ov-kpi-sub   { font-size:11px; color:var(--c-muted); }
+.ov-kpi-badge {
+  display:inline-block; padding:2px 7px; border-radius:3px;
+  font-size:10px; font-weight:700; color:#fff; background:#DC3545;
+  margin-top:4px; align-self:flex-start;
+}
+.ov-val-red    { color:#DC3545; }
+.ov-val-yellow { color:#E65100; }
+.ov-val-green  { color:#28A745; }
+
+/* =====================================================
+   OVERFILL: HEATMAP
+   ===================================================== */
+table.ov-heatmap { width:100%; border-collapse:collapse; font-size:11px; }
+table.ov-heatmap thead th {
+  background:#003D5C; color:#fff; padding:7px 8px;
+  font-size:10px; font-weight:700; text-align:center; white-space:nowrap;
+  border:1px solid rgba(255,255,255,.1);
+}
+table.ov-heatmap thead th.row-hdr { text-align:left; }
+table.ov-heatmap tbody td {
+  padding:5px 6px; border:1px solid rgba(0,0,0,.06);
+  text-align:center; font-weight:700; font-size:10.5px; color:#fff; white-space:nowrap;
+}
+table.ov-heatmap tbody td.row-hdr {
+  text-align:left; font-weight:600; color:var(--c-text); background:rgba(0,61,92,.04);
+}
+.hm-dkred   { background:#C62828; }
+.hm-red     { background:#DC3545; }
+.hm-orange  { background:#E65100; }
+.hm-yellow  { background:#F5A534; color:#333 !important; }
+.hm-lgreen  { background:#81C784; color:#1B5E20 !important; }
+.hm-green   { background:#28A745; }
+.hm-nodata  { background:#f5f5f5; color:#ccc !important; font-weight:400 !important; }
+
+/* =====================================================
+   OVERFILL: SPEC SCALE (BULLET CHART)
+   ===================================================== */
+.bullet-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.bullet-card {
+  background:var(--c-card); border:1px solid var(--c-border);
+  border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:8px;
+}
+.bullet-card-title { font-size:12px; font-weight:700; color:var(--c-text); }
+.bullet-card-sub   { font-size:10px; color:var(--c-muted); }
+.bullet-scale-wrap { position:relative; height:200px; overflow:hidden; }
+.bullet-scale {
+  position:relative; height:100%; width:100%;
+  display:flex; flex-direction:column;
+}
+.bullet-zone { position:relative; }
+.bullet-zone-reject { background:rgba(220,53,69,.18); }
+.bullet-zone-warn   { background:rgba(255,193,7,.18); }
+.bullet-zone-ok     { background:rgba(40,167,69,.14); }
+.bullet-zone-label {
+  position:absolute; right:6px; font-size:9px; font-weight:700; color:#DC3545;
+}
+.bullet-zone-label.top { bottom:3px; }
+.bullet-zone-label.bot { top:3px; }
+.bullet-target-line {
+  position:absolute; left:0; right:0; height:2px; z-index:3;
+  background:repeating-linear-gradient(90deg,#333 0 6px,transparent 6px 12px);
+}
+.bullet-sigma {
+  position:absolute; left:20%; right:20%; height:4px;
+  background:rgba(0,123,255,.4); border-radius:2px; z-index:4;
+}
+.bullet-mean-dot {
+  position:absolute; left:50%; transform:translateX(-50%);
+  width:14px; height:14px; border-radius:50%;
+  background:#007BFF; border:2px solid #fff;
+  box-shadow:0 0 0 2px #007BFF; z-index:5;
+}
+.bullet-metrics {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:4px;
+  border-top:1px solid var(--c-border); padding-top:8px;
+}
+.bullet-metric { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.bullet-metric-label { font-size:9px; font-weight:700; text-transform:uppercase; color:var(--c-muted); letter-spacing:.4px; }
+.bullet-metric-val   { font-size:13px; font-weight:700; font-family:monospace; }
+.bullet-metric-sub   { font-size:9px; color:var(--c-muted); }
+
+/* =====================================================
+   OVERFILL: ROOT CAUSE CARDS
+   ===================================================== */
+.rc-card { border-radius:7px; border:1px solid var(--c-border); overflow:hidden; margin-bottom:8px; }
+.rc-header {
+  display:flex; align-items:center; gap:10px; padding:12px 16px; cursor:pointer;
+  background:var(--c-card); user-select:none; border-left:8px solid transparent;
+}
+.rc-header:hover { background:rgba(0,0,0,.02); }
+.rc-risk-dot { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
+.rc-title    { flex:1; font-size:13px; font-weight:700; color:var(--c-text); }
+.rc-meta     { font-size:11px; color:var(--c-muted); white-space:nowrap; }
+.rc-recover  { font-size:12px; font-weight:700; white-space:nowrap; }
+.rc-expand   { font-size:13px; color:var(--c-muted); transition:transform .2s; flex-shrink:0; }
+.rc-expand.open { transform:rotate(180deg); }
+.rc-body     { display:none; background:var(--c-card); border-top:1px solid var(--c-border); }
+.rc-affected {
+  background:#F8F9FA; padding:8px 16px;
+  font-size:11px; color:var(--c-muted); font-style:italic;
+  border-bottom:1px solid var(--c-border);
+}
+.rc-section { padding:12px 16px; border-bottom:1px solid var(--c-border); border-left:4px solid transparent; }
+.rc-section.cause  { border-left-color:#FF9800; }
+.rc-section.action { background:#E7F3FF; border-left-color:#007BFF; }
+.rc-section-title  { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+.rc-section.cause  .rc-section-title { color:#E65100; }
+.rc-section.action .rc-section-title { color:#007BFF; }
+.rc-section-text   { font-size:12.5px; color:var(--c-text); line-height:1.65; }
+.rc-badges         { display:flex; gap:8px; flex-wrap:wrap; padding:10px 16px; }
+.rc-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:3px 9px; border-radius:3px; font-size:10px; font-weight:700;
+}
+.rc-badge.capex   { background:#E7F3FF; color:#007BFF; border:1px solid #99CAFF; }
+.rc-badge.payback { background:#E8F5E9; color:#28A745; border:1px solid #A5D6A7; }
+.rc-badge.asset   { background:#F0F0F0; color:#555;    border:1px solid #CCC; }
+.risk-high    { border-left-color:#DC3545 !important; }
+.risk-high    .rc-risk-dot { background:#DC3545; }
+.risk-medhigh { border-left-color:#FF9800 !important; }
+.risk-medhigh .rc-risk-dot { background:#FF9800; }
+.risk-med     { border-left-color:#F5A534 !important; }
+.risk-med     .rc-risk-dot { background:#F5A534; }
+.risk-low     { border-left-color:#28A745 !important; }
+.risk-low     .rc-risk-dot { background:#28A745; }
+
+/* =====================================================
+   OVERFILL: SCENARIO CARDS (PREDICTIVE)
+   ===================================================== */
+.scenario-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:0; }
+.scenario-card {
+  border-radius:8px; padding:18px 20px;
+  display:flex; flex-direction:column; gap:4px;
+  color:#fff; overflow:hidden; position:relative;
+}
+.scenario-card.red   { background:linear-gradient(135deg,#C62828,#E57373); }
+.scenario-card.blue  { background:linear-gradient(135deg,#1565C0,#5C9DE8); }
+.scenario-card.green { background:linear-gradient(135deg,#1B5E20,#66BB6A); }
+.scenario-title { font-size:11px; font-weight:700; text-transform:uppercase; opacity:.85; }
+.scenario-value { font-size:36px; font-weight:700; line-height:1; letter-spacing:-.5px; }
+.scenario-sub   { font-size:11px; opacity:.8; line-height:1.45; }
+
+/* =====================================================
+   OVERFILL: FLAGGED COMPONENTS
+   ===================================================== */
+.flagged-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.flagged-card {
+  background:var(--c-card); border:1px solid var(--c-border);
+  border-radius:7px; padding:12px 14px;
+  border-left:6px solid transparent;
+  display:flex; flex-direction:column; gap:4px;
+}
+.fl-resource { font-size:12px; font-weight:700; color:var(--c-text); }
+.fl-meta     { font-size:11px; color:var(--c-muted); }
+.fl-cause    { font-size:11px; color:var(--c-muted); font-style:italic; }
+.fl-risk-high    { border-left-color:#DC3545; }
+.fl-risk-medhigh { border-left-color:#FF9800; }
+.fl-risk-med     { border-left-color:#F5A534; }
+.fl-risk-low     { border-left-color:#28A745; }
+
+/* =====================================================
+   OVERFILL: DATE RANGE / SIDEBAR EXTRAS
+   ===================================================== */
+.date-range-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+.date-reset { font-size:10px; color:#1565C0; text-decoration:underline; cursor:pointer; }
+.date-field { margin-bottom:6px; }
+.date-field label { display:block; font-size:9.5px; color:var(--c-muted); margin-bottom:2px; }
+.date-field input[type=date] {
+  width:100%; background:#fff; border:1px solid rgba(0,0,0,.15);
+  color:var(--c-text); padding:5px 7px; border-radius:4px; font-size:11px; outline:none;
+}
+.date-presets { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px; }
+.date-preset {
+  background:#fff; border:1px solid rgba(0,0,0,.15); color:var(--c-muted);
+  padding:3px 8px; border-radius:3px; font-size:10.5px; cursor:pointer; transition:all .12s;
+}
+.date-preset:hover { background:rgba(21,101,192,.08); color:var(--c-blue); border-color:var(--c-blue); }
+.sidebar-helper { font-size:9px; color:#ADB5BD; font-style:italic; line-height:1.5; margin-top:8px; }
+
+/* =====================================================
+   OVERFILL: TOGGLE GROUP
+   ===================================================== */
+.ov-toggle-row { display:flex; align-items:center; gap:6px; }
+.ov-toggle-btn {
+  background:#fff; border:1.5px solid #007BFF; color:#007BFF;
+  padding:4px 14px; border-radius:4px; cursor:pointer;
+  font-size:11px; font-weight:600; transition:all .12s;
+}
+.ov-toggle-btn.active { background:#007BFF; color:#fff; }
+
+/* SG status badges */
+.sg-badge { display:inline-block; padding:1px 6px; border-radius:3px; font-size:10px; font-weight:700; margin:1px 2px; }
+.sg-badge.ok     { background:#E8F5E9; color:#28A745; border:1px solid #A5D6A7; }
+.sg-badge.warn   { background:#FFF9E6; color:#E65100; border:1px solid #F5A534; }
+.sg-badge.orange { background:#FFF3E0; color:#E65100; border:1px solid #FFCC80; }
+.sg-badge.err    { background:#FEECEC; color:#DC3545; border:1px solid #F5C6CB; }
 </style>
 </head>
 <body>
@@ -576,10 +798,16 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
     <span class="gs-header-sub">Manufacturing Performance vs. Benchmark</span>
   </div>
   <div style="display:flex; align-items:center; gap:10px;">
+    <div class="module-toggle" id="module-toggle">
+      <button id="btn-module-gs" class="module-btn active" onclick="showModule('gs')">Gold Standard Gap</button>
+      <span class="module-sep">|</span>
+      <button id="btn-module-overfill" class="module-btn" onclick="showModule('overfill')">Overfill Analysis</button>
+    </div>
+    <span style="color:rgba(255,255,255,0.2);font-size:15px;user-select:none;">|</span>
     <div id="gs-type-indicator" class="gs-type-badge governed">
       🔒 <span id="gs-type-label">Governed GS · FY25</span>
     </div>
-    <nav class="page-nav">
+    <nav class="page-nav" id="gs-page-nav">
       <button id="btn-home" class="page-nav-btn active" onclick="showPage('home')">HOME</button>
       <button id="btn-dv" class="page-nav-btn" onclick="showPage('dv')">DEEP VIEW</button>
     </nav>
@@ -593,85 +821,180 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
 
   <!-- ====== LEFT PANEL ====== -->
   <aside class="gs-panel">
-    <div>
-      <span class="slicer-label">Plant</span>
-      <select class="slicer-select" onchange="handleSlicerChange()">
-        <option>Oevel</option>
-        <option>Zaventem</option>
-        <option>— All Plants —</option>
-      </select>
-    </div>
-    <div>
-      <span class="slicer-label">Resource / Line</span>
-      <select class="slicer-select" onchange="handleSlicerChange()">
-        <option>L67</option>
-        <option>L68</option>
-        <option>L72</option>
-        <option>— All Resources —</option>
-      </select>
-    </div>
-    <div>
-      <span class="slicer-label">Unit Size</span>
-      <select class="slicer-select" onchange="handleSlicerChange()">
-        <option>— All Sizes —</option>
-        <option>15 ml</option>
-        <option>30 ml</option>
-        <option>50 ml</option>
-      </select>
-    </div>
-    <div>
-      <span class="slicer-label">Product Category</span>
-      <div class="ms-wrap" id="ms-prodcat">
-        <button class="ms-trigger" id="ms-prodcat-trigger" onclick="toggleMS('ms-prodcat')">All Product Categories</button>
-        <div class="ms-dropdown">
-          <label class="ms-item"><input type="checkbox" id="ms-prodcat-all" onchange="toggleAllMS('ms-prodcat')" checked> All</label>
-          <hr class="ms-sep">
-          <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Mascara - Multi-purpose" checked> Mascara - Multi-purpose</label>
-          <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Foundation - Liquid" checked> Foundation - Liquid</label>
-          <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Serum - Anti-aging" checked> Serum - Anti-aging</label>
-          <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Cleanser - Foaming" checked> Cleanser - Foaming</label>
-          <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Moisturizer - SPF" checked> Moisturizer - SPF</label>
+
+    <!-- GS FILTERS -->
+    <div id="gs-sidebar-content">
+      <div>
+        <span class="slicer-label">Plant</span>
+        <select id="gs-plant" class="slicer-select" onchange="handleSlicerChange()">
+          <option>Oevel</option>
+          <option>Zaventem</option>
+          <option>— All Plants —</option>
+        </select>
+      </div>
+      <div>
+        <span class="slicer-label">Resource / Line</span>
+        <select id="gs-resource" class="slicer-select" onchange="handleSlicerChange()">
+          <option>L67</option>
+          <option>L68</option>
+          <option>L72</option>
+          <option>— All Resources —</option>
+        </select>
+      </div>
+      <div>
+        <span class="slicer-label">Unit Size</span>
+        <select class="slicer-select" onchange="handleSlicerChange()">
+          <option>— All Sizes —</option>
+          <option>15 ml</option>
+          <option>30 ml</option>
+          <option>50 ml</option>
+        </select>
+      </div>
+      <div>
+        <span class="slicer-label">Product Category</span>
+        <div class="ms-wrap" id="ms-prodcat">
+          <button class="ms-trigger" id="ms-prodcat-trigger" data-all-label="All Product Categories" onclick="toggleMS('ms-prodcat')">All Product Categories</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-prodcat-all" onchange="toggleAllMS('ms-prodcat')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Mascara - Multi-purpose" checked> Mascara - Multi-purpose</label>
+            <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Foundation - Liquid" checked> Foundation - Liquid</label>
+            <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Serum - Anti-aging" checked> Serum - Anti-aging</label>
+            <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Cleanser - Foaming" checked> Cleanser - Foaming</label>
+            <label class="ms-item"><input type="checkbox" class="ms-prodcat-opt" onchange="updateMSTrigger('ms-prodcat')" value="Moisturizer - SPF" checked> Moisturizer - SPF</label>
+          </div>
         </div>
       </div>
-    </div>
-    <div>
-      <span class="slicer-label">Time Period</span>
-      <select id="slicer-time" class="slicer-select" onchange="handleSlicerChange()">
-        <option value="week">Week</option>
-        <option value="month" selected>Month</option>
-        <option value="fy">Fiscal Year</option>
-        <option value="r12">Rolling 12 Months</option>
-        <option value="r6">Rolling 6 Months</option>
-        <option value="custom">Custom Date Range</option>
-      </select>
-    </div>
-
-    <!-- GS TYPE -->
-    <hr class="panel-sep">
-    <div>
-      <span class="slicer-label">Gold Standard Type</span>
-      <select id="slicer-gs-type" class="slicer-select" onchange="handleGSTypeChange()">
-        <option value="governed" selected>🔒 Governed GS (FY25 — Locked)</option>
-        <option value="baseline-12m">📊 Operating Baseline — 12 Month</option>
-        <option value="baseline-6m">📊 Operating Baseline — 6 Month</option>
-      </select>
-      <div id="baseline-months-grp" style="display:none;"></div>
-      <div style="font-size:9px;color:var(--c-muted);margin-top:4px;line-height:1.45;">
-        Governed = Official reporting &amp; compensation<br>
-        Operating Baselines = Analysis only (rolling window)
+      <div>
+        <span class="slicer-label">Time Period</span>
+        <select id="slicer-time" class="slicer-select" onchange="handleSlicerChange()">
+          <option value="week">Week</option>
+          <option value="month" selected>Month</option>
+          <option value="fy">Fiscal Year</option>
+          <option value="r12">Rolling 12 Months</option>
+          <option value="r6">Rolling 6 Months</option>
+          <option value="custom">Custom Date Range</option>
+        </select>
       </div>
-    </div>
 
-    <!-- Deep View sub-navigation (shown only on DV page) -->
-    <div id="dv-subnav" style="display:none">
+      <!-- GS TYPE -->
       <hr class="panel-sep">
-      <div class="subnav-heading">Deep View</div>
-      <button id="btn-sub-speed" class="sub-btn active" onclick="showSubTab('speed')">⚙&nbsp; Speed</button>
-      <button id="btn-sub-labor" class="sub-btn" onclick="showSubTab('labor')">👥&nbsp; Labor</button>
-      <button id="btn-sub-oee"   class="sub-btn" onclick="showSubTab('oee')">📊&nbsp; OEE</button>
-      <button id="btn-sub-scrap"    class="sub-btn" onclick="showSubTab('scrap')">♻&nbsp; Scrap</button>
-      <button id="btn-sub-massattr" class="sub-btn" onclick="showSubTab('massattr')">🔬&nbsp; Mass Attr.</button>
-    </div>
+      <div>
+        <span class="slicer-label">Gold Standard Type</span>
+        <select id="slicer-gs-type" class="slicer-select" onchange="handleGSTypeChange()">
+          <option value="governed" selected>🔒 Governed GS (FY25 — Locked)</option>
+          <option value="baseline-12m">📊 Operating Baseline — 12 Month</option>
+          <option value="baseline-6m">📊 Operating Baseline — 6 Month</option>
+        </select>
+        <div id="baseline-months-grp" style="display:none;"></div>
+        <div style="font-size:9px;color:var(--c-muted);margin-top:4px;line-height:1.45;">
+          Governed = Official reporting &amp; compensation<br>
+          Operating Baselines = Analysis only (rolling window)
+        </div>
+      </div>
+
+      <!-- Deep View sub-navigation (shown only on DV page) -->
+      <div id="dv-subnav" style="display:none">
+        <hr class="panel-sep">
+        <div class="subnav-heading">Deep View</div>
+        <button id="btn-sub-speed"    class="sub-btn active" onclick="showSubTab('speed')">⚙&nbsp; Speed</button>
+        <button id="btn-sub-labor"    class="sub-btn" onclick="showSubTab('labor')">👥&nbsp; Labor</button>
+        <button id="btn-sub-oee"      class="sub-btn" onclick="showSubTab('oee')">📊&nbsp; OEE</button>
+        <button id="btn-sub-scrap"    class="sub-btn" onclick="showSubTab('scrap')">♻&nbsp; Scrap</button>
+        <button id="btn-sub-massattr" class="sub-btn" onclick="showSubTab('massattr')">🔬&nbsp; Mass Attr.</button>
+      </div>
+    </div><!-- /gs-sidebar-content -->
+
+    <!-- OVERFILL FILTERS -->
+    <div id="ov-sidebar-content" style="display:none;">
+      <div class="date-range-row">
+        <span class="slicer-label">Date Range</span>
+        <span class="date-reset" onclick="resetOVDates()">Reset</span>
+      </div>
+      <div class="date-presets">
+        <button class="date-preset" onclick="setOVPreset('4w')">Last 4W</button>
+        <button class="date-preset" onclick="setOVPreset('3m')">Last 3M</button>
+        <button class="date-preset" onclick="setOVPreset('ytd')">YTD</button>
+        <button class="date-preset" onclick="setOVPreset('r12')">R12M</button>
+      </div>
+      <div class="date-field">
+        <label>From</label>
+        <input type="date" id="ov-date-from" value="2025-01-01" onchange="handleOVFilterChange()">
+      </div>
+      <div class="date-field">
+        <label>To</label>
+        <input type="date" id="ov-date-to" value="2025-06-30" onchange="handleOVFilterChange()">
+      </div>
+      <hr class="panel-sep">
+      <div>
+        <span class="slicer-label">Plant</span>
+        <select id="ov-plant" class="slicer-select" onchange="handleOVFilterChange()">
+          <option>Oevel</option>
+          <option>Zaventem</option>
+          <option>— All Plants —</option>
+        </select>
+      </div>
+      <div>
+        <span class="slicer-label">Resource / Line</span>
+        <div class="ms-wrap" id="ms-ov-resource">
+          <button class="ms-trigger" id="ms-ov-resource-trigger" data-all-label="All Resources" onclick="toggleMS('ms-ov-resource')">All Resources</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-ov-resource-all" onchange="toggleAllMS('ms-ov-resource')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item"><input type="checkbox" class="ms-ov-resource-opt" onchange="updateMSTrigger('ms-ov-resource')" value="L67" checked> L67</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-resource-opt" onchange="updateMSTrigger('ms-ov-resource')" value="L68" checked> L68</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-resource-opt" onchange="updateMSTrigger('ms-ov-resource')" value="L72" checked> L72</label>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="slicer-label">SKU</span>
+        <div class="ms-wrap" id="ms-ov-sku">
+          <button class="ms-trigger" id="ms-ov-sku-trigger" data-all-label="All SKUs" onclick="toggleMS('ms-ov-sku')">All SKUs</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-ov-sku-all" onchange="toggleAllMS('ms-ov-sku')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1042" checked> SKU-1042</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1055" checked> SKU-1055</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1098" checked> SKU-1098</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1113" checked> SKU-1113</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1127" checked> SKU-1127</label>
+          </div>
+        </div>
+      </div>
+      <hr class="panel-sep">
+      <div>
+        <span class="slicer-label">Brand</span>
+        <select class="slicer-select" onchange="handleOVFilterChange()">
+          <option>— All Brands —</option>
+          <option>Color Pro</option>
+          <option>Pure Skin</option>
+          <option>DermaTech</option>
+        </select>
+      </div>
+      <div>
+        <span class="slicer-label">Family</span>
+        <select class="slicer-select" onchange="handleOVFilterChange()">
+          <option>— All Families —</option>
+          <option>Mascara</option>
+          <option>Foundation</option>
+          <option>Serum</option>
+          <option>Cleanser</option>
+          <option>Moisturizer</option>
+        </select>
+      </div>
+      <div>
+        <span class="slicer-label">Shift</span>
+        <select class="slicer-select" onchange="handleOVFilterChange()">
+          <option>— All Shifts —</option>
+          <option>Morning</option>
+          <option>Afternoon</option>
+          <option>Night</option>
+        </select>
+      </div>
+      <p class="sidebar-helper">Filters apply to all Overfill pages. Switch modules to return to GS filters.</p>
+    </div><!-- /ov-sidebar-content -->
+
   </aside>
 
   <!-- ====== HOME PAGE ====== -->
@@ -1394,6 +1717,160 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
     </div><!-- /pane-massattr -->
 
   </main><!-- /page-dv -->
+
+  <!-- ====== OVERFILL ANALYSIS PAGE ====== -->
+  <main id="page-overfill" class="gs-content" style="display:none;">
+    <div class="tab-nav">
+      <button id="t-ov-overview"   class="tab-btn active" onclick="showOVTab('overview')">Overview</button>
+      <button id="t-ov-specscale"  class="tab-btn"        onclick="showOVTab('specscale')">Spec Scale</button>
+      <button id="t-ov-sg"         class="tab-btn"        onclick="showOVTab('sg')">Specific Gravity</button>
+      <button id="t-ov-rootcause"  class="tab-btn"        onclick="showOVTab('rootcause')">Root Cause &amp; Rec.</button>
+      <button id="t-ov-predictive" class="tab-btn"        onclick="showOVTab('predictive')">Predictive Insights</button>
+    </div>
+
+    <!-- ── OVERVIEW ── -->
+    <div class="pane active" id="pane-ov-overview">
+      <div class="ov-kpi-row" id="ov-kpi-row"></div>
+
+      <div class="card-grid col-2" style="margin-top:12px;">
+        <div class="gs-card">
+          <div class="card-title">Cost Trend — 12-Week Rolling</div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-cost-trend"></canvas></div>
+        </div>
+        <div class="gs-card">
+          <div class="card-title">Quantity Trend — 12-Week Rolling (g)</div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-qty-trend"></canvas></div>
+        </div>
+      </div>
+
+      <div class="gs-card" style="margin-top:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="card-title" style="margin:0;" id="ov-bar-title">Giveaway by Resource</div>
+          <div class="ov-toggle-row">
+            <button id="btn-ov-by-res" class="ov-toggle-btn active" onclick="setOVGroupBy('res')">By Resource</button>
+            <button id="btn-ov-by-sku" class="ov-toggle-btn"        onclick="setOVGroupBy('sku')">By SKU</button>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:180px;"><canvas id="ch-ov-giveaway-bar"></canvas></div>
+      </div>
+
+      <div class="gs-card" style="margin-top:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="card-title" style="margin:0;">
+            Overfill Heatmap — Resource × SKU
+            <span style="font-weight:400;font-size:10px;color:var(--c-muted);">&nbsp;(% Overfill · green = within spec · red = critical)</span>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="ov-heatmap" id="ov-heatmap-tbl"></table>
+        </div>
+        <div style="text-align:center;margin-top:10px;">
+          <button id="btn-load-more-hm" class="btn-secondary" onclick="loadMoreHeatmap()" style="font-size:11px;padding:6px 20px;">Load Next 20 →</button>
+        </div>
+      </div>
+
+      <div class="gs-card" style="margin-top:12px;">
+        <div class="card-title">Top Contributors to Overfill Cost</div>
+        <table class="dv-table" id="tb-ov-top">
+          <thead>
+            <tr>
+              <th>#</th><th>Resource</th><th>SKU</th>
+              <th>Avg Overfill %</th><th>Overfill g/yr</th><th>Cost Impact $</th><th>Risk</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div><!-- /pane-ov-overview -->
+
+    <!-- ── SPEC SCALE ── -->
+    <div class="pane" id="pane-ov-specscale">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div>
+          <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Fill Spec Scale</h3>
+          <p style="font-size:11px;color:var(--c-muted);margin:0;">Mean fill vs. nominal target with ±σ band and reject zones. Circle = measured mean. Dashed line = target.</p>
+        </div>
+        <div class="ov-toggle-row">
+          <button id="btn-ss-by-res" class="ov-toggle-btn active" onclick="setSSGroupBy('res')">By Resource</button>
+          <button id="btn-ss-by-sku" class="ov-toggle-btn"        onclick="setSSGroupBy('sku')">By SKU</button>
+        </div>
+      </div>
+      <div class="bullet-grid" id="bullet-grid"></div>
+    </div><!-- /pane-ov-specscale -->
+
+    <!-- ── SPECIFIC GRAVITY ── -->
+    <div class="pane" id="pane-ov-sg">
+      <div style="margin-bottom:14px;">
+        <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Specific Gravity Analysis</h3>
+        <p style="font-size:11px;color:var(--c-muted);margin:0;">SG variance over time and its weight impact per SKU. Higher SG = same volume weighs more = larger fill giveaway.</p>
+      </div>
+      <div class="gs-card" style="margin-bottom:12px;">
+        <div class="card-title">SG over Time — by SKU (12 Weeks)</div>
+        <div class="chart-wrap" style="height:210px;"><canvas id="ch-ov-sg-time"></canvas></div>
+      </div>
+      <div class="gs-card">
+        <div class="card-title">SG-Adjusted Overfill Assessment</div>
+        <table class="dv-table" id="tb-ov-sg">
+          <thead>
+            <tr>
+              <th>SKU</th><th>Resource</th><th>Nominal SG</th><th>Actual SG</th>
+              <th>SG Δ%</th><th>Fill Vol (ml)</th><th>SG-Adj Overfill (g)</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div><!-- /pane-ov-sg -->
+
+    <!-- ── ROOT CAUSE & RECOMMENDATIONS ── -->
+    <div class="pane" id="pane-ov-rootcause">
+      <div style="margin-bottom:16px;">
+        <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Root Cause &amp; Recommendations</h3>
+        <p style="font-size:11px;color:var(--c-muted);margin:0;">Ranked by risk priority. Click a card to expand root cause analysis and recommended actions.</p>
+      </div>
+      <div id="rc-stack"></div>
+    </div><!-- /pane-ov-rootcause -->
+
+    <!-- ── PREDICTIVE INSIGHTS ── -->
+    <div class="pane" id="pane-ov-predictive">
+      <div style="margin-bottom:14px;">
+        <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Predictive Insights</h3>
+        <p style="font-size:11px;color:var(--c-muted);margin:0;">6-month cost trajectory under three scenarios. All figures in USD.</p>
+      </div>
+
+      <div class="scenario-row" id="scenario-row"></div>
+
+      <div class="gs-card" style="margin-top:12px;">
+        <div class="card-title">Cumulative Cost Impact — 6-Month Scenarios</div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-ov-cumulative"></canvas></div>
+      </div>
+
+      <div class="gs-card" style="margin-top:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="card-title" style="margin:0;">3-Month Projection</div>
+          <div class="ov-toggle-row">
+            <button id="btn-3m-by-res" class="ov-toggle-btn active" onclick="set3MGroupBy('res')">By Resource</button>
+            <button id="btn-3m-by-sku" class="ov-toggle-btn"        onclick="set3MGroupBy('sku')">By SKU</button>
+          </div>
+        </div>
+        <table class="dv-table" id="tb-ov-3mo">
+          <thead>
+            <tr>
+              <th>Resource / SKU</th><th>Month +1</th><th>Month +2</th><th>Month +3</th>
+              <th>3M Total</th><th>Δ vs Do Nothing</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="gs-card" style="margin-top:12px;">
+        <div class="card-title">Flagged Components for Next Review Cycle</div>
+        <div class="flagged-grid" id="flagged-grid"></div>
+      </div>
+    </div><!-- /pane-ov-predictive -->
+
+  </main><!-- /page-overfill -->
 
 </div><!-- /gs-layout -->
 
@@ -2207,7 +2684,7 @@ function updateMSTrigger(id) {
   allCb.indeterminate = checked.length > 0 && checked.length < opts.length;
   const trigger = document.getElementById(id + '-trigger');
   if (checked.length === 0 || checked.length === opts.length) {
-    trigger.textContent = 'All Product Categories';
+    trigger.textContent = trigger.dataset.allLabel || 'All';
   } else if (checked.length === 1) {
     trigger.textContent = checked[0].value;
   } else {
@@ -2216,8 +2693,626 @@ function updateMSTrigger(id) {
   handleSlicerChange();
 }
 
+/* ─── OVERFILL DATA ──────────────────────────────────── */
+
+const OV_SUMMARY = {
+  giveawayUSD:    147250,
+  avgOverfillPct: 4.82,
+  overfillGPerYr: 38640,
+  worstContrib:   'L67 / SKU-1042',
+  trend:          '+1.2% MoM',
+  impactVsPrev:   '+$8,430'
+};
+
+const OV_WEEKS = ['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'];
+const OV_COST_TREND = [10800,11200,10500,12400,13100,12700,13900,14300,13600,14800,15200,14900];
+const OV_QTY_TREND  = [2800,2920,2770,3100,3290,3010,3210,3380,3190,3450,3640,3510];
+
+const OV_GIVEAWAY_BY_RES = {
+  labels: ['L67','L68','L72'],
+  data:   [67400,49800,30050],
+  colors: ['#DC3545','#FF9800','#28A745']
+};
+const OV_GIVEAWAY_BY_SKU = {
+  labels: ['SKU-1042','SKU-1055','SKU-1098','SKU-1113','SKU-1127'],
+  data:   [45600,38200,29400,22100,11950],
+  colors: ['#C62828','#DC3545','#FF9800','#F5A534','#28A745']
+};
+
+const OV_HEATMAP_ROWS = [
+  { resource:'L67', skus:{'SKU-1042':6.8,'SKU-1055':5.2,'SKU-1098':4.1,'SKU-1113':3.3,'SKU-1127':2.8} },
+  { resource:'L68', skus:{'SKU-1042':5.1,'SKU-1055':4.7,'SKU-1098':3.9,'SKU-1113':2.5,'SKU-1127':1.9} },
+  { resource:'L72', skus:{'SKU-1042':3.8,'SKU-1055':3.2,'SKU-1098':2.1,'SKU-1113':1.6,'SKU-1127':1.2} },
+  { resource:'L65', skus:{'SKU-1042':4.4,'SKU-1055':3.8,'SKU-1098':2.9,'SKU-1113':null,'SKU-1127':1.5} },
+  { resource:'L70', skus:{'SKU-1042':5.9,'SKU-1055':4.3,'SKU-1098':null,'SKU-1113':3.1,'SKU-1127':2.3} },
+  { resource:'L71', skus:{'SKU-1042':3.2,'SKU-1055':2.8,'SKU-1098':2.0,'SKU-1113':1.4,'SKU-1127':null} },
+  { resource:'L73', skus:{'SKU-1042':7.1,'SKU-1055':5.5,'SKU-1098':4.8,'SKU-1113':3.7,'SKU-1127':2.6} },
+  { resource:'L74', skus:{'SKU-1042':2.9,'SKU-1055':2.4,'SKU-1098':1.8,'SKU-1113':1.2,'SKU-1127':0.9} },
+  { resource:'L75', skus:{'SKU-1042':6.2,'SKU-1055':5.0,'SKU-1098':4.0,'SKU-1113':2.8,'SKU-1127':1.7} },
+  { resource:'L76', skus:{'SKU-1042':4.7,'SKU-1055':3.9,'SKU-1098':3.1,'SKU-1113':2.0,'SKU-1127':1.3} },
+  { resource:'L77', skus:{'SKU-1042':5.3,'SKU-1055':4.5,'SKU-1098':3.5,'SKU-1113':2.6,'SKU-1127':2.1} },
+  { resource:'L78', skus:{'SKU-1042':4.0,'SKU-1055':3.4,'SKU-1098':2.7,'SKU-1113':1.9,'SKU-1127':1.1} },
+  { resource:'L79', skus:{'SKU-1042':6.5,'SKU-1055':4.9,'SKU-1098':3.8,'SKU-1113':3.0,'SKU-1127':2.2} },
+  { resource:'L80', skus:{'SKU-1042':3.5,'SKU-1055':2.9,'SKU-1098':2.3,'SKU-1113':1.7,'SKU-1127':1.0} },
+  { resource:'L81', skus:{'SKU-1042':4.9,'SKU-1055':4.2,'SKU-1098':3.3,'SKU-1113':2.4,'SKU-1127':1.8} },
+  { resource:'L82', skus:{'SKU-1042':5.7,'SKU-1055':4.6,'SKU-1098':3.6,'SKU-1113':2.7,'SKU-1127':2.0} },
+  { resource:'L83', skus:{'SKU-1042':3.1,'SKU-1055':2.7,'SKU-1098':2.2,'SKU-1113':1.5,'SKU-1127':0.8} },
+  { resource:'L84', skus:{'SKU-1042':6.0,'SKU-1055':4.8,'SKU-1098':3.7,'SKU-1113':2.9,'SKU-1127':2.4} },
+  { resource:'L85', skus:{'SKU-1042':4.6,'SKU-1055':3.7,'SKU-1098':2.8,'SKU-1113':2.1,'SKU-1127':1.6} },
+  { resource:'L86', skus:{'SKU-1042':5.4,'SKU-1055':4.4,'SKU-1098':3.4,'SKU-1113':2.5,'SKU-1127':1.4} },
+  { resource:'L87', skus:{'SKU-1042':2.6,'SKU-1055':2.1,'SKU-1098':1.7,'SKU-1113':1.1,'SKU-1127':0.7} },
+  { resource:'L88', skus:{'SKU-1042':5.6,'SKU-1055':4.1,'SKU-1098':3.2,'SKU-1113':2.3,'SKU-1127':1.8} },
+  { resource:'L89', skus:{'SKU-1042':3.6,'SKU-1055':3.0,'SKU-1098':2.4,'SKU-1113':1.8,'SKU-1127':1.2} },
+  { resource:'L90', skus:{'SKU-1042':6.3,'SKU-1055':4.7,'SKU-1098':3.5,'SKU-1113':2.6,'SKU-1127':2.0} },
+];
+let OV_HEATMAP_OFFSET = 0;
+
+const OV_TOP_CONTRIBUTORS = [
+  { rank:1,  resource:'L67', sku:'SKU-1042', pct:6.8, gramsYr:12400, cost:45600, risk:'High' },
+  { rank:2,  resource:'L73', sku:'SKU-1042', pct:7.1, gramsYr:11800, cost:42900, risk:'High' },
+  { rank:3,  resource:'L67', sku:'SKU-1055', pct:5.2, gramsYr:9600,  cost:38200, risk:'Med-High' },
+  { rank:4,  resource:'L75', sku:'SKU-1042', pct:6.2, gramsYr:9100,  cost:34700, risk:'Med-High' },
+  { rank:5,  resource:'L68', sku:'SKU-1042', pct:5.1, gramsYr:8800,  cost:29800, risk:'Med-High' },
+  { rank:6,  resource:'L82', sku:'SKU-1055', pct:4.6, gramsYr:7500,  cost:24100, risk:'Med' },
+  { rank:7,  resource:'L70', sku:'SKU-1042', pct:5.9, gramsYr:7200,  cost:22600, risk:'Med' },
+  { rank:8,  resource:'L68', sku:'SKU-1055', pct:4.7, gramsYr:6900,  cost:21400, risk:'Med' },
+  { rank:9,  resource:'L67', sku:'SKU-1098', pct:4.1, gramsYr:5800,  cost:17200, risk:'Med' },
+  { rank:10, resource:'L77', sku:'SKU-1042', pct:5.3, gramsYr:5400,  cost:16800, risk:'Med' },
+];
+
+const OV_SPEC_SCALE = [
+  { id:'ss-L67',    resource:'L67', sku:'SKU-1042', nominalMl:30, meanMl:31.44, sigmaMl:0.82, specLo:28.5, specHi:31.5, targetMl:30.0 },
+  { id:'ss-L68',    resource:'L68', sku:'SKU-1042', nominalMl:30, meanMl:31.10, sigmaMl:0.65, specLo:28.5, specHi:31.5, targetMl:30.0 },
+  { id:'ss-L72',    resource:'L72', sku:'SKU-1042', nominalMl:30, meanMl:30.54, sigmaMl:0.45, specLo:28.5, specHi:31.5, targetMl:30.0 },
+  { id:'ss-L67-55', resource:'L67', sku:'SKU-1055', nominalMl:50, meanMl:52.60, sigmaMl:1.10, specLo:47.5, specHi:52.5, targetMl:50.0 },
+  { id:'ss-L68-55', resource:'L68', sku:'SKU-1055', nominalMl:50, meanMl:52.35, sigmaMl:0.95, specLo:47.5, specHi:52.5, targetMl:50.0 },
+  { id:'ss-L73',    resource:'L73', sku:'SKU-1042', nominalMl:30, meanMl:31.86, sigmaMl:0.90, specLo:28.5, specHi:31.5, targetMl:30.0 },
+];
+
+const OV_SG_DATA = {
+  'SKU-1042': [1.025,1.028,1.031,1.033,1.029,1.035,1.038,1.041,1.037,1.042,1.044,1.040],
+  'SKU-1055': [0.994,0.996,0.998,0.995,0.999,1.001,0.997,1.002,1.000,1.003,1.005,1.001],
+  'SKU-1098': [1.048,1.051,1.049,1.054,1.052,1.056,1.058,1.055,1.059,1.061,1.057,1.063],
+  'SKU-1113': [1.012,1.014,1.011,1.016,1.013,1.018,1.015,1.020,1.017,1.021,1.019,1.023],
+};
+const OV_SG_TABLE = [
+  { sku:'SKU-1042', resource:'L67', nomSG:1.025, actSG:1.040, fillVol:30, status:'warn' },
+  { sku:'SKU-1042', resource:'L68', nomSG:1.025, actSG:1.035, fillVol:30, status:'warn' },
+  { sku:'SKU-1055', resource:'L67', nomSG:0.995, actSG:1.001, fillVol:50, status:'warn' },
+  { sku:'SKU-1098', resource:'L67', nomSG:1.048, actSG:1.063, fillVol:15, status:'err' },
+  { sku:'SKU-1098', resource:'L68', nomSG:1.048, actSG:1.055, fillVol:15, status:'orange' },
+  { sku:'SKU-1113', resource:'L72', nomSG:1.012, actSG:1.021, fillVol:30, status:'ok' },
+  { sku:'SKU-1127', resource:'L72', nomSG:0.988, actSG:0.991, fillVol:50, status:'ok' },
+];
+
+const OV_ROOT_CAUSES = [
+  {
+    id:'rc-1', risk:'high', resource:'L67 / L73', skus:'SKU-1042, SKU-1055',
+    recoverable:'+$38,400/yr',
+    title:'Fill Head Calibration Drift — High Pressure Lines',
+    affectedRuns:'Affects all SKUs on L67 and L73 (26 active POs, ~840 fills/week)',
+    cause:'Fill heads on L67 and L73 show systematic positive bias of +4.8% and +5.1% respectively. Calibration logs indicate last certified calibration was 18 months ago (limit: 12 months). Positive SG drift amplifies weight-per-volume, compounding the volumetric overfill.',
+    action:'Schedule certified fill head calibration for L67 and L73 within 14 days. Implement 6-month calibration cadence. Add SPC alert for fill head bias > ±1.5% as leading indicator. Estimated correction: −4.1% avg overfill post-calibration.',
+    capex:'$2,400', payback:'< 30 days', asset:'Fill Heads FH-67A, FH-73B'
+  },
+  {
+    id:'rc-2', risk:'medhigh', resource:'L67 / L68 / L72', skus:'SKU-1098',
+    recoverable:'+$22,100/yr',
+    title:'SG Reference Formula Mismatch — SKU-1098',
+    affectedRuns:'Affects SKU-1098 across 3 resources (~210 fills/week)',
+    cause:'The formulation batch sheet for SKU-1098 references SG = 1.048 (original formula). Post-reformulation (Q2 FY24), the actual SG shifted to 1.058–1.063. The fill system uses the old SG reference for weight-to-volume conversion, resulting in systematic overfill of +1.4% purely from reference error.',
+    action:'Update SG reference in fill control system from 1.048 to 1.060 for SKU-1098. Trigger re-validation run (3 × 50 fills per resource). Update DimSKU master data. Alert QA to update formulation reference documentation.',
+    capex:'$0 (process correction)', payback:'Immediate', asset:'Fill Control System SKU Master'
+  },
+  {
+    id:'rc-3', risk:'medhigh', resource:'L75 / L82', skus:'SKU-1042',
+    recoverable:'+$17,800/yr',
+    title:'Temperature-Driven Viscosity Shift at Line Start',
+    affectedRuns:'Affects first 60–90 minutes of each production run on L75 and L82',
+    cause:'Viscosity measurements at line start show 12–18% higher readings than steady-state (product not fully at operating temp). This increases actual fill volume in volumetric fill heads. Effect dissipates after 60–90 min but accounts for ~23% of total overfill on these resources.',
+    action:'Implement minimum 45-min warm-up protocol before production start for SKU-1042 on L75 / L82. Add pre-run viscosity check (target: < ±3% of nominal). Program line start reject window (first 20 fills flagged for manual weigh-check).',
+    capex:'$800 (thermometer probes)', payback:'< 60 days', asset:'L75-TH01, L82-TH01'
+  },
+  {
+    id:'rc-4', risk:'med', resource:'All resources', skus:'SKU-1055',
+    recoverable:'+$11,200/yr',
+    title:'Nozzle Drip — Post-Fill Deadband Too Wide',
+    affectedRuns:'Observed on 6 of 9 active resources for SKU-1055 (~380 fills/week)',
+    cause:'Post-fill nozzle drip adds +0.3–0.8g per fill beyond target weight. Drip pattern is consistent with deadband timing set at 600ms; industry benchmark for this viscosity is 350–400ms. No SPC alert threshold was set for post-fill weight deviation.',
+    action:'Reduce nozzle close deadband from 600ms to 375ms on all resources. Run 3-day trial on L67 before fleet-wide rollout. Set SPC alert for post-fill weight drift > 0.25g. Expected improvement: −0.5g avg per fill (−0.4% overfill).',
+    capex:'$0 (parameter change)', payback:'Immediate', asset:'Nozzle Controller NC-ALL'
+  },
+  {
+    id:'rc-5', risk:'low', resource:'L68', skus:'SKU-1113',
+    recoverable:'+$4,800/yr',
+    title:'Operator Variance — Manual Top-Up Practice',
+    affectedRuns:'Intermittent — observed on 14% of L68 runs for SKU-1113',
+    cause:'Operator-initiated manual top-up fills are adding +1.1–1.9g beyond target in 14% of inspected fills on L68 for SKU-1113. This practice was introduced informally to avoid under-fill rejects and is not documented in the work instruction.',
+    action:'Update SOP to prohibit manual top-up without QA sign-off. Add targeted operator re-training on L68 (SKU-1113 setup). Add flag to shift supervisor checklist. Review SPC lower control limit — current setting may be too aggressive, driving the behavior.',
+    capex:'$0', payback:'< 30 days', asset:'SOP WI-L68-SKU1113'
+  },
+];
+
+const OV_PREDICTIVE = {
+  months:        ['Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25'],
+  cumDoNothing:  [14900,30300,46400,63200,80700,98900],
+  cumInvest:     [14900,29100,42700,55600,67900,79700],
+  cumNet:        [14900,28000,39400,49200,57800,65700],
+};
+
+const OV_SCENARIOS = [
+  { scenario:'Do Nothing',      value:'$98,900', sub:'6-month cumulative at current trajectory (+22% vs H1)', cls:'red' },
+  { scenario:'Investment Path', value:'$79,700', sub:'After calibration, SG fix, warm-up protocol — saves $19,200 vs do-nothing', cls:'blue' },
+  { scenario:'Net 6M Result',   value:'$65,700', sub:'All 5 root cause actions complete — total savings: $33,200', cls:'green' },
+];
+
+const OV_3MO_TABLE = [
+  { name:'L67', m1:14200, m2:13400, m3:12600, vs:'−$6,900' },
+  { name:'L68', m1:10800, m2:10200, m3: 9600, vs:'−$4,200' },
+  { name:'L72', m1: 6600, m2: 6100, m3: 5800, vs:'−$2,100' },
+  { name:'L73', m1:13100, m2:12300, m3:11500, vs:'−$5,800' },
+  { name:'L75', m1: 9200, m2: 8600, m3: 8100, vs:'−$2,800' },
+];
+
+const OV_FLAGGED = [
+  { resource:'L67', sku:'SKU-1042', metric:'Overfill % = 6.8%', risk:'fl-risk-high',    cause:'Fill head drift' },
+  { resource:'L73', sku:'SKU-1042', metric:'Overfill % = 7.1%', risk:'fl-risk-high',    cause:'Fill head drift' },
+  { resource:'L67', sku:'SKU-1098', metric:'SG Δ = +1.5%',      risk:'fl-risk-medhigh', cause:'SG ref mismatch' },
+  { resource:'L75', sku:'SKU-1042', metric:'Overfill % = 6.2%', risk:'fl-risk-medhigh', cause:'Viscosity shift' },
+  { resource:'L82', sku:'SKU-1042', metric:'Temp trend ↑',      risk:'fl-risk-medhigh', cause:'Warm-up needed' },
+  { resource:'L68', sku:'SKU-1113', metric:'Manual top-up (14%)',risk:'fl-risk-med',     cause:'Operator variance' },
+];
+
+let OV_GROUP_BY      = 'res';
+let SS_GROUP_BY      = 'res';
+let THREEMO_GROUP_BY = 'res';
+
+/* ─── OVERFILL: MODULE SWITCH ────────────────────────── */
+
+function showModule(m) {
+  const pageHome = document.getElementById('page-home');
+  const pageDV   = document.getElementById('page-dv');
+  const pageOV   = document.getElementById('page-overfill');
+  const gsNav    = document.getElementById('gs-page-nav');
+  const gsSide   = document.getElementById('gs-sidebar-content');
+  const ovSide   = document.getElementById('ov-sidebar-content');
+  const btnGS    = document.getElementById('btn-module-gs');
+  const btnOV    = document.getElementById('btn-module-overfill');
+
+  if (m === 'gs') {
+    pageOV.style.display  = 'none';
+    gsNav.style.display   = '';
+    gsSide.style.display  = '';
+    ovSide.style.display  = 'none';
+    btnGS.classList.add('active');
+    btnOV.classList.remove('active');
+    // restore whichever GS page was active
+    const activePage = document.getElementById('btn-home').classList.contains('active') ? 'home' : 'dv';
+    showPage(activePage);
+  } else {
+    pageHome.style.display = 'none';
+    pageDV.style.display   = 'none';
+    pageOV.style.display   = '';
+    gsNav.style.display    = 'none';
+    gsSide.style.display   = 'none';
+    ovSide.style.display   = '';
+    btnGS.classList.remove('active');
+    btnOV.classList.add('active');
+    // persist Plant filter from GS → OV
+    const gsPlant = document.getElementById('gs-plant');
+    const ovPlant = document.getElementById('ov-plant');
+    if (gsPlant && ovPlant) ovPlant.value = gsPlant.value;
+    showOVTab('overview');
+  }
+}
+
+/* ─── OVERFILL: TAB NAVIGATION ───────────────────────── */
+
+const OV_INITED = {};
+
+function showOVTab(tab) {
+  document.querySelectorAll('#page-overfill .pane').forEach(p => p.classList.remove('active'));
+  const active = document.getElementById('pane-ov-' + tab);
+  if (active) active.classList.add('active');
+  ['overview','specscale','sg','rootcause','predictive'].forEach(t => {
+    const b = document.getElementById('t-ov-' + t);
+    if (b) b.classList.toggle('active', t === tab);
+  });
+  if (!OV_INITED[tab]) {
+    OV_INITED[tab] = true;
+    if      (tab === 'overview')   { renderOVKPIs(); initOVOverviewCharts(); renderOVHeatmap(); renderOVTopContributors(); }
+    else if (tab === 'specscale')  { renderOVSpecScale(); }
+    else if (tab === 'sg')         { initOVSGCharts(); renderOVSGTable(); }
+    else if (tab === 'rootcause')  { renderOVRootCauses(); }
+    else if (tab === 'predictive') { renderOVScenarios(); initOVPredictiveCharts(); renderOV3MoTable(); renderOVFlagged(); }
+  }
+}
+
+/* ─── OVERFILL: KPI TILES ────────────────────────────── */
+
+function renderOVKPIs() {
+  const el = document.getElementById('ov-kpi-row');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="ov-kpi-card">
+      <span class="ov-kpi-label">Total Giveaway Cost (YTD)</span>
+      <span class="ov-kpi-value ov-val-red">$${OV_SUMMARY.giveawayUSD.toLocaleString()}</span>
+      <span class="ov-kpi-sub">vs $138,820 prior period</span>
+      <span class="ov-kpi-badge">▲ ${OV_SUMMARY.impactVsPrev} MoM</span>
+    </div>
+    <div class="ov-kpi-card">
+      <span class="ov-kpi-label">Avg Overfill % (All Resources)</span>
+      <span class="ov-kpi-value ov-val-yellow">${OV_SUMMARY.avgOverfillPct.toFixed(2)}%</span>
+      <span class="ov-kpi-sub">Spec limit: ≤ 2.00%</span>
+      <span class="ov-kpi-badge" style="background:#E65100;">${OV_SUMMARY.trend}</span>
+    </div>
+    <div class="ov-kpi-card">
+      <span class="ov-kpi-label">Overfill Weight / Year</span>
+      <span class="ov-kpi-value ov-val-yellow">${OV_SUMMARY.overfillGPerYr.toLocaleString()} g</span>
+      <span class="ov-kpi-sub">~${(OV_SUMMARY.overfillGPerYr/1000).toFixed(1)} kg total giveaway</span>
+    </div>
+    <div class="ov-kpi-card">
+      <span class="ov-kpi-label">Worst Contributor</span>
+      <span class="ov-kpi-value" style="font-size:19px;color:var(--c-text);">${OV_SUMMARY.worstContrib}</span>
+      <span class="ov-kpi-sub">6.8% avg overfill · $45,600 YTD cost</span>
+      <span class="ov-kpi-badge">Needs action</span>
+    </div>`;
+}
+
+/* ─── OVERFILL: OVERVIEW CHARTS ──────────────────────── */
+
+function initOVOverviewCharts() {
+  init('ch-ov-cost-trend', {
+    type: 'line',
+    data: {
+      labels: OV_WEEKS,
+      datasets: [{ label:'Giveaway Cost ($)', data:OV_COST_TREND,
+        borderColor:'#DC3545', backgroundColor:'rgba(220,53,69,.08)',
+        fill:true, tension:.3, pointRadius:3, borderWidth:2 }]
+    },
+    options: { ...baseOpts('USD ($)'), plugins:{ legend:{ display:false } } }
+  });
+  init('ch-ov-qty-trend', {
+    type: 'line',
+    data: {
+      labels: OV_WEEKS,
+      datasets: [{ label:'Overfill Volume (g)', data:OV_QTY_TREND,
+        borderColor:'#FF9800', backgroundColor:'rgba(255,152,0,.08)',
+        fill:true, tension:.3, pointRadius:3, borderWidth:2 }]
+    },
+    options: { ...baseOpts('Grams (g)'), plugins:{ legend:{ display:false } } }
+  });
+  _renderOVGiveawayBar();
+}
+
+function _renderOVGiveawayBar() {
+  const src = OV_GROUP_BY === 'res' ? OV_GIVEAWAY_BY_RES : OV_GIVEAWAY_BY_SKU;
+  const ex  = REG['ch-ov-giveaway-bar'];
+  if (ex) { ex.destroy(); delete REG['ch-ov-giveaway-bar']; }
+  const titleEl = document.getElementById('ov-bar-title');
+  if (titleEl) titleEl.textContent = OV_GROUP_BY === 'res' ? 'Giveaway by Resource' : 'Giveaway by SKU';
+  init('ch-ov-giveaway-bar', {
+    type: 'bar',
+    data: { labels:src.labels, datasets:[{ data:src.data, backgroundColor:src.colors, borderRadius:4 }] },
+    options: { ...baseOpts('USD ($)'), indexAxis:'y', plugins:{ legend:{ display:false } } }
+  });
+}
+
+function setOVGroupBy(group) {
+  OV_GROUP_BY = group;
+  document.getElementById('btn-ov-by-res').classList.toggle('active', group === 'res');
+  document.getElementById('btn-ov-by-sku').classList.toggle('active', group === 'sku');
+  _renderOVGiveawayBar();
+}
+
+/* ─── OVERFILL: HEATMAP ──────────────────────────────── */
+
+function _hmClass(v) {
+  if (v === null || v === undefined) return 'hm-nodata';
+  if (v >= 6.0) return 'hm-dkred';
+  if (v >= 4.5) return 'hm-red';
+  if (v >= 3.5) return 'hm-orange';
+  if (v >= 2.5) return 'hm-yellow';
+  if (v >= 1.5) return 'hm-lgreen';
+  return 'hm-green';
+}
+
+function renderOVHeatmap() {
+  OV_HEATMAP_OFFSET = 0;
+  const tbl = document.getElementById('ov-heatmap-tbl');
+  if (!tbl) return;
+  const skus = Object.keys(OV_HEATMAP_ROWS[0].skus);
+  let html = '<thead><tr><th class="row-hdr">Resource</th>';
+  skus.forEach(s => { html += '<th>' + s + '</th>'; });
+  html += '</tr></thead><tbody id="ov-hm-body">';
+  OV_HEATMAP_ROWS.slice(0, 20).forEach(r => {
+    html += '<tr><td class="row-hdr">' + r.resource + '</td>';
+    skus.forEach(s => {
+      const v = r.skus[s];
+      html += '<td class="' + _hmClass(v) + '">' + (v != null ? v.toFixed(1) + '%' : '—') + '</td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  tbl.innerHTML = html;
+  OV_HEATMAP_OFFSET = 20;
+  const btn = document.getElementById('btn-load-more-hm');
+  if (btn) btn.style.display = OV_HEATMAP_OFFSET >= OV_HEATMAP_ROWS.length ? 'none' : '';
+}
+
+function loadMoreHeatmap() {
+  const tbody = document.getElementById('ov-hm-body');
+  if (!tbody) return;
+  const skus = Object.keys(OV_HEATMAP_ROWS[0].skus);
+  OV_HEATMAP_ROWS.slice(OV_HEATMAP_OFFSET, OV_HEATMAP_OFFSET + 20).forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td class="row-hdr">' + r.resource + '</td>' +
+      skus.map(s => {
+        const v = r.skus[s];
+        return '<td class="' + _hmClass(v) + '">' + (v != null ? v.toFixed(1) + '%' : '—') + '</td>';
+      }).join('');
+    tbody.appendChild(tr);
+  });
+  OV_HEATMAP_OFFSET += 20;
+  const btn = document.getElementById('btn-load-more-hm');
+  if (btn) btn.style.display = OV_HEATMAP_OFFSET >= OV_HEATMAP_ROWS.length ? 'none' : '';
+}
+
+/* ─── OVERFILL: TOP CONTRIBUTORS ─────────────────────── */
+
+function renderOVTopContributors() {
+  const tb = document.querySelector('#tb-ov-top tbody');
+  if (!tb) return;
+  const rC = { 'High':'#DC3545', 'Med-High':'#FF9800', 'Med':'#F5A534' };
+  tb.innerHTML = OV_TOP_CONTRIBUTORS.map(r => `
+    <tr>
+      <td style="font-weight:700;">${r.rank}</td>
+      <td>${r.resource}</td><td>${r.sku}</td>
+      <td style="font-weight:700;color:${rC[r.risk]||'#333'}">${r.pct.toFixed(1)}%</td>
+      <td>${r.gramsYr.toLocaleString()} g</td>
+      <td style="font-weight:700;">$${r.cost.toLocaleString()}</td>
+      <td><span class="ov-kpi-badge" style="background:${rC[r.risk]||'#555'};">${r.risk}</span></td>
+    </tr>`).join('');
+}
+
+/* ─── OVERFILL: SPEC SCALE (BULLET CHARTS) ───────────── */
+
+function renderOVSpecScale() {
+  const grid = document.getElementById('bullet-grid');
+  if (!grid) return;
+  grid.innerHTML = OV_SPEC_SCALE.map(d => {
+    const range    = d.specHi - d.specLo;
+    const pct      = v => ((v - d.specLo) / range * 100);
+    const clamp    = x => Math.max(0, Math.min(100, x));
+    const meanP    = clamp(pct(d.meanMl));
+    const targetP  = clamp(pct(d.targetMl));
+    const sigLoP   = clamp(pct(d.meanMl - d.sigmaMl));
+    const sigHiP   = clamp(pct(d.meanMl + d.sigmaMl));
+    const specHiP  = clamp(pct(d.specHi));
+    const specLoP  = clamp(pct(d.specLo));
+    const ovPct    = ((d.meanMl - d.targetMl) / d.targetMl * 100);
+    const statusCls = ovPct > 4 ? 'ov-val-red' : ovPct > 2 ? 'ov-val-yellow' : 'ov-val-green';
+    const rejHi    = (100 - specHiP).toFixed(1);
+    const warnHi   = (specHiP - 65).toFixed(1);
+    const warnLo   = (65 - specLoP).toFixed(1);
+    const rejLo    = specLoP.toFixed(1);
+    return `
+      <div class="bullet-card">
+        <div class="bullet-card-title">${d.resource}</div>
+        <div class="bullet-card-sub">${d.sku} · Nominal: ${d.nominalMl} ml</div>
+        <div class="bullet-scale-wrap">
+          <div class="bullet-scale">
+            <div class="bullet-zone bullet-zone-reject" style="flex:${rejHi}">
+              <span class="bullet-zone-label top">REJECT HIGH</span>
+            </div>
+            <div class="bullet-zone bullet-zone-warn" style="flex:${warnHi}"></div>
+            <div class="bullet-zone bullet-zone-ok"   style="flex:30"></div>
+            <div class="bullet-zone bullet-zone-warn" style="flex:${warnLo}"></div>
+            <div class="bullet-zone bullet-zone-reject" style="flex:${rejLo}">
+              <span class="bullet-zone-label bot">REJECT LOW</span>
+            </div>
+            <div class="bullet-target-line" style="top:${(100-targetP).toFixed(1)}%"></div>
+            <div class="bullet-sigma" style="top:${(100-sigHiP).toFixed(1)}%;height:${(sigHiP-sigLoP).toFixed(1)}%"></div>
+            <div class="bullet-mean-dot" style="top:calc(${(100-meanP).toFixed(1)}% - 7px)"></div>
+          </div>
+        </div>
+        <div class="bullet-metrics">
+          <div class="bullet-metric">
+            <span class="bullet-metric-label">Mean</span>
+            <span class="bullet-metric-val">${d.meanMl.toFixed(2)}</span>
+            <span class="bullet-metric-sub">ml</span>
+          </div>
+          <div class="bullet-metric">
+            <span class="bullet-metric-label">σ</span>
+            <span class="bullet-metric-val">±${d.sigmaMl.toFixed(2)}</span>
+            <span class="bullet-metric-sub">ml</span>
+          </div>
+          <div class="bullet-metric">
+            <span class="bullet-metric-label">Overfill</span>
+            <span class="bullet-metric-val ${statusCls}">+${ovPct.toFixed(1)}%</span>
+            <span class="bullet-metric-sub">vs target</span>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function setSSGroupBy(group) {
+  SS_GROUP_BY = group;
+  document.getElementById('btn-ss-by-res').classList.toggle('active', group === 'res');
+  document.getElementById('btn-ss-by-sku').classList.toggle('active', group === 'sku');
+}
+
+/* ─── OVERFILL: SG CHART + TABLE ─────────────────────── */
+
+function initOVSGCharts() {
+  const skus    = Object.keys(OV_SG_DATA);
+  const palette = ['#1565C0','#DC3545','#28A745','#FF9800','#6A1B9A'];
+  init('ch-ov-sg-time', {
+    type: 'line',
+    data: {
+      labels: OV_WEEKS,
+      datasets: skus.map((sku, i) => ({
+        label: sku, data: OV_SG_DATA[sku],
+        borderColor: palette[i % palette.length],
+        backgroundColor: 'transparent',
+        tension:.3, pointRadius:4, borderWidth:2
+      }))
+    },
+    options: baseOpts('Specific Gravity')
+  });
+}
+
+function renderOVSGTable() {
+  const tb = document.querySelector('#tb-ov-sg tbody');
+  if (!tb) return;
+  const labelMap = { ok:'Within Spec', warn:'Monitor', orange:'Caution', err:'Out of Spec' };
+  tb.innerHTML = OV_SG_TABLE.map(r => {
+    const delta   = ((r.actSG - r.nomSG) / r.nomSG * 100);
+    const adjOvf  = (r.fillVol * delta / 100 * r.actSG).toFixed(2);
+    return `<tr>
+      <td>${r.sku}</td><td>${r.resource}</td>
+      <td>${r.nomSG.toFixed(3)}</td>
+      <td style="font-weight:700;">${r.actSG.toFixed(3)}</td>
+      <td style="font-weight:700;color:${delta>1?'#DC3545':'#28A745'}">${delta>0?'+':''}${delta.toFixed(2)}%</td>
+      <td>${r.fillVol} ml</td>
+      <td>${adjOvf} g</td>
+      <td><span class="sg-badge ${r.status}">${labelMap[r.status]||r.status}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ─── OVERFILL: ROOT CAUSE CARDS ─────────────────────── */
+
+function renderOVRootCauses() {
+  const stack = document.getElementById('rc-stack');
+  if (!stack) return;
+  stack.innerHTML = OV_ROOT_CAUSES.map(r => `
+    <div class="rc-card">
+      <div class="rc-header risk-${r.risk}" onclick="toggleRC('${r.id}')">
+        <div class="rc-risk-dot"></div>
+        <div class="rc-title">${r.title}</div>
+        <div class="rc-meta">${r.resource}</div>
+        <div class="rc-recover ov-val-green">${r.recoverable}</div>
+        <span class="rc-expand" id="rcx-${r.id}">▼</span>
+      </div>
+      <div class="rc-body" id="rcb-${r.id}">
+        <div class="rc-affected">Affected: ${r.affectedRuns}</div>
+        <div class="rc-section cause">
+          <div class="rc-section-title">Root Cause</div>
+          <div class="rc-section-text">${r.cause}</div>
+        </div>
+        <div class="rc-section action">
+          <div class="rc-section-title">Recommended Action</div>
+          <div class="rc-section-text">${r.action}</div>
+        </div>
+        <div class="rc-badges">
+          <span class="rc-badge capex">CapEx: ${r.capex}</span>
+          <span class="rc-badge payback">Payback: ${r.payback}</span>
+          <span class="rc-badge asset">${r.asset}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleRC(id) {
+  const body = document.getElementById('rcb-' + id);
+  const icon = document.getElementById('rcx-' + id);
+  if (!body) return;
+  const open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  if (icon) icon.classList.toggle('open', !open);
+}
+
+/* ─── OVERFILL: PREDICTIVE ───────────────────────────── */
+
+function renderOVScenarios() {
+  const el = document.getElementById('scenario-row');
+  if (!el) return;
+  el.innerHTML = OV_SCENARIOS.map(s => `
+    <div class="scenario-card ${s.cls}">
+      <div class="scenario-title">${s.scenario}</div>
+      <div class="scenario-value">${s.value}</div>
+      <div class="scenario-sub">${s.sub}</div>
+    </div>`).join('');
+}
+
+function initOVPredictiveCharts() {
+  init('ch-ov-cumulative', {
+    type: 'line',
+    data: {
+      labels: OV_PREDICTIVE.months,
+      datasets: [
+        { label:'Do Nothing',      data:OV_PREDICTIVE.cumDoNothing,
+          borderColor:'#DC3545', backgroundColor:'rgba(220,53,69,.08)',
+          fill:true, tension:.35, borderWidth:2.5, pointRadius:3 },
+        { label:'Investment Path', data:OV_PREDICTIVE.cumInvest,
+          borderColor:'#1565C0', backgroundColor:'rgba(21,101,192,.06)',
+          fill:true, tension:.35, borderWidth:2.5, borderDash:[5,3], pointRadius:3 },
+        { label:'Net Result',      data:OV_PREDICTIVE.cumNet,
+          borderColor:'#28A745', backgroundColor:'rgba(40,167,69,.08)',
+          fill:true, tension:.35, borderWidth:2.5, borderDash:[2,3], pointRadius:3 },
+      ]
+    },
+    options: baseOpts('Cumulative Cost ($)')
+  });
+}
+
+function renderOV3MoTable() {
+  const tb = document.querySelector('#tb-ov-3mo tbody');
+  if (!tb) return;
+  tb.innerHTML = OV_3MO_TABLE.map(r => `
+    <tr>
+      <td style="font-weight:700;">${r.name}</td>
+      <td>$${r.m1.toLocaleString()}</td>
+      <td>$${r.m2.toLocaleString()}</td>
+      <td>$${r.m3.toLocaleString()}</td>
+      <td style="font-weight:700;">$${(r.m1+r.m2+r.m3).toLocaleString()}</td>
+      <td style="font-weight:700;color:#28A745;">${r.vs}</td>
+    </tr>`).join('');
+}
+
+function set3MGroupBy(group) {
+  THREEMO_GROUP_BY = group;
+  document.getElementById('btn-3m-by-res').classList.toggle('active', group === 'res');
+  document.getElementById('btn-3m-by-sku').classList.toggle('active', group === 'sku');
+}
+
+function renderOVFlagged() {
+  const grid = document.getElementById('flagged-grid');
+  if (!grid) return;
+  grid.innerHTML = OV_FLAGGED.map(f => `
+    <div class="flagged-card ${f.risk}">
+      <div class="fl-resource">${f.resource} · ${f.sku}</div>
+      <div class="fl-meta">${f.metric}</div>
+      <div class="fl-cause">↳ ${f.cause}</div>
+    </div>`).join('');
+}
+
+/* ─── OVERFILL: DATE FILTER HELPERS ──────────────────── */
+
+function handleOVFilterChange() { /* stub — visual only */ }
+
+function resetOVDates() {
+  document.getElementById('ov-date-from').value = '2025-01-01';
+  document.getElementById('ov-date-to').value   = '2025-06-30';
+}
+
+function setOVPreset(p) {
+  const today = new Date('2025-06-30T00:00:00');
+  const from  = new Date(today);
+  if      (p === '4w')  { from.setDate(today.getDate() - 28); }
+  else if (p === '3m')  { from.setMonth(today.getMonth() - 3); }
+  else if (p === 'ytd') { from.setMonth(0); from.setDate(1); }
+  else if (p === 'r12') { from.setFullYear(today.getFullYear() - 1); }
+  const ymd = d => d.toISOString().split('T')[0];
+  document.getElementById('ov-date-from').value = ymd(from);
+  document.getElementById('ov-date-to').value   = ymd(today);
+}
+
 /* ─── INIT ───────────────────────────────────────────── */
 window.addEventListener('load', () => {
+  showModule('gs');
   showPage('home');
   showHomeTab('results');
 });
