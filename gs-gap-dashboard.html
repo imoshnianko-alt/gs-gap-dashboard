@@ -851,6 +851,22 @@ table.ov-heatmap tbody td.row-hdr {
         </select>
       </div>
       <div>
+        <span class="slicer-label">Product</span>
+        <div class="ms-wrap" id="ms-product">
+          <button class="ms-trigger" id="ms-product-trigger" data-all-label="All Products" onclick="toggleMS('ms-product')">All Products</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-product-all" onchange="toggleAllMS('ms-product')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item"><input type="checkbox" class="ms-product-opt" onchange="updateMSTrigger('ms-product')" value="Mascara Black Volume 15ml" checked> Mascara Black Volume 15ml</label>
+            <label class="ms-item"><input type="checkbox" class="ms-product-opt" onchange="updateMSTrigger('ms-product')" value="Mascara Black Volume 30ml" checked> Mascara Black Volume 30ml</label>
+            <label class="ms-item"><input type="checkbox" class="ms-product-opt" onchange="updateMSTrigger('ms-product')" value="Foundation Matte SPF15 30ml" checked> Foundation Matte SPF15 30ml</label>
+            <label class="ms-item"><input type="checkbox" class="ms-product-opt" onchange="updateMSTrigger('ms-product')" value="Serum HA Anti-aging 15ml" checked> Serum HA Anti-aging 15ml</label>
+            <label class="ms-item"><input type="checkbox" class="ms-product-opt" onchange="updateMSTrigger('ms-product')" value="Cleanser Foam Gentle 30ml" checked> Cleanser Foam Gentle 30ml</label>
+            <label class="ms-item"><input type="checkbox" class="ms-product-opt" onchange="updateMSTrigger('ms-product')" value="Moisturizer SPF30 30ml" checked> Moisturizer SPF30 30ml</label>
+          </div>
+        </div>
+      </div>
+      <div>
         <span class="slicer-label">Product Category</span>
         <div class="ms-wrap" id="ms-prodcat">
           <button class="ms-trigger" id="ms-prodcat-trigger" data-all-label="All Product Categories" onclick="toggleMS('ms-prodcat')">All Product Categories</button>
@@ -1114,13 +1130,13 @@ table.ov-heatmap tbody td.row-hdr {
           <span class="card-title">Portfolio Segmentation</span>
           <button style="background:none;border:none;cursor:pointer;font-size:12px;color:var(--c-blue);font-weight:700;" onclick="openThreshConfig()">⚙ Configure Thresholds</button>
         </div>
-        <div class="card-subtitle" style="margin-bottom:6px;">SKU/line performance classified by gap to Governed GS. Thresholds configurable pending Stephanie &amp; Steven sign-off.</div>
+        <div class="card-subtitle" style="margin-bottom:6px;">SKU/line performance classified by gap to Reference Speed (RS). Thresholds configurable pending Stephanie &amp; Steven sign-off.</div>
         <div class="seg-grid">
           <div class="seg-panel gold">
             <div class="seg-icon">★</div>
             <div class="seg-pct" id="seg-gold-pct">34%</div>
             <div class="seg-label">Gold</div>
-            <div class="seg-thresh" id="seg-gold-thresh">≤ 0% gap (at or above GS)</div>
+            <div class="seg-thresh" id="seg-gold-thresh">≤ 0% gap (at or above RS)</div>
             <div class="seg-note">✨ Beating GS: 12 SKUs</div>
           </div>
           <div class="seg-panel silver">
@@ -1147,7 +1163,7 @@ table.ov-heatmap tbody td.row-hdr {
           <div style="display:grid;grid-template-columns:repeat(3,auto);gap:10px 16px;align-items:center;">
             <span style="font-size:11px;color:var(--c-muted);">Gold ≤</span>
             <input type="number" id="thresh-gold" value="0" min="-50" max="50" style="width:55px;" oninput="applyThresholds()">
-            <span style="font-size:11px;color:var(--c-muted);">% gap to GS</span>
+            <span style="font-size:11px;color:var(--c-muted);">% gap to RS</span>
             <span style="font-size:11px;color:var(--c-muted);">Silver ≤</span>
             <input type="number" id="thresh-silver" value="5" min="0" max="100" style="width:55px;" oninput="applyThresholds()">
             <span style="font-size:11px;color:var(--c-muted);">% gap</span>
@@ -1194,6 +1210,8 @@ table.ov-heatmap tbody td.row-hdr {
         <div class="info-item"><strong>Labor hours per 1000 units:</strong> Total labor hours ÷ 1,000 units produced, compared to best demonstrated (GS) and reference (RS).</div>
         <div class="info-item"><strong>Performance above GS:</strong> ✨ Celebrated — not flagged as an anomaly. Indicates genuine improvement beyond the baseline.</div>
         <div class="info-item"><strong>KPI GS Methodology:</strong> <strong>Line Speed</strong> = Nameplate (static). <strong>OEE</strong> = 75th percentile (n≥12 orders). <strong>Labor / Scrap</strong> = Best demonstrated performance.</div>
+        <div class="info-item"><strong>Engineering Gap (GS Gap):</strong> Nameplate Speed − Reference Speed. Represents the design/engineering opportunity — the ceiling above the best-demonstrated reference.</div>
+        <div class="info-item"><strong>Operational Gap (Reference Gap):</strong> Reference Speed − Actual Speed. Represents the operational improvement target — gap between current performance and the realistic best-demonstrated reference.</div>
       </div>
     </div><!-- /pane-results -->
 
@@ -1265,9 +1283,27 @@ table.ov-heatmap tbody td.row-hdr {
 
       <!-- KPI + time buttons row -->
       <div style="display:grid; grid-template-columns:1fr auto; gap:12px; align-items:stretch;">
-        <div class="kpi-large">
-          <div class="kpi-large-label">Saving Opportunities $</div>
-          <div class="kpi-large-value">$612.1K</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+          <div class="kpi-large">
+            <div class="kpi-large-label">Total Opportunity $</div>
+            <div class="kpi-large-value">$612.1K</div>
+          </div>
+          <div class="kpi-large" style="border-left:3px solid var(--c-blue);">
+            <div class="kpi-large-label" style="display:flex;align-items:center;gap:4px;">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--c-blue);display:inline-block;"></span>
+              Engineering Gap $
+            </div>
+            <div class="kpi-large-value" style="font-size:20px;">$248.4K</div>
+            <div style="font-size:9px;color:var(--c-muted);margin-top:2px;">Nameplate − Reference Speed</div>
+          </div>
+          <div class="kpi-large" style="border-left:3px solid var(--c-neg);">
+            <div class="kpi-large-label" style="display:flex;align-items:center;gap:4px;">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--c-neg);display:inline-block;"></span>
+              Operational Gap $
+            </div>
+            <div class="kpi-large-value" style="font-size:20px;">$363.7K</div>
+            <div style="font-size:9px;color:var(--c-muted);margin-top:2px;">Reference − Actual Speed</div>
+          </div>
         </div>
         <div class="card" style="justify-content:space-between; min-width:130px;">
           <span style="font-size:9.5px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.5px;">Time Window</span>
@@ -1280,10 +1316,10 @@ table.ov-heatmap tbody td.row-hdr {
         </div>
       </div>
 
-      <!-- Waterfall chart -->
+      <!-- Stacked bar: savings by resource × KPI -->
       <div class="card">
         <span class="card-title">Savings Opportunity by Resource &amp; KPI ($)</span>
-        <div class="card-subtitle">Stacked by KPI: Speed UPM · OEE · Labor hrs/1000u · Scrap. Totals avoid double-counting.</div>
+        <div class="card-subtitle">Stacked by KPI: Speed UPM · OEE · Labor hrs/1000u · Scrap. Operational gap (Reference − Actual) — actionable by CE teams. Totals avoid double-counting.</div>
         <div class="chart-wrap" style="height:200px;"><canvas id="ch-waterfall"></canvas></div>
       </div>
 
@@ -1316,7 +1352,7 @@ table.ov-heatmap tbody td.row-hdr {
               <tr><td>Jul 1, 2025</td><td>System</td><td>FY25 GS baseline locked for current fiscal year</td><td>Annual cycle</td></tr>
               <tr><td>Apr 15, 2026</td><td>S. De Muyer</td><td>Speed GS updated for L72 following capital investment</td><td>Capital improvement completed</td></tr>
               <tr><td>Jun 23, 2026</td><td>Workshop</td><td>"Labor Efficiency" renamed to "Labor hours per 1000 units" across all reports</td><td>Terminology alignment</td></tr>
-              <tr><td>Jul 2, 2026</td><td>Phase 2</td><td>Product Category replaces Family; GS filter 3 options; stacked savings chart; % / $ toggles; RDS deferred</td><td>Phase 2 requirements</td></tr>
+              <tr><td>Jul 2, 2026</td><td>Phase 2</td><td>Product Category replaces Family; GS filter 3 options; stacked savings chart; % / $ toggles; dual gap types (Engineering + Operational); portfolio segmentation vs RS</td><td>Phase 2 requirements</td></tr>
             </tbody>
           </table>
         </div>
@@ -1415,27 +1451,37 @@ table.ov-heatmap tbody td.row-hdr {
         </div>
       </div>
 
-      <!-- Summary KPIs -->
+      <!-- Summary KPIs — split by gap type -->
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:4px;">
+        <span style="font-size:10px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.5px;">Opportunity Split:</span>
+        <span style="font-size:10px;color:var(--c-blue);font-weight:700;">● Engineering Gap (Nameplate − Reference)</span>
+        <span style="font-size:10px;color:var(--c-neg);font-weight:700;">● Operational Gap (Reference − Actual)</span>
+      </div>
       <div class="kpi-row">
         <div class="kpi-card">
-          <span class="kpi-label">Speed Savings Potential</span>
+          <span class="kpi-label">Speed — Operational</span>
           <span class="kpi-value" style="font-size:26px;">$45.2K</span>
-          <span class="kpi-delta pos">▲ if all lines reach GS speed</span>
+          <span class="kpi-delta pos">▲ Reference → Actual gap</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Speed — Engineering</span>
+          <span class="kpi-value" style="font-size:22px;color:var(--c-blue);">$31.8K</span>
+          <span class="kpi-delta pos">▲ Nameplate → Reference gap</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Labor Savings Potential</span>
           <span class="kpi-value" style="font-size:26px;">$28.5K</span>
-          <span class="kpi-delta pos">▲ crew size reduction to GS</span>
+          <span class="kpi-delta pos">▲ hrs/1000u reduction to RS</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">OEE Savings Potential</span>
           <span class="kpi-value" style="font-size:26px;">$32.1K</span>
-          <span class="kpi-delta pos">▲ OEE gap to 75th percentile</span>
+          <span class="kpi-delta pos">▲ OEE gap to RS (75th pct)</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Scrap Savings Potential</span>
           <span class="kpi-value" style="font-size:26px;">$18.9K</span>
-          <span class="kpi-delta pos">▲ scrap reduction to GS</span>
+          <span class="kpi-delta pos">▲ scrap reduction to RS</span>
         </div>
       </div>
 
@@ -1455,18 +1501,18 @@ table.ov-heatmap tbody td.row-hdr {
 
       <!-- Detailed What-If table -->
       <div class="card">
-        <span class="card-title">Detailed Potential Savings (Actual vs. If-at-GS)</span>
-        <div class="card-subtitle" style="margin-bottom:4px;">Model: Actual Expenses vs Calculated Expenses if resource operates at Governed Gold Standard.</div>
+        <span class="card-title">Detailed Potential Savings — Operational Gap (Reference − Actual)</span>
+        <div class="card-subtitle" style="margin-bottom:4px;">Operational improvement target: gap between Reference Speed (RS, best-demonstrated) and Actual. Engineering gap (Nameplate − RS) shown separately in KPI tiles above.</div>
         <div class="tbl-wrap">
           <table class="gs-tbl" id="tb-whatif">
             <thead>
               <tr>
                 <th>Resource</th><th>SKU</th><th class="r">Plan Vol</th>
-                <th class="r">GS Speed</th><th class="r">Act Speed</th><th class="r">Speed $</th>
+                <th class="r">Nameplate (GS)</th><th class="r">RS (Ref)</th><th class="r">Actual Speed</th><th class="r">Oper. Gap $</th>
                 <th class="r">GS OEE%</th><th class="r">Act OEE%</th><th class="r">OEE $</th>
                 <th class="r">GS Hrs/1000u</th><th class="r">Act Hrs/1000u</th><th class="r">Labor $</th>
                 <th class="r">GS Scrap%</th><th class="r">Act Scrap%</th><th class="r">Scrap $</th>
-                <th class="r" style="font-weight:800;">Total Potential $</th>
+                <th class="r" style="font-weight:800;">Total Oper. $</th>
               </tr>
             </thead>
             <tbody id="tb-whatif-body"></tbody>
@@ -1475,7 +1521,7 @@ table.ov-heatmap tbody td.row-hdr {
       </div>
 
       <div class="note-box">
-        📌 <strong>Note:</strong> This model uses Chris Van Deursen's financial methodology. All figures are estimates based on planned SAP orders and the Governed GS (FY25 locked). Results are for <em>capital investment analysis only</em> — not for operational targets or compensation. Time frame selection affects planned volume inputs.
+        📌 <strong>Note:</strong> This model uses Chris Van Deursen's financial methodology. Figures split into two gap types: <strong>Operational Gap</strong> (Reference − Actual, actionable by CE teams) and <strong>Engineering Gap</strong> (Nameplate − Reference, requires capital/engineering investment). Labor cost model: <em>methodology TBD with Steven Johnstone</em>. All figures are estimates based on planned SAP orders and the Governed GS (FY25 locked) — for <em>capital investment analysis only</em>, not for operational targets or compensation.
       </div>
 
     </div><!-- /pane-whatif -->
@@ -1708,9 +1754,9 @@ table.ov-heatmap tbody td.row-hdr {
       <!-- Analysis options note -->
       <div class="info-box">
         <div class="info-box-title">📊 Analysis Roadmap</div>
-        <div class="info-item"><strong>Heat map (PO run sequence):</strong> Shows demographic changes (family, fill size, viscosity) vs performance metrics. Available now.</div>
-        <div class="info-item"><strong>Matrix view (family × viscosity × performance):</strong> Statistical attribution when ≥ 50 related runs per pair. Partial data available.</div>
-        <div class="info-item"><strong>Trend across similar runs:</strong> Compare runs with same family but different parameters (e.g. supplier A vs B, viscosity 2 vs 3).</div>
+        <div class="info-item"><strong>Heat map (PO run sequence):</strong> Shows demographic changes (product category, fill size, viscosity) vs performance metrics. Available now.</div>
+        <div class="info-item"><strong>Matrix view (product category × viscosity × performance):</strong> Statistical attribution when ≥ 50 related runs per pair. Partial data available.</div>
+        <div class="info-item"><strong>Trend across similar runs:</strong> Compare runs with same product category but different parameters (e.g. supplier A vs B, viscosity 2 vs 3).</div>
         <div class="info-item"><strong>Key correlations to establish:</strong> Speed ↔ Viscosity/Sp.Gravity · OEE ↔ Fill volume/Aeration · Scrap ↔ Component supplier/Folding carton quality · Labor ↔ Process complexity</div>
       </div>
 
@@ -2333,18 +2379,18 @@ function applyThresholds() {
 /* ─── WHAT-IF DATA & CHARTS ──────────────────────────── */
 
 const WHATIF_DATA = [
-  {res:'L67', sku:'SKU-101 / Mascara - Multi-purpose', vol:48000, gsSpeed:95, actSpeed:82, speedUSD:4200, gsOEE:75, actOEE:62, oeeUSD:5800, gsLabor:7, actLabor:10, laborUSD:3200, gsScrap:2.5, actScrap:4.2, scrapUSD:2900, total:16100},
-  {res:'L67', sku:'SKU-202 / Foundation - Liquid', vol:36000, gsSpeed:95, actSpeed:80, speedUSD:3800, gsOEE:75, actOEE:66, oeeUSD:4200, gsLabor:7, actLabor:9,  laborUSD:2100, gsScrap:2.5, actScrap:3.9, scrapUSD:2400, total:12500},
-  {res:'L68', sku:'Serum 15ml / SKU-303', vol:22000, gsSpeed:90, actSpeed:74, speedUSD:3100, gsOEE:75, actOEE:58, oeeUSD:3900, gsLabor:7, actLabor:9,  laborUSD:2800, gsScrap:2.5, actScrap:4.5, scrapUSD:1800, total:11600},
-  {res:'L68', sku:'SKU-401 / Cleanser - Foaming', vol:18000, gsSpeed:90, actSpeed:71, speedUSD:2800, gsOEE:75, actOEE:61, oeeUSD:3200, gsLabor:7, actLabor:8,  laborUSD:1400, gsScrap:2.5, actScrap:3.8, scrapUSD:1600, total:9000},
-  {res:'L72', sku:'SKU-502 / Moisturizer - SPF', vol:29000, gsSpeed:100, actSpeed:86, speedUSD:3500, gsOEE:75, actOEE:67, oeeUSD:3800, gsLabor:8, actLabor:10, laborUSD:1800, gsScrap:2.5, actScrap:4.1, scrapUSD:2200, total:11300},
+  {res:'L67', sku:'SKU-101 / Mascara - Multi-purpose', vol:48000, gsSpeed:95, rsSpeed:88, actSpeed:82, speedUSD:4200, gsOEE:75, actOEE:62, oeeUSD:5800, gsLabor:7, actLabor:10, laborUSD:3200, gsScrap:2.5, actScrap:4.2, scrapUSD:2900, total:16100},
+  {res:'L67', sku:'SKU-202 / Foundation - Liquid', vol:36000, gsSpeed:95, rsSpeed:88, actSpeed:80, speedUSD:3800, gsOEE:75, actOEE:66, oeeUSD:4200, gsLabor:7, actLabor:9,  laborUSD:2100, gsScrap:2.5, actScrap:3.9, scrapUSD:2400, total:12500},
+  {res:'L68', sku:'SKU-303 / Serum - Anti-aging', vol:22000, gsSpeed:90, rsSpeed:82, actSpeed:74, speedUSD:3100, gsOEE:75, actOEE:58, oeeUSD:3900, gsLabor:7, actLabor:9,  laborUSD:2800, gsScrap:2.5, actScrap:4.5, scrapUSD:1800, total:11600},
+  {res:'L68', sku:'SKU-401 / Cleanser - Foaming', vol:18000, gsSpeed:90, rsSpeed:82, actSpeed:71, speedUSD:2800, gsOEE:75, actOEE:61, oeeUSD:3200, gsLabor:7, actLabor:8,  laborUSD:1400, gsScrap:2.5, actScrap:3.8, scrapUSD:1600, total:9000},
+  {res:'L72', sku:'SKU-502 / Moisturizer - SPF', vol:29000, gsSpeed:100, rsSpeed:90, actSpeed:86, speedUSD:3500, gsOEE:75, actOEE:67, oeeUSD:3800, gsLabor:8, actLabor:10, laborUSD:1800, gsScrap:2.5, actScrap:4.1, scrapUSD:2200, total:11300},
 ];
 
 function renderWhatIfTable() {
   if (!$$('tb-whatif-body')) return;
   const rows = WHATIF_DATA.map(r=>`<tr>
     <td>${r.res}</td><td>${r.sku}</td><td class="r">${fmtN(r.vol)}</td>
-    <td class="r">${r.gsSpeed}</td><td class="r">${r.actSpeed}</td><td class="r c-neg">${fmt(r.speedUSD)}</td>
+    <td class="r">${r.gsSpeed}</td><td class="r" style="color:var(--c-blue);">${r.rsSpeed}</td><td class="r">${r.actSpeed}</td><td class="r c-neg">${fmt(r.speedUSD)}</td>
     <td class="r">${r.gsOEE}%</td><td class="r">${r.actOEE}%</td><td class="r c-neg">${fmt(r.oeeUSD)}</td>
     <td class="r">${r.gsLabor}</td><td class="r">${r.actLabor}</td><td class="r c-neg">${fmt(r.laborUSD)}</td>
     <td class="r">${r.gsScrap}%</td><td class="r">${r.actScrap}%</td><td class="r c-neg">${fmt(r.scrapUSD)}</td>
@@ -2352,7 +2398,7 @@ function renderWhatIfTable() {
   </tr>`).join('');
   const tot = WHATIF_DATA.reduce((a,r)=>({total:a.total+r.total}),{total:0});
   $$('tb-whatif-body').innerHTML = rows + `<tr class="total-row">
-    <td colspan="15">TOTAL POTENTIAL SAVINGS</td>
+    <td colspan="16">TOTAL POTENTIAL SAVINGS</td>
     <td class="r bold" style="color:#7FCDFF;">${fmt(tot.total)}</td>
   </tr>`;
 }
