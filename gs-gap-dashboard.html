@@ -882,6 +882,20 @@ table.ov-heatmap tbody td.row-hdr {
         </div>
       </div>
       <div>
+        <span class="slicer-label">Subcategory</span>
+        <div class="ms-wrap" id="ms-subcat">
+          <button class="ms-trigger" id="ms-subcat-trigger" data-all-label="All Subcategories" onclick="toggleMS('ms-subcat')">All Subcategories</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-subcat-all" onchange="toggleAllMS('ms-subcat')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item"><input type="checkbox" class="ms-subcat-opt" onchange="updateMSTrigger('ms-subcat')" value="Eye" checked> Eye</label>
+            <label class="ms-item"><input type="checkbox" class="ms-subcat-opt" onchange="updateMSTrigger('ms-subcat')" value="Face" checked> Face</label>
+            <label class="ms-item"><input type="checkbox" class="ms-subcat-opt" onchange="updateMSTrigger('ms-subcat')" value="Skin Care" checked> Skin Care</label>
+            <label class="ms-item"><input type="checkbox" class="ms-subcat-opt" onchange="updateMSTrigger('ms-subcat')" value="Cleansing" checked> Cleansing</label>
+          </div>
+        </div>
+      </div>
+      <div>
         <span class="slicer-label">Time Period</span>
         <select id="slicer-time" class="slicer-select" onchange="handleSlicerChange()">
           <option value="week">Week</option>
@@ -1063,6 +1077,55 @@ table.ov-heatmap tbody td.row-hdr {
         </div>
       </div>
 
+      <!-- Speed Gap Summary — GS GAP vs RS GAP -->
+      <div style="background:#f0f6ff;border:1px solid #c5d8f5;border-radius:8px;padding:10px 12px;margin-bottom:2px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+          <span style="font-size:11px;font-weight:700;color:#003D5C;text-transform:uppercase;letter-spacing:0.5px;">Speed Gap Analysis</span>
+          <span style="font-size:9.5px;color:var(--c-muted);">GS GAP = Nameplate − Reference &nbsp;|&nbsp; RS GAP = Reference − Actual</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;">
+          <div style="background:#fff;border:1px solid #e0e8f0;border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;">Nameplate (Gs)</div>
+            <div id="kpi-gs-upm" style="font-size:18px;font-weight:700;color:#00695C;">105 <small style="font-size:10px;font-weight:400;">UPM</small></div>
+            <div style="font-size:9px;color:var(--c-muted);margin-top:2px;">Equipment spec</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e0e8f0;border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;">Reference Spd (Rs)</div>
+            <div id="kpi-rs-upm" style="font-size:18px;font-weight:700;color:#1565C0;">95 <small style="font-size:10px;font-weight:400;">UPM</small></div>
+            <div style="font-size:9px;color:var(--c-muted);margin-top:2px;">MAX(As) on line</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e0e8f0;border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;">Actual Spd (As)</div>
+            <div id="kpi-as-upm" style="font-size:18px;font-weight:700;color:#2E7D32;">82 <small style="font-size:10px;font-weight:400;">UPM</small></div>
+            <div style="font-size:9px;color:var(--c-muted);margin-top:2px;">Current period</div>
+          </div>
+          <div style="background:#e8f0fe;border:2px solid #1565C0;border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;font-weight:700;color:#1565C0;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;">GS GAP (UPM)</div>
+            <div id="kpi-gsgap-upm" style="font-size:18px;font-weight:700;color:#1565C0;">10 <small style="font-size:10px;font-weight:400;">UPM</small></div>
+            <div style="font-size:9px;color:#1565C0;margin-top:2px;">Gs − Rs · CAPEX</div>
+          </div>
+          <div style="background:#fde8e8;border:2px solid var(--c-neg);border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;font-weight:700;color:var(--c-neg);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;">RS GAP (UPM)</div>
+            <div id="kpi-rsgap-upm" style="font-size:18px;font-weight:700;color:var(--c-neg);">13 <small style="font-size:10px;font-weight:400;">UPM</small></div>
+            <div style="font-size:9px;color:var(--c-neg);margin-top:2px;">Rs − As · Ops</div>
+          </div>
+          <div style="background:#e8f0fe;border:1px solid #1565C0;border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;font-weight:700;color:#1565C0;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;">GS GAP Impact $</div>
+            <div id="kpi-gsgap-usd" style="font-size:18px;font-weight:700;color:#1565C0;">$248K</div>
+            <div style="font-size:9px;color:var(--c-muted);margin-top:2px;">Engineering opp.</div>
+          </div>
+          <div style="background:#fde8e8;border:1px solid var(--c-neg);border-radius:6px;padding:8px;text-align:center;">
+            <div style="font-size:9px;font-weight:700;color:var(--c-neg);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;">RS GAP Impact $</div>
+            <div id="kpi-rsgap-usd" style="font-size:18px;font-weight:700;color:var(--c-neg);">$364K</div>
+            <div style="font-size:9px;color:var(--c-muted);margin-top:2px;">Operational opp.</div>
+          </div>
+        </div>
+        <div style="margin-top:7px;font-size:9px;color:var(--c-muted);display:flex;gap:14px;flex-wrap:wrap;">
+          <span>⚠ People/labor cost: <em>pending Steven Johnstone confirmation</em></span>
+          <span>Rs = MAX(Actual Speed) on this line across all historical runs — floating, updates when new maximum achieved</span>
+        </div>
+      </div>
+
       <!-- 2×2 Chart Grid -->
       <div class="charts-grid">
 
@@ -1130,48 +1193,49 @@ table.ov-heatmap tbody td.row-hdr {
           <span class="card-title">Portfolio Segmentation</span>
           <button style="background:none;border:none;cursor:pointer;font-size:12px;color:var(--c-blue);font-weight:700;" onclick="openThreshConfig()">⚙ Configure Thresholds</button>
         </div>
-        <div class="card-subtitle" style="margin-bottom:6px;">SKU/line performance classified by gap to Reference Speed (RS). Thresholds configurable pending Stephanie &amp; Steven sign-off.</div>
+        <div class="card-subtitle" style="margin-bottom:6px;">SKU/line performance classified by Actual Speed as % of Reference Speed (Rs). Gold = at or above 90% of Rs. Thresholds pending final sign-off from Stephanie.</div>
         <div class="seg-grid">
           <div class="seg-panel gold">
             <div class="seg-icon">★</div>
             <div class="seg-pct" id="seg-gold-pct">34%</div>
             <div class="seg-label">Gold</div>
-            <div class="seg-thresh" id="seg-gold-thresh">≤ 0% gap (at or above RS)</div>
-            <div class="seg-note">✨ Beating GS: 12 SKUs</div>
+            <div class="seg-thresh" id="seg-gold-thresh">≥ 90% of Rs</div>
+            <div class="seg-note">✨ Best demonstrated: 12 SKUs</div>
           </div>
           <div class="seg-panel silver">
             <div class="seg-icon">◆</div>
             <div class="seg-pct" id="seg-silver-pct">28%</div>
             <div class="seg-label">Silver</div>
-            <div class="seg-thresh" id="seg-silver-thresh">1–5% gap</div>
+            <div class="seg-thresh" id="seg-silver-thresh">75–89% of Rs</div>
           </div>
           <div class="seg-panel bronze">
             <div class="seg-icon">▲</div>
             <div class="seg-pct" id="seg-bronze-pct">22%</div>
             <div class="seg-label">Bronze</div>
-            <div class="seg-thresh" id="seg-bronze-thresh">6–15% gap</div>
+            <div class="seg-thresh" id="seg-bronze-thresh">60–74% of Rs</div>
           </div>
           <div class="seg-panel other">
             <div class="seg-icon">○</div>
             <div class="seg-pct" id="seg-other-pct">16%</div>
             <div class="seg-label">Other</div>
-            <div class="seg-thresh" id="seg-other-thresh">&gt; 15% gap</div>
+            <div class="seg-thresh" id="seg-other-thresh">&lt; 60% of Rs</div>
           </div>
         </div>
         <!-- Inline threshold config (hidden by default) -->
         <div id="thresh-config" class="thresh-cfg" style="display:none;">
+          <div style="margin-bottom:6px;font-size:11px;color:var(--c-muted);">Tier thresholds as % of Reference Speed (Rs). Gold ≥ threshold means As/Rs ≥ that value.</div>
           <div style="display:grid;grid-template-columns:repeat(3,auto);gap:10px 16px;align-items:center;">
-            <span style="font-size:11px;color:var(--c-muted);">Gold ≤</span>
-            <input type="number" id="thresh-gold" value="0" min="-50" max="50" style="width:55px;" oninput="applyThresholds()">
-            <span style="font-size:11px;color:var(--c-muted);">% gap to RS</span>
-            <span style="font-size:11px;color:var(--c-muted);">Silver ≤</span>
-            <input type="number" id="thresh-silver" value="5" min="0" max="100" style="width:55px;" oninput="applyThresholds()">
-            <span style="font-size:11px;color:var(--c-muted);">% gap</span>
-            <span style="font-size:11px;color:var(--c-muted);">Bronze ≤</span>
-            <input type="number" id="thresh-bronze" value="15" min="0" max="100" style="width:55px;" oninput="applyThresholds()">
-            <span style="font-size:11px;color:var(--c-muted);">% gap</span>
+            <span style="font-size:11px;color:var(--c-muted);">Gold ≥</span>
+            <input type="number" id="thresh-gold" value="90" min="50" max="105" style="width:55px;" oninput="applyThresholds()">
+            <span style="font-size:11px;color:var(--c-muted);">% of Rs</span>
+            <span style="font-size:11px;color:var(--c-muted);">Silver ≥</span>
+            <input type="number" id="thresh-silver" value="75" min="30" max="100" style="width:55px;" oninput="applyThresholds()">
+            <span style="font-size:11px;color:var(--c-muted);">% of Rs</span>
+            <span style="font-size:11px;color:var(--c-muted);">Bronze ≥</span>
+            <input type="number" id="thresh-bronze" value="60" min="10" max="100" style="width:55px;" oninput="applyThresholds()">
+            <span style="font-size:11px;color:var(--c-muted);">% of Rs</span>
           </div>
-          <div class="note-box" style="margin-top:8px;">⚠ Thresholds pending final sign-off: Stephanie (segmentation), Steven (scrap guardrails). Do not use for compensation decisions until approved.</div>
+          <div class="note-box" style="margin-top:8px;">⚠ Thresholds pending final sign-off: Stephanie (segmentation), Steven (labor cost). Do not use for compensation decisions until approved.</div>
         </div>
       </div>
 
@@ -1206,12 +1270,14 @@ table.ov-heatmap tbody td.row-hdr {
         <div class="info-box-title">ℹ Definitions</div>
         <div class="info-item"><strong>Gold Standard (GS) — Governed:</strong> FY25 (Jul 2024–Jun 2025) locked baseline. Used for official reporting &amp; compensation.</div>
         <div class="info-item"><strong>Gold Standard (GS) — Operating Baseline:</strong> Rolling 6/9/12-month window. For operational analysis only — not official metrics.</div>
-        <div class="info-item"><strong>Reference Standard (RS):</strong> Realistic speed adjusted for unit size; best performing product in same size group.</div>
-        <div class="info-item"><strong>Labor hours per 1000 units:</strong> Total labor hours ÷ 1,000 units produced, compared to best demonstrated (GS) and reference (RS).</div>
-        <div class="info-item"><strong>Performance above GS:</strong> ✨ Celebrated — not flagged as an anomaly. Indicates genuine improvement beyond the baseline.</div>
-        <div class="info-item"><strong>KPI GS Methodology:</strong> <strong>Line Speed</strong> = Nameplate (static). <strong>OEE</strong> = 75th percentile (n≥12 orders). <strong>Labor / Scrap</strong> = Best demonstrated performance.</div>
-        <div class="info-item"><strong>Engineering Gap (GS Gap):</strong> Nameplate Speed − Reference Speed. Represents the design/engineering opportunity — the ceiling above the best-demonstrated reference.</div>
-        <div class="info-item"><strong>Operational Gap (Reference Gap):</strong> Reference Speed − Actual Speed. Represents the operational improvement target — gap between current performance and the realistic best-demonstrated reference.</div>
+        <div class="info-item"><strong>Nameplate Speed (Gs):</strong> Equipment manufacturer specification — static per line, SKU-independent. Represents the design ceiling; closing this gap requires CAPEX investment.</div>
+        <div class="info-item"><strong>Reference Speed (Rs):</strong> MAX(Actual Speed) across ALL historical production runs on that line. Floating — updates whenever a new maximum is achieved. Not adjusted for unit size or product mix.</div>
+        <div class="info-item"><strong>Actual Speed (As):</strong> Units Produced ÷ (Run Time Hours × 60). Excludes runs with speed &lt;5 or &gt;150 UPM, PO qty &lt;10, line trials (7th digit = R or PO type ZNFA), China rec variants (7th digit = C), Z-variants, assembly-only scope, and Filling+Assembly on different resources.</div>
+        <div class="info-item"><strong>Cycle Speed (CS):</strong> From SAP line trial data — reference only; NOT used in GS gap calculations.</div>
+        <div class="info-item"><strong>GS GAP (Engineering Gap):</strong> Gs − Rs. The gap between nameplate speed and the best-ever demonstrated speed. Closing this requires CAPEX investment in equipment upgrades.</div>
+        <div class="info-item"><strong>RS GAP (Operational Gap):</strong> Rs − As. The gap between best-ever demonstrated speed and current actual speed. Closing this requires operational improvements (scheduling, changeover, process stability).</div>
+        <div class="info-item"><strong>GS GAP Impact $:</strong> (Quantity ÷ GS GAP) × People × Labor Cost Per Hour. RS GAP Impact $: (Quantity ÷ RS GAP) × People × Labor Cost Per Hour. People and labor cost pending Steven Johnstone sign-off.</div>
+        <div class="info-item"><strong>Tier Classification:</strong> Based on As/Rs %. Gold ≥90% of Rs · Silver 75–89% · Bronze 60–74% · Other &lt;60%. Thresholds pending Stephanie sign-off.</div>
       </div>
     </div><!-- /pane-results -->
 
@@ -1316,6 +1382,28 @@ table.ov-heatmap tbody td.row-hdr {
         </div>
       </div>
 
+      <!-- Line Overview Visual -->
+      <div class="card">
+        <div class="flex-row" style="margin-bottom:6px;">
+          <span class="card-title">Gap Analysis — Line Overview</span>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button id="btn-lo-upm" class="time-btn active" onclick="setLOView('upm')">UPM</button>
+            <button id="btn-lo-usd" class="time-btn" onclick="setLOView('usd')">$ Impact</button>
+          </div>
+        </div>
+        <div class="card-subtitle" style="margin-bottom:8px;">Each bar = Actual Speed (As). Lines show Nameplate (Gs) and Reference (Rs) per resource. Gap to Rs = operational opportunity; gap Rs→Gs = engineering/CAPEX opportunity. Click bar to drill down.</div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-line-overview"></canvas></div>
+        <div class="legend-row" style="margin-top:6px;">
+          <span class="legend-item"><span style="display:inline-block;width:18px;height:10px;background:#2E7D32aa;border-radius:2px;vertical-align:middle;"></span> Actual Speed (As)</span>
+          <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2.5px solid #00695C;vertical-align:middle;"></span> Nameplate (Gs) — constant per line</span>
+          <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2px dashed #1565C0;vertical-align:middle;"></span> Reference Speed (Rs) — MAX(As) historically</span>
+        </div>
+        <div style="margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;">
+          <span class="seg-badge" style="background:#e8f0fe;color:#1565C0;border:1px solid #1565C0;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">■ GS GAP (blue shading) = Nameplate − Rs · Requires CAPEX</span>
+          <span class="seg-badge" style="background:#fde8e8;color:var(--c-neg);border:1px solid var(--c-neg);padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">■ RS GAP (red) = Rs − As · Operational improvement</span>
+        </div>
+      </div>
+
       <!-- Stacked bar: savings by resource × KPI -->
       <div class="card">
         <span class="card-title">Savings Opportunity by Resource &amp; KPI ($)</span>
@@ -1401,6 +1489,36 @@ table.ov-heatmap tbody td.row-hdr {
         </div>
       </div>
 
+      <!-- RS GAP Deep Dive Table -->
+      <div class="card">
+        <div class="flex-row" style="margin-bottom:6px;">
+          <span class="card-title">Reference Gap Deep Dive</span>
+          <span style="font-size:10px;color:var(--c-muted);">RS GAP = Rs − As · Operational improvement opportunity per PO</span>
+        </div>
+        <div class="card-subtitle" style="margin-bottom:6px;">Drillable by Plant &gt; Resource &gt; Family &gt; Subcategory &gt; Category &gt; PO &gt; SKU. Sorted by RS GAP $ desc. Replenishable SKUs only.</div>
+        <div class="tbl-wrap">
+          <table class="gs-tbl" id="tb-rsgap-deepdive">
+            <thead>
+              <tr>
+                <th>Plant</th><th>Resource</th><th>Family</th><th>Subcategory</th><th>Category</th>
+                <th>PO</th><th>SKU</th>
+                <th class="r">Rs (UPM)</th><th class="r">As (UPM)</th>
+                <th class="r" style="color:var(--c-rs);">RS GAP (UPM)</th>
+                <th class="r" style="color:var(--c-rs);">RS GAP ($)</th>
+                <th class="r" style="color:var(--c-blue);">GS GAP (UPM)</th>
+                <th class="r" style="color:var(--c-blue);">GS GAP ($)</th>
+                <th>Tier</th>
+              </tr>
+            </thead>
+            <tbody id="tb-rsgap-body"></tbody>
+          </table>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+          <button id="btn-rsgap-more" onclick="loadMoreRSGap()" style="font-size:11px;color:var(--c-blue);background:none;border:1px solid var(--c-blue);padding:4px 14px;border-radius:4px;cursor:pointer;">Load More (20)</button>
+          <span style="font-size:9px;color:var(--c-muted);">Showing top rows · Click row to drill into Deep View</span>
+        </div>
+      </div>
+
     </div><!-- /pane-gap -->
 
 
@@ -1449,6 +1567,76 @@ table.ov-heatmap tbody td.row-hdr {
           </div>
           <button style="background:var(--c-blue);color:#fff;border:none;padding:7px 18px;border-radius:4px;font-weight:700;font-size:12px;cursor:pointer;">▶ Calculate</button>
         </div>
+      </div>
+
+      <!-- What-If Simulation Sliders -->
+      <div class="card" style="border:1px solid #c5d8f5;background:#f8fbff;">
+        <div class="flex-row" style="margin-bottom:8px;">
+          <span class="card-title" style="color:var(--c-blue);">⚡ Interactive Speed Simulation</span>
+          <button onclick="resetWhatIfSimulation()" style="font-size:11px;color:var(--c-muted);background:none;border:1px solid #d0d8e4;padding:3px 10px;border-radius:4px;cursor:pointer;">Reset</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:start;">
+          <!-- Target UPM Slider -->
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span class="slicer-label">Target Speed (UPM)</span>
+              <strong id="wi-target-upm-val" style="font-size:13px;color:var(--c-blue);">88</strong>
+            </div>
+            <input type="range" id="wi-target-upm" min="60" max="105" value="88" step="1"
+              style="width:100%;accent-color:var(--c-blue);" oninput="updateWhatIfSimulation()">
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:2px;">
+              <span>60 UPM</span>
+              <span style="color:var(--c-rs);">Rs = 95</span>
+              <span style="color:var(--c-gs);">Gs = 105</span>
+            </div>
+          </div>
+          <!-- Number of People -->
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span class="slicer-label">Headcount (people)</span>
+              <strong id="wi-people-val" style="font-size:13px;color:var(--c-blue);">7</strong>
+            </div>
+            <input type="range" id="wi-people" min="1" max="20" value="7" step="1"
+              style="width:100%;accent-color:var(--c-blue);" oninput="updateWhatIfSimulation()">
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:2px;">
+              <span>1</span><span>10</span><span>20</span>
+            </div>
+          </div>
+          <!-- Labor Cost Per Hour (auto-populated) -->
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span class="slicer-label">Labor Cost / Hr ($)</span>
+              <strong id="wi-laborcost-val" style="font-size:13px;color:var(--c-blue);">45</strong>
+            </div>
+            <input type="range" id="wi-laborcost" min="20" max="120" value="45" step="1"
+              style="width:100%;accent-color:var(--c-blue);" oninput="updateWhatIfSimulation()">
+            <div style="font-size:9px;color:var(--c-muted);margin-top:2px;">Pending Steven Johnstone sign-off. Default = $45/hr illustrative.</div>
+          </div>
+        </div>
+        <!-- Simulation Output Row -->
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #d5e4f5;">
+          <div style="text-align:center;">
+            <div style="font-size:9px;color:var(--c-muted);text-transform:uppercase;font-weight:700;">Target → Rs GAP</div>
+            <div id="wi-out-rsgap" style="font-size:18px;font-weight:800;color:var(--c-rs);">7 UPM</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:9px;color:var(--c-muted);text-transform:uppercase;font-weight:700;">Rs GAP Impact $</div>
+            <div id="wi-out-rsgap-usd" style="font-size:18px;font-weight:800;color:var(--c-rs);">$—</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:9px;color:var(--c-muted);text-transform:uppercase;font-weight:700;">Run Time Reduction</div>
+            <div id="wi-out-runtime" style="font-size:18px;font-weight:800;color:var(--c-blue);">— hrs</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:9px;color:var(--c-muted);text-transform:uppercase;font-weight:700;">Expected Finish</div>
+            <div id="wi-out-finish" style="font-size:16px;font-weight:800;color:var(--c-gs);">—</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:9px;color:var(--c-muted);text-transform:uppercase;font-weight:700;">Tier at Target</div>
+            <div id="wi-out-tier" style="font-size:15px;font-weight:800;">—</div>
+          </div>
+        </div>
+        <div style="font-size:9px;color:var(--c-muted);margin-top:6px;">Formula: RS GAP Impact $ = (Quantity ÷ RS GAP) × People × Labor Cost/Hr. Run time uses representative 48,000 unit PO. Pending Steven Johnstone labor cost sign-off.</div>
       </div>
 
       <!-- Summary KPIs — split by gap type -->
@@ -1559,6 +1747,24 @@ table.ov-heatmap tbody td.row-hdr {
         </div>
       </div>
 
+      <!-- 12-Week Speed Trendline -->
+      <div class="card">
+        <div class="flex-row" style="margin-bottom:6px;">
+          <span class="card-title">12-Week Speed Trend — Actual vs Reference vs Nameplate</span>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button id="btn-12w-upm" class="time-btn active" onclick="set12WView('upm')">UPM</button>
+            <button id="btn-12w-usd" class="time-btn" onclick="set12WView('usd')">$ Impact</button>
+          </div>
+        </div>
+        <div class="card-subtitle" style="margin-bottom:8px;">Weekly view. Gs (nameplate) = solid teal line. Rs (MAX historical) = dashed blue line. As (actual) = green bars. RS GAP $ = (Qty ÷ RS GAP) × People × Labor Cost/Hr.</div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-12w-trend"></canvas></div>
+        <div class="legend-row" style="margin-top:6px;">
+          <span class="legend-item"><span style="display:inline-block;width:18px;height:10px;background:#2E7D32aa;border-radius:2px;vertical-align:middle;"></span> Actual Speed (As)</span>
+          <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2.5px solid #00695C;vertical-align:middle;"></span> Nameplate (Gs)</span>
+          <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2px dashed #1565C0;vertical-align:middle;"></span> Reference (Rs) — MAX(As)</span>
+        </div>
+      </div>
+
       <div class="card">
         <span class="card-title">PO-Level Speed Detail</span>
         <div class="tbl-wrap">
@@ -1566,17 +1772,17 @@ table.ov-heatmap tbody td.row-hdr {
             <thead>
               <tr>
                 <th>PO Number</th><th>SKU</th><th>Resource</th>
-                <th class="r">Cycle Speed (UPM)</th>
-                <th class="r">GS Nameplate (UPM)</th>
-                <th class="r">RS Reference (UPM)</th>
-                <th class="r">Gap to RS ($)</th>
-                <th class="r">Gap RS→GS ($)</th>
+                <th class="r">Actual Speed (UPM)</th>
+                <th class="r">Nameplate Gs (UPM)</th>
+                <th class="r">Reference Rs (UPM)</th>
+                <th class="r">RS GAP ($)</th>
+                <th class="r">GS GAP ($)</th>
               </tr>
             </thead>
             <tbody id="tb-dv-speed"></tbody>
           </table>
         </div>
-        <div class="note-box" style="margin-top:6px;">Based on 3–5 year historical tolerance window for speed risk calculations. Future speed risk for upcoming POs uses planned schedule combined with historical variation patterns.</div>
+        <div class="note-box" style="margin-top:6px;">RS GAP = Rs − As (operational). GS GAP = Gs − Rs (engineering/CAPEX). People &amp; labor cost pending Steven Johnstone sign-off. Exclusions applied: speed &lt;5/&gt;150 UPM, qty &lt;10, line trials, China rec variants, Z-variants, assembly-only.</div>
       </div>
     </div><!-- /pane-speed -->
 
@@ -2131,6 +2337,7 @@ function initPredictionsCharts() {
 }
 
 function initGapCharts() {
+  initLineOverviewChart();
   // Stacked bar: resources (L67 / L68 / L72) × KPIs (Speed UPM $, OEE $, Labor hrs/1000u $, Scrap $)
   const resources = ['L67','L68','L72'];
   const kpis = [
@@ -2170,6 +2377,7 @@ function initGapCharts() {
 function initDVSpeedCharts() {
   init('ch-dv-speed-trend', comboConfig(MONTHS, SPEED_TREND.actual, SPEED_TREND.gs, SPEED_TREND.rs, 'UPM'));
   init('ch-dv-speed-prod',  speedSegConfig());
+  init12WeekTrendChart();
 }
 function initDVLaborCharts() {
   init('ch-dv-labor-trend', comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Hrs/1000u'));
@@ -2234,6 +2442,65 @@ function renderPred() {
     <td>${r.sku}</td><td class="r">${isUSD ? fmt(r.gapUSD) : fmtN(r.vol)}</td><td class="r">${r.pos}</td>
   </tr>`).join('');
 }
+/* ─── RS GAP DEEP DIVE DATA & RENDER ────────────────── */
+
+const RSGAP_DATA = [
+  {plant:'NA-ATL',res:'L67',family:'Face',subcat:'Eye',   cat:'Mascara',      po:'PO-4421871',sku:'SKU-101 Mascara Multi',   gs:105,rs:95,as:82,people:7,laborCost:45,qty:48000},
+  {plant:'NA-ATL',res:'L67',family:'Face',subcat:'Eye',   cat:'Mascara',      po:'PO-4418322',sku:'SKU-112 Mascara Volume',  gs:105,rs:95,as:79,people:7,laborCost:45,qty:36000},
+  {plant:'NA-ATL',res:'L67',family:'Face',subcat:'Face',  cat:'Foundation',   po:'PO-4409811',sku:'SKU-202 Foundation Liquid',gs:105,rs:95,as:80,people:7,laborCost:45,qty:36000},
+  {plant:'NA-ATL',res:'L68',family:'Skin', subcat:'Skin Care',cat:'Serum',    po:'PO-4392041',sku:'SKU-303 Serum Anti-aging', gs:100,rs:88,as:74,people:6,laborCost:45,qty:22000},
+  {plant:'NA-ATL',res:'L68',family:'Skin', subcat:'Cleansing',cat:'Cleanser', po:'PO-4378512',sku:'SKU-401 Cleanser Foaming', gs:100,rs:88,as:71,people:6,laborCost:45,qty:18000},
+  {plant:'NA-ATL',res:'L72',family:'Skin', subcat:'Skin Care',cat:'Moisturizer',po:'PO-4399927',sku:'SKU-502 Moisturizer SPF',gs:100,rs:90,as:86,people:8,laborCost:45,qty:29000},
+  {plant:'NA-CHI',res:'L55',family:'Face',subcat:'Eye',   cat:'Liner',        po:'PO-4402115',sku:'SKU-601 Eye Liner Precise',gs: 90,rs:82,as:70,people:5,laborCost:44,qty:15000},
+  {plant:'NA-CHI',res:'L61',family:'Face',subcat:'Face',  cat:'Blush',        po:'PO-4387634',sku:'SKU-702 Blush Powder',     gs: 95,rs:86,as:76,people:5,laborCost:44,qty:20000},
+  {plant:'EU-PAR',res:'L74',family:'Skin', subcat:'Skin Care',cat:'Cream',    po:'PO-4411002',sku:'SKU-803 Cream Intensive',  gs: 95,rs:85,as:71,people:6,laborCost:48,qty:24000},
+  {plant:'EU-PAR',res:'L81',family:'Face',subcat:'Cleansing',cat:'Micellar', po:'PO-4423189',sku:'SKU-901 Micellar Water',   gs: 90,rs:78,as:65,people:5,laborCost:48,qty:19000},
+];
+
+let rsGapOffset = 0;
+const RSGAP_PAGE = 10;
+
+function renderRSGapDeepDive(append) {
+  const tbody = $$('tb-rsgap-body');
+  if (!tbody) return;
+  const slice = RSGAP_DATA.slice(0, rsGapOffset + RSGAP_PAGE);
+  const rows = slice.map(r => {
+    const rsGapUPM = Math.max(0, r.rs - r.as);
+    const gsGapUPM = Math.max(0, r.gs - r.rs);
+    const rsGapUSD = rsGapUPM > 0 ? Math.round((r.qty / rsGapUPM) * r.people * r.laborCost) : 0;
+    const gsGapUSD = gsGapUPM > 0 ? Math.round((r.qty / gsGapUPM) * r.people * r.laborCost) : 0;
+    const rsPct = r.rs > 0 ? (r.as / r.rs) * 100 : 0;
+    const seg = getSegment(rsPct);
+    const tierMap = { gold:'★ Gold', silver:'◆ Silver', bronze:'▲ Bronze', other:'○ Other' };
+    const tierClr = { gold:'#F9A825', silver:'#607D8B', bronze:'#8D6E63', other:'#9E9E9E' };
+    return `<tr style="cursor:pointer;" onclick="drillDV('${r.res}')">
+      <td>${r.plant}</td><td><strong>${r.res}</strong></td><td>${r.family}</td>
+      <td>${r.subcat}</td><td>${r.cat}</td>
+      <td style="font-family:monospace;font-size:10px;">${r.po}</td>
+      <td>${r.sku}</td>
+      <td class="r">${r.rs}</td><td class="r">${r.as}</td>
+      <td class="r" style="color:var(--c-rs);font-weight:700;">${rsGapUPM}</td>
+      <td class="r" style="color:var(--c-rs);">$${rsGapUSD.toLocaleString()}</td>
+      <td class="r" style="color:var(--c-blue);">${gsGapUPM}</td>
+      <td class="r" style="color:var(--c-blue);">$${gsGapUSD.toLocaleString()}</td>
+      <td><span style="color:${tierClr[seg]};font-weight:700;">${tierMap[seg]}</span></td>
+    </tr>`;
+  }).join('');
+  if (append) {
+    tbody.innerHTML += rows;
+  } else {
+    tbody.innerHTML = rows;
+  }
+  // Hide Load More if all rows shown
+  const btn = $$('btn-rsgap-more');
+  if (btn) btn.style.display = rsGapOffset + RSGAP_PAGE >= RSGAP_DATA.length ? 'none' : '';
+}
+
+function loadMoreRSGap() {
+  rsGapOffset += RSGAP_PAGE;
+  renderRSGapDeepDive(false);
+}
+
 function renderPlanAhead() {
   const rows = PLAN_AHEAD.map(r=>{
     const gapPct = Math.round((r.total / (r.total + 50000)) * 100);
@@ -2304,12 +2571,14 @@ function renderDVScrap() {
 
 let activeGSType = 'governed';
 let baselineMonths = 9;
-const THRESHOLDS = { gold: 0, silver: 5, bronze: 15 };
+// Thresholds are % of Rs (As/Rs × 100). Gold ≥ gold, Silver ≥ silver, Bronze ≥ bronze, Other < bronze.
+const THRESHOLDS = { gold: 90, silver: 75, bronze: 60 };
 
-function getSegment(gapPct) {
-  if (gapPct <= THRESHOLDS.gold)   return 'gold';
-  if (gapPct <= THRESHOLDS.silver) return 'silver';
-  if (gapPct <= THRESHOLDS.bronze) return 'bronze';
+function getSegment(rsPct) {
+  // rsPct = (As / Rs) × 100
+  if (rsPct >= THRESHOLDS.gold)   return 'gold';
+  if (rsPct >= THRESHOLDS.silver) return 'silver';
+  if (rsPct >= THRESHOLDS.bronze) return 'bronze';
   return 'other';
 }
 
@@ -2360,20 +2629,240 @@ function openThreshConfig() {
 }
 
 function applyThresholds() {
-  const g = parseFloat(($$('thresh-gold')  ||{value:'0'}).value)  || 0;
-  const s = parseFloat(($$('thresh-silver')||{value:'5'}).value)  || 5;
-  const b = parseFloat(($$('thresh-bronze')||{value:'15'}).value) || 15;
+  const g = parseFloat(($$('thresh-gold')  ||{value:'90'}).value) || 90;
+  const s = parseFloat(($$('thresh-silver')||{value:'75'}).value) || 75;
+  const b = parseFloat(($$('thresh-bronze')||{value:'60'}).value) || 60;
   THRESHOLDS.gold   = g;
   THRESHOLDS.silver = s;
   THRESHOLDS.bronze = b;
-  // Update labels in segmentation card
-  [['seg-gold-thresh',  `≤ ${g}% gap`],
-   ['seg-silver-thresh',`${g+1}–${s}% gap`],
-   ['seg-bronze-thresh',`${s+1}–${b}% gap`],
-   ['seg-other-thresh', `> ${b}% gap`]
+  // Update labels — thresholds are now % of Rs (As/Rs × 100)
+  [['seg-gold-thresh',  `≥ ${g}% of Rs`],
+   ['seg-silver-thresh',`${s}–${g-1}% of Rs`],
+   ['seg-bronze-thresh',`${b}–${s-1}% of Rs`],
+   ['seg-other-thresh', `< ${b}% of Rs`]
   ].forEach(([id, txt]) => { const el=$$(id); if(el) el.textContent=txt; });
   // Re-render tables if gap tab is active
   if (activeHomeTab === 'gap') { renderPlanAhead(); renderImpact(); }
+}
+
+/* ─── 12-WEEK TREND DATA & CHARTS ───────────────────── */
+
+const WEEKS_12 = ['W19','W20','W21','W22','W23','W24','W25','W26','W27','W28','W29','W30'];
+const TREND_12W = {
+  gs:  [105,105,105,105,105,105,105,105,105,105,105,105],
+  rs:  [ 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95],
+  as:  [ 78, 80, 81, 79, 83, 82, 80, 84, 85, 83, 82, 84],
+};
+// RS GAP $ per week = (weekly qty / RS GAP) × people × labor cost; illustrative values
+const TREND_12W_USD = {
+  rsgap: [18200,17400,16800,19100,15200,16000,17600,14200,13800,15400,16200,14600],
+  gsgap: [ 9800, 9400, 9800,10200, 8800, 9200, 9800, 8400, 8200, 9000, 9400, 8800],
+};
+
+let view12W = 'upm';
+
+function set12WView(type) {
+  view12W = type;
+  ['upm','usd'].forEach(t => {
+    const btn = $$('btn-12w-' + t);
+    if (btn) btn.classList.toggle('active', t === type);
+  });
+  update12WChart();
+}
+
+function update12WChart() {
+  const chart = REG['ch-12w-trend'];
+  if (!chart) { init12WeekTrendChart(); return; }
+  if (view12W === 'usd') {
+    chart.data.datasets = [
+      { type:'bar',  label:'RS GAP Impact ($)', data:TREND_12W_USD.rsgap, backgroundColor:CC.rs+'aa', borderRadius:3, order:2 },
+      { type:'bar',  label:'GS GAP Impact ($)', data:TREND_12W_USD.gsgap, backgroundColor:CC.blue+'99', borderRadius:3, order:3 },
+    ];
+    chart.options.scales.y.title.text = '$ Impact';
+    chart.options.plugins.tooltip.callbacks.label = ctx =>
+      ' ' + ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString();
+  } else {
+    chart.data.datasets = [
+      { type:'bar',  label:'Actual Speed (As)', data:TREND_12W.as, backgroundColor: TREND_12W.as.map(v => v >= 0.9*95 ? CC.actual+'cc' : v >= 0.75*95 ? '#F9A825cc' : CC.rs+'aa'), borderRadius:3, order:3 },
+      { type:'line', label:'Nameplate (Gs)', data:TREND_12W.gs, borderColor:CC.gs, borderWidth:2.5, pointRadius:3, fill:false, order:1 },
+      { type:'line', label:'Reference (Rs)', data:TREND_12W.rs, borderColor:CC.blue, borderDash:[5,4], borderWidth:2, pointRadius:3, fill:false, order:2 },
+    ];
+    chart.options.scales.y.title.text = 'Speed (UPM)';
+    chart.options.plugins.tooltip.callbacks.label = ctx =>
+      ' ' + ctx.dataset.label + ': ' + ctx.parsed.y + ' UPM';
+  }
+  chart.update();
+}
+
+function init12WeekTrendChart() {
+  if (REG['ch-12w-trend']) return;
+  init('ch-12w-trend', {
+    type: 'bar',
+    data: {
+      labels: WEEKS_12,
+      datasets: [
+        { type:'bar',  label:'Actual Speed (As)', data:TREND_12W.as, backgroundColor:TREND_12W.as.map(v=>v>=85?CC.actual+'cc':v>=71?'#F9A825cc':CC.rs+'aa'), borderRadius:3, order:3 },
+        { type:'line', label:'Nameplate (Gs)', data:TREND_12W.gs, borderColor:CC.gs, borderWidth:2.5, pointRadius:3, fill:false, order:1 },
+        { type:'line', label:'Reference (Rs)', data:TREND_12W.rs, borderColor:CC.blue, borderDash:[5,4], borderWidth:2, pointRadius:3, fill:false, order:2 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display:true, labels:{ color:CC.text, font:{size:10}, boxWidth:14 } },
+        tooltip: {
+          backgroundColor:'#FFFFFF', borderColor:'rgba(0,0,0,0.15)', borderWidth:1,
+          titleColor:'#1A2B3C', bodyColor:'#4A6580', padding:10,
+          callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.parsed.y + ' UPM' }
+        }
+      },
+      scales: {
+        x: { grid:{ color:CC.grid }, ticks:{ color:CC.text, font:{size:10} } },
+        y: { grid:{ color:CC.grid }, ticks:{ color:CC.text, font:{size:10} }, min:60,
+             title:{ display:true, text:'Speed (UPM)', color:CC.text, font:{size:10} } }
+      }
+    }
+  });
+}
+
+/* ─── LINE OVERVIEW DATA & CHARTS ───────────────────── */
+
+// LINE_OVERVIEW: per-line data for Gap Analysis Line Overview chart
+// gs = Nameplate (manufacturer spec), rs = MAX(As) historically, as = current actual, people = headcount
+// gsgapUSD = (qty / gsGap) × people × laborCostPerHr, rsgapUSD = (qty / rsGap) × people × laborCostPerHr
+const LINE_OVERVIEW = {
+  labels: ['L55', 'L61', 'L67', 'L68', 'L72', 'L74', 'L81'],
+  gs:     [110,   105,   105,   100,   100,    95,    90],
+  rs:     [ 96,    92,    95,    88,    90,    85,    78],
+  as:     [ 88,    84,    82,    74,    86,    71,    65],
+  gsgapUSD: [62000, 48000, 54000, 42000, 36000, 38000, 28000],
+  rsgapUSD: [98000, 82000, 104000, 88000, 54000, 76000, 62000],
+};
+
+let loView = 'upm'; // 'upm' or 'usd'
+
+function setLOView(type) {
+  loView = type;
+  ['upm','usd'].forEach(t => {
+    const btn = $$('btn-lo-' + t);
+    if (btn) btn.classList.toggle('active', t === type);
+  });
+  updateLineOverviewChart();
+}
+
+function updateLineOverviewChart() {
+  const chart = REG['ch-line-overview'];
+  if (!chart) { initLineOverviewChart(); return; }
+  const d = LINE_OVERVIEW;
+  if (loView === 'usd') {
+    // In $ view: show GS GAP $ and RS GAP $ as grouped bars; hide UPM lines
+    chart.data.datasets[0].data  = d.gsgapUSD.map(() => null); // hide Gs line
+    chart.data.datasets[0].hidden = true;
+    chart.data.datasets[1].data  = d.rsgapUSD.map(() => null); // hide Rs line
+    chart.data.datasets[1].hidden = true;
+    chart.data.datasets[2].data  = d.rsgapUSD;
+    chart.data.datasets[2].label = 'RS GAP Impact ($)';
+    chart.data.datasets[2].backgroundColor = d.labels.map(() => CC.rs + 'aa');
+    chart.options.scales.y.title.text = '$ Impact';
+    chart.options.scales.y.min = 0;
+    chart.options.plugins.tooltip.callbacks.label = ctx =>
+      ' ' + ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString();
+  } else {
+    chart.data.datasets[0].hidden = false;
+    chart.data.datasets[0].data  = d.gs;
+    chart.data.datasets[0].label = 'Nameplate (Gs)';
+    chart.data.datasets[1].hidden = false;
+    chart.data.datasets[1].data  = d.rs;
+    chart.data.datasets[1].label = 'Reference (Rs)';
+    chart.data.datasets[2].data  = d.as;
+    chart.data.datasets[2].label = 'Actual Speed (As)';
+    chart.data.datasets[2].backgroundColor = d.as.map((v, i) => {
+      const rsPct = d.rs[i] > 0 ? (v / d.rs[i]) * 100 : 0;
+      if (rsPct >= 90) return CC.actual + 'cc';
+      if (rsPct >= 75) return '#F9A825cc';
+      if (rsPct >= 60) return CC.rs + 'aa';
+      return '#C62828bb';
+    });
+    chart.options.scales.y.title.text = 'Speed (UPM)';
+    chart.options.scales.y.min = 50;
+    chart.options.plugins.tooltip.callbacks.label = ctx =>
+      ' ' + ctx.dataset.label + ': ' + ctx.parsed.y + ' UPM';
+  }
+  chart.update();
+}
+
+function initLineOverviewChart() {
+  if (REG['ch-line-overview']) return;
+  const d = LINE_OVERVIEW;
+  init('ch-line-overview', {
+    type: 'bar',
+    data: {
+      labels: d.labels,
+      datasets: [
+        {
+          type: 'line',
+          label: 'Nameplate (Gs)',
+          data: d.gs,
+          borderColor: CC.gs,
+          borderWidth: 2.5,
+          borderDash: [],
+          pointRadius: 4,
+          pointBackgroundColor: CC.gs,
+          fill: false,
+          order: 1,
+        },
+        {
+          type: 'line',
+          label: 'Reference (Rs)',
+          data: d.rs,
+          borderColor: CC.blue,
+          borderWidth: 2,
+          borderDash: [5, 4],
+          pointRadius: 4,
+          pointBackgroundColor: CC.blue,
+          fill: false,
+          order: 2,
+        },
+        {
+          type: 'bar',
+          label: 'Actual Speed (As)',
+          data: d.as,
+          backgroundColor: d.as.map((v, i) => {
+            const rsPct = d.rs[i] > 0 ? (v / d.rs[i]) * 100 : 0;
+            if (rsPct >= 90) return CC.actual + 'cc';
+            if (rsPct >= 75) return '#F9A825cc';
+            if (rsPct >= 60) return CC.rs + 'aa';
+            return '#C62828bb';
+          }),
+          borderRadius: 3,
+          order: 3,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, labels: { color: CC.text, font: { size: 10 }, boxWidth: 14 } },
+        tooltip: {
+          backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.15)', borderWidth: 1,
+          titleColor: '#1A2B3C', bodyColor: '#4A6580', padding: 10,
+          callbacks: {
+            label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.parsed.y + ' UPM'
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: CC.grid }, ticks: { color: CC.text, font: { size: 10 } } },
+        y: {
+          grid: { color: CC.grid },
+          ticks: { color: CC.text, font: { size: 10 } },
+          title: { display: true, text: 'Speed (UPM)', color: CC.text, font: { size: 10 } },
+          min: 50
+        }
+      }
+    }
+  });
 }
 
 /* ─── WHAT-IF DATA & CHARTS ──────────────────────────── */
@@ -2483,6 +2972,66 @@ const CORR_DATA = {
   ]
 };
 
+/* ─── WHAT-IF SIMULATION LOGIC ──────────────────────── */
+
+function updateWhatIfSimulation() {
+  const targetUPM  = parseInt(($$('wi-target-upm')  || {value:'88'}).value);
+  const people     = parseInt(($$('wi-people')      || {value:'7'}).value);
+  const laborCost  = parseInt(($$('wi-laborcost')   || {value:'45'}).value);
+
+  // Update displayed values
+  if ($$('wi-target-upm-val')) $$('wi-target-upm-val').textContent = targetUPM;
+  if ($$('wi-people-val'))     $$('wi-people-val').textContent = people;
+  if ($$('wi-laborcost-val'))  $$('wi-laborcost-val').textContent = laborCost;
+
+  const RS = 95;   // reference speed for L67 (illustrative)
+  const GS = 105;  // nameplate speed for L67
+  const repQty = 48000; // representative PO quantity
+
+  const rsGapUPM = Math.max(0, RS - targetUPM);
+  if ($$('wi-out-rsgap')) $$('wi-out-rsgap').textContent = rsGapUPM + ' UPM';
+
+  if (rsGapUPM > 0) {
+    const rsGapUSD = Math.round((repQty / rsGapUPM) * people * laborCost);
+    if ($$('wi-out-rsgap-usd')) $$('wi-out-rsgap-usd').textContent = '$' + rsGapUSD.toLocaleString();
+  } else {
+    if ($$('wi-out-rsgap-usd')) $$('wi-out-rsgap-usd').textContent = '$0';
+  }
+
+  // Run time reduction: current time vs target time (hours) for repQty units
+  const currentAS = 82; // illustrative current actual speed
+  const currentTimeHrs = repQty / (currentAS * 60);
+  const targetTimeHrs  = repQty / (targetUPM * 60);
+  const reductionHrs   = Math.max(0, currentTimeHrs - targetTimeHrs);
+  if ($$('wi-out-runtime')) $$('wi-out-runtime').textContent = reductionHrs.toFixed(1) + ' hrs';
+
+  // Expected finish (from now, using run time)
+  const nowH = new Date().getHours();
+  const finishH = (nowH + Math.ceil(targetTimeHrs)) % 24;
+  const ampm = finishH >= 12 ? 'PM' : 'AM';
+  const h12  = finishH % 12 || 12;
+  if ($$('wi-out-finish')) $$('wi-out-finish').textContent = h12 + ':00 ' + ampm;
+
+  // Tier
+  const rsPct = RS > 0 ? (targetUPM / RS) * 100 : 0;
+  let tier = 'Other', tierColor = '#9E9E9E';
+  if      (rsPct >= THRESHOLDS.gold)   { tier = '★ Gold';   tierColor = '#F9A825'; }
+  else if (rsPct >= THRESHOLDS.silver) { tier = '◆ Silver'; tierColor = '#607D8B'; }
+  else if (rsPct >= THRESHOLDS.bronze) { tier = '▲ Bronze'; tierColor = '#8D6E63'; }
+  if ($$('wi-out-tier')) {
+    $$('wi-out-tier').textContent = tier;
+    $$('wi-out-tier').style.color = tierColor;
+  }
+}
+
+function resetWhatIfSimulation() {
+  const defaults = { 'wi-target-upm':88, 'wi-people':7, 'wi-laborcost':45 };
+  Object.entries(defaults).forEach(([id, val]) => {
+    const el = $$(id); if (el) el.value = val;
+  });
+  updateWhatIfSimulation();
+}
+
 function renderMassAttrHeatmap() {
   const tbody = $$('tb-hm-runseq');
   if (!tbody) return;
@@ -2575,8 +3124,8 @@ function showHomeTab(tab) {
   setTimeout(() => {
     if (tab === 'results')     { initResultsCharts(); }
     if (tab === 'predictions') { renderPred(); initPredictionsCharts(); }
-    if (tab === 'gap')         { renderPlanAhead(); renderImpact(); initGapCharts(); }
-    if (tab === 'whatif')      { renderWhatIfTable(); initWhatIfCharts(); }
+    if (tab === 'gap')         { renderPlanAhead(); renderImpact(); initGapCharts(); renderRSGapDeepDive(false); }
+    if (tab === 'whatif')      { renderWhatIfTable(); initWhatIfCharts(); updateWhatIfSimulation(); }
   }, 30);
 }
 
