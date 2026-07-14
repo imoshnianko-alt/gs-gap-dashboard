@@ -580,7 +580,7 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
 /* =====================================================
    OVERFILL: KPI TILES
    ===================================================== */
-.ov-kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.ov-kpi-row { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
 .ov-kpi-card {
   background:var(--c-card); border:1px solid var(--c-border); border-radius:8px;
   padding:16px 18px; display:flex; flex-direction:column; gap:4px;
@@ -785,6 +785,454 @@ table.ov-heatmap tbody td.row-hdr {
 .sg-badge.warn   { background:#FFF9E6; color:#E65100; border:1px solid #F5A534; }
 .sg-badge.orange { background:#FFF3E0; color:#E65100; border:1px solid #FFCC80; }
 .sg-badge.err    { background:#FEECEC; color:#DC3545; border:1px solid #F5C6CB; }
+
+/* =====================================================
+   OVERFILL: KPI ROW UPDATE (5 + 3 cards)
+   ===================================================== */
+.ov-kpi-row   { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+.ov-kpi-row-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px; }
+.ov-kpi-card.clickable { cursor:pointer; transition:box-shadow .15s,transform .1s; }
+.ov-kpi-card.clickable:hover { box-shadow:0 4px 12px rgba(0,0,0,.13); transform:translateY(-1px); }
+/* Gap to GS card */
+.ov-kpi-card.gs-gap-card { border-left:4px solid #DC3545; }
+.ov-kpi-card.gs-gap-card.ok { border-left-color:#28A745; }
+/* Avg Overfill % card */
+.ov-kpi-card.avg-pct-card { border-left:4px solid #FF9800; }
+
+/* =====================================================
+   OVERFILL: WHAT-IF SIDE-BY-SIDE LAYOUT
+   ===================================================== */
+.whatif-sides { display:flex; gap:0; border-radius:9px; overflow:hidden; border:1px solid #E0E4E8; margin-top:14px; }
+.whatif-left  { width:45%; background:#F8F9FA; padding:22px 24px; border-right:1px solid #E0E4E8; flex-shrink:0; }
+.whatif-right { flex:1; background:#fff; padding:22px 24px; }
+.whatif-col-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:#212529; margin-bottom:16px; display:flex; align-items:center; gap:7px; }
+.whatif-impact-card { background:#E7F3FF; border-left:4px solid #007BFF; border-radius:6px; padding:14px 16px; margin-bottom:14px; }
+.whatif-impact-row  { display:flex; justify-content:space-between; align-items:center; padding:5px 0; font-size:12px; }
+.whatif-impact-row + .whatif-impact-row { border-top:1px solid rgba(0,0,0,.08); }
+.whatif-impact-label { color:#6C757D; }
+.whatif-impact-val   { font-weight:700; color:#212529; font-size:14px; }
+.whatif-impact-val.adjusted { color:#007BFF; }
+.whatif-impact-val.savings  { color:#28A745; font-size:16px; }
+.whatif-decomp-section { margin-top:14px; padding-top:12px; border-top:1px solid #E0E4E8; }
+.whatif-decomp-title   { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#6C757D; margin-bottom:10px; }
+.whatif-decomp-item    { display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid rgba(0,0,0,.05); }
+.whatif-decomp-item:last-child { border-bottom:none; }
+.whatif-decomp-name    { flex:1; font-size:12px; color:#212529; }
+.whatif-decomp-bar-wrap { width:80px; height:4px; background:#E0E4E8; border-radius:2px; flex-shrink:0; }
+.whatif-decomp-bar     { height:4px; border-radius:2px; }
+.whatif-decomp-amt     { font-size:12px; font-weight:700; width:55px; text-align:right; flex-shrink:0; }
+.whatif-decomp-prev    { font-size:10px; color:#ADB5BD; font-style:italic; white-space:nowrap; }
+
+/* =====================================================
+   OVERFILL: QUANTITY DECOMPOSITION (mirrors cost cards)
+   ===================================================== */
+.qty-decomp-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px; }
+.qty-decomp-card { border-radius:9px; padding:18px 20px; display:flex; flex-direction:column; gap:5px; color:#fff; }
+.qty-decomp-card.brand    { background:linear-gradient(135deg,#B71C1C,#E57373); }
+.qty-decomp-card.setpoint { background:linear-gradient(135deg,#E65100,#FFB74D); }
+.qty-decomp-card.sigma    { background:linear-gradient(135deg,#F9A825,#FFF176); color:#333; }
+.qty-decomp-label { font-size:10px; font-weight:700; text-transform:uppercase; opacity:.85; letter-spacing:.5px; }
+.qty-decomp-value { font-size:34px; font-weight:700; line-height:1; letter-spacing:-.5px; }
+.qty-decomp-sub   { font-size:11px; opacity:.8; }
+.qty-decomp-pct   { font-size:13px; font-weight:700; margin-top:2px; opacity:.9; }
+.qty-total-bar    { background:#fff; border:1px solid rgba(0,0,0,.1); border-radius:7px;
+  padding:12px 18px; display:flex; align-items:center; justify-content:space-between;
+  font-size:13px; margin-top:4px; }
+.qty-total-label  { font-weight:600; color:var(--c-text); }
+.qty-total-value  { font-size:20px; font-weight:700; color:#4A6580; }
+
+/* =====================================================
+   OVERFILL: TOLERANCE PARAMETERS TABLE
+   ===================================================== */
+.tolerance-table { width:100%; border-collapse:collapse; font-size:11px; }
+.tolerance-table thead th {
+  background:#0D3F5C; color:#fff; padding:8px 10px;
+  font-size:10px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.3px; white-space:nowrap; border:1px solid rgba(255,255,255,.1);
+}
+.tolerance-table tbody td { padding:7px 9px; border:1px solid #E0E4E8; font-size:11px; }
+.tolerance-table tbody tr:nth-child(even) td { background:#F8F9FA; }
+.tol-mean-ok   { color:#28A745; font-weight:700; }
+.tol-mean-warn { color:#E65100; font-weight:700; }
+.tol-mean-bad  { color:#DC3545; font-weight:700; }
+.tol-used-ok   { color:#28A745; }
+.tol-used-warn { color:#E65100; }
+.tol-used-bad  { color:#DC3545; font-weight:700; }
+
+/* =====================================================
+   OVERFILL: SIDEBAR FILTER ADDITIONS
+   ===================================================== */
+.filter-radio-group { display:flex; flex-direction:column; gap:5px; margin-top:4px; }
+.filter-radio-item  { display:flex; align-items:flex-start; gap:6px; font-size:11px; color:var(--c-text); cursor:pointer; line-height:1.4; }
+.filter-radio-item input[type="radio"] { margin-top:2px; accent-color:#1565C0; flex-shrink:0; }
+.filter-check-group { display:flex; flex-direction:column; gap:5px; margin-top:4px; }
+.filter-check-item  { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--c-text); cursor:pointer; }
+.filter-check-item input[type="checkbox"] { accent-color:#1565C0; }
+
+/* =====================================================
+   OVERFILL: DECOMPOSITION CARDS
+   ===================================================== */
+.decomp-section { margin-bottom:14px; }
+.decomp-section-title {
+  font-size:12px; font-weight:700; color:var(--c-muted); text-transform:uppercase;
+  letter-spacing:.5px; margin-bottom:10px; display:flex; align-items:center; gap:8px;
+}
+.decomp-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px; }
+.decomp-card {
+  border-radius:9px; padding:18px 20px;
+  display:flex; flex-direction:column; gap:5px;
+  color:#fff; position:relative; overflow:hidden;
+}
+.decomp-card.brand    { background:linear-gradient(135deg,#B71C1C,#E57373); }
+.decomp-card.setpoint { background:linear-gradient(135deg,#E65100,#FFB74D); }
+.decomp-card.sigma    { background:linear-gradient(135deg,#F9A825,#FFF176); color:#333; }
+.decomp-label  { font-size:10px; font-weight:700; text-transform:uppercase; opacity:.85; letter-spacing:.5px; }
+.decomp-value  { font-size:34px; font-weight:700; line-height:1; letter-spacing:-.5px; }
+.decomp-sub    { font-size:11px; opacity:.8; }
+.decomp-pct    { font-size:13px; font-weight:700; margin-top:2px; opacity:.9; }
+.decomp-total-bar {
+  background:#fff; border:1px solid rgba(0,0,0,.1); border-radius:7px;
+  padding:12px 18px; display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:14px; font-size:13px;
+}
+.decomp-total-label { font-weight:600; color:var(--c-text); }
+.decomp-total-value { font-size:20px; font-weight:700; color:#DC3545; }
+
+/* =====================================================
+   OVERFILL: WHAT-IF SLIDERS
+   ===================================================== */
+.whatif-section {
+  background:#F8F9FA; border:1px solid rgba(0,0,0,.1); border-radius:9px;
+  padding:16px 20px; margin-top:14px;
+}
+.whatif-title  { font-size:13px; font-weight:700; color:var(--c-text); margin-bottom:4px; }
+.whatif-sub    { font-size:11px; color:var(--c-muted); margin-bottom:14px; }
+.slider-row    { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.slider-label  { width:160px; font-size:12px; font-weight:600; color:var(--c-text); flex-shrink:0; }
+.slider-input  { flex:1; accent-color:#1565C0; height:4px; cursor:pointer; }
+.slider-value  {
+  width:62px; text-align:right; font-size:12px; font-weight:700;
+  color:#1565C0; font-family:monospace;
+}
+.slider-range  { font-size:10px; color:var(--c-muted); width:90px; flex-shrink:0; }
+.whatif-reset  {
+  background:#fff; border:1.5px solid #1565C0; color:#1565C0;
+  padding:5px 16px; border-radius:5px; cursor:pointer;
+  font-size:11px; font-weight:700; margin-top:4px; transition:all .12s;
+}
+.whatif-reset:hover { background:#1565C0; color:#fff; }
+.whatif-result {
+  background:#fff; border:1px solid rgba(0,0,0,.1); border-radius:7px;
+  padding:14px 18px; margin-top:14px;
+}
+.whatif-result-title { font-size:12px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.5px; color:var(--c-muted); margin-bottom:10px; }
+.whatif-result-row  { display:flex; align-items:center; justify-content:space-between;
+  padding:4px 0; border-bottom:1px solid rgba(0,0,0,.06); font-size:12px; }
+.whatif-result-row:last-child { border-bottom:none; }
+.whatif-result-key  { color:var(--c-muted); }
+.whatif-result-val  { font-weight:700; color:var(--c-text); }
+.whatif-savings     { color:#28A745 !important; font-size:15px !important; }
+.whatif-decomp-row  { display:flex; align-items:center; justify-content:space-between;
+  font-size:11px; padding:3px 0; color:var(--c-muted); }
+.whatif-decomp-val  { font-weight:700; color:var(--c-text); }
+
+/* =====================================================
+   OVERFILL: DRIVER DECOMPOSITION TABLE
+   ===================================================== */
+.driver-table { width:100%; border-collapse:collapse; font-size:11px; }
+.driver-table thead th {
+  background:#003D5C; color:#fff; padding:7px 8px;
+  font-size:10px; font-weight:700; white-space:nowrap;
+  border:1px solid rgba(255,255,255,.1); text-align:center;
+}
+.driver-table thead th:first-child { text-align:left; }
+.driver-table tbody td {
+  padding:5px 7px; border:1px solid rgba(0,0,0,.06);
+  text-align:center; font-size:10.5px; white-space:nowrap;
+}
+.driver-table tbody td:first-child { text-align:left; font-weight:600; }
+.driver-table tbody tr:nth-child(even) td { background:rgba(0,0,0,.018); }
+.driver-pct-red    { color:#DC3545; font-weight:700; }
+.driver-pct-orange { color:#E65100; font-weight:700; }
+.driver-pct-yellow { color:#E65100; }
+.driver-pct-green  { color:#28A745; }
+.driver-pct-blue   { color:#1565C0; }
+.scatter-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:14px; }
+
+/* =====================================================
+   OVERFILL: SG SUMMARY STATS
+   ===================================================== */
+.sg-stats-card {
+  background:var(--c-card); border:1px solid var(--c-border); border-radius:8px;
+  padding:14px 18px; margin-bottom:14px;
+}
+.sg-stats-title { font-size:13px; font-weight:700; color:var(--c-text); margin-bottom:10px; }
+.sg-stats-grid  { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.sg-stat-item   { display:flex; flex-direction:column; gap:2px; }
+.sg-stat-label  { font-size:10px; font-weight:700; color:var(--c-muted); text-transform:uppercase; letter-spacing:.4px; }
+.sg-stat-value  { font-size:16px; font-weight:700; color:var(--c-text); font-family:monospace; }
+.sg-stat-sub    { font-size:10px; color:var(--c-muted); }
+.sg-spec-width-green  { color:#28A745; }
+.sg-spec-width-yellow { color:#E65100; }
+.sg-spec-width-red    { color:#DC3545; }
+
+/* =====================================================
+   OVERFILL: TOP-10 MODAL
+   ===================================================== */
+.ov-modal-overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,.55);
+  z-index:1000; align-items:center; justify-content:center;
+}
+.ov-modal-overlay.active { display:flex; }
+.ov-modal {
+  background:#fff; border-radius:10px; width:90%; max-width:780px;
+  max-height:90vh; overflow:hidden; display:flex; flex-direction:column;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+}
+.ov-modal-header {
+  background:#003D5C; color:#fff; padding:14px 20px;
+  display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+}
+.ov-modal-header-title { font-size:15px; font-weight:700; }
+.ov-modal-header-filters { font-size:11px; opacity:.7; }
+.ov-modal-close {
+  background:none; border:none; color:#fff; cursor:pointer;
+  font-size:18px; line-height:1; padding:0 4px;
+}
+.ov-modal-body { overflow-y:auto; padding:16px 20px; }
+table.top10-tbl { width:100%; border-collapse:collapse; font-size:12px; }
+table.top10-tbl thead th {
+  background:#F0F4F8; color:#003D5C; padding:8px 10px;
+  font-size:11px; font-weight:700; text-align:left; white-space:nowrap;
+  border-bottom:2px solid #d0d8e4; position:sticky; top:0;
+}
+table.top10-tbl tbody tr { border-bottom:1px solid rgba(0,0,0,.06); }
+table.top10-tbl tbody tr:nth-child(even) td { background:#F8F9FA; }
+table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
+.top10-rank { width:28px; height:28px; border-radius:50%; background:#003D5C;
+  color:#fff; display:inline-flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; }
+.top10-pct-red    { color:#DC3545; font-weight:700; background:#FEECEC; padding:2px 6px; border-radius:3px; }
+.top10-pct-yellow { color:#E65100; font-weight:700; background:#FFF9E6; padding:2px 6px; border-radius:3px; }
+.top10-pct-green  { color:#28A745; font-weight:700; background:#E8F5E9; padding:2px 6px; border-radius:3px; }
+
+/* =====================================================
+   OVERFILL: DATA EXPORT TAB
+   ===================================================== */
+.export-table { width:100%; border-collapse:collapse; font-size:10.5px; }
+.export-table thead th {
+  background:#003D5C; color:#fff; padding:6px 8px; font-size:10px; font-weight:700;
+  white-space:nowrap; border:1px solid rgba(255,255,255,.1); text-align:left; position:sticky; top:0;
+}
+.export-table tbody td {
+  padding:4px 8px; border-bottom:1px solid rgba(0,0,0,.06); white-space:nowrap; font-size:10.5px;
+}
+.export-table tbody tr:nth-child(even) td { background:rgba(0,0,0,.018); }
+.export-btn {
+  background:#1565C0; color:#fff; border:none; border-radius:5px;
+  padding:8px 20px; font-size:12px; font-weight:700; cursor:pointer;
+  display:flex; align-items:center; gap:6px; transition:background .12s;
+}
+.export-btn:hover { background:#0D47A1; }
+.export-wrap { overflow:auto; max-height:calc(100vh - 280px); }
+
+/* ─── KPI NAVIGATION CARDS (Level 2) ─── */
+.kpi-nav-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  flex-shrink: 0;
+}
+.kpi-nav-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 2px solid #d0d8e4;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  text-align: left;
+  font-family: inherit;
+  width: 100%;
+}
+.kpi-nav-card:hover:not(.static) {
+  border-color: var(--c-blue);
+  box-shadow: 0 2px 8px rgba(21,101,192,0.12);
+}
+.kpi-nav-card.active {
+  border-color: var(--c-blue);
+  background: #f0f6ff;
+  box-shadow: 0 2px 10px rgba(21,101,192,0.18);
+}
+.kpi-nav-card.static {
+  cursor: default;
+  opacity: 0.82;
+  background: #f8f9fb;
+}
+.knc-icon { font-size: 20px; flex-shrink: 0; }
+.knc-body { flex: 1; min-width: 0; }
+.knc-kpi {
+  font-size: 8.5px;
+  font-weight: 800;
+  color: var(--c-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 2px;
+}
+.knc-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text);
+  line-height: 1.2;
+}
+.knc-unit { font-size: 10px; font-weight: 400; color: var(--c-muted); }
+.knc-delta { font-size: 10px; color: var(--c-neg); margin-top: 2px; }
+.knc-delta.pos { color: var(--c-pos); }
+.knc-delta.neutral { color: var(--c-blue); }
+.knc-static-badge {
+  font-size: 8px;
+  color: var(--c-muted);
+  background: #edf0f4;
+  border-radius: 3px;
+  padding: 1px 5px;
+  display: inline-block;
+  margin-top: 3px;
+}
+/* ─── KPI CONTENT PANES ─── */
+.kpi-cnt { display: none; flex-direction: column; gap: 8px; flex: 1; min-height: 0; overflow-y: auto; }
+.kpi-cnt.active { display: flex; }
+
+/* =====================================================
+   LAYOUT & UI FIXES — July 13 2026
+   ===================================================== */
+
+/* Issue 1: KPI Nav Cards — increase card height for readability */
+.kpi-nav-card {
+  min-height: 90px !important;
+  padding: 12px 14px !important;
+}
+.knc-val {
+  font-size: 20px !important;
+  line-height: 1.25 !important;
+}
+.knc-kpi { font-size: 9px !important; }
+.knc-delta { font-size: 10.5px !important; margin-top: 3px !important; }
+
+/* Speed Gap Analysis inner KPI cards — more breathing room */
+.speed-gap-kpi-grid > div {
+  padding: 12px 10px !important;
+  min-height: 90px;
+}
+
+/* Issue 2: Chart sections — breathing room + prevent flex compression */
+/* Root fix: kpi-cnt is height-constrained (flex:1 in viewport), so its flex
+   children default to shrinking. flex-shrink:0 lets them keep natural height
+   and the overflow-y:auto on kpi-cnt provides the scroll. */
+/* Prevent ALL direct children from being shrunk by the flex algorithm.
+   kpi-cnt has a constrained viewport height; overflow-y:auto scrolls the rest. */
+.kpi-cnt > * {
+  flex-shrink: 0;
+}
+.kpi-cnt > .card,
+.kpi-cnt > .charts-grid,
+.kpi-cnt > .info-box,
+.kpi-cnt > .note-box,
+.kpi-cnt > .gap-hero,
+.kpi-cnt > .labor-disclaimer-box,
+.kpi-cnt > .sec-heading {
+  margin-bottom: 8px;
+}
+/* chart-wrap inside .card is also a flex child — must not shrink */
+.chart-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Portfolio Segmentation — visual separator from charts above */
+.portfolio-segmentation-wrap {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--c-border);
+}
+
+/* Issue 3: PO-Level Detail Tables — scrollable with sticky header */
+.tbl-wrap {
+  max-height: 520px;
+  overflow-y: auto;
+  border: 1px solid var(--c-border);
+  border-radius: 5px;
+}
+.gs-tbl thead tr th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #EAF1F8;
+}
+
+/* Issue 4: What-If Sliders — larger thumb, better spacing */
+.kpi-cnt input[type="range"] {
+  height: 6px !important;
+  cursor: pointer;
+}
+.kpi-cnt input[type="range"]::-webkit-slider-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--c-blue);
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  -webkit-appearance: none;
+}
+.kpi-cnt input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--c-blue);
+  cursor: pointer;
+  border: 2px solid #fff;
+}
+
+/* Issue 6: Date Range Pickers — comfortable spacing */
+.gap-hero .date-group {
+  gap: 16px !important;
+}
+.date-input {
+  padding: 6px 12px !important;
+  min-width: 140px;
+}
+.date-label {
+  white-space: nowrap;
+}
+
+/* Labor cost prominent disclaimer box */
+.labor-disclaimer-box {
+  background: #FFF8E7;
+  border: 1.5px solid #F5A534;
+  border-left: 4px solid #F5A534;
+  border-radius: 5px;
+  padding: 10px 14px;
+  font-size: 11px;
+  color: #7A4500;
+  line-height: 1.55;
+  margin-top: 8px;
+}
+.labor-disclaimer-box strong { color: #4A2800; }
+
+/* Pending confirmation items in definitions */
+.pending-item {
+  background: #FFF8E7;
+  border: 1px solid rgba(245,165,52,0.35);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: #7A4500;
+  margin-top: 4px;
+}
 </style>
 </head>
 <body>
@@ -807,10 +1255,6 @@ table.ov-heatmap tbody td.row-hdr {
     <div id="gs-type-indicator" class="gs-type-badge governed">
       🔒 <span id="gs-type-label">Governed GS · FY25</span>
     </div>
-    <nav class="page-nav" id="gs-page-nav">
-      <button id="btn-home" class="page-nav-btn active" onclick="showPage('home')">HOME</button>
-      <button id="btn-dv" class="page-nav-btn" onclick="showPage('dv')">DEEP VIEW</button>
-    </nav>
   </div>
 </header>
 
@@ -923,20 +1367,11 @@ table.ov-heatmap tbody td.row-hdr {
         </div>
       </div>
 
-      <!-- Deep View sub-navigation (shown only on DV page) -->
-      <div id="dv-subnav" style="display:none">
-        <hr class="panel-sep">
-        <div class="subnav-heading">Deep View</div>
-        <button id="btn-sub-speed"    class="sub-btn active" onclick="showSubTab('speed')">⚙&nbsp; Speed</button>
-        <button id="btn-sub-labor"    class="sub-btn" onclick="showSubTab('labor')">👥&nbsp; Labor</button>
-        <button id="btn-sub-oee"      class="sub-btn" onclick="showSubTab('oee')">📊&nbsp; OEE</button>
-        <button id="btn-sub-scrap"    class="sub-btn" onclick="showSubTab('scrap')">♻&nbsp; Scrap</button>
-        <button id="btn-sub-massattr" class="sub-btn" onclick="showSubTab('massattr')">🔬&nbsp; Mass Attr.</button>
-      </div>
     </div><!-- /gs-sidebar-content -->
 
     <!-- OVERFILL FILTERS -->
     <div id="ov-sidebar-content" style="display:none;">
+      <!-- DATE RANGE -->
       <div class="date-range-row">
         <span class="slicer-label">Date Range</span>
         <span class="date-reset" onclick="resetOVDates()">Reset</span>
@@ -946,6 +1381,8 @@ table.ov-heatmap tbody td.row-hdr {
         <button class="date-preset" onclick="setOVPreset('3m')">Last 3M</button>
         <button class="date-preset" onclick="setOVPreset('ytd')">YTD</button>
         <button class="date-preset" onclick="setOVPreset('r12')">R12M</button>
+        <button class="date-preset" onclick="setOVPreset('fy26')">FY26</button>
+        <button class="date-preset" onclick="setOVPreset('fy27')">FY27</button>
       </div>
       <div class="date-field">
         <label>From</label>
@@ -956,6 +1393,8 @@ table.ov-heatmap tbody td.row-hdr {
         <input type="date" id="ov-date-to" value="2025-06-30" onchange="handleOVFilterChange()">
       </div>
       <hr class="panel-sep">
+
+      <!-- PLANT -->
       <div>
         <span class="slicer-label">Plant</span>
         <select id="ov-plant" class="slicer-select" onchange="handleOVFilterChange()">
@@ -964,6 +1403,8 @@ table.ov-heatmap tbody td.row-hdr {
           <option>— All Plants —</option>
         </select>
       </div>
+
+      <!-- RESOURCE / LINE -->
       <div>
         <span class="slicer-label">Resource / Line</span>
         <div class="ms-wrap" id="ms-ov-resource">
@@ -977,31 +1418,8 @@ table.ov-heatmap tbody td.row-hdr {
           </div>
         </div>
       </div>
-      <div>
-        <span class="slicer-label">SKU</span>
-        <div class="ms-wrap" id="ms-ov-sku">
-          <button class="ms-trigger" id="ms-ov-sku-trigger" data-all-label="All SKUs" onclick="toggleMS('ms-ov-sku')">All SKUs</button>
-          <div class="ms-dropdown">
-            <label class="ms-item"><input type="checkbox" id="ms-ov-sku-all" onchange="toggleAllMS('ms-ov-sku')" checked> All</label>
-            <hr class="ms-sep">
-            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1042" checked> SKU-1042</label>
-            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1055" checked> SKU-1055</label>
-            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1098" checked> SKU-1098</label>
-            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1113" checked> SKU-1113</label>
-            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1127" checked> SKU-1127</label>
-          </div>
-        </div>
-      </div>
-      <hr class="panel-sep">
-      <div>
-        <span class="slicer-label">Brand</span>
-        <select class="slicer-select" onchange="handleOVFilterChange()">
-          <option>— All Brands —</option>
-          <option>Color Pro</option>
-          <option>Pure Skin</option>
-          <option>DermaTech</option>
-        </select>
-      </div>
+
+      <!-- FAMILY -->
       <div>
         <span class="slicer-label">Family</span>
         <select class="slicer-select" onchange="handleOVFilterChange()">
@@ -1013,33 +1431,260 @@ table.ov-heatmap tbody td.row-hdr {
           <option>Moisturizer</option>
         </select>
       </div>
+
+      <!-- PRODUCT (SKU) — renamed from SKU -->
       <div>
-        <span class="slicer-label">Shift</span>
-        <select class="slicer-select" onchange="handleOVFilterChange()">
-          <option>— All Shifts —</option>
-          <option>Morning</option>
-          <option>Afternoon</option>
-          <option>Night</option>
+        <span class="slicer-label">Product (SKU)</span>
+        <div class="ms-wrap" id="ms-ov-sku">
+          <button class="ms-trigger" id="ms-ov-sku-trigger" data-all-label="All Products" onclick="toggleMS('ms-ov-sku')">All Products</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-ov-sku-all" onchange="toggleAllMS('ms-ov-sku')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1042" checked> SKU-1042</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1055" checked> SKU-1055</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1098" checked> SKU-1098</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1113" checked> SKU-1113</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-sku-opt" onchange="updateMSTrigger('ms-ov-sku')" value="SKU-1127" checked> SKU-1127</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORY — new -->
+      <div>
+        <span class="slicer-label">Category</span>
+        <div class="ms-wrap" id="ms-ov-cat">
+          <button class="ms-trigger" id="ms-ov-cat-trigger" data-all-label="All Categories" onclick="toggleMS('ms-ov-cat')">All Categories</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-ov-cat-all" onchange="toggleAllMS('ms-ov-cat')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item"><input type="checkbox" class="ms-ov-cat-opt" onchange="updateMSTrigger('ms-ov-cat')" value="Skincare" checked> Skincare</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-cat-opt" onchange="updateMSTrigger('ms-ov-cat')" value="Makeup" checked> Makeup</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-cat-opt" onchange="updateMSTrigger('ms-ov-cat')" value="Fragrance" checked> Fragrance</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-cat-opt" onchange="updateMSTrigger('ms-ov-cat')" value="Hair Care" checked> Hair Care</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBCATEGORY — new, hierarchical -->
+      <div>
+        <span class="slicer-label">Subcategory</span>
+        <div class="ms-wrap" id="ms-ov-subcat">
+          <button class="ms-trigger" id="ms-ov-subcat-trigger" data-all-label="All Subcategories" onclick="toggleMS('ms-ov-subcat')">All Subcategories</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-ov-subcat-all" onchange="toggleAllMS('ms-ov-subcat')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item" style="color:#6C757D;font-size:10px;pointer-events:none;">— Skincare —</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-subcat-opt" onchange="updateMSTrigger('ms-ov-subcat')" value="Serum" checked> Serum</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-subcat-opt" onchange="updateMSTrigger('ms-ov-subcat')" value="Moisturizer – SPF" checked> Moisturizer – SPF</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-subcat-opt" onchange="updateMSTrigger('ms-ov-subcat')" value="Cleanser – Foaming" checked> Cleanser – Foaming</label>
+            <label class="ms-item" style="color:#6C757D;font-size:10px;pointer-events:none;">— Makeup —</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-subcat-opt" onchange="updateMSTrigger('ms-ov-subcat')" value="Foundation – Liquid" checked> Foundation – Liquid</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-subcat-opt" onchange="updateMSTrigger('ms-ov-subcat')" value="Mascara" checked> Mascara</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- DECLARED CONTENT (ML) — renamed from Size (ml) -->
+      <div>
+        <span class="slicer-label">Declared Content (ml)</span>
+        <div class="ms-wrap" id="ms-ov-size">
+          <button class="ms-trigger" id="ms-ov-size-trigger" data-all-label="All Sizes" onclick="toggleMS('ms-ov-size')">All Sizes</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-ov-size-all" onchange="toggleAllMS('ms-ov-size')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item"><input type="checkbox" class="ms-ov-size-opt" onchange="updateMSTrigger('ms-ov-size')" value="15" checked> 15 ml</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-size-opt" onchange="updateMSTrigger('ms-ov-size')" value="30" checked> 30 ml</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-size-opt" onchange="updateMSTrigger('ms-ov-size')" value="50" checked> 50 ml</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-size-opt" onchange="updateMSTrigger('ms-ov-size')" value="100" checked> 100 ml</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-size-opt" onchange="updateMSTrigger('ms-ov-size')" value="150" checked> 150 ml</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- PACKAGE TYPE -->
+      <div>
+        <span class="slicer-label">Package Type</span>
+        <div class="ms-wrap" id="ms-ov-pkgtype">
+          <button class="ms-trigger" id="ms-ov-pkgtype-trigger" data-all-label="All Types" onclick="toggleMS('ms-ov-pkgtype')">All Types</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-ov-pkgtype-all" onchange="toggleAllMS('ms-ov-pkgtype')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item"><input type="checkbox" class="ms-ov-pkgtype-opt" onchange="updateMSTrigger('ms-ov-pkgtype')" value="Tube" checked> Tube</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-pkgtype-opt" onchange="updateMSTrigger('ms-ov-pkgtype')" value="Bottle" checked> Bottle</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-pkgtype-opt" onchange="updateMSTrigger('ms-ov-pkgtype')" value="Jar" checked> Jar</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-pkgtype-opt" onchange="updateMSTrigger('ms-ov-pkgtype')" value="Mascara Vial" checked> Mascara Vial</label>
+            <label class="ms-item"><input type="checkbox" class="ms-ov-pkgtype-opt" onchange="updateMSTrigger('ms-ov-pkgtype')" value="Pump Bottle" checked> Pump Bottle</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOT SIZE -->
+      <div>
+        <span class="slicer-label">Lot Size</span>
+        <select id="ov-lot-size" class="slicer-select" onchange="handleOVFilterChange()">
+          <option value="">— All Lot Sizes —</option>
+          <option value="small">Small (&lt; 10,000)</option>
+          <option value="medium">Medium (10,000–50,000)</option>
+          <option value="large">Large (&gt; 50,000)</option>
         </select>
       </div>
+
+      <!-- PROCESS / ASSEMBLY TYPE — new -->
+      <div>
+        <span class="slicer-label">Process / Assembly Type</span>
+        <div class="filter-radio-group">
+          <label class="filter-radio-item">
+            <input type="radio" name="ov-process-type" value="" checked onchange="handleOVFilterChange()">
+            All Types
+          </label>
+          <label class="filter-radio-item">
+            <input type="radio" name="ov-process-type" value="end-to-end" onchange="handleOVFilterChange()">
+            End-to-end (Mass → FG)
+          </label>
+          <label class="filter-radio-item">
+            <input type="radio" name="ov-process-type" value="pack-off" onchange="handleOVFilterChange()">
+            Pack-off (WIP → FG)
+          </label>
+          <label class="filter-radio-item">
+            <input type="radio" name="ov-process-type" value="wip" onchange="handleOVFilterChange()">
+            Work-in-process (Mass → WIP)
+          </label>
+        </div>
+      </div>
+
+      <!-- LIFE CYCLE STAGE — new -->
+      <div>
+        <span class="slicer-label">Life Cycle Stage</span>
+        <div class="filter-check-group">
+          <label class="filter-check-item">
+            <input type="checkbox" id="ov-lcs-npl" checked onchange="handleOVFilterChange()">
+            New Product Launch (NPL)
+          </label>
+          <label class="filter-check-item">
+            <input type="checkbox" id="ov-lcs-legacy" checked onchange="handleOVFilterChange()">
+            Legacy Product
+          </label>
+        </div>
+      </div>
+
+      <!-- VISCOSITY -->
+      <div>
+        <span class="slicer-label">Viscosity</span>
+        <select id="ov-viscosity" class="slicer-select" onchange="handleOVFilterChange()">
+          <option value="">— All Viscosities —</option>
+          <option value="low">Low (&lt; 1,000 cP)</option>
+          <option value="medium">Medium (1,000–3,000 cP)</option>
+          <option value="high">High (&gt; 3,000 cP)</option>
+        </select>
+      </div>
+
+
       <p class="sidebar-helper">Filters apply to all Overfill pages. Switch modules to return to GS filters.</p>
     </div><!-- /ov-sidebar-content -->
 
   </aside>
 
-  <!-- ====== HOME PAGE ====== -->
-  <main id="page-home" class="gs-content">
+  <!-- ====== GS MAIN CONTENT ====== -->
+  <main id="gs-main" class="gs-content">
 
-    <!-- Tab navigation -->
-    <div class="tab-nav">
-      <button id="t-results"     class="tab-btn active"  onclick="showHomeTab('results')">Results</button>
-      <button id="t-predictions" class="tab-btn"         onclick="showHomeTab('predictions')">Predictions</button>
-      <button id="t-gap"         class="tab-btn"         onclick="showHomeTab('gap')">Gap Analysis ($)</button>
-      <button id="t-whatif"      class="tab-btn"         onclick="showHomeTab('whatif')">💰 What-If ($)</button>
+    <!-- ─── Level 2: KPI Category Cards ─────────────────── -->
+    <div id="gs-kpi-nav" class="kpi-nav-row">
+      <button class="kpi-nav-card" id="knc-speed" onclick="showKPI('speed')">
+        <span class="knc-icon">🏃</span>
+        <div class="knc-body">
+          <div class="knc-kpi">Speed</div>
+          <div class="knc-val">82 <span class="knc-unit">UPM</span></div>
+          <div class="knc-delta">▼ −13 vs Rs</div>
+        </div>
+      </button>
+      <button class="kpi-nav-card" id="knc-labor" onclick="showKPI('labor')">
+        <span class="knc-icon">👥</span>
+        <div class="knc-body">
+          <div class="knc-kpi">Labor</div>
+          <div class="knc-val">9 <span class="knc-unit">hrs/1000u</span></div>
+          <div class="knc-delta">▲ +2 vs GS</div>
+        </div>
+      </button>
+      <button class="kpi-nav-card" id="knc-oee" onclick="showKPI('oee')">
+        <span class="knc-icon">⚙️</span>
+        <div class="knc-body">
+          <div class="knc-kpi">OEE</div>
+          <div class="knc-val">62 <span class="knc-unit">%</span></div>
+          <div class="knc-delta">▼ −8% vs Rs</div>
+        </div>
+      </button>
+      <div class="kpi-nav-card static" id="knc-scrap" title="Scrap is a reference metric — no dedicated drill-down page">
+        <span class="knc-icon">♻️</span>
+        <div class="knc-body">
+          <div class="knc-kpi">Scrap</div>
+          <div class="knc-val">4.2 <span class="knc-unit">%</span></div>
+          <div class="knc-delta">▲ +1.4% vs GS</div>
+          <div class="knc-static-badge">reference only</div>
+        </div>
+      </div>
+      <button class="kpi-nav-card" id="knc-massattr" onclick="showKPI('massattr')">
+        <span class="knc-icon">🔬</span>
+        <div class="knc-body">
+          <div class="knc-kpi">Mass Attr.</div>
+          <div class="knc-val" style="font-size:12px;font-weight:700;">LIMS</div>
+          <div class="knc-delta neutral">View analysis →</div>
+        </div>
+      </button>
     </div>
 
-    <!-- ─── TAB: RESULTS ─────────────────────────────────── -->
-    <div id="pane-results" class="pane active">
+    <!-- ─── Level 3: Sub-tabs ────────────────────────────── -->
+    <div id="gs-kpi-subtabs" class="tab-nav" style="margin-top:0;display:none;">
+      <button id="ksub-results"     class="tab-btn active"  onclick="showKPISub('results')">Results</button>
+      <button id="ksub-predictions" class="tab-btn"         onclick="showKPISub('predictions')">Predictions</button>
+      <button id="ksub-gap"         class="tab-btn"         onclick="showKPISub('gap')">Gap Analysis ($)</button>
+      <button id="ksub-dv"          class="tab-btn"         onclick="showKPISub('dv')">Deep View</button>
+      <button id="ksub-whatif"      class="tab-btn"         onclick="showKPISub('whatif')">💰 What-If ($)</button>
+    </div>
+
+    <!-- ─── GS OVERVIEW (landing state — before KPI selected) ─── -->
+    <div id="cnt-gs-overview" class="kpi-cnt active">
+      <div class="info-box" style="padding:12px 16px;">
+        <div class="info-box-title" style="font-size:11px;">📋 Gold Standard Gap Dashboard — Overview</div>
+        <p style="font-size:12px;color:var(--c-text);margin-bottom:8px;">Select a KPI category above to view detailed analysis, charts, and improvement opportunities.</p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px;">
+          <div onclick="showKPI('speed')" style="background:#fff;border:1px solid #c5d8f5;border-radius:7px;padding:14px;cursor:pointer;text-align:center;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 2px 8px rgba(21,101,192,0.15)'" onmouseout="this.style.boxShadow=''">
+            <div style="font-size:22px;margin-bottom:6px;">🏃</div>
+            <div style="font-size:12px;font-weight:700;color:var(--c-text);">Speed</div>
+            <div style="font-size:18px;font-weight:700;color:#2E7D32;margin:4px 0;">82 <span style="font-size:10px;font-weight:400;color:var(--c-muted);">UPM</span></div>
+            <div style="font-size:10px;color:var(--c-neg);">▼ −13 vs Rs</div>
+            <div style="margin-top:8px;font-size:10px;color:var(--c-blue);font-weight:700;">View details →</div>
+          </div>
+          <div onclick="showKPI('labor')" style="background:#fff;border:1px solid #c5d8f5;border-radius:7px;padding:14px;cursor:pointer;text-align:center;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 2px 8px rgba(21,101,192,0.15)'" onmouseout="this.style.boxShadow=''">
+            <div style="font-size:22px;margin-bottom:6px;">👥</div>
+            <div style="font-size:12px;font-weight:700;color:var(--c-text);">Labor</div>
+            <div style="font-size:18px;font-weight:700;color:#E65100;margin:4px 0;">9 <span style="font-size:10px;font-weight:400;color:var(--c-muted);">hrs/1000u</span></div>
+            <div style="font-size:10px;color:var(--c-neg);">▲ +2 vs GS</div>
+            <div style="margin-top:8px;font-size:10px;color:var(--c-blue);font-weight:700;">View details →</div>
+          </div>
+          <div onclick="showKPI('oee')" style="background:#fff;border:1px solid #c5d8f5;border-radius:7px;padding:14px;cursor:pointer;text-align:center;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 2px 8px rgba(21,101,192,0.15)'" onmouseout="this.style.boxShadow=''">
+            <div style="font-size:22px;margin-bottom:6px;">⚙️</div>
+            <div style="font-size:12px;font-weight:700;color:var(--c-text);">OEE</div>
+            <div style="font-size:18px;font-weight:700;color:#1565C0;margin:4px 0;">62 <span style="font-size:10px;font-weight:400;color:var(--c-muted);">%</span></div>
+            <div style="font-size:10px;color:var(--c-neg);">▼ −8% vs Rs</div>
+            <div style="margin-top:8px;font-size:10px;color:var(--c-blue);font-weight:700;">View details →</div>
+          </div>
+          <div style="background:#f8f9fb;border:1px solid #d0d8e4;border-radius:7px;padding:14px;text-align:center;opacity:0.82;" title="Scrap is a reference metric — no dedicated drill-down page">
+            <div style="font-size:22px;margin-bottom:6px;">♻️</div>
+            <div style="font-size:12px;font-weight:700;color:var(--c-text);">Scrap</div>
+            <div style="font-size:18px;font-weight:700;color:#6A1B9A;margin:4px 0;">4.2 <span style="font-size:10px;font-weight:400;color:var(--c-muted);">%</span></div>
+            <div style="font-size:10px;color:var(--c-neg);">▲ +1.4% vs GS</div>
+            <div style="margin-top:8px;font-size:9px;background:#edf0f4;border-radius:3px;padding:2px 6px;display:inline-block;color:var(--c-muted);">reference only</div>
+          </div>
+        </div>
+      </div>
+      <div class="note-box" style="font-size:11px;">
+        💡 <strong>Tip:</strong> Click any KPI card above (Speed, Labor, OEE) to drill into detailed results, predictions, gap analysis, and What-If simulation.
+        Scrap is a reference metric — visible in context on all pages.
+      </div>
+    </div><!-- /cnt-gs-overview -->
+
+    <!-- ─── SPEED: RESULTS ──────────────────────────────── -->
+    <div id="cnt-speed-results" class="kpi-cnt">
 
       <!-- GS Type status bar + view toggle row -->
       <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
@@ -1050,30 +1695,6 @@ table.ov-heatmap tbody td.row-hdr {
           <span style="font-size:9.5px;color:var(--c-muted);font-weight:700;">VIEW:</span>
           <button id="tog-res-pct" class="time-btn active" onclick="setViewType('results','pct')">% Percentage</button>
           <button id="tog-res-usd" class="time-btn" onclick="setViewType('results','usd')">$ Dollar</button>
-        </div>
-      </div>
-
-      <!-- KPI Row -->
-      <div class="kpi-row">
-        <div class="kpi-card">
-          <span class="kpi-label">Speed</span>
-          <span class="kpi-value" id="kpi-speed-val">82 <small>UPM</small></span>
-          <span class="kpi-delta neg" id="kpi-speed-delta">▼ &minus;12 UPM vs RS</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">Labor hrs / 1000u</span>
-          <span class="kpi-value" id="kpi-labor-val">9 <small>#</small></span>
-          <span class="kpi-delta neg" id="kpi-labor-delta">▲ +2 vs GS</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">OEE</span>
-          <span class="kpi-value" id="kpi-oee-val">62 <small>%</small></span>
-          <span class="kpi-delta neg" id="kpi-oee-delta">▼ &minus;8% vs RS</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">Scrap</span>
-          <span class="kpi-value" id="kpi-scrap-val">4.2 <small>%</small></span>
-          <span class="kpi-delta neg" id="kpi-scrap-delta">▲ +1.4% vs GS</span>
         </div>
       </div>
 
@@ -1149,46 +1770,11 @@ table.ov-heatmap tbody td.row-hdr {
           <div class="chart-note">Gap to RS = realistic improvement potential; gap RS→GS = design / engineering opportunity.</div>
         </div>
 
-        <!-- Labor hours per 1000 units chart -->
-        <div class="card">
-          <span class="card-title">Labor hours per 1000 units</span>
-          <div class="card-subtitle">Actual labor hours/1000u vs. best demonstrated (GS) and reference (RS)</div>
-          <div class="chart-wrap" style="height:200px;"><canvas id="ch-crew-res"></canvas></div>
-          <div class="legend-row">
-            <span class="legend-item"><span class="leg-line actual"></span> Actual Hrs/1000u</span>
-            <span class="legend-item"><span class="leg-line gs"></span> GS (best demonstrated)</span>
-            <span class="legend-item"><span class="leg-line rs"></span> RS (reference)</span>
-          </div>
-        </div>
-
-        <!-- OEE chart -->
-        <div class="card">
-          <span class="card-title">OEE</span>
-          <div class="card-subtitle">OEE % vs. best demonstrated. Note: OEE varies by PO size; use PO size slicer for fair comparison.</div>
-          <div class="chart-wrap" style="height:200px;"><canvas id="ch-oee-res"></canvas></div>
-          <div class="legend-row">
-            <span class="legend-item"><span class="leg-line actual"></span> Actual OEE%</span>
-            <span class="legend-item"><span class="leg-line gs"></span> GS (best demonstrated)</span>
-            <span class="legend-item"><span class="leg-line rs"></span> RS (reference)</span>
-          </div>
-        </div>
-
-        <!-- Scrap chart -->
-        <div class="card">
-          <span class="card-title">Scrap</span>
-          <div class="card-subtitle">Scrap % vs. best demonstrated. Scrap split: Fixed (beta) + Variable (alpha).</div>
-          <div class="chart-wrap" style="height:200px;"><canvas id="ch-scrap-res"></canvas></div>
-          <div class="legend-row">
-            <span class="legend-item"><span class="leg-line actual"></span> Actual Scrap%</span>
-            <span class="legend-item"><span class="leg-line gs"></span> GS</span>
-            <span class="legend-item"><span class="leg-line rs"></span> RS</span>
-          </div>
-        </div>
 
       </div><!-- /charts-grid -->
 
       <!-- Portfolio Segmentation -->
-      <div class="card">
+      <div class="card portfolio-segmentation-wrap">
         <div class="flex-row">
           <span class="card-title">Portfolio Segmentation</span>
           <button style="background:none;border:none;cursor:pointer;font-size:12px;color:var(--c-blue);font-weight:700;" onclick="openThreshConfig()">⚙ Configure Thresholds</button>
@@ -1279,11 +1865,12 @@ table.ov-heatmap tbody td.row-hdr {
         <div class="info-item"><strong>GS GAP Impact $:</strong> (Quantity ÷ GS GAP) × People × Labor Cost Per Hour. RS GAP Impact $: (Quantity ÷ RS GAP) × People × Labor Cost Per Hour. People and labor cost pending Steven Johnstone sign-off.</div>
         <div class="info-item"><strong>Tier Classification:</strong> Based on As/Rs %. Gold ≥90% of Rs · Silver 75–89% · Bronze 60–74% · Other &lt;60%. Thresholds pending Stephanie sign-off.</div>
       </div>
-    </div><!-- /pane-results -->
+    </div><!-- /cnt-speed-results -->
 
 
-    <!-- ─── TAB: PREDICTIONS ──────────────────────────────── -->
-    <div id="pane-predictions" class="pane">
+    <!-- ─── SPEED: PREDICTIONS ─────────────────────────────── -->
+    <!-- ─── SPEED: PREDICTIONS ──────────────────────────── -->
+    <div id="cnt-speed-predictions" class="kpi-cnt">
 
       <div class="flex-row">
         <span class="sec-heading">📅 Planned Production (Next 12 Months)</span>
@@ -1325,11 +1912,12 @@ table.ov-heatmap tbody td.row-hdr {
         </div>
         <div class="note-box">Predictions tab shows schedule visibility and volume planning. Not KPI forecasting unless confirmed by advanced modeling.</div>
       </div>
-    </div><!-- /pane-predictions -->
+    </div><!-- /cnt-speed-predictions -->
 
 
-    <!-- ─── TAB: GAP ANALYSIS ($) ─────────────────────────── -->
-    <div id="pane-gap" class="pane">
+    <!-- ─── SPEED: GAP ANALYSIS ($) ──────────────────────────── -->
+    <!-- ─── SPEED: GAP ANALYSIS ─────────────────────────── -->
+    <div id="cnt-speed-gap" class="kpi-cnt">
 
       <!-- Hero header -->
       <div class="gap-hero">
@@ -1392,7 +1980,7 @@ table.ov-heatmap tbody td.row-hdr {
           </div>
         </div>
         <div class="card-subtitle" style="margin-bottom:8px;">Each bar = Actual Speed (As). Lines show Nameplate (Gs) and Reference (Rs) per resource. Gap to Rs = operational opportunity; gap Rs→Gs = engineering/CAPEX opportunity. Click bar to drill down.</div>
-        <div class="chart-wrap" style="height:220px;"><canvas id="ch-line-overview"></canvas></div>
+        <div class="chart-wrap" style="height:300px;"><canvas id="ch-line-overview"></canvas></div>
         <div class="legend-row" style="margin-top:6px;">
           <span class="legend-item"><span style="display:inline-block;width:18px;height:10px;background:#2E7D32aa;border-radius:2px;vertical-align:middle;"></span> Actual Speed (As)</span>
           <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2.5px solid #00695C;vertical-align:middle;"></span> Nameplate (Gs) — constant per line</span>
@@ -1408,7 +1996,7 @@ table.ov-heatmap tbody td.row-hdr {
       <div class="card">
         <span class="card-title">Savings Opportunity by Resource &amp; KPI ($)</span>
         <div class="card-subtitle">Stacked by KPI: Speed UPM · OEE · Labor hrs/1000u · Scrap. Operational gap (Reference − Actual) — actionable by CE teams. Totals avoid double-counting.</div>
-        <div class="chart-wrap" style="height:200px;"><canvas id="ch-waterfall"></canvas></div>
+        <div class="chart-wrap" style="height:300px;"><canvas id="ch-waterfall"></canvas></div>
       </div>
 
       <!-- Governance & Change Log -->
@@ -1470,7 +2058,29 @@ table.ov-heatmap tbody td.row-hdr {
       <!-- Table 2: Impact & Recommendations (drill-through source) -->
       <div class="card">
         <span class="card-title">Impact and Improvement Recommendations</span>
-        <div class="card-subtitle" style="margin-bottom:4px;">Click any row to drill through to the Deep View for that parameter.</div>
+        <div class="card-subtitle" style="margin-bottom:4px;">Data-driven insights based on available production data. Click any row to drill through to Deep View.</div>
+        <div class="info-box" style="margin-bottom:8px;padding:8px 12px;">
+          <div class="info-box-title" style="margin-bottom:4px;">📊 Insight Scope (What's Available)</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px;">
+            <div>
+              <strong style="color:#259F4C;">✅ Available insights:</strong>
+              <ul style="margin:4px 0 0 14px;color:var(--c-muted);line-height:1.6;">
+                <li>Frequency: one-time vs recurring pattern</li>
+                <li>Category trends (e.g. Mascara vs Foundation speed)</li>
+                <li>SKU complexity correlation (component count)</li>
+                <li>Historical trajectory: improving / declining / stable</li>
+              </ul>
+            </div>
+            <div>
+              <strong style="color:#F5A534;">⏳ Not yet available (data pending):</strong>
+              <ul style="margin:4px 0 0 14px;color:var(--c-muted);line-height:1.6;">
+                <li>Temperature / mass attribute correlations (LIMS in progress)</li>
+                <li>Operator-level adjustments (no tracking yet)</li>
+                <li>Equipment factor analysis (Ignition/EWR data awaited)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <div class="tbl-wrap">
           <table class="gs-tbl">
             <thead>
@@ -1519,11 +2129,12 @@ table.ov-heatmap tbody td.row-hdr {
         </div>
       </div>
 
-    </div><!-- /pane-gap -->
+    </div><!-- /cnt-speed-gap -->
 
 
-    <!-- ─── TAB: WHAT-IF ($) ─────────────────────────────── -->
-    <div id="pane-whatif" class="pane">
+    <!-- ─── SPEED: WHAT-IF ($) ──────────────────────────────── -->
+    <!-- ─── SPEED: WHAT-IF ──────────────────────────────── -->
+    <div id="cnt-speed-whatif" class="kpi-cnt">
 
       <!-- Hero -->
       <div class="gap-hero">
@@ -1636,7 +2247,12 @@ table.ov-heatmap tbody td.row-hdr {
             <div id="wi-out-tier" style="font-size:15px;font-weight:800;">—</div>
           </div>
         </div>
-        <div style="font-size:9px;color:var(--c-muted);margin-top:6px;">Formula: RS GAP Impact $ = (Quantity ÷ RS GAP) × People × Labor Cost/Hr. Run time uses representative 48,000 unit PO. Pending Steven Johnstone labor cost sign-off.</div>
+        <div class="labor-disclaimer-box">
+          ⚠️ <strong>Labor cost model: methodology TBD with Steven Johnstone.</strong>
+          All figures are estimates based on planned SAP orders — for <em>capital investment analysis only</em>, not for operational targets or compensation.
+          Labor cost = flat rate per plant per fiscal year (pending Steven Johnstone sign-off). FX methodology aligns with Overfill dashboard (Chris Van Deursen).
+          Default rate shown: $45/hr illustrative. Formula: RS GAP Impact $ = (Quantity ÷ RS GAP) × People × Labor Cost/Hr.
+        </div>
       </div>
 
       <!-- Summary KPIs — split by gap type -->
@@ -1709,30 +2325,236 @@ table.ov-heatmap tbody td.row-hdr {
       </div>
 
       <div class="note-box">
-        📌 <strong>Note:</strong> This model uses Chris Van Deursen's financial methodology. Figures split into two gap types: <strong>Operational Gap</strong> (Reference − Actual, actionable by CE teams) and <strong>Engineering Gap</strong> (Nameplate − Reference, requires capital/engineering investment). Labor cost model: <em>methodology TBD with Steven Johnstone</em>. All figures are estimates based on planned SAP orders and the Governed GS (FY25 locked) — for <em>capital investment analysis only</em>, not for operational targets or compensation.
+        📌 <strong>Note:</strong> This model uses Chris Van Deursen's financial methodology. Figures split into two gap types: <strong>Operational Gap</strong> (Reference − Actual, actionable by CE teams) and <strong>Engineering Gap</strong> (Nameplate − Reference, requires capital/engineering investment).<br>
+        ⚠️ <strong>Labor cost model: methodology TBD with Steven Johnstone.</strong> Labor cost = flat rate per plant per fiscal year (available in SAP). FX rate aligns with Overfill dashboard approach (Chris Van Deursen). All figures are estimates based on planned SAP orders — for <em>capital investment analysis only</em>, not for operational targets or compensation.
       </div>
 
-    </div><!-- /pane-whatif -->
+    </div><!-- /cnt-speed-whatif -->
 
-  </main><!-- /page-home -->
+    <!-- ─── LABOR: RESULTS ──────────────────────────────── -->
+    <div id="cnt-labor-results" class="kpi-cnt">
+      <div class="sec-heading">👥 Labor — Results</div>
+      <div id="gs-status-bar-labor" class="gs-type-badge governed" style="align-self:flex-start;">
+        🔒 Governed Gold Standard active (FY25) — LOCKED for official reporting &amp; compensation
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <span class="kpi-label">Actual Labor hrs / 1000u</span>
+          <span class="kpi-value">9 <small>hrs/1000u</small></span>
+          <span class="kpi-delta neg">▲ +2 vs GS</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">GS (Best Demonstrated)</span>
+          <span class="kpi-value" style="color:var(--c-gs);">7 <small>hrs/1000u</small></span>
+          <span class="kpi-delta">FY25 locked baseline</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Labor Gap to GS</span>
+          <span class="kpi-value" style="color:var(--c-neg);">2 <small>hrs/1000u</small></span>
+          <span class="kpi-delta neg">Excess per 1,000 units</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Labor Savings Potential</span>
+          <span class="kpi-value">$28.5K</span>
+          <span class="kpi-delta neg">Annualized at plan volume</span>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-title">Labor hours per 1000 units — Monthly Trend</span>
+        <div class="card-subtitle">Actual labor hrs/1000u vs. best demonstrated (GS) and reference (RS). Exclusions: speed &lt;5/&gt;150 UPM, qty &lt;10, line trials.</div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-crew-res"></canvas></div>
+        <div class="legend-row">
+          <span class="legend-item"><span class="leg-line actual"></span> Actual Hrs/1000u</span>
+          <span class="legend-item"><span class="leg-line gs"></span> GS (best demonstrated)</span>
+          <span class="legend-item"><span class="leg-line rs"></span> RS (reference)</span>
+        </div>
+      </div>
+      <div class="note-box">📌 For PO-level detail, trend charts by line, and crew size analysis — click <strong>Deep View</strong> tab above.</div>
+      <div class="info-box">
+        <div class="info-box-title">ℹ Labor Methodology</div>
+        <div class="info-item"><strong>Labor hrs / 1000u:</strong> Total labor hours ÷ 1,000 units produced (including setup/teardown). Same PO/run exclusions as Speed.</div>
+        <div class="info-item"><strong>GS (Gold Standard):</strong> Best demonstrated performance for this line. FY25 governed baseline — locked for reporting.</div>
+        <div class="info-item"><strong>Gap Impact $:</strong> (Actual − GS hrs/1000u) × planned units / 1000 × labor rate. Labor cost rate: <em>pending Steven Johnstone confirmation</em>.</div>
+      </div>
+    </div><!-- /cnt-labor-results -->
 
+    <!-- ─── LABOR: PREDICTIONS ───────────────────────────── -->
+    <div id="cnt-labor-predictions" class="kpi-cnt">
+      <div class="sec-heading">👥 Labor — Predictions</div>
+      <div class="note-box">📋 Planned production schedule for Labor analysis — sourced from SAP planned orders. Same SKU/line/period filters as Speed Predictions.</div>
+      <div class="card">
+        <span class="card-title">Planned Labor Hours by Period</span>
+        <div class="card-subtitle">Projected labor requirements at current GS efficiency vs. actual efficiency gap.</div>
+        <div style="padding:32px;text-align:center;color:var(--c-muted);font-size:12px;">Labor Predictions chart — coming in next iteration</div>
+      </div>
+    </div><!-- /cnt-labor-predictions -->
 
-  <!-- ====== DEEP VIEW PAGE ====== -->
-  <main id="page-dv" class="gs-content" style="display:none;">
+    <!-- ─── LABOR: GAP ANALYSIS ──────────────────────────── -->
+    <div id="cnt-labor-gap" class="kpi-cnt">
+      <div class="sec-heading">👥 Labor — Gap Analysis ($)</div>
+      <div class="note-box">💰 Labor gap financial impact — RS GAP (operational) and GS GAP (structural) expressed in dollars at planned volume.</div>
+      <div class="card">
+        <span class="card-title">Labor Gap by Resource ($)</span>
+        <div class="card-subtitle">Lines sorted by labor gap $ — identify priority targets for crew efficiency improvement.</div>
+        <div style="padding:32px;text-align:center;color:var(--c-muted);font-size:12px;">Labor Gap Analysis chart — coming in next iteration</div>
+      </div>
+    </div><!-- /cnt-labor-gap -->
 
-    <!-- Back + context row -->
-    <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
-      <button class="back-btn" onclick="goBack()">← Back to Gap Analysis</button>
-      <span id="dv-ctx" class="drill-ctx" style="display:none;"></span>
-    </div>
+    <!-- ─── LABOR: DEEP VIEW ─────────────────────────────── (moved from page-dv) -->
+    <div id="cnt-labor-dv" class="kpi-cnt">
+      <div class="sec-heading">👥 Labor hours per 1000 units — Deep View</div>
+      <div class="charts-grid">
+        <div class="card">
+          <span class="card-title">Actual hrs/1000u vs. GS and RS over time</span>
+          <div class="card-subtitle">Labor hours per 1,000 units produced</div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-labor-trend"></canvas></div>
+        </div>
+        <div class="card">
+          <span class="card-title">Hrs/1000u by line (sorted by gap to GS)</span>
+          <div class="card-subtitle">Lines with highest excess labor hrs/1000u appear first</div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-labor-res"></canvas></div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-title">PO-Level Labor Detail</span>
+        <div class="tbl-wrap">
+          <table class="gs-tbl">
+            <thead>
+              <tr>
+                <th>PO Number</th><th>SKU</th><th>Resource</th>
+                <th class="r">Actual Hrs/1000u</th>
+                <th class="r">GS Hrs/1000u</th>
+                <th class="r">RS Hrs/1000u</th>
+                <th class="r">Gap $ (excess × rate)</th>
+              </tr>
+            </thead>
+            <tbody id="tb-dv-labor"></tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /cnt-labor-dv -->
 
-    <!-- ─── SUB-TAB: SPEED ─────────────────────────────────── -->
-    <div id="pane-speed" class="pane active">
+    <!-- ─── LABOR: WHAT-IF ───────────────────────────────── -->
+    <div id="cnt-labor-whatif" class="kpi-cnt">
+      <div class="sec-heading">👥 Labor — What-If ($)</div>
+      <div class="note-box">💰 Simulate the impact of crew size and labor rate changes on total labor gap cost.</div>
+      <div class="card">
+        <span class="card-title">Labor What-If Simulator</span>
+        <div style="padding:32px;text-align:center;color:var(--c-muted);font-size:12px;">Labor What-If simulation — coming in next iteration</div>
+      </div>
+    </div><!-- /cnt-labor-whatif -->
+
+    <!-- ─── OEE: RESULTS ─────────────────────────────────── -->
+    <div id="cnt-oee-results" class="kpi-cnt">
+      <div class="sec-heading">⚙️ OEE — Results</div>
+      <div class="gs-type-badge governed" style="align-self:flex-start;">
+        🔒 Governed Gold Standard active (FY25) — LOCKED for official reporting &amp; compensation
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <span class="kpi-label">Actual OEE</span>
+          <span class="kpi-value">62 <small>%</small></span>
+          <span class="kpi-delta neg">▼ −8% vs Rs</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">GS OEE (Best Demonstrated)</span>
+          <span class="kpi-value" style="color:var(--c-gs);">78 <small>%</small></span>
+          <span class="kpi-delta">FY25 locked baseline</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">RS OEE (Reference)</span>
+          <span class="kpi-value" style="color:var(--c-blue);">70 <small>%</small></span>
+          <span class="kpi-delta">Historical MAX on this line</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">OEE Gap Impact</span>
+          <span class="kpi-value">$20.9K</span>
+          <span class="kpi-delta neg">Lost throughput value</span>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-title">OEE — Monthly Trend</span>
+        <div class="card-subtitle">OEE % vs. best demonstrated (GS) and reference (RS). Note: OEE varies by PO size; use PO size slicer for fair comparison.</div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-oee-res"></canvas></div>
+        <div class="legend-row">
+          <span class="legend-item"><span class="leg-line actual"></span> Actual OEE%</span>
+          <span class="legend-item"><span class="leg-line gs"></span> GS (best demonstrated)</span>
+          <span class="legend-item"><span class="leg-line rs"></span> RS (reference)</span>
+        </div>
+      </div>
+      <div class="note-box">📌 For PO-level detail and trend charts by line — click <strong>Deep View</strong> tab above.</div>
+    </div><!-- /cnt-oee-results -->
+
+    <!-- ─── OEE: PREDICTIONS ─────────────────────────────── -->
+    <div id="cnt-oee-predictions" class="kpi-cnt">
+      <div class="sec-heading">⚙️ OEE — Predictions</div>
+      <div class="note-box">📋 Projected OEE vs. planned production — planned maintenance windows, changeover counts, and trial runs impact forecast OEE.</div>
+      <div class="card">
+        <span class="card-title">Projected OEE by Period</span>
+        <div style="padding:32px;text-align:center;color:var(--c-muted);font-size:12px;">OEE Predictions chart — coming in next iteration</div>
+      </div>
+    </div><!-- /cnt-oee-predictions -->
+
+    <!-- ─── OEE: GAP ANALYSIS ────────────────────────────── -->
+    <div id="cnt-oee-gap" class="kpi-cnt">
+      <div class="sec-heading">⚙️ OEE — Gap Analysis ($)</div>
+      <div class="note-box">💰 OEE gap financial impact — lost throughput value from availability, performance, and quality losses.</div>
+      <div class="card">
+        <span class="card-title">OEE Gap by Resource ($)</span>
+        <div style="padding:32px;text-align:center;color:var(--c-muted);font-size:12px;">OEE Gap Analysis chart — coming in next iteration</div>
+      </div>
+    </div><!-- /cnt-oee-gap -->
+
+    <!-- ─── OEE: DEEP VIEW ───────────────────────────────── (moved from page-dv) -->
+    <div id="cnt-oee-dv" class="kpi-cnt">
+      <div class="sec-heading">⚙️ OEE — Deep View</div>
+      <div class="charts-grid">
+        <div class="card">
+          <span class="card-title">OEE % vs. best demonstrated over time</span>
+          <div class="card-subtitle">OEE varies by PO size — use unit size slicer for fair comparison.</div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-oee-trend"></canvas></div>
+        </div>
+        <div class="card">
+          <span class="card-title">OEE segmented by PO size</span>
+          <div class="card-subtitle">Small POs typically have lower OEE due to changeover frequency (confirmed Jun 23)</div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-oee-po"></canvas></div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-title">PO-Level OEE Detail</span>
+        <div class="tbl-wrap">
+          <table class="gs-tbl">
+            <thead>
+              <tr>
+                <th>PO Number</th><th>SKU</th><th>Resource</th><th>PO Size Bucket</th>
+                <th class="r">Actual OEE %</th>
+                <th class="r">GS OEE %</th>
+                <th class="r">Gap $ (lost throughput)</th>
+              </tr>
+            </thead>
+            <tbody id="tb-dv-oee"></tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /cnt-oee-dv -->
+
+    <!-- ─── OEE: WHAT-IF ─────────────────────────────────── -->
+    <div id="cnt-oee-whatif" class="kpi-cnt">
+      <div class="sec-heading">⚙️ OEE — What-If ($)</div>
+      <div class="note-box">💰 Simulate the financial impact of OEE improvement targets across lines.</div>
+      <div class="card">
+        <span class="card-title">OEE What-If Simulator</span>
+        <div style="padding:32px;text-align:center;color:var(--c-muted);font-size:12px;">OEE What-If simulation — coming in next iteration</div>
+      </div>
+    </div><!-- /cnt-oee-whatif -->
+
+    <!-- ─── SPEED: DEEP VIEW ─────────────────────────────── -->
+    <div id="cnt-speed-dv" class="kpi-cnt">
       <div class="sec-heading">⚙ Speed — Deep View</div>
 
       <div class="charts-grid">
         <div class="card">
-          <span class="card-title">Cycle speed vs GS (nameplate) and RS (reference) over time</span>
+          <span class="card-title">Actual Speed (As) vs Nameplate (Gs) and Reference (Rs) over time</span>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-speed-trend"></canvas></div>
         </div>
         <div class="card">
@@ -1784,83 +2606,13 @@ table.ov-heatmap tbody td.row-hdr {
         </div>
         <div class="note-box" style="margin-top:6px;">RS GAP = Rs − As (operational). GS GAP = Gs − Rs (engineering/CAPEX). People &amp; labor cost pending Steven Johnstone sign-off. Exclusions applied: speed &lt;5/&gt;150 UPM, qty &lt;10, line trials, China rec variants, Z-variants, assembly-only.</div>
       </div>
-    </div><!-- /pane-speed -->
+    </div><!-- /cnt-speed-dv -->
 
 
-    <!-- ─── SUB-TAB: LABOR ─────────────────────────────────── -->
-    <div id="pane-labor" class="pane">
-      <div class="sec-heading">👥 Labor hours per 1000 units — Deep View</div>
-
-      <div class="charts-grid">
-        <div class="card">
-          <span class="card-title">Actual hrs/1000u vs. GS and RS over time</span>
-          <div class="card-subtitle">Labor hours per 1,000 units produced</div>
-          <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-labor-trend"></canvas></div>
-        </div>
-        <div class="card">
-          <span class="card-title">Hrs/1000u by line (sorted by gap to GS)</span>
-          <div class="card-subtitle">Lines with highest excess labor hrs/1000u appear first</div>
-          <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-labor-res"></canvas></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <span class="card-title">PO-Level Labor Detail</span>
-        <div class="tbl-wrap">
-          <table class="gs-tbl">
-            <thead>
-              <tr>
-                <th>PO Number</th><th>SKU</th><th>Resource</th>
-                <th class="r">Actual Hrs/1000u</th>
-                <th class="r">GS Hrs/1000u</th>
-                <th class="r">RS Hrs/1000u</th>
-                <th class="r">Gap $ (excess × rate)</th>
-              </tr>
-            </thead>
-            <tbody id="tb-dv-labor"></tbody>
-          </table>
-        </div>
-      </div>
-    </div><!-- /pane-labor -->
 
 
-    <!-- ─── SUB-TAB: OEE ───────────────────────────────────── -->
-    <div id="pane-oee" class="pane">
-      <div class="sec-heading">📊 OEE — Deep View</div>
-
-      <div class="charts-grid">
-        <div class="card">
-          <span class="card-title">OEE % vs. best demonstrated over time</span>
-          <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-oee-trend"></canvas></div>
-        </div>
-        <div class="card">
-          <span class="card-title">OEE segmented by PO size</span>
-          <div class="card-subtitle">Small POs typically have lower OEE due to changeover frequency (confirmed Jun 23)</div>
-          <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-oee-po"></canvas></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <span class="card-title">PO-Level OEE Detail</span>
-        <div class="tbl-wrap">
-          <table class="gs-tbl">
-            <thead>
-              <tr>
-                <th>PO Number</th><th>SKU</th><th>Resource</th><th>PO Size Bucket</th>
-                <th class="r">Actual OEE %</th>
-                <th class="r">GS OEE %</th>
-                <th class="r">Gap $ (lost throughput)</th>
-              </tr>
-            </thead>
-            <tbody id="tb-dv-oee"></tbody>
-          </table>
-        </div>
-      </div>
-    </div><!-- /pane-oee -->
-
-
-    <!-- ─── SUB-TAB: SCRAP ─────────────────────────────────── -->
-    <div id="pane-scrap" class="pane">
+    <!-- ─── SCRAP ──────────────────────────────────────────── -->
+    <div id="cnt-scrap" class="kpi-cnt">
       <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
         <div class="sec-heading" style="margin-bottom:0;">♻ Scrap — Deep View</div>
         <div style="display:flex; align-items:center; gap:5px;">
@@ -1905,11 +2657,11 @@ table.ov-heatmap tbody td.row-hdr {
           </table>
         </div>
       </div>
-    </div><!-- /pane-scrap -->
+    </div><!-- /cnt-scrap -->
 
 
-    <!-- ─── DV SUB-TAB: MASS ATTRIBUTES ─────────────────── -->
-    <div id="pane-massattr" class="pane">
+    <!-- ─── MASS ATTRIBUTES ──────────────────────────────── -->
+    <div id="cnt-massattr" class="kpi-cnt">
 
       <!-- LIMS Status -->
       <div class="info-box">
@@ -1960,29 +2712,35 @@ table.ov-heatmap tbody td.row-hdr {
       <!-- Analysis options note -->
       <div class="info-box">
         <div class="info-box-title">📊 Analysis Roadmap</div>
-        <div class="info-item"><strong>Heat map (PO run sequence):</strong> Shows demographic changes (product category, fill size, viscosity) vs performance metrics. Available now.</div>
+        <div class="info-item"><strong>Heat map (PO run sequence):</strong> Shows demographic changes (product category, fill size, viscosity) vs performance metrics. <span style="color:#259F4C;font-weight:700;">Available now.</span></div>
         <div class="info-item"><strong>Matrix view (product category × viscosity × performance):</strong> Statistical attribution when ≥ 50 related runs per pair. Partial data available.</div>
         <div class="info-item"><strong>Trend across similar runs:</strong> Compare runs with same product category but different parameters (e.g. supplier A vs B, viscosity 2 vs 3).</div>
-        <div class="info-item"><strong>Key correlations to establish:</strong> Speed ↔ Viscosity/Sp.Gravity · OEE ↔ Fill volume/Aeration · Scrap ↔ Component supplier/Folding carton quality · Labor ↔ Process complexity</div>
+        <div class="info-item"><strong>Planned correlations (pending LIMS integration):</strong> Speed ↔ Viscosity/Sp.Gravity · OEE ↔ Fill volume/Aeration · Scrap ↔ Component supplier quality. <span style="color:#F5A534;font-weight:700;">⏳ Equipment-level data (temperature, mass) awaiting Ignition/EWR feed.</span></div>
+        <div class="info-item" style="margin-top:4px;padding-top:6px;border-top:1px solid rgba(34,151,246,0.15);"><strong>Known limitations:</strong> No operator-level tracking. Equipment-specific factors deferred pending Ignition/EWR data integration. Operator adjustments not captured in current data model.</div>
       </div>
 
-    </div><!-- /pane-massattr -->
+    </div><!-- /cnt-massattr -->
 
-  </main><!-- /page-dv -->
+  </main><!-- /gs-main -->
 
   <!-- ====== OVERFILL ANALYSIS PAGE ====== -->
   <main id="page-overfill" class="gs-content" style="display:none;">
     <div class="tab-nav">
       <button id="t-ov-overview"   class="tab-btn active" onclick="showOVTab('overview')">Overview</button>
+      <button id="t-ov-trend"      class="tab-btn"        onclick="showOVTab('trend')">Trend Analysis</button>
       <button id="t-ov-specscale"  class="tab-btn"        onclick="showOVTab('specscale')">Spec Scale</button>
       <button id="t-ov-sg"         class="tab-btn"        onclick="showOVTab('sg')">Specific Gravity</button>
-      <button id="t-ov-rootcause"  class="tab-btn"        onclick="showOVTab('rootcause')">Root Cause &amp; Rec.</button>
+      <button id="t-ov-drivers"    class="tab-btn"        onclick="showOVTab('drivers')">Drivers</button>
       <button id="t-ov-predictive" class="tab-btn"        onclick="showOVTab('predictive')">Predictive Insights</button>
+      <button id="t-ov-export"     class="tab-btn"        onclick="showOVTab('export')">Data Export</button>
     </div>
 
     <!-- ── OVERVIEW ── -->
     <div class="pane active" id="pane-ov-overview">
+      <!-- Row 1: 5 cost KPIs -->
       <div class="ov-kpi-row" id="ov-kpi-row"></div>
+      <!-- Row 2: 3 quantity KPIs -->
+      <div class="ov-kpi-row-3" id="ov-kpi-row2"></div>
 
       <div class="card-grid col-2" style="margin-top:12px;">
         <div class="gs-card">
@@ -2035,6 +2793,51 @@ table.ov-heatmap tbody td.row-hdr {
       </div>
     </div><!-- /pane-ov-overview -->
 
+    <!-- ── TREND ANALYSIS ── -->
+    <div class="pane" id="pane-ov-trend">
+      <div style="margin-bottom:14px;">
+        <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Multi-Site Trend Comparison</h3>
+        <p style="font-size:11px;color:var(--c-muted);margin:0;">Same SKU across multiple plants/resources — identify best practices and underperformers.</p>
+      </div>
+
+      <div class="gs-card" style="margin-bottom:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="card-title" style="margin:0;">Giveaway Cost by Site — 12-Week Trend ($)</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="ov-toggle-row">
+              <button id="btn-trend-sku-prev" class="ov-toggle-btn" onclick="trendSKUNav(-1)">◀</button>
+              <span id="trend-sku-label" style="font-size:12px;font-weight:700;padding:0 8px;min-width:80px;text-align:center;"></span>
+              <button id="btn-trend-sku-next" class="ov-toggle-btn" onclick="trendSKUNav(1)">▶</button>
+            </div>
+            <select id="trend-yoy-select" class="slicer-select" style="font-size:11px;height:28px;" onchange="updateTrendCharts()">
+              <option value="none">Current period only</option>
+              <option value="yoy">Compare: Same period last year</option>
+              <option value="prev12">Compare: Previous 12 weeks</option>
+            </select>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-ov-trend-cost"></canvas></div>
+      </div>
+
+      <div class="gs-card" style="margin-bottom:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="card-title" style="margin:0;">Giveaway Quantity by Site — 12-Week Trend (kg)</div>
+        </div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-ov-trend-qty"></canvas></div>
+      </div>
+
+      <div class="gs-card">
+        <div class="card-title" style="margin-bottom:10px;">Site Performance Summary</div>
+        <table class="dv-table" id="tb-trend-summary">
+          <thead><tr>
+            <th>Plant</th><th>Resource</th><th>12W Avg Cost/Week</th>
+            <th>12W Avg Qty (kg/wk)</th><th>Avg Overfill %</th><th>vs. Best Site</th><th>Status</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div><!-- /pane-ov-trend -->
+
     <!-- ── SPEC SCALE ── -->
     <div class="pane" id="pane-ov-specscale">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
@@ -2056,11 +2859,15 @@ table.ov-heatmap tbody td.row-hdr {
         <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Specific Gravity Analysis</h3>
         <p style="font-size:11px;color:var(--c-muted);margin:0;">SG variance over time and its weight impact per SKU. Higher SG = same volume weighs more = larger fill giveaway.</p>
       </div>
+
+      <!-- SG Summary Stats cards -->
+      <div id="sg-stats-container"></div>
+
       <div class="gs-card" style="margin-bottom:12px;">
         <div class="card-title">SG over Time — by SKU (12 Weeks)</div>
         <div class="chart-wrap" style="height:210px;"><canvas id="ch-ov-sg-time"></canvas></div>
       </div>
-      <div class="gs-card">
+      <div class="gs-card" style="margin-bottom:12px;">
         <div class="card-title">SG-Adjusted Overfill Assessment</div>
         <table class="dv-table" id="tb-ov-sg">
           <thead>
@@ -2072,24 +2879,202 @@ table.ov-heatmap tbody td.row-hdr {
           <tbody></tbody>
         </table>
       </div>
+      <div class="gs-card">
+        <div class="card-title" style="margin-bottom:8px;">Control Limits by SKU &amp; Resource</div>
+        <p style="font-size:10px;color:var(--c-muted);margin:0 0 10px;">From Freeway SPC data — process control boundaries.</p>
+        <table class="dv-table" id="tb-ov-cl">
+          <thead>
+            <tr>
+              <th>SKU</th><th>Resource</th><th>LSL (g)</th><th>LCL (g)</th>
+              <th>Target (g)</th><th>UCL (g)</th><th>USL (g)</th>
+              <th>Mean Fill (g)</th><th>Sigma (σ)</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tb-ov-cl-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Tolerance Parameters by SKU — NEW -->
+      <div class="gs-card" style="margin-top:12px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;">
+          <div>
+            <div class="card-title" style="margin:0;">Tolerance Parameters by SKU</div>
+            <p style="font-size:10px;color:var(--c-muted);margin:4px 0 10px;">Specification limits and actual performance at SKU level. Sorted by % of tolerance used (highest risk first).</p>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="tolerance-table" id="tb-ov-tolerance">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Declared (ml)</th>
+                <th>LSL (g)</th>
+                <th>Target (g)</th>
+                <th>Mean Fill (g)</th>
+                <th>USL (g)</th>
+                <th>Tolerance Range (g)</th>
+                <th>Sigma (σ)</th>
+                <th>% Tolerance Used</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="tb-ov-tolerance-body"></tbody>
+          </table>
+        </div>
+      </div>
     </div><!-- /pane-ov-sg -->
 
-    <!-- ── ROOT CAUSE & RECOMMENDATIONS ── -->
-    <div class="pane" id="pane-ov-rootcause">
-      <div style="margin-bottom:16px;">
-        <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Root Cause &amp; Recommendations</h3>
-        <p style="font-size:11px;color:var(--c-muted);margin:0;">Ranked by risk priority. Click a card to expand root cause analysis and recommended actions.</p>
+    <!-- ── DRIVERS ── -->
+    <div class="pane" id="pane-ov-drivers">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+        <div>
+          <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Overfill Driver Decomposition</h3>
+          <p style="font-size:11px;color:var(--c-muted);margin:0;">Quantified breakdown by controllable driver: Brand, Set Point, Sigma, SG. Top 20 by total cost.</p>
+        </div>
+        <div class="ov-toggle-row">
+          <button id="btn-drv-by-res" class="ov-toggle-btn active" onclick="setDriverGroupBy('res')">By Resource</button>
+          <button id="btn-drv-by-sku" class="ov-toggle-btn"        onclick="setDriverGroupBy('sku')">By SKU</button>
+        </div>
       </div>
-      <div id="rc-stack"></div>
-    </div><!-- /pane-ov-rootcause -->
+
+      <div class="gs-card" style="margin-bottom:14px;overflow-x:auto;">
+        <table class="driver-table" id="tb-drivers">
+          <thead>
+            <tr>
+              <th>#</th><th>Resource</th><th>SKU</th><th>PO</th><th>Lot Size</th>
+              <th>Viscosity (cP)</th><th>Actual Fill (g)</th>
+              <th>Brand-Driven (g)</th><th>%</th>
+              <th>Set Point-Driven (g)</th><th>%</th>
+              <th>Sigma-Driven (g)</th><th>%</th>
+              <th>SG-Driven (g)</th><th>%</th>
+              <th>Total Overfill $</th>
+            </tr>
+          </thead>
+          <tbody id="tb-drivers-body"></tbody>
+        </table>
+        <div style="text-align:center;margin-top:10px;">
+          <button id="btn-load-more-drv" class="btn-secondary" onclick="loadMoreDrivers()" style="font-size:11px;padding:6px 20px;">Load Next 20 →</button>
+        </div>
+      </div>
+
+      <div class="scatter-grid">
+        <div class="gs-card">
+          <div class="card-title" style="margin-bottom:4px;">Lot Size vs. Sigma Correlation</div>
+          <p style="font-size:10px;color:var(--c-muted);margin:0 0 8px;">Larger lot sizes typically show lower sigma (more consistent process).</p>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-drv-lotsize-sigma"></canvas></div>
+        </div>
+        <div class="gs-card">
+          <div class="card-title" style="margin-bottom:4px;">Viscosity vs. Sigma Correlation</div>
+          <p style="font-size:10px;color:var(--c-muted);margin:0 0 8px;">Higher viscosity products may show different overfill patterns.</p>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-drv-visc-sigma"></canvas></div>
+        </div>
+      </div>
+    </div><!-- /pane-ov-drivers -->
 
     <!-- ── PREDICTIVE INSIGHTS ── -->
     <div class="pane" id="pane-ov-predictive">
       <div style="margin-bottom:14px;">
         <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Predictive Insights</h3>
-        <p style="font-size:11px;color:var(--c-muted);margin:0;">6-month cost trajectory under three scenarios. All figures in USD.</p>
+        <p style="font-size:11px;color:var(--c-muted);margin:0;">6-month cost trajectory and overfill decomposition. All figures in USD.</p>
       </div>
 
+      <!-- Decomposition cards -->
+      <div class="gs-card" style="margin-bottom:14px;">
+        <div class="card-title" style="margin-bottom:10px;">Predicted Overfill Decomposition — 6-Month Projection</div>
+        <div class="decomp-row" id="decomp-row"></div>
+        <div class="decomp-total-bar" id="decomp-total-bar">
+          <span class="decomp-total-label">Total Predicted Overfill (6 months)</span>
+          <span class="decomp-total-value" id="decomp-total-val">—</span>
+        </div>
+      </div>
+
+      <!-- What-If Scenario Builder — side-by-side layout -->
+      <div class="gs-card" style="padding:0;overflow:hidden;margin-bottom:14px;">
+        <div style="padding:14px 20px 10px;border-bottom:1px solid #E0E4E8;">
+          <div style="font-size:15px;font-weight:700;color:var(--c-text);">What-If Scenario Builder</div>
+          <div style="font-size:11px;color:var(--c-muted);margin-top:2px;">Adjust variables to simulate impact on predicted overfill cost and quantity.</div>
+        </div>
+        <div class="whatif-sides">
+          <!-- LEFT: sliders -->
+          <div class="whatif-left">
+            <div class="whatif-col-title">🎛️ Adjust Parameters</div>
+            <div class="slider-row">
+              <span class="slider-label">Specific Gravity (SG)</span>
+              <input type="range" class="slider-input" id="wi-sg" min="1.000" max="1.100" step="0.001" value="1.034" oninput="updateWhatIf()">
+              <span class="slider-value" id="wi-sg-val">1.034</span>
+              <span class="slider-range">1.000 – 1.100</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label">Sigma (σ) in grams</span>
+              <input type="range" class="slider-input" id="wi-sigma" min="0.05" max="0.30" step="0.01" value="0.15" oninput="updateWhatIf()">
+              <span class="slider-value" id="wi-sigma-val">0.15g</span>
+              <span class="slider-range">0.05 – 0.30g</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label">LSL Offset (ml above declared)</span>
+              <input type="range" class="slider-input" id="wi-lsl" min="0" max="5" step="0.5" value="2.0" oninput="updateWhatIf()">
+              <span class="slider-value" id="wi-lsl-val">+2.0ml</span>
+              <span class="slider-range">0 – 5 ml</span>
+            </div>
+            <button class="whatif-reset" onclick="resetWhatIf()">↺ Reset to Defaults</button>
+          </div>
+          <!-- RIGHT: results -->
+          <div class="whatif-right">
+            <div class="whatif-col-title">📊 Predicted Impact</div>
+            <div class="whatif-impact-card">
+              <div class="whatif-impact-row">
+                <span class="whatif-impact-label">Current Predicted (6mo)</span>
+                <span class="whatif-impact-val" id="wi-res-current">—</span>
+              </div>
+              <div class="whatif-impact-row">
+                <span class="whatif-impact-label">After Adjustments</span>
+                <span class="whatif-impact-val adjusted" id="wi-res-adjusted">—</span>
+              </div>
+              <div class="whatif-impact-row">
+                <span class="whatif-impact-label" style="font-weight:700;color:#28A745;">Potential Savings</span>
+                <span class="whatif-impact-val savings" id="wi-res-savings">—</span>
+              </div>
+            </div>
+            <div class="whatif-decomp-section">
+              <div class="whatif-decomp-title">Decomposition after changes</div>
+              <div class="whatif-decomp-item">
+                <span class="whatif-decomp-name">Brand-Driven</span>
+                <div class="whatif-decomp-bar-wrap"><div class="whatif-decomp-bar" id="wi-bar-brand" style="background:#DC3545;width:38%;"></div></div>
+                <span class="whatif-decomp-amt" style="color:#DC3545;" id="wi-d-brand">—</span>
+                <span class="whatif-decomp-prev" id="wi-d-brand-prev"></span>
+              </div>
+              <div class="whatif-decomp-item">
+                <span class="whatif-decomp-name">Set Point-Driven</span>
+                <div class="whatif-decomp-bar-wrap"><div class="whatif-decomp-bar" id="wi-bar-setpoint" style="background:#FF9800;width:28%;"></div></div>
+                <span class="whatif-decomp-amt" style="color:#FF9800;" id="wi-d-setpoint">—</span>
+                <span class="whatif-decomp-prev" id="wi-d-setpoint-prev"></span>
+              </div>
+              <div class="whatif-decomp-item">
+                <span class="whatif-decomp-name">Sigma-Driven</span>
+                <div class="whatif-decomp-bar-wrap"><div class="whatif-decomp-bar" id="wi-bar-sigma" style="background:#FFC107;width:34%;"></div></div>
+                <span class="whatif-decomp-amt" style="color:#E65100;" id="wi-d-sigma">—</span>
+                <span class="whatif-decomp-prev" id="wi-d-sigma-prev"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Predicted Quantity Decomposition — NEW -->
+      <div class="gs-card" style="margin-bottom:14px;">
+        <div class="card-title" style="margin-bottom:10px;">Predicted Quantity Decomposition — 6-Month Projection</div>
+        <div class="qty-decomp-row" id="qty-decomp-row"></div>
+        <div class="qty-total-bar">
+          <span class="qty-total-label">Total Predicted Quantity (6 months)</span>
+          <span class="qty-total-value" id="qty-total-val">—</span>
+        </div>
+        <div style="font-size:11px;color:#28A745;font-weight:700;margin-top:8px;text-align:right;" id="qty-savings-hint"></div>
+      </div>
+
+      <!-- Investment scenarios (existing) -->
+      <div style="margin:16px 0 8px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--c-muted);">Investment Scenarios — 6-Month Comparison</div>
+      </div>
       <div class="scenario-row" id="scenario-row"></div>
 
       <div class="gs-card" style="margin-top:12px;">
@@ -2121,6 +3106,37 @@ table.ov-heatmap tbody td.row-hdr {
         <div class="flagged-grid" id="flagged-grid"></div>
       </div>
     </div><!-- /pane-ov-predictive -->
+
+    <!-- ── DATA EXPORT ── -->
+    <div class="pane" id="pane-ov-export">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+        <div>
+          <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Data Export</h3>
+          <p style="font-size:11px;color:var(--c-muted);margin:0;">Full dataset respecting current filter selections. Max 30,000 rows per export (Power BI Service limit).</p>
+        </div>
+        <button class="export-btn" onclick="exportToCSV()">📥 Export to CSV</button>
+      </div>
+      <div class="gs-card">
+        <div class="export-wrap">
+          <table class="export-table" id="tb-export">
+            <thead>
+              <tr>
+                <th>Date</th><th>Plant</th><th>Resource</th><th>SKU</th><th>PO</th>
+                <th>Lot Size</th><th>Declared Content (ml)</th><th>SG</th><th>Target Fill (g)</th>
+                <th>Actual Fill (g)</th><th>Overfill (g)</th><th>Overfill %</th>
+                <th>Cost/g ($)</th><th>Giveaway Cost ($)</th><th>Brand</th>
+                <th>Category</th><th>Subcategory</th><th>Package Type</th>
+                <th>Viscosity (cP)</th><th>Process Type</th><th>Life Cycle Stage</th>
+              </tr>
+            </thead>
+            <tbody id="tb-export-body"></tbody>
+          </table>
+        </div>
+        <div style="margin-top:10px;text-align:center;">
+          <button id="btn-load-more-exp" class="btn-secondary" onclick="loadMoreExport()" style="font-size:11px;padding:6px 20px;">Load Next 50 rows →</button>
+        </div>
+      </div>
+    </div><!-- /pane-ov-export -->
 
   </main><!-- /page-overfill -->
 
@@ -2311,10 +3327,15 @@ function init(id, config) {
 /* ─── CHART INIT FUNCTIONS (lazy) ───────────────────── */
 
 function initResultsCharts() {
-  init('ch-speed-res',  speedSegConfig());
-  init('ch-crew-res',   comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Hrs/1000u'));
-  init('ch-oee-res',    comboConfig(MONTHS, OEE.actual,  OEE.gs,  OEE.rs,  'OEE %'));
-  init('ch-scrap-res',  comboConfig(MONTHS, SCRAP.actual,SCRAP.gs,SCRAP.rs,'Scrap %'));
+  init('ch-speed-res', speedSegConfig());
+}
+function initLaborResultsCharts() {
+  init('ch-crew-res', comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Hrs/1000u'));
+  if (REG['ch-crew-res']) REG['ch-crew-res'].resize();
+}
+function initOEEResultsCharts() {
+  init('ch-oee-res', comboConfig(MONTHS, OEE.actual, OEE.gs, OEE.rs, 'OEE %'));
+  if (REG['ch-oee-res']) REG['ch-oee-res'].resize();
 }
 
 function initPredictionsCharts() {
@@ -2327,7 +3348,15 @@ function initPredictionsCharts() {
     type:'bar', data:{labels:MONTHS12, datasets},
     options:{
       ...baseOpts('Units'),
-      plugins:{legend:{display:true,labels:{color:CC.text,font:{size:10},boxWidth:12}}},
+      plugins:{
+        legend:{
+          display:true,
+          position:'bottom',
+          align:'start',
+          labels:{color:CC.text, font:{size:10}, boxWidth:14, padding:14}
+        }
+      },
+      layout:{ padding:{ top:10, bottom:8 } },
       scales:{
         x:{stacked:true,grid:{color:CC.grid},ticks:{color:CC.text,font:{size:10}}},
         y:{stacked:true,grid:{color:CC.grid},ticks:{color:CC.text,font:{size:10}}}
@@ -2338,6 +3367,8 @@ function initPredictionsCharts() {
 
 function initGapCharts() {
   initLineOverviewChart();
+  if (REG['ch-line-overview']) REG['ch-line-overview'].resize();
+  if (REG['ch-waterfall'])     REG['ch-waterfall'].resize();
   // Stacked bar: resources (L67 / L68 / L72) × KPIs (Speed UPM $, OEE $, Labor hrs/1000u $, Scrap $)
   const resources = ['L67','L68','L72'];
   const kpis = [
@@ -3101,47 +4132,87 @@ function sendChat() {
 
 /* ─── NAVIGATION ─────────────────────────────────────── */
 
-let activePage = 'home';
+let activeKPI    = null;   // null = overview landing state
+let activeKPISub = 'results';
+
+function showKPI(kpi) {
+  activeKPI = kpi;
+  ['speed','labor','oee','massattr'].forEach(k => {
+    const el = document.getElementById('knc-' + k);
+    if (el) el.classList.toggle('active', k === kpi);
+  });
+  // Hide overview landing panel
+  const overview = document.getElementById('cnt-gs-overview');
+  if (overview) overview.classList.remove('active');
+  // Show/hide sub-tab nav
+  const subtabNav = document.getElementById('gs-kpi-subtabs');
+  if (subtabNav) subtabNav.style.display = kpi === 'massattr' ? 'none' : '';
+  if (kpi === 'massattr') {
+    showKPIContent('massattr', null);
+  } else {
+    showKPISub('results');
+  }
+}
+
+function showKPISub(sub) {
+  if (!activeKPI) return; // guard: no KPI selected yet
+  activeKPISub = sub;
+  ['results','predictions','gap','dv','whatif'].forEach(t => {
+    const btn = document.getElementById('ksub-' + t);
+    if (btn) btn.classList.toggle('active', t === sub);
+  });
+  showKPIContent(activeKPI, sub);
+}
+
+function showKPIContent(kpi, sub) {
+  if (!kpi) return; // guard: no KPI selected yet
+  document.querySelectorAll('.kpi-cnt').forEach(p => p.classList.remove('active'));
+  const paneId = sub ? 'cnt-' + kpi + '-' + sub : 'cnt-' + kpi;
+  const pane = document.getElementById(paneId);
+  if (pane) pane.classList.add('active');
+  setTimeout(() => {
+    if (kpi === 'speed') {
+      if (sub === 'results')     { initResultsCharts(); }
+      if (sub === 'predictions') { renderPred(); initPredictionsCharts(); }
+      if (sub === 'gap')         { renderPlanAhead(); renderImpact(); initGapCharts(); renderRSGapDeepDive(false); }
+      if (sub === 'dv')          { initDVSpeedCharts(); renderDVSpeed(); }
+      if (sub === 'whatif')      { renderWhatIfTable(); initWhatIfCharts(); updateWhatIfSimulation(); }
+    } else if (kpi === 'labor') {
+      if (sub === 'results')     { initLaborResultsCharts(); }
+      if (sub === 'dv')          { initDVLaborCharts(); renderDVLabor(); }
+    } else if (kpi === 'oee') {
+      if (sub === 'results')     { initOEEResultsCharts(); }
+      if (sub === 'dv')          { initDVOEECharts(); renderDVOEE(); }
+    } else if (kpi === 'massattr') {
+      renderMassAttrHeatmap(); renderCorrelationMatrix();
+    }
+  }, 30);
+}
+
+/* Shim functions — kept for backward compat (drillThrough, goBack, etc.) */
+let activePage    = 'home';
 let activeHomeTab = 'results';
-let activeDVTab = 'speed';
+let activeDVTab   = 'speed';
 
 function showPage(page) {
-  activePage = page;
-  $$('page-home').style.display = page === 'home' ? 'flex' : 'none';
-  $$('page-dv').style.display   = page === 'dv'   ? 'flex' : 'none';
-  $$('dv-subnav').style.display = page === 'dv'   ? 'block': 'none';
-  $$('btn-home').classList.toggle('active', page === 'home');
-  $$('btn-dv').classList.toggle('active',   page === 'dv');
-  if (page === 'dv') { setTimeout(() => showSubTab(activeDVTab), 0); }
+  if (page === 'home') {
+    if (activeKPI) { showKPI(activeKPI); }
+    else { /* show overview */ const o=document.getElementById('cnt-gs-overview'); if(o) o.classList.add('active'); }
+  }
+  else if (page === 'dv') { showKPISub('dv'); }
 }
 
 function showHomeTab(tab) {
-  activeHomeTab = tab;
-  ['results','predictions','gap','whatif'].forEach(t => {
-    $$('pane-'+t).classList.toggle('active', t === tab);
-    $$('t-'+t).classList.toggle('active', t === tab);
-  });
-  setTimeout(() => {
-    if (tab === 'results')     { initResultsCharts(); }
-    if (tab === 'predictions') { renderPred(); initPredictionsCharts(); }
-    if (tab === 'gap')         { renderPlanAhead(); renderImpact(); initGapCharts(); renderRSGapDeepDive(false); }
-    if (tab === 'whatif')      { renderWhatIfTable(); initWhatIfCharts(); updateWhatIfSimulation(); }
-  }, 30);
+  const m = { results:'results', predictions:'predictions', gap:'gap', whatif:'whatif' };
+  if (m[tab]) showKPISub(m[tab]);
 }
 
 function showSubTab(tab) {
-  activeDVTab = tab;
-  ['speed','labor','oee','scrap','massattr'].forEach(t => {
-    $$('pane-'+t).classList.toggle('active', t === tab);
-    $$('btn-sub-'+t).classList.toggle('active', t === tab);
-  });
-  setTimeout(() => {
-    if (tab === 'speed')    { initDVSpeedCharts(); renderDVSpeed(); }
-    if (tab === 'labor')    { initDVLaborCharts(); renderDVLabor(); }
-    if (tab === 'oee')      { initDVOEECharts();  renderDVOEE(); }
-    if (tab === 'scrap')    { initDVScrapCharts(); renderDVScrap(); }
-    if (tab === 'massattr') { renderMassAttrHeatmap(); renderCorrelationMatrix(); }
-  }, 30);
+  const kpiMap = { speed:'speed', labor:'labor', oee:'oee', scrap:'speed', massattr:'massattr' };
+  const kpi = kpiMap[tab] || 'speed';
+  if (kpi === 'massattr') { showKPI('massattr'); return; }
+  showKPI(kpi);
+  showKPISub('dv');
 }
 
 function pickTime(btn, groupId) {
@@ -3235,17 +4306,21 @@ function setViewType(page, type) {
 }
 
 function drillThrough(plant, line, prodCat, area) {
-  showPage('dv');
-  const ctx = $$('dv-ctx');
-  ctx.style.display = 'inline-flex';
-  ctx.textContent = `Drill-through: ${plant} › ${line} › ${prodCat}`;
-  showSubTab(area);
+  const kpiMap = { speed:'speed', labor:'labor', oee:'oee', scrap:'speed', massattr:'massattr' };
+  const kpi = kpiMap[area] || 'speed';
+  if (kpi === 'massattr') { showKPI('massattr'); return; }
+  showKPI(kpi);
+  showKPISub('dv');
 }
 
 function goBack() {
-  $$('dv-ctx').style.display = 'none';
-  showPage('home');
-  showHomeTab('gap');
+  showKPI('speed');
+  showKPISub('gap');
+}
+
+function drillDV(res) {
+  showKPI('speed');
+  showKPISub('dv');
 }
 
 function handleSlicerChange() { /* Slicers synced — would filter data in real Power BI */ }
@@ -3291,13 +4366,195 @@ function updateMSTrigger(id) {
 /* ─── OVERFILL DATA ──────────────────────────────────── */
 
 const OV_SUMMARY = {
+  // KPI Row 1 — Cost cards
+  totalActualCost:     2950000,
+  brandRequiredCost:   1120000,
+  stdCostVariance:     430000,   // positive = we costed more than actual (budget savings)
+  topOpportunity:      'Resource 11 / SKU-1042',
+  topOpportunityCost:  87009,
+  topOpportunityPct:   0.94,
+  // KPI Row 1 — Gap to GS
+  currentOverfillPct:  0.42,     // current avg overfill %
+  // KPI Row 2 — Quantity cards
+  totalOverfillKg:     50100,    // 50.1t
+  brandRequiredKg:     18300,    // 18.3t
+  avgOverfillPct:      0.34,     // KPI 8 — displayed separately
+  // Legacy
   giveawayUSD:    147250,
-  avgOverfillPct: 4.82,
   overfillGPerYr: 38640,
-  worstContrib:   'L67 / SKU-1042',
   trend:          '+1.2% MoM',
   impactVsPrev:   '+$8,430'
 };
+
+/* Gold Standard baseline — FY25 locked, does NOT change with filters */
+const OV_GS_BASELINE = { pct: 0.35, fy: 'FY25' };
+
+/* Tolerance parameters by SKU */
+const OV_TOLERANCE = [
+  { sku:'SKU-1042', declaredMl:15,  lsl:15.00, target:15.45, mean:15.55, usl:15.80, sigma:0.150 },
+  { sku:'SKU-1055', declaredMl:30,  lsl:29.50, target:30.06, mean:30.16, usl:30.50, sigma:0.120 },
+  { sku:'SKU-1098', declaredMl:50,  lsl:49.00, target:50.00, mean:50.50, usl:51.00, sigma:0.250 },
+  { sku:'SKU-1113', declaredMl:100, lsl:98.50, target:99.80, mean:99.95, usl:100.50, sigma:0.180 },
+  { sku:'SKU-1127', declaredMl:150, lsl:148.00, target:149.40, mean:149.70, usl:150.60, sigma:0.220 },
+];
+
+/* Decomposition (6-month projection) */
+const OV_DECOMP = {
+  brand:    { cost6m: 670000, qty6mKg: 22800, label:'LSL > Declared Content' },
+  setpoint: { cost6m: 480000, qty6mKg: 16300, label:'Target > LSL' },
+  sigma:    { cost6m: 590000, qty6mKg: 20100, label:'Process variation (σ)' },
+};
+
+/* What-If defaults */
+const WI_DEFAULTS = { sg: 1.034, sigma: 0.15, lsl: 2.0 };
+
+/* Multi-site trend data (per plant / resource, same SKU) */
+const OV_TREND_SKUS = ['SKU-1042','SKU-1055','SKU-1098'];
+let OV_TREND_SKU_IDX = 0;
+
+const OV_TREND_SITES = {
+  'SKU-1042': [
+    { plant:'Oevel',      resource:'L67', color:'#DC3545',
+      cost:  [4100,4300,4000,4800,5100,4900,5400,5600,5200,5700,5900,5800],
+      qty:   [1060,1100,1040,1200,1280,1230,1350,1400,1300,1420,1480,1450] },
+    { plant:'Oevel',      resource:'L73', color:'#C62828',
+      cost:  [3800,4100,3900,4400,4700,4600,5000,5200,4800,5300,5500,5400],
+      qty:   [980, 1050,1000,1120,1190,1170,1280,1320,1220,1340,1380,1360] },
+    { plant:'Melville',   resource:'R4',  color:'#1565C0',
+      cost:  [3200,3400,3100,3600,3800,3700,4000,4200,3900,4300,4500,4400],
+      qty:   [820, 870, 800, 920, 970, 950, 1020,1060,990, 1090,1140,1120] },
+    { plant:'Shimotsuma', resource:'R2',  color:'#28A745',
+      cost:  [2600,2800,2500,2900,3100,3000,3300,3500,3200,3600,3700,3600],
+      qty:   [670, 720, 645, 745, 800, 772, 850, 900, 820, 920, 950, 930] },
+  ],
+  'SKU-1055': [
+    { plant:'Oevel',    resource:'L67', color:'#DC3545',
+      cost:  [3500,3700,3400,4000,4200,4100,4500,4700,4300,4800,5000,4900],
+      qty:   [900, 960, 880,1030,1080,1060,1160,1210,1110,1230,1280,1260] },
+    { plant:'Oevel',    resource:'L68', color:'#E65100',
+      cost:  [3100,3300,3000,3500,3700,3600,3900,4100,3800,4200,4400,4300],
+      qty:   [800, 850, 780, 900, 950, 930,1000,1050, 980,1070,1120,1100] },
+    { plant:'Melville', resource:'R5',  color:'#1565C0',
+      cost:  [2500,2700,2400,2800,3000,2900,3200,3400,3100,3500,3600,3500],
+      qty:   [640, 690, 620, 720, 770, 745, 820, 870, 795, 895, 925, 900] },
+  ],
+  'SKU-1098': [
+    { plant:'Oevel',  resource:'L67', color:'#DC3545',
+      cost:  [2200,2400,2100,2600,2800,2700,3000,3100,2900,3200,3300,3200],
+      qty:   [560, 610, 540, 660, 710, 690, 760, 790, 740, 810, 840, 820] },
+    { plant:'Oevel',  resource:'L68', color:'#E65100',
+      cost:  [1800,2000,1700,2100,2300,2200,2500,2600,2400,2700,2800,2700],
+      qty:   [460, 510, 440, 540, 590, 565, 640, 665, 615, 690, 715, 695] },
+    { plant:'Oevel',  resource:'L72', color:'#28A745',
+      cost:  [1400,1500,1300,1600,1700,1600,1800,1900,1700,1950,2000,1950],
+      qty:   [355, 385, 335, 410, 435, 410, 460, 485, 435, 498, 510, 500] },
+  ],
+};
+
+/* Driver decomposition detail rows */
+const OV_DRIVERS = [
+  { rank:1,  res:'L67', sku:'SKU-1042', po:'PO-10234', lotSize:8500,  visc:2100, actualFill:31.44, brand:0.62, setpoint:0.35, sigDriven:0.58, sgDriven:0.09, totalCost:45600 },
+  { rank:2,  res:'L73', sku:'SKU-1042', po:'PO-10235', lotSize:7200,  visc:2050, actualFill:31.86, brand:0.60, setpoint:0.33, sigDriven:0.72, sgDriven:0.11, totalCost:42900 },
+  { rank:3,  res:'L67', sku:'SKU-1055', po:'PO-10236', lotSize:12000, visc:1800, actualFill:52.60, brand:0.55, setpoint:0.28, sigDriven:0.70, sgDriven:0.07, totalCost:38200 },
+  { rank:4,  res:'L75', sku:'SKU-1042', po:'PO-10237', lotSize:6800,  visc:2300, actualFill:31.21, brand:0.58, setpoint:0.31, sigDriven:0.62, sgDriven:0.10, totalCost:34700 },
+  { rank:5,  res:'L68', sku:'SKU-1042', po:'PO-10238', lotSize:9500,  visc:2000, actualFill:31.10, brand:0.55, setpoint:0.30, sigDriven:0.50, sgDriven:0.08, totalCost:29800 },
+  { rank:6,  res:'L82', sku:'SKU-1055', po:'PO-10239', lotSize:15000, visc:1750, actualFill:52.35, brand:0.52, setpoint:0.27, sigDriven:0.52, sgDriven:0.06, totalCost:24100 },
+  { rank:7,  res:'L70', sku:'SKU-1042', po:'PO-10240', lotSize:7600,  visc:2150, actualFill:30.89, brand:0.57, setpoint:0.29, sigDriven:0.56, sgDriven:0.08, totalCost:22600 },
+  { rank:8,  res:'L68', sku:'SKU-1055', po:'PO-10241', lotSize:11000, visc:1820, actualFill:52.35, brand:0.51, setpoint:0.26, sigDriven:0.55, sgDriven:0.06, totalCost:21400 },
+  { rank:9,  res:'L67', sku:'SKU-1098', po:'PO-10242', lotSize:5200,  visc:2800, actualFill:15.73, brand:0.48, setpoint:0.22, sigDriven:0.62, sgDriven:0.12, totalCost:17200 },
+  { rank:10, res:'L77', sku:'SKU-1042', po:'PO-10243', lotSize:8800,  visc:2000, actualFill:30.95, brand:0.53, setpoint:0.28, sigDriven:0.44, sgDriven:0.07, totalCost:16800 },
+  { rank:11, res:'L79', sku:'SKU-1042', po:'PO-10244', lotSize:7400,  visc:2100, actualFill:31.33, brand:0.56, setpoint:0.31, sigDriven:0.50, sgDriven:0.09, totalCost:15200 },
+  { rank:12, res:'L84', sku:'SKU-1042', po:'PO-10245', lotSize:6200,  visc:2200, actualFill:31.08, brand:0.54, setpoint:0.28, sigDriven:0.48, sgDriven:0.08, totalCost:14100 },
+  { rank:13, res:'L65', sku:'SKU-1042', po:'PO-10246', lotSize:8100,  visc:1950, actualFill:30.76, brand:0.51, setpoint:0.26, sigDriven:0.45, sgDriven:0.07, totalCost:13400 },
+  { rank:14, res:'L90', sku:'SKU-1042', po:'PO-10247', lotSize:7900,  visc:2050, actualFill:31.15, brand:0.55, setpoint:0.29, sigDriven:0.49, sgDriven:0.08, totalCost:12800 },
+  { rank:15, res:'L86', sku:'SKU-1055', po:'PO-10248', lotSize:13000, visc:1780, actualFill:52.18, brand:0.49, setpoint:0.25, sigDriven:0.43, sgDriven:0.06, totalCost:11900 },
+  { rank:16, res:'L81', sku:'SKU-1042', po:'PO-10249', lotSize:7000,  visc:2100, actualFill:30.97, brand:0.52, setpoint:0.27, sigDriven:0.42, sgDriven:0.07, totalCost:11300 },
+  { rank:17, res:'L76', sku:'SKU-1098', po:'PO-10250', lotSize:4800,  visc:2750, actualFill:15.64, brand:0.45, setpoint:0.20, sigDriven:0.56, sgDriven:0.11, totalCost:10800 },
+  { rank:18, res:'L85', sku:'SKU-1042', po:'PO-10251', lotSize:8300,  visc:2000, actualFill:30.83, brand:0.50, setpoint:0.26, sigDriven:0.38, sgDriven:0.06, totalCost:10200 },
+  { rank:19, res:'L88', sku:'SKU-1055', po:'PO-10252', lotSize:14000, visc:1800, actualFill:52.09, brand:0.47, setpoint:0.24, sigDriven:0.40, sgDriven:0.05, totalCost:9600 },
+  { rank:20, res:'L72', sku:'SKU-1042', po:'PO-10253', lotSize:9200,  visc:1980, actualFill:30.54, brand:0.44, setpoint:0.22, sigDriven:0.35, sgDriven:0.05, totalCost:9100 },
+  { rank:21, res:'L78', sku:'SKU-1055', po:'PO-10254', lotSize:10500, visc:1820, actualFill:51.94, brand:0.46, setpoint:0.23, sigDriven:0.37, sgDriven:0.05, totalCost:8500 },
+  { rank:22, res:'L83', sku:'SKU-1042', po:'PO-10255', lotSize:7700,  visc:2080, actualFill:30.41, brand:0.43, setpoint:0.21, sigDriven:0.33, sgDriven:0.05, totalCost:7800 },
+  { rank:23, res:'L74', sku:'SKU-1113', po:'PO-10256', lotSize:22000, visc:1200, actualFill:30.29, brand:0.35, setpoint:0.18, sigDriven:0.25, sgDriven:0.03, totalCost:6900 },
+  { rank:24, res:'L80', sku:'SKU-1042', po:'PO-10257', lotSize:8600,  visc:2050, actualFill:30.37, brand:0.42, setpoint:0.21, sigDriven:0.30, sgDriven:0.04, totalCost:6400 },
+  { rank:25, res:'L87', sku:'SKU-1127', po:'PO-10258', lotSize:32000, visc:950,  actualFill:50.21, brand:0.28, setpoint:0.14, sigDriven:0.18, sgDriven:0.02, totalCost:5200 },
+];
+let OV_DRV_OFFSET = 0;
+let OV_DRV_GROUP = 'res';
+
+/* SG stats per SKU */
+const OV_SG_STATS = {
+  'SKU-1042': { maxDemo:1.044, mean:1.034, median:1.033, sigma:0.006, specMin:1.004, specMax:1.072 },
+  'SKU-1055': { maxDemo:1.005, mean:0.999, median:0.999, sigma:0.003, specMin:0.975, specMax:1.025 },
+  'SKU-1098': { maxDemo:1.063, mean:1.054, median:1.054, sigma:0.005, specMin:1.030, specMax:1.080 },
+  'SKU-1113': { maxDemo:1.023, mean:1.016, median:1.016, sigma:0.004, specMin:0.995, specMax:1.040 },
+};
+
+/* Control limits table */
+const OV_CONTROL_LIMITS = [
+  { sku:'SKU-1042', res:'L67', lsl:28.5, lcl:29.2, target:30.0, ucl:30.8, usl:31.5, meanFill:31.44, sigma:0.82 },
+  { sku:'SKU-1042', res:'L68', lsl:28.5, lcl:29.2, target:30.0, ucl:30.8, usl:31.5, meanFill:31.10, sigma:0.65 },
+  { sku:'SKU-1042', res:'L72', lsl:28.5, lcl:29.2, target:30.0, ucl:30.8, usl:31.5, meanFill:30.54, sigma:0.45 },
+  { sku:'SKU-1055', res:'L67', lsl:47.5, lcl:48.5, target:50.0, ucl:51.5, usl:52.5, meanFill:52.60, sigma:1.10 },
+  { sku:'SKU-1055', res:'L68', lsl:47.5, lcl:48.5, target:50.0, ucl:51.5, usl:52.5, meanFill:52.35, sigma:0.95 },
+  { sku:'SKU-1098', res:'L67', lsl:14.0, lcl:14.3, target:15.0, ucl:15.7, usl:16.0, meanFill:15.73, sigma:0.31 },
+  { sku:'SKU-1113', res:'L72', lsl:28.5, lcl:29.3, target:30.0, ucl:30.7, usl:31.5, meanFill:30.29, sigma:0.32 },
+];
+
+/* Export raw data */
+const OV_EXPORT_DATA = (function() {
+  const rows = [];
+  const plants      = ['Oevel','Oevel','Oevel','Melville','Shimotsuma'];
+  const skus        = ['SKU-1042','SKU-1055','SKU-1098','SKU-1113','SKU-1127'];
+  const pkgs        = ['Mascara Vial','Bottle','Tube','Jar','Pump Bottle'];
+  const brands      = ['Color Pro','Pure Skin','DermaTech','Color Pro','Pure Skin'];
+  const viscMap     = [2100,1800,2800,1200,950];
+  const declaredMl  = [30,50,15,30,50];
+  const ress        = ['L67','L68','L72','R4','R2'];
+  const cats        = ['Makeup','Skincare','Makeup','Skincare','Hair Care'];
+  const subcats     = ['Mascara','Moisturizer – SPF','Foundation – Liquid','Serum','Cleanser – Foaming'];
+  const procTypes   = ['End-to-end','Pack-off','End-to-end','Work-in-process','Pack-off'];
+  const lifeCycles  = ['Legacy Product','New Product Launch (NPL)','Legacy Product','Legacy Product','New Product Launch (NPL)'];
+  let d = new Date('2026-01-07');
+  for (let w=0; w<52; w++) {
+    skus.forEach((sku, si) => {
+      const res = ress[si % ress.length];
+      const plant = plants[si % plants.length];
+      const declared = declaredMl[si];
+      const sg = 1.020 + Math.random()*0.040;
+      const target = declared * sg * 1.02;
+      const actual = target + (Math.random()*0.8 - 0.1);
+      const overfill = actual - declared * sg;
+      const overfillPct = overfill / (declared * sg) * 100;
+      const costPg = 0.038 + Math.random()*0.012;
+      rows.push({
+        date: d.toISOString().split('T')[0],
+        plant, res, sku,
+        po: 'PO-' + (10200 + w*5 + si),
+        lotSize: [8500,12000,5200,22000,32000][si],
+        declaredMl: declared,
+        sg: sg.toFixed(3),
+        targetFill: target.toFixed(2),
+        actualFill: actual.toFixed(2),
+        overfillG: overfill.toFixed(2),
+        overfillPct: overfillPct.toFixed(2),
+        costPg: costPg.toFixed(4),
+        giveawayCost: (overfill * costPg).toFixed(2),
+        brand: brands[si],
+        pkgType: pkgs[si],
+        visc: viscMap[si],
+        category: cats[si],
+        subcategory: subcats[si],
+        processType: procTypes[si],
+        lifeCycleStage: lifeCycles[si],
+      });
+    });
+    if (w % 7 === 6) d.setDate(d.getDate() + 1);
+    else d.setDate(d.getDate() + 1);
+  }
+  return rows;
+})();
+let OV_EXP_OFFSET = 0;
 
 const OV_WEEKS = ['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'];
 const OV_COST_TREND = [10800,11200,10500,12400,13100,12700,13900,14300,13600,14800,15200,14900];
@@ -3465,32 +4722,31 @@ let THREEMO_GROUP_BY = 'res';
 /* ─── OVERFILL: MODULE SWITCH ────────────────────────── */
 
 function showModule(m) {
-  const pageHome = document.getElementById('page-home');
-  const pageDV   = document.getElementById('page-dv');
-  const pageOV   = document.getElementById('page-overfill');
-  const gsNav    = document.getElementById('gs-page-nav');
-  const gsSide   = document.getElementById('gs-sidebar-content');
-  const ovSide   = document.getElementById('ov-sidebar-content');
-  const btnGS    = document.getElementById('btn-module-gs');
-  const btnOV    = document.getElementById('btn-module-overfill');
+  const gsMain = document.getElementById('gs-main');
+  const pageOV = document.getElementById('page-overfill');
+  const gsSide = document.getElementById('gs-sidebar-content');
+  const ovSide = document.getElementById('ov-sidebar-content');
+  const btnGS  = document.getElementById('btn-module-gs');
+  const btnOV  = document.getElementById('btn-module-overfill');
 
   if (m === 'gs') {
-    pageOV.style.display  = 'none';
-    gsNav.style.display   = '';
-    gsSide.style.display  = '';
-    ovSide.style.display  = 'none';
+    pageOV.style.display = 'none';
+    if (gsMain) gsMain.style.display = '';
+    gsSide.style.display = '';
+    ovSide.style.display = 'none';
     btnGS.classList.add('active');
     btnOV.classList.remove('active');
-    // restore whichever GS page was active
-    const activePage = document.getElementById('btn-home').classList.contains('active') ? 'home' : 'dv';
-    showPage(activePage);
+    if (activeKPI) {
+      showKPI(activeKPI);
+    } else {
+      const o = document.getElementById('cnt-gs-overview');
+      if (o) { document.querySelectorAll('.kpi-cnt').forEach(p => p.classList.remove('active')); o.classList.add('active'); }
+    }
   } else {
-    pageHome.style.display = 'none';
-    pageDV.style.display   = 'none';
-    pageOV.style.display   = '';
-    gsNav.style.display    = 'none';
-    gsSide.style.display   = 'none';
-    ovSide.style.display   = '';
+    if (gsMain) gsMain.style.display = 'none';
+    pageOV.style.display = '';
+    gsSide.style.display = 'none';
+    ovSide.style.display = '';
     btnGS.classList.remove('active');
     btnOV.classList.add('active');
     // persist Plant filter from GS → OV
@@ -3509,48 +4765,107 @@ function showOVTab(tab) {
   document.querySelectorAll('#page-overfill .pane').forEach(p => p.classList.remove('active'));
   const active = document.getElementById('pane-ov-' + tab);
   if (active) active.classList.add('active');
-  ['overview','specscale','sg','rootcause','predictive'].forEach(t => {
+  ['overview','trend','specscale','sg','drivers','predictive','export'].forEach(t => {
     const b = document.getElementById('t-ov-' + t);
     if (b) b.classList.toggle('active', t === tab);
   });
   if (!OV_INITED[tab]) {
     OV_INITED[tab] = true;
     if      (tab === 'overview')   { renderOVKPIs(); initOVOverviewCharts(); renderOVHeatmap(); renderOVTopContributors(); }
+    else if (tab === 'trend')      { initOVTrendCharts(); renderTrendSummaryTable(); }
     else if (tab === 'specscale')  { renderOVSpecScale(); }
-    else if (tab === 'sg')         { initOVSGCharts(); renderOVSGTable(); }
-    else if (tab === 'rootcause')  { renderOVRootCauses(); }
-    else if (tab === 'predictive') { renderOVScenarios(); initOVPredictiveCharts(); renderOV3MoTable(); renderOVFlagged(); }
+    else if (tab === 'sg')         { initOVSGCharts(); renderOVSGTable(); renderSGStats(); renderControlLimits(); renderToleranceTable(); }
+    else if (tab === 'drivers')    { renderDriverTable(); initDriverScatters(); }
+    else if (tab === 'predictive') { renderOVDecomp(); renderQtyDecomp(); initWhatIf(); renderOVScenarios(); initOVPredictiveCharts(); renderOV3MoTable(); renderOVFlagged(); }
+    else if (tab === 'export')     { renderExportTable(); }
   }
 }
 
 /* ─── OVERFILL: KPI TILES ────────────────────────────── */
 
+function _fmt$M(v) {
+  if (v >= 1e6) return '$' + (v/1e6).toFixed(2) + 'M';
+  if (v >= 1e3) return '$' + (v/1e3).toFixed(0) + 'K';
+  return '$' + v.toLocaleString();
+}
+function _fmtKg(kg) {
+  if (kg >= 1000) return (kg/1000).toFixed(1) + ' t';
+  return kg.toFixed(0) + ' kg';
+}
+
 function renderOVKPIs() {
-  const el = document.getElementById('ov-kpi-row');
-  if (!el) return;
-  el.innerHTML = `
+  const row1 = document.getElementById('ov-kpi-row');
+  const row2 = document.getElementById('ov-kpi-row2');
+  if (!row1) return;
+
+  // ── Row 1: 5 Cost KPIs ──────────────────────────────────
+  const varSign  = OV_SUMMARY.stdCostVariance >= 0;
+  const varColor = varSign ? '#28A745' : '#DC3545';
+  const varPfx   = varSign ? '+' : '';
+
+  const gap      = OV_SUMMARY.currentOverfillPct - OV_GS_BASELINE.pct;
+  const gapAbove = gap > 0;
+  const gapColor = gapAbove ? '#DC3545' : '#28A745';
+  const gapArrow = gapAbove ? '▲' : '▼';
+  const gapPfx   = gapAbove ? '+' : '';
+
+  row1.innerHTML = `
     <div class="ov-kpi-card">
-      <span class="ov-kpi-label">Total Giveaway Cost (YTD)</span>
-      <span class="ov-kpi-value ov-val-red">$${OV_SUMMARY.giveawayUSD.toLocaleString()}</span>
-      <span class="ov-kpi-sub">vs $138,820 prior period</span>
-      <span class="ov-kpi-badge">▲ ${OV_SUMMARY.impactVsPrev} MoM</span>
+      <span class="ov-kpi-label">Total Actual Cost of Overfill</span>
+      <span class="ov-kpi-value ov-val-red">${_fmt$M(OV_SUMMARY.totalActualCost)}</span>
+      <span class="ov-kpi-sub">▲ fill above target · recoverable</span>
+      <span class="ov-kpi-badge">Annual estimate</span>
     </div>
     <div class="ov-kpi-card">
-      <span class="ov-kpi-label">Avg Overfill % (All Resources)</span>
-      <span class="ov-kpi-value ov-val-yellow">${OV_SUMMARY.avgOverfillPct.toFixed(2)}%</span>
-      <span class="ov-kpi-sub">Spec limit: ≤ 2.00%</span>
-      <span class="ov-kpi-badge" style="background:#E65100;">${OV_SUMMARY.trend}</span>
+      <span class="ov-kpi-label">Brand Required Overfill Cost</span>
+      <span class="ov-kpi-value" style="color:#FF9800;">${_fmt$M(OV_SUMMARY.brandRequiredCost)}</span>
+      <span class="ov-kpi-sub">LSL − Declared Content · necessary overfill</span>
+      <span class="ov-kpi-badge" style="background:#FF9800;">Aesthetic req.</span>
     </div>
     <div class="ov-kpi-card">
-      <span class="ov-kpi-label">Overfill Weight / Year</span>
-      <span class="ov-kpi-value ov-val-yellow">${OV_SUMMARY.overfillGPerYr.toLocaleString()} g</span>
-      <span class="ov-kpi-sub">~${(OV_SUMMARY.overfillGPerYr/1000).toFixed(1)} kg total giveaway</span>
+      <span class="ov-kpi-label">Standard Cost Variance</span>
+      <span class="ov-kpi-value" style="color:${varColor};">${varPfx}${_fmt$M(Math.abs(OV_SUMMARY.stdCostVariance))}</span>
+      <span class="ov-kpi-sub">Costed vs. Actual · SAP MM03</span>
+      <span class="ov-kpi-badge" style="background:${varColor};">${varSign ? '▲ Budget savings' : '▼ Cost overrun'}</span>
+    </div>
+    <div class="ov-kpi-card clickable" onclick="openTop10Modal()">
+      <span class="ov-kpi-label">Top Opportunities ▸</span>
+      <span class="ov-kpi-value" style="font-size:16px;color:var(--c-text);">${OV_SUMMARY.topOpportunity}</span>
+      <span class="ov-kpi-sub">${OV_SUMMARY.topOpportunityPct.toFixed(2)}% avg overfill · ${_fmt$M(OV_SUMMARY.topOpportunityCost)}/yr</span>
+      <span class="ov-kpi-badge" style="background:#1565C0;">Click — see top 10</span>
+    </div>
+    <div class="ov-kpi-card gs-gap-card${gapAbove ? '' : ' ok'}">
+      <span class="ov-kpi-label">Gap to Gold Standard</span>
+      <span class="ov-kpi-value" style="color:${gapColor};">${gapArrow} ${gapPfx}${gap.toFixed(2)}%</span>
+      <span class="ov-kpi-sub">(Current: ${OV_SUMMARY.currentOverfillPct.toFixed(2)}% | GS: ${OV_GS_BASELINE.pct.toFixed(2)}%)</span>
+      <span class="ov-kpi-badge" style="background:#6C757D;font-style:italic;">Governed GS · ${OV_GS_BASELINE.fy}</span>
+    </div>`;
+
+  // ── Row 2: 3 Quantity KPIs ───────────────────────────────
+  if (!row2) return;
+  const avgPct      = OV_SUMMARY.avgOverfillPct;
+  const avgPctColor = avgPct > 0.50 ? '#DC3545' : avgPct > 0.25 ? '#FF9800' : '#28A745';
+  const avgPctBadge = avgPct > 0.50 ? 'Critical' : avgPct > 0.25 ? 'Monitor' : 'On Target';
+  const avgPctBadgeBg = avgPct > 0.50 ? '#DC3545' : avgPct > 0.25 ? '#FF9800' : '#28A745';
+
+  row2.innerHTML = `
+    <div class="ov-kpi-card">
+      <span class="ov-kpi-label">Total Overfill Quantity</span>
+      <span class="ov-kpi-value" style="color:#4A6580;">${_fmtKg(OV_SUMMARY.totalOverfillKg)}</span>
+      <span class="ov-kpi-sub">${OV_SUMMARY.totalOverfillKg.toLocaleString()} kg given away annually</span>
+      <span class="ov-kpi-badge" style="background:#4A6580;">Total vol. above target</span>
     </div>
     <div class="ov-kpi-card">
-      <span class="ov-kpi-label">Worst Contributor</span>
-      <span class="ov-kpi-value" style="font-size:19px;color:var(--c-text);">${OV_SUMMARY.worstContrib}</span>
-      <span class="ov-kpi-sub">6.8% avg overfill · $45,600 YTD cost</span>
-      <span class="ov-kpi-badge">Needs action</span>
+      <span class="ov-kpi-label">Brand Required Overfill Qty</span>
+      <span class="ov-kpi-value" style="color:#FF9800;">${_fmtKg(OV_SUMMARY.brandRequiredKg)}</span>
+      <span class="ov-kpi-sub">LSL − Declared Content · necessary overfill</span>
+      <span class="ov-kpi-badge" style="background:#FF9800;">${(OV_SUMMARY.brandRequiredKg/OV_SUMMARY.totalOverfillKg*100).toFixed(0)}% of total qty</span>
+    </div>
+    <div class="ov-kpi-card avg-pct-card">
+      <span class="ov-kpi-label">Avg Overfill %</span>
+      <span class="ov-kpi-value" style="color:${avgPctColor};">${avgPct.toFixed(2)}%</span>
+      <span class="ov-kpi-sub">Mean fill vs target across selection</span>
+      <span class="ov-kpi-badge" style="background:${avgPctBadgeBg};">${avgPctBadge}</span>
     </div>`;
 }
 
@@ -3884,6 +5199,515 @@ function renderOVFlagged() {
     </div>`).join('');
 }
 
+/* ─── OVERFILL: TOP-10 MODAL ────────────────────────── */
+
+function openTop10Modal() {
+  const modal = document.getElementById('top10-modal-overlay');
+  if (!modal) return;
+  const tbody = document.getElementById('top10-tbody');
+  const pctClass = p => p > 0.6 ? 'top10-pct-red' : p > 0.4 ? 'top10-pct-yellow' : 'top10-pct-green';
+  const driverMap = {
+    'SKU-1042':'Worn piston pump', 'SKU-1055':'Fill manifold',
+    'SKU-1098':'SG ref mismatch',  'SKU-1113':'Conservative target', 'SKU-1127':'Process variation'
+  };
+  const top10 = OV_TOP_CONTRIBUTORS.slice(0, 10);
+  tbody.innerHTML = top10.map(r => `
+    <tr>
+      <td><span class="top10-rank">${r.rank}</span></td>
+      <td style="font-weight:700;">${r.resource}</td>
+      <td>${r.sku}</td>
+      <td><span class="${pctClass(r.pct/100)}">${r.pct.toFixed(2)}%</span></td>
+      <td style="font-weight:700;">$${r.cost.toLocaleString()}</td>
+      <td>${driverMap[r.sku] || r.sku}</td>
+    </tr>`).join('');
+  modal.classList.add('active');
+}
+
+function closeTop10Modal(e) {
+  if (e && e.type === 'click' && e.target !== document.getElementById('top10-modal-overlay')) return;
+  document.getElementById('top10-modal-overlay').classList.remove('active');
+}
+
+/* ─── OVERFILL: TREND ANALYSIS ───────────────────────── */
+
+function _trendSKU() { return OV_TREND_SKUS[OV_TREND_SKU_IDX]; }
+
+function trendSKUNav(dir) {
+  OV_TREND_SKU_IDX = (OV_TREND_SKU_IDX + dir + OV_TREND_SKUS.length) % OV_TREND_SKUS.length;
+  OV_INITED['trend'] = false;
+  const costChart = REG['ch-ov-trend-cost'];
+  const qtyChart  = REG['ch-ov-trend-qty'];
+  if (costChart) { costChart.destroy(); delete REG['ch-ov-trend-cost']; }
+  if (qtyChart)  { qtyChart.destroy();  delete REG['ch-ov-trend-qty'];  }
+  OV_INITED['trend'] = true;
+  initOVTrendCharts();
+  renderTrendSummaryTable();
+}
+
+function updateTrendCharts() {
+  OV_INITED['trend'] = false;
+  const costChart = REG['ch-ov-trend-cost'];
+  const qtyChart  = REG['ch-ov-trend-qty'];
+  if (costChart) { costChart.destroy(); delete REG['ch-ov-trend-cost']; }
+  if (qtyChart)  { qtyChart.destroy();  delete REG['ch-ov-trend-qty'];  }
+  OV_INITED['trend'] = true;
+  initOVTrendCharts();
+}
+
+function initOVTrendCharts() {
+  const sku   = _trendSKU();
+  const sites = OV_TREND_SITES[sku] || [];
+  const lbl   = document.getElementById('trend-sku-label');
+  if (lbl) lbl.textContent = sku;
+
+  const yoy = document.getElementById('trend-yoy-select');
+  const compareMode = yoy ? yoy.value : 'none';
+
+  function makeDatasets(field, solid) {
+    const ds = [];
+    sites.forEach(s => {
+      ds.push({
+        label: s.plant + ' – ' + s.resource,
+        data: s[field],
+        borderColor: s.color,
+        backgroundColor: 'transparent',
+        tension: .3, pointRadius: 4, borderWidth: 2,
+        borderDash: solid ? [] : undefined,
+      });
+      if (compareMode !== 'none') {
+        const shift = compareMode === 'yoy' ? 12 : 6;
+        ds.push({
+          label: s.plant + ' – ' + s.resource + ' (prev)',
+          data: s[field].map((v,i) => +(v * (0.88 + 0.08*Math.sin(i))).toFixed(0)),
+          borderColor: s.color,
+          backgroundColor: 'transparent',
+          tension: .3, pointRadius: 2, borderWidth: 1.5,
+          borderDash: [5,4],
+        });
+      }
+    });
+    return ds;
+  }
+
+  init('ch-ov-trend-cost', {
+    type: 'line',
+    data: { labels: OV_WEEKS, datasets: makeDatasets('cost', true) },
+    options: baseOpts('Giveaway Cost ($)')
+  });
+  init('ch-ov-trend-qty', {
+    type: 'line',
+    data: { labels: OV_WEEKS, datasets: makeDatasets('qty', true) },
+    options: baseOpts('Quantity (kg)')
+  });
+}
+
+function renderTrendSummaryTable() {
+  const sku   = _trendSKU();
+  const sites = OV_TREND_SITES[sku] || [];
+  const tb = document.querySelector('#tb-trend-summary tbody');
+  if (!tb) return;
+  const bestCost = Math.min(...sites.map(s => s.cost.reduce((a,b)=>a+b,0)/s.cost.length));
+  tb.innerHTML = sites.map(s => {
+    const avgCost = s.cost.reduce((a,b)=>a+b,0)/s.cost.length;
+    const avgQty  = s.qty.reduce((a,b)=>a+b,0)/s.qty.length;
+    const avgPct  = (avgCost / 15000 * 4.5).toFixed(2);
+    const vsB     = ((avgCost - bestCost)/bestCost*100);
+    const isBest  = vsB < 0.5;
+    return `<tr>
+      <td>${s.plant}</td>
+      <td style="font-weight:700;">${s.resource}</td>
+      <td style="font-weight:700;">$${Math.round(avgCost).toLocaleString()}</td>
+      <td>${(avgQty/1000).toFixed(1)} kg</td>
+      <td style="font-weight:700;color:${avgPct>4?'#DC3545':'#28A745'}">${avgPct}%</td>
+      <td style="font-weight:700;color:${isBest?'#28A745':'#E65100'}">${isBest?'Best site':'+'+(vsB).toFixed(0)+'%'}</td>
+      <td><span class="ov-kpi-badge" style="background:${isBest?'#28A745':'#FF9800'}">${isBest?'Best Practice':'Opportunity'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ─── OVERFILL: DECOMPOSITION + WHAT-IF ─────────────── */
+
+function renderOVDecomp() {
+  const row = document.getElementById('decomp-row');
+  if (!row) return;
+  const total = OV_DECOMP.brand.cost6m + OV_DECOMP.setpoint.cost6m + OV_DECOMP.sigma.cost6m;
+  const pct = v => (v/total*100).toFixed(0);
+  row.innerHTML = `
+    <div class="decomp-card brand">
+      <div class="decomp-label">Brand-Driven</div>
+      <div class="decomp-value">${_fmt$M(OV_DECOMP.brand.cost6m)}</div>
+      <div class="decomp-sub">${OV_DECOMP.brand.label}</div>
+      <div class="decomp-pct">${pct(OV_DECOMP.brand.cost6m)}% of total</div>
+    </div>
+    <div class="decomp-card setpoint">
+      <div class="decomp-label">Set Point-Driven</div>
+      <div class="decomp-value">${_fmt$M(OV_DECOMP.setpoint.cost6m)}</div>
+      <div class="decomp-sub">${OV_DECOMP.setpoint.label}</div>
+      <div class="decomp-pct">${pct(OV_DECOMP.setpoint.cost6m)}% of total</div>
+    </div>
+    <div class="decomp-card sigma">
+      <div class="decomp-label">Sigma-Driven</div>
+      <div class="decomp-value">${_fmt$M(OV_DECOMP.sigma.cost6m)}</div>
+      <div class="decomp-sub">${OV_DECOMP.sigma.label}</div>
+      <div class="decomp-pct">${pct(OV_DECOMP.sigma.cost6m)}% of total</div>
+    </div>`;
+  const totEl = document.getElementById('decomp-total-val');
+  if (totEl) totEl.textContent = _fmt$M(total);
+}
+
+function initWhatIf() {
+  updateWhatIf();
+}
+
+function updateWhatIf() {
+  const sg    = parseFloat(document.getElementById('wi-sg').value);
+  const sigma = parseFloat(document.getElementById('wi-sigma').value);
+  const lsl   = parseFloat(document.getElementById('wi-lsl').value);
+
+  document.getElementById('wi-sg-val').textContent    = sg.toFixed(3);
+  document.getElementById('wi-sigma-val').textContent = sigma.toFixed(2) + 'g';
+  document.getElementById('wi-lsl-val').textContent   = '+' + lsl.toFixed(1) + 'ml';
+
+  const sgRatio  = sg / WI_DEFAULTS.sg;
+  const sigRatio = sigma / WI_DEFAULTS.sigma;
+  const lslRatio = lsl / WI_DEFAULTS.lsl;
+
+  const adjBrand    = +(OV_DECOMP.brand.cost6m    * (0.5 + 0.5 * sgRatio) * (0.6 + 0.4 * lslRatio)).toFixed(0);
+  const adjSetpoint = +(OV_DECOMP.setpoint.cost6m * (0.7 + 0.3 * lslRatio)).toFixed(0);
+  const adjSigma    = +(OV_DECOMP.sigma.cost6m    * sigRatio).toFixed(0);
+  const adjTotal    = adjBrand + adjSetpoint + adjSigma;
+  const baseTotal   = OV_DECOMP.brand.cost6m + OV_DECOMP.setpoint.cost6m + OV_DECOMP.sigma.cost6m;
+  const savings     = baseTotal - adjTotal;
+  const savingsPct  = (savings/baseTotal*100).toFixed(0);
+
+  const el = id => document.getElementById(id);
+  if (el('wi-res-current'))  el('wi-res-current').textContent  = _fmt$M(baseTotal);
+  if (el('wi-res-adjusted')) el('wi-res-adjusted').textContent = _fmt$M(adjTotal);
+  if (el('wi-res-savings'))  el('wi-res-savings').textContent  = _fmt$M(savings) + ' (' + savingsPct + '% reduction)';
+  // Decomp amounts
+  if (el('wi-d-brand'))    el('wi-d-brand').textContent    = _fmt$M(adjBrand);
+  if (el('wi-d-setpoint')) el('wi-d-setpoint').textContent = _fmt$M(adjSetpoint);
+  if (el('wi-d-sigma'))    el('wi-d-sigma').textContent    = _fmt$M(adjSigma);
+  // Prev-period labels
+  if (el('wi-d-brand-prev'))    el('wi-d-brand-prev').textContent    = '(was ' + _fmt$M(OV_DECOMP.brand.cost6m) + ')';
+  if (el('wi-d-setpoint-prev')) el('wi-d-setpoint-prev').textContent = '(was ' + _fmt$M(OV_DECOMP.setpoint.cost6m) + ')';
+  if (el('wi-d-sigma-prev'))    el('wi-d-sigma-prev').textContent    = '(was ' + _fmt$M(OV_DECOMP.sigma.cost6m) + ')';
+  // Bar widths (proportional to adjusted total)
+  if (adjTotal > 0) {
+    const bBrand = (adjBrand/adjTotal*100).toFixed(0);
+    const bSet   = (adjSetpoint/adjTotal*100).toFixed(0);
+    const bSig   = (adjSigma/adjTotal*100).toFixed(0);
+    if (el('wi-bar-brand'))    el('wi-bar-brand').style.width    = bBrand + '%';
+    if (el('wi-bar-setpoint')) el('wi-bar-setpoint').style.width = bSet + '%';
+    if (el('wi-bar-sigma'))    el('wi-bar-sigma').style.width    = bSig + '%';
+  }
+  // Also update qty savings hint if qty decomp section exists
+  const qtyHint = el('qty-savings-hint');
+  if (qtyHint) {
+    const baseQty = (OV_DECOMP.brand.qty6mKg + OV_DECOMP.setpoint.qty6mKg + OV_DECOMP.sigma.qty6mKg);
+    const adjQty  = +(baseQty * (adjTotal / baseTotal)).toFixed(0);
+    const qSav    = baseQty - adjQty;
+    if (qSav > 0) qtyHint.textContent = 'Potential Qty Reduction: ' + _fmtKg(qSav) + ' (' + (qSav/baseQty*100).toFixed(0) + '% reduction)';
+    else qtyHint.textContent = '';
+  }
+}
+
+function resetWhatIf() {
+  document.getElementById('wi-sg').value    = WI_DEFAULTS.sg;
+  document.getElementById('wi-sigma').value = WI_DEFAULTS.sigma;
+  document.getElementById('wi-lsl').value   = WI_DEFAULTS.lsl;
+  updateWhatIf();
+}
+
+/* ─── OVERFILL: DRIVER DECOMPOSITION ────────────────── */
+
+function _drvPctClass(pct, threshA, threshB) {
+  if (pct >= threshA) return 'driver-pct-red';
+  if (pct >= threshB) return 'driver-pct-orange';
+  return 'driver-pct-green';
+}
+
+function renderDriverTable() {
+  OV_DRV_OFFSET = 0;
+  const tbody = document.getElementById('tb-drivers-body');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  _appendDriverRows(0, 20);
+  OV_DRV_OFFSET = 20;
+  const btn = document.getElementById('btn-load-more-drv');
+  if (btn) btn.style.display = OV_DRV_OFFSET >= OV_DRIVERS.length ? 'none' : '';
+}
+
+function _appendDriverRows(from, to) {
+  const tbody = document.getElementById('tb-drivers-body');
+  if (!tbody) return;
+  OV_DRIVERS.slice(from, to).forEach(r => {
+    const tot = r.brand + r.setpoint + r.sigDriven + r.sgDriven;
+    const bp  = (r.brand    / tot * 100).toFixed(0);
+    const sp  = (r.setpoint / tot * 100).toFixed(0);
+    const sgp = (r.sigDriven/ tot * 100).toFixed(0);
+    const sgg = (r.sgDriven / tot * 100).toFixed(0);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="font-weight:700;">${r.rank}</td>
+      <td>${r.res}</td><td>${r.sku}</td><td>${r.po}</td>
+      <td>${r.lotSize.toLocaleString()}</td><td>${r.visc.toLocaleString()}</td>
+      <td style="font-family:monospace;">${r.actualFill.toFixed(2)}</td>
+      <td style="font-family:monospace;">+${r.brand.toFixed(2)}</td>
+      <td class="${_drvPctClass(+bp,40,20)}">${bp}%</td>
+      <td style="font-family:monospace;">+${r.setpoint.toFixed(2)}</td>
+      <td class="${_drvPctClass(+sp,30,15)}">${sp}%</td>
+      <td style="font-family:monospace;">+${r.sigDriven.toFixed(2)}</td>
+      <td class="${_drvPctClass(+sgp,35,20)}">${sgp}%</td>
+      <td style="font-family:monospace;">+${r.sgDriven.toFixed(2)}</td>
+      <td class="driver-pct-blue">${sgg}%</td>
+      <td style="font-weight:700;">$${r.totalCost.toLocaleString()}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function loadMoreDrivers() {
+  _appendDriverRows(OV_DRV_OFFSET, OV_DRV_OFFSET + 20);
+  OV_DRV_OFFSET += 20;
+  const btn = document.getElementById('btn-load-more-drv');
+  if (btn) btn.style.display = OV_DRV_OFFSET >= OV_DRIVERS.length ? 'none' : '';
+}
+
+function setDriverGroupBy(group) {
+  OV_DRV_GROUP = group;
+  document.getElementById('btn-drv-by-res').classList.toggle('active', group === 'res');
+  document.getElementById('btn-drv-by-sku').classList.toggle('active', group === 'sku');
+}
+
+function initDriverScatters() {
+  /* Lot Size vs Sigma */
+  const lsData = OV_DRIVERS.map(r => ({
+    x: r.lotSize,
+    y: parseFloat((0.05 + 0.3 * Math.exp(-r.lotSize/30000) + Math.random()*0.05).toFixed(3))
+  }));
+  init('ch-drv-lotsize-sigma', {
+    type: 'scatter',
+    data: { datasets: [{
+      label: 'SKU-Resource', data: lsData,
+      backgroundColor: 'rgba(21,101,192,.55)', pointRadius: 5,
+    }]},
+    options: {
+      ...baseOpts('Sigma (σ) g'),
+      scales: {
+        x: { title:{ display:true, text:'Lot Size (units)', font:{size:10} } },
+        y: { title:{ display:true, text:'Sigma (σ) g', font:{size:10} } }
+      }
+    }
+  });
+  /* Viscosity vs Sigma */
+  const viscData = OV_DRIVERS.map(r => ({
+    x: r.visc,
+    y: parseFloat((0.05 + 0.0001 * r.visc * (0.9 + Math.random()*0.2)).toFixed(3))
+  }));
+  init('ch-drv-visc-sigma', {
+    type: 'scatter',
+    data: { datasets: [{
+      label: 'SKU-Resource', data: viscData,
+      backgroundColor: 'rgba(220,53,69,.55)', pointRadius: 5,
+    }]},
+    options: {
+      ...baseOpts('Sigma (σ) g'),
+      scales: {
+        x: { title:{ display:true, text:'Viscosity (cP)', font:{size:10} } },
+        y: { title:{ display:true, text:'Sigma (σ) g', font:{size:10} } }
+      }
+    }
+  });
+}
+
+/* ─── OVERFILL: SG STATS + CONTROL LIMITS ───────────── */
+
+function renderSGStats() {
+  const container = document.getElementById('sg-stats-container');
+  if (!container) return;
+  container.innerHTML = Object.entries(OV_SG_STATS).map(([sku, s]) => {
+    const specWidth = s.specMax - s.specMin;
+    const widthCls  = specWidth < 0.05 ? 'sg-spec-width-green' : specWidth < 0.10 ? 'sg-spec-width-yellow' : 'sg-spec-width-red';
+    return `
+      <div class="sg-stats-card">
+        <div class="sg-stats-title">${sku} — SG Summary Statistics</div>
+        <div class="sg-stats-grid">
+          <div class="sg-stat-item">
+            <span class="sg-stat-label">Max Demonstrated SG</span>
+            <span class="sg-stat-value">${s.maxDemo.toFixed(3)}</span>
+            <span class="sg-stat-sub">From actual batches</span>
+          </div>
+          <div class="sg-stat-item">
+            <span class="sg-stat-label">Mean SG</span>
+            <span class="sg-stat-value">${s.mean.toFixed(3)}</span>
+            <span class="sg-stat-sub">Use for costing (not max)</span>
+          </div>
+          <div class="sg-stat-item">
+            <span class="sg-stat-label">Median SG</span>
+            <span class="sg-stat-value">${s.median.toFixed(3)}</span>
+            <span class="sg-stat-sub"></span>
+          </div>
+          <div class="sg-stat-item">
+            <span class="sg-stat-label">SG Sigma (σ)</span>
+            <span class="sg-stat-value">${s.sigma.toFixed(3)}</span>
+            <span class="sg-stat-sub">Process variation</span>
+          </div>
+          <div class="sg-stat-item">
+            <span class="sg-stat-label">Spec Range (PDS)</span>
+            <span class="sg-stat-value">${s.specMin.toFixed(3)} – ${s.specMax.toFixed(3)}</span>
+            <span class="sg-stat-sub"></span>
+          </div>
+          <div class="sg-stat-item">
+            <span class="sg-stat-label">Spec Width</span>
+            <span class="sg-stat-value ${widthCls}">${specWidth.toFixed(3)}</span>
+            <span class="sg-stat-sub ${widthCls}">${specWidth < 0.05 ? 'Tight ✓' : specWidth < 0.10 ? 'Monitor' : 'Opportunity to tighten'}</span>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderControlLimits() {
+  const tbody = document.getElementById('tb-ov-cl-body');
+  if (!tbody) return;
+  tbody.innerHTML = OV_CONTROL_LIMITS.map(r => {
+    const inControl = r.meanFill >= r.lcl && r.meanFill <= r.ucl;
+    const status    = inControl ? 'ok' : r.meanFill > r.ucl ? 'err' : 'warn';
+    const statusMap = { ok:'In Control', warn:'Near Limit', err:'Out of Control' };
+    return `<tr>
+      <td>${r.sku}</td><td style="font-weight:700;">${r.res}</td>
+      <td>${r.lsl.toFixed(1)}</td><td>${r.lcl.toFixed(1)}</td>
+      <td style="font-weight:700;">${r.target.toFixed(1)}</td>
+      <td>${r.ucl.toFixed(1)}</td><td>${r.usl.toFixed(1)}</td>
+      <td style="font-weight:700;color:${r.meanFill>r.ucl?'#DC3545':'#333'}">${r.meanFill.toFixed(2)}</td>
+      <td>${r.sigma.toFixed(2)}</td>
+      <td><span class="sg-badge ${status}">${statusMap[status]}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ─── OVERFILL: QUANTITY DECOMPOSITION ──────────────── */
+
+function renderQtyDecomp() {
+  const row = document.getElementById('qty-decomp-row');
+  if (!row) return;
+  const totalKg = OV_DECOMP.brand.qty6mKg + OV_DECOMP.setpoint.qty6mKg + OV_DECOMP.sigma.qty6mKg;
+  const pct = v => (v/totalKg*100).toFixed(0);
+  row.innerHTML = `
+    <div class="qty-decomp-card brand">
+      <div class="qty-decomp-label">Brand-Driven Quantity</div>
+      <div class="qty-decomp-value">${_fmtKg(OV_DECOMP.brand.qty6mKg)}</div>
+      <div class="qty-decomp-sub">${OV_DECOMP.brand.label}</div>
+      <div class="qty-decomp-pct">${pct(OV_DECOMP.brand.qty6mKg)}% of total</div>
+    </div>
+    <div class="qty-decomp-card setpoint">
+      <div class="qty-decomp-label">Set Point-Driven Quantity</div>
+      <div class="qty-decomp-value">${_fmtKg(OV_DECOMP.setpoint.qty6mKg)}</div>
+      <div class="qty-decomp-sub">${OV_DECOMP.setpoint.label}</div>
+      <div class="qty-decomp-pct">${pct(OV_DECOMP.setpoint.qty6mKg)}% of total</div>
+    </div>
+    <div class="qty-decomp-card sigma">
+      <div class="qty-decomp-label">Sigma-Driven Quantity</div>
+      <div class="qty-decomp-value">${_fmtKg(OV_DECOMP.sigma.qty6mKg)}</div>
+      <div class="qty-decomp-sub">${OV_DECOMP.sigma.label}</div>
+      <div class="qty-decomp-pct">${pct(OV_DECOMP.sigma.qty6mKg)}% of total</div>
+    </div>`;
+  const tot = document.getElementById('qty-total-val');
+  if (tot) tot.textContent = _fmtKg(totalKg);
+}
+
+/* ─── OVERFILL: TOLERANCE PARAMETERS TABLE ──────────── */
+
+function renderToleranceTable() {
+  const tbody = document.getElementById('tb-ov-tolerance-body');
+  if (!tbody) return;
+  const rows = [...OV_TOLERANCE].sort((a, b) => {
+    const ua = (a.mean - a.lsl) / (a.usl - a.lsl) * 100;
+    const ub = (b.mean - b.lsl) / (b.usl - b.lsl) * 100;
+    return ub - ua;
+  });
+  tbody.innerHTML = rows.map(r => {
+    const tolRange = r.usl - r.lsl;
+    const pctUsed  = (r.mean - r.lsl) / tolRange * 100;
+    const inSpec   = r.mean >= r.lsl && r.mean <= r.usl;
+    const sigmaOk  = r.sigma <= tolRange / 6;
+    const status   = !inSpec ? 'Out of Spec' : (inSpec && sigmaOk) ? 'In Control' : 'Warning';
+    const statusBg = status === 'In Control' ? '#28A745' : status === 'Warning' ? '#FF9800' : '#DC3545';
+    const meanCls  = r.mean < r.lsl || r.mean > r.usl ? 'tol-mean-bad'
+                   : r.mean > r.target ? 'tol-mean-warn' : 'tol-mean-ok';
+    const usedCls  = pctUsed > 80 ? 'tol-used-bad' : pctUsed > 60 ? 'tol-used-warn' : 'tol-used-ok';
+    return `<tr>
+      <td style="font-weight:700;">${r.sku}</td>
+      <td style="text-align:right;">${r.declaredMl}</td>
+      <td style="font-family:monospace;text-align:right;">${r.lsl.toFixed(2)}</td>
+      <td style="font-family:monospace;text-align:right;">${r.target.toFixed(2)}</td>
+      <td class="${meanCls}" style="font-family:monospace;text-align:right;">${r.mean.toFixed(2)}</td>
+      <td style="font-family:monospace;text-align:right;">${r.usl.toFixed(2)}</td>
+      <td style="font-family:monospace;text-align:right;">${tolRange.toFixed(2)}</td>
+      <td style="font-family:monospace;text-align:right;">${r.sigma.toFixed(3)}</td>
+      <td class="${usedCls}" style="text-align:right;font-weight:700;">${pctUsed.toFixed(1)}%</td>
+      <td><span class="ov-kpi-badge" style="background:${statusBg};">${status}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ─── OVERFILL: DATA EXPORT ──────────────────────────── */
+
+function renderExportTable() {
+  OV_EXP_OFFSET = 0;
+  const tbody = document.getElementById('tb-export-body');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  _appendExportRows(0, 50);
+  OV_EXP_OFFSET = 50;
+  const btn = document.getElementById('btn-load-more-exp');
+  if (btn) btn.style.display = OV_EXP_OFFSET >= OV_EXPORT_DATA.length ? 'none' : '';
+}
+
+function _appendExportRows(from, to) {
+  const tbody = document.getElementById('tb-export-body');
+  if (!tbody) return;
+  OV_EXPORT_DATA.slice(from, to).forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${r.date}</td><td>${r.plant}</td><td>${r.res}</td><td>${r.sku}</td>
+      <td>${r.po}</td><td>${r.lotSize.toLocaleString()}</td><td>${r.declaredMl}</td>
+      <td>${r.sg}</td><td>${r.targetFill}</td><td>${r.actualFill}</td>
+      <td>${r.overfillG}</td>
+      <td style="font-weight:700;color:${+r.overfillPct>4?'#DC3545':'#333'}">${r.overfillPct}%</td>
+      <td>${r.costPg}</td><td>$${r.giveawayCost}</td>
+      <td>${r.brand}</td><td>${r.category||'—'}</td><td>${r.subcategory||'—'}</td>
+      <td>${r.pkgType}</td><td>${r.visc.toLocaleString()}</td>
+      <td>${r.processType||'—'}</td><td>${r.lifeCycleStage||'—'}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function loadMoreExport() {
+  _appendExportRows(OV_EXP_OFFSET, OV_EXP_OFFSET + 50);
+  OV_EXP_OFFSET += 50;
+  const btn = document.getElementById('btn-load-more-exp');
+  if (btn) btn.style.display = OV_EXP_OFFSET >= OV_EXPORT_DATA.length ? 'none' : '';
+}
+
+function exportToCSV() {
+  const headers = ['Date','Plant','Resource','SKU','PO','Lot Size','Declared Content (ml)','SG',
+    'Target Fill (g)','Actual Fill (g)','Overfill (g)','Overfill %','Cost/g','Giveaway Cost ($)',
+    'Brand','Category','Subcategory','Package Type','Viscosity (cP)','Process Type','Life Cycle Stage'];
+  const rows = OV_EXPORT_DATA.map(r => [
+    r.date, r.plant, r.res, r.sku, r.po, r.lotSize, r.declaredMl, r.sg,
+    r.targetFill, r.actualFill, r.overfillG, r.overfillPct, r.costPg, r.giveawayCost,
+    r.brand, r.category||'', r.subcategory||'', r.pkgType, r.visc,
+    r.processType||'', r.lifeCycleStage||''
+  ]);
+  const csv = [headers, ...rows].map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'overfill_export_' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+}
+
 /* ─── OVERFILL: DATE FILTER HELPERS ──────────────────── */
 
 function handleOVFilterChange() { /* stub — visual only */ }
@@ -3895,23 +5719,51 @@ function resetOVDates() {
 
 function setOVPreset(p) {
   const today = new Date('2025-06-30T00:00:00');
-  const from  = new Date(today);
+  let from = new Date(today), to = new Date(today);
   if      (p === '4w')  { from.setDate(today.getDate() - 28); }
   else if (p === '3m')  { from.setMonth(today.getMonth() - 3); }
   else if (p === 'ytd') { from.setMonth(0); from.setDate(1); }
   else if (p === 'r12') { from.setFullYear(today.getFullYear() - 1); }
+  else if (p === 'fy26') { from = new Date('2025-07-01'); to = new Date('2026-06-30'); }
+  else if (p === 'fy27') { from = new Date('2026-07-01'); to = new Date('2027-06-30'); }
   const ymd = d => d.toISOString().split('T')[0];
   document.getElementById('ov-date-from').value = ymd(from);
-  document.getElementById('ov-date-to').value   = ymd(today);
+  document.getElementById('ov-date-to').value   = ymd(to);
 }
 
 /* ─── INIT ───────────────────────────────────────────── */
 window.addEventListener('load', () => {
   showModule('gs');
-  showPage('home');
-  showHomeTab('results');
+  showKPI('speed');
+  showKPISub('results');
 });
 </script>
+
+<!-- =====================================================
+     TOP-10 OPPORTUNITIES MODAL
+     ===================================================== -->
+<div class="ov-modal-overlay" id="top10-modal-overlay" onclick="closeTop10Modal(event)">
+  <div class="ov-modal" onclick="event.stopPropagation()">
+    <div class="ov-modal-header">
+      <div>
+        <div class="ov-modal-header-title">🏆 Top 10 Opportunities</div>
+        <div class="ov-modal-header-filters" id="top10-filter-context">All plants · All resources · All SKUs</div>
+      </div>
+      <button class="ov-modal-close" onclick="closeTop10Modal()">✕</button>
+    </div>
+    <div class="ov-modal-body">
+      <table class="top10-tbl" id="top10-table">
+        <thead>
+          <tr>
+            <th>#</th><th>Resource</th><th>SKU</th>
+            <th>Overfill %</th><th>Giveaway $/yr</th><th>Root Driver</th>
+          </tr>
+        </thead>
+        <tbody id="top10-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 <!-- =====================================================
      AI CHATBOT FAB
