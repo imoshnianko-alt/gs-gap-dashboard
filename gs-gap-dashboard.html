@@ -4164,11 +4164,11 @@ function renderOEEGapTable(reset) {
   if (!tbody) return;
   if (oeeGapOffset === 0) tbody.innerHTML = '';
   tbody.innerHTML += page.map(r => `<tr>
+    <td>${r.res}</td>
     <td>${r.family}</td>
+    <td>${r.cat}</td>
     <td>${r.sku}</td>
     <td>${r.po}</td>
-    <td>${r.res}</td>
-    <td>${r.plant}</td>
     <td class="r">${r.oee.toFixed(1)}%</td>
     <td class="r" style="color:var(--c-gs)">${r.gsOee.toFixed(1)}%</td>
     <td class="r" style="color:${r.gap > 5 ? 'var(--c-neg)' : 'var(--c-text)'}">${r.gap.toFixed(1)}%</td>
@@ -4232,9 +4232,8 @@ function renderOEEPredTable(reset) {
   tbody.innerHTML += page.map(r => `<tr>
     <td>${r.month}</td>
     <td>${r.sku}</td>
-    <td>${r.family}</td>
     <td>${r.res}</td>
-    <td>${r.plant}</td>
+    <td>${r.family}</td>
     <td class="r" style="color:var(--c-actual)">${r.predOee.toFixed(1)}%</td>
     <td class="r" style="color:var(--c-gs)">${r.gsOee.toFixed(1)}%</td>
     <td class="r" style="color:var(--c-neg)">${r.gapPct.toFixed(1)}%</td>
