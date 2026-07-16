@@ -2758,6 +2758,7 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
             <thead>
               <tr>
                 <th>PO Number</th><th>SKU</th><th>Resource</th><th>PO Size Bucket</th>
+                <th class="r">PO Qty</th>
                 <th class="r">Actual OEE %</th>
                 <th class="r">GS OEE %</th>
                 <th class="r">Gap $ (lost throughput)</th>
@@ -3614,11 +3615,11 @@ const PO_LABOR = [
   {po:'PO-2026-005',sku:'SKU-401 / Cleanser - Foaming',      res:'L72',actual:8, gs:7,rs:8,gapUSD:3100},
 ];
 const PO_OEE = [
-  {po:'PO-2026-005',sku:'SKU-401 / Cleanser - Foaming',      res:'L72',poSz:'Small', actual:49,gs:80,gapUSD:22300},
-  {po:'PO-2026-002',sku:'SKU-102 / Mascara - Multi-purpose', res:'L67',poSz:'Small', actual:54,gs:80,gapUSD:18600},
-  {po:'PO-2026-004',sku:'SKU-301 / Serum - Anti-aging',      res:'L68',poSz:'Medium',actual:58,gs:80,gapUSD:14200},
-  {po:'PO-2026-001',sku:'SKU-101 / Mascara - Multi-purpose', res:'L67',poSz:'Medium',actual:62,gs:80,gapUSD:12400},
-  {po:'PO-2026-003',sku:'SKU-201 / Foundation - Liquid',     res:'L67',poSz:'Large', actual:71,gs:80,gapUSD:6800},
+  {po:'PO-2026-005',sku:'SKU-401 / Cleanser - Foaming',      res:'L72',poSz:'Small', poQty:18000, actual:49,gs:80,gapUSD:22300},
+  {po:'PO-2026-002',sku:'SKU-102 / Mascara - Multi-purpose', res:'L67',poSz:'Small', poQty:22000, actual:54,gs:80,gapUSD:18600},
+  {po:'PO-2026-004',sku:'SKU-301 / Serum - Anti-aging',      res:'L68',poSz:'Medium',poQty:48000, actual:58,gs:80,gapUSD:14200},
+  {po:'PO-2026-001',sku:'SKU-101 / Mascara - Multi-purpose', res:'L67',poSz:'Medium',poQty:55000, actual:62,gs:80,gapUSD:12400},
+  {po:'PO-2026-003',sku:'SKU-201 / Foundation - Liquid',     res:'L67',poSz:'Large', poQty:120000,actual:71,gs:80,gapUSD:6800},
 ];
 const PO_SCRAP = [
   {po:'PO-2026-002',sku:'SKU-102 / Mascara - Multi-purpose', res:'L67',actual:5.0,gs:2.5,fixed:1.8,variable:3.2,totalUSD:5200},
@@ -4076,6 +4077,7 @@ function renderDVLabor() {
 function renderDVOEE() {
   $$('tb-dv-oee').innerHTML = PO_OEE.map(r=>`<tr>
     <td>${r.po}</td><td>${r.sku}</td><td>${r.res}</td><td>${r.poSz}</td>
+    <td class="r">${fmtN(r.poQty)}</td>
     <td class="r">${r.actual}%</td><td class="r">${r.gs}%</td>
     <td class="r c-neg">${fmt(r.gapUSD)}</td>
   </tr>`).join('');
