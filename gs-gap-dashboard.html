@@ -1233,6 +1233,82 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
   color: #7A4500;
   margin-top: 4px;
 }
+
+/* ── View-As scenario switcher ─────────────────── */
+.card-header-row { display:flex; align-items:baseline; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+.view-as-wrap { display:flex; align-items:center; gap:4px; flex-shrink:0; }
+.view-as-label { font-size:9.5px; color:var(--c-muted); white-space:nowrap; }
+.view-as-select {
+  font-size:10px; color:var(--c-text); background:var(--c-panel);
+  border:1px solid var(--c-border); border-radius:4px; padding:2px 6px;
+  cursor:pointer; white-space:nowrap;
+}
+.view-as-select:focus { outline:1px solid var(--c-blue); }
+
+/* ── Tier modal pop-up ─────────────────────────── */
+.tier-modal-overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65);
+  z-index:200; align-items:center; justify-content:center;
+}
+.tier-modal-overlay.open { display:flex; }
+.tier-modal {
+  background:var(--c-card); border:1px solid var(--c-border); border-radius:8px;
+  width:min(860px,92vw); max-height:80vh; overflow-y:auto;
+  padding:20px 22px; position:relative; box-shadow:0 16px 40px rgba(0,0,0,0.5);
+}
+.tier-modal-close {
+  position:absolute; top:12px; right:14px; font-size:18px; line-height:1;
+  background:none; border:none; color:var(--c-muted); cursor:pointer;
+}
+.tier-modal-close:hover { color:var(--c-text); }
+.tier-modal h3 { font-size:14px; font-weight:700; margin:0 0 12px; color:var(--c-text); }
+.family-group-hdr td {
+  background:var(--c-panel); font-size:10.5px; font-weight:700;
+  color:var(--c-text); padding:5px 8px; border-bottom:1px solid var(--c-border);
+}
+
+/* ── Placeholder cards (data not available) ───── */
+.placeholder-card {
+  background:var(--c-card); border:1px solid var(--c-border); border-radius:6px;
+  padding:16px 18px; opacity:0.72; position:relative; margin-top:10px;
+}
+.placeholder-badge {
+  display:inline-flex; align-items:center; gap:4px; padding:2px 10px;
+  border-radius:10px; font-size:10px; font-weight:700; margin-bottom:6px;
+}
+.placeholder-badge.unavailable { background:rgba(198,40,40,0.15); color:#C62828; border:1px solid rgba(198,40,40,0.3); }
+.placeholder-badge.pending     { background:rgba(245,165,52,0.15); color:#B45309; border:1px solid rgba(245,165,52,0.3); }
+.placeholder-filters { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 4px; }
+.placeholder-filters span {
+  font-size:9.5px; color:var(--c-muted); background:var(--c-panel);
+  border:1px solid var(--c-border); border-radius:3px; padding:1px 7px;
+  opacity:0.6; pointer-events:none;
+}
+.placeholder-timeframes { display:flex; gap:5px; margin:4px 0 6px; }
+.placeholder-timeframes span {
+  font-size:9px; color:var(--c-muted); border:1px solid var(--c-border);
+  border-radius:3px; padding:1px 6px; opacity:0.55;
+}
+.placeholder-tooltip-icon { font-size:12px; cursor:help; color:var(--c-muted); vertical-align:middle; }
+.placeholder-tooltip-icon[title]:hover::after {
+  content: attr(title); position:absolute; left:16px; top:0;
+  background:#222; color:#eee; font-size:10px; padding:6px 10px;
+  border-radius:4px; max-width:340px; white-space:pre-line; z-index:100;
+  line-height:1.5; box-shadow:0 4px 12px rgba(0,0,0,0.4);
+}
+.placeholder-content-area {
+  min-height:70px; display:flex; align-items:center; justify-content:center;
+  border:1px dashed var(--c-border); border-radius:4px; margin-top:6px;
+  color:var(--c-muted); font-size:11px; font-style:italic;
+}
+
+/* ── PO pending filter ─────────────────────────── */
+.po-filter-pending {
+  opacity:0.55; pointer-events:none;
+}
+.po-filter-pending .slicer-select {
+  cursor:not-allowed; border-style:dashed;
+}
 </style>
 </head>
 <body>
@@ -1365,6 +1441,23 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
           Governed = Official reporting &amp; compensation<br>
           Operating Baselines = Analysis only (rolling window)
         </div>
+      </div>
+
+      <!-- PO Filter — Pending Decision (Change 10) -->
+      <hr class="panel-sep">
+      <div class="po-filter-pending">
+        <span class="slicer-label" style="display:flex;align-items:center;gap:5px;">
+          PO Filter
+          <span style="font-size:9px;background:rgba(245,165,52,0.18);color:#B45309;border-radius:3px;padding:1px 5px;font-weight:700;">⚠ Pending Decision</span>
+        </span>
+        <div style="font-size:9.5px;color:var(--c-muted);margin-top:4px;line-height:1.45;">
+          Filter scope (ALL POs vs ≥ GS threshold only) is pending client alignment. Available after Kris Van Deursen sign-off on tiered minimum PO rule.
+        </div>
+        <select class="slicer-select" style="margin-top:6px;" disabled>
+          <option>All POs (default)</option>
+          <option>GS-qualified POs only</option>
+          <option>Custom threshold</option>
+        </select>
       </div>
 
     </div><!-- /gs-sidebar-content -->
@@ -1946,7 +2039,7 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
           </table>
         </div>
         <div class="note-box" style="margin-top:8px;line-height:1.7;">
-          <strong>Included:</strong> Replenishable products · ≥10 historical runs · SAP future POs. &nbsp;
+          <strong>Included:</strong> Replenishable products · GS min PO threshold (weekly ≥10 · monthly ≥6 · quarterly ≥4) · SAP future POs. &nbsp;
           <strong>Excluded:</strong> NPLs · Line trials (7th digit R) · China rec (7th digit C) · Z-variants. &nbsp;
           <strong>Formula:</strong> Impact $ = (PO Qty ÷ RS GAP UPM) ÷ 60 × People × Labor Cost/Hr. &nbsp;
           <strong>Confidence:</strong> 🟢 High (30+ runs) · 🟡 Medium (10–29) · 🔴 Low (&lt;10 runs).
@@ -2535,10 +2628,19 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
         </div>
       </div>
       <div class="card">
-        <span class="card-title">OEE — Monthly Trend</span>
+        <div class="card-header-row">
+          <span class="card-title">OEE — Monthly Trend</span>
+          <div class="view-as-wrap">
+            <span class="view-as-label">View as:</span>
+            <select class="view-as-select" onchange="switchOEEResView(this.value)">
+              <option value="single">Single resource</option>
+              <option value="two">Two resources</option>
+            </select>
+          </div>
+        </div>
         <div class="card-subtitle">OEE % vs. best demonstrated (GS) and reference (RS). Note: OEE varies by PO size; use PO size slicer for fair comparison.</div>
         <div class="chart-wrap" style="height:220px;"><canvas id="ch-oee-res"></canvas></div>
-        <div class="legend-row">
+        <div class="legend-row" id="oee-res-legend">
           <span class="legend-item"><span class="leg-line actual"></span> Actual OEE%</span>
           <span class="legend-item"><span class="leg-line gs"></span> GS (best demonstrated)</span>
           <span class="legend-item"><span class="leg-line rs"></span> RS (reference)</span>
@@ -2566,7 +2668,7 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
         <div class="kpi-card">
           <span class="kpi-label">High-Confidence Predictions</span>
           <span class="kpi-value" id="oee-pred-conf-pct" style="color:var(--c-gs);">—</span>
-          <span class="kpi-delta pos">≥10 historical POs per SKU-Line</span>
+          <span class="kpi-delta pos">Min PO threshold: weekly ≥10 · monthly ≥6 · quarterly ≥4</span>
         </div>
       </div>
 
@@ -2614,7 +2716,7 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
 
       <!-- Data Quality & Scope Notes -->
       <div class="note-box" style="line-height:1.7;">
-        <strong>✅ Included:</strong> Non-NPL · Non-line-trial (7th digit ≠ R) · Non-China-rec (7th digit ≠ C) · ≥10 historical POs per SKU × Resource. &nbsp;
+        <strong>✅ Included:</strong> Non-NPL · Non-line-trial (7th digit ≠ R) · Non-China-rec (7th digit ≠ C) · GS min PO threshold (weekly ≥10 · monthly ≥6 · quarterly ≥4) per SKU × Resource. &nbsp;
         <strong style="color:#D97706;">⚠ Data Quality Flags:</strong> If a line trial was run on a different Resource than the future PO's assigned line, a warning will appear in the UI. &nbsp;
         <strong style="color:#D97706;">⚠ Pending:</strong> ML / multivariate regression model (scope TBD with data science team). Labour cost uses SAP plant FY rate. Gold Standard time frame (FY vs rolling) pending client confirmation. &nbsp;
         <strong>Formula:</strong> Predicted GAP $ = (GS OEE% − Predicted OEE%) × Labour Hrs/1000u × (Vol ÷ 1000) × Plant Rate.
@@ -2625,11 +2727,23 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
     <div id="cnt-oee-gap" class="kpi-cnt">
       <div class="sec-heading">⚙️ OEE — Gap Analysis ($)</div>
       <div class="gs-type-badge governed" style="align-self:flex-start;margin-bottom:8px;">
-        🔒 GS OEE = P75 of ≥10 qualified POs per Family × Resource | FY25 locked baseline &nbsp;·&nbsp; ⚠ Silver/Bronze thresholds configurable — pending confirmation from Kris Van Deursen
+        🔒 GS OEE = P75 of qualified POs per Family × Resource (weekly ≥10 · monthly ≥6 · quarterly ≥4) | FY25 locked baseline &nbsp;·&nbsp; ⚠ Silver/Bronze thresholds configurable — pending confirmation from Kris Van Deursen
       </div>
 
       <!-- ── KPI Summary Cards (KPI 3 & 4) ── -->
-      <div class="kpi-row">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <span style="font-size:11px;font-weight:700;color:var(--c-text);">📊 Summary — GS OEE vs Actual</span>
+        <div class="view-as-wrap">
+          <span class="view-as-label">Resource view:</span>
+          <select class="view-as-select" onchange="switchGapCardsView(this.value)">
+            <option value="1">1 resource (cards)</option>
+            <option value="2">2 resources (comparison table)</option>
+            <option value="3">3+ resources (scrollable table)</option>
+          </select>
+        </div>
+      </div>
+      <!-- 1-resource card view (default) -->
+      <div id="gap-cards-single" class="kpi-row">
         <div class="kpi-card">
           <span class="kpi-label">GS OEE % (P75 Benchmark)</span>
           <span class="kpi-value" style="color:var(--c-gs);">92.1 <small>%</small></span>
@@ -2651,39 +2765,80 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
           <span class="kpi-delta neg">Selected filters · YTD</span>
         </div>
       </div>
+      <!-- 2-resource comparison table (hidden by default) -->
+      <div id="gap-cards-multi" style="display:none;" class="card" style="padding:10px;">
+        <div class="tbl-wrap">
+          <table class="gs-tbl" style="width:100%;">
+            <thead><tr>
+              <th>Resource</th>
+              <th class="r" style="color:var(--c-gs);">GS OEE %</th>
+              <th class="r">Actual OEE %</th>
+              <th class="r" style="color:var(--c-neg);">GS GAP %</th>
+              <th class="r" style="color:var(--c-neg);">GS GAP $ Impact</th>
+            </tr></thead>
+            <tbody id="tb-gap-cards-multi">
+              <tr style="cursor:pointer;" onclick="filterGapByResource('L67')" title="Click to filter charts to L67">
+                <td><strong>L67</strong> <span style="font-size:9px;color:var(--c-muted);">(click to filter)</span></td>
+                <td class="r" style="color:var(--c-gs);">92.1%</td>
+                <td class="r">84.6%</td>
+                <td class="r" style="color:var(--c-neg);">7.5%</td>
+                <td class="r" style="color:var(--c-neg);">$16.2K</td>
+              </tr>
+              <tr style="cursor:pointer;" onclick="filterGapByResource('L68')" title="Click to filter charts to L68">
+                <td><strong>L68</strong> <span style="font-size:9px;color:var(--c-muted);">(click to filter)</span></td>
+                <td class="r" style="color:var(--c-gs);">88.2%</td>
+                <td class="r">79.4%</td>
+                <td class="r" style="color:var(--c-neg);">8.8%</td>
+                <td class="r" style="color:var(--c-neg);">$13.3K</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size:9.5px;color:var(--c-muted);margin-top:4px;">ℹ Click a row to filter all charts on this tab to that resource.</div>
+      </div>
 
-      <!-- ── Tier Summary (KPI 5) ── -->
+      <!-- ── Tier Summary (KPI 5) — Unified SKU-level tier ── -->
       <div style="display:flex;align-items:baseline;justify-content:space-between;margin:4px 0 6px;">
-        <span style="font-size:13px;font-weight:700;color:var(--c-text);">🏆 Performance Tier Distribution</span>
-        <span style="font-size:10px;color:var(--c-muted);">Gold = P75 (confirmed) · Silver = P50 · Bronze = P25 (⚠ pending client sign-off)</span>
+        <span style="font-size:13px;font-weight:700;color:var(--c-text);">🏆 Performance Tier Distribution — Unified SKU Tier</span>
+        <span style="font-size:10px;color:var(--c-muted);">Composite tier = dollarized total gap across Speed + OEE + Labour + Scrap · Gold = P75 confirmed · Silver/Bronze thresholds ⚠ pending Kris Van Deursen sign-off</span>
       </div>
       <div class="kpi-row">
-        <div class="kpi-card" style="border-left:3px solid #155724;">
-          <span class="kpi-label">🟢 Gold POs (≥ P75 OEE)</span>
-          <span class="kpi-value" style="color:#155724;" id="oee-tier-gold-cnt">7</span>
-          <span class="kpi-delta pos">At or above GS benchmark</span>
+        <div class="kpi-card" style="border-left:3px solid #B8860B;cursor:pointer;" onclick="showTierPopup('Gold')" title="Click to see top contributors">
+          <span class="kpi-label">🥇 GOLD SKUs <span style="font-size:9px;opacity:.6;">(click for detail)</span></span>
+          <span class="kpi-value" style="color:#B8860B;" id="oee-tier-gold-cnt">5 SKUs</span>
+          <span class="kpi-delta pos">Total $ gap below P75 threshold</span>
         </div>
-        <div class="kpi-card" style="border-left:3px solid #856404;">
-          <span class="kpi-label">🟡 Silver POs (P50–P75)</span>
-          <span class="kpi-value" style="color:#856404;" id="oee-tier-silver-cnt">6</span>
-          <span class="kpi-delta" style="color:#856404;">Moderate gap · improvement target</span>
+        <div class="kpi-card" style="border-left:3px solid #78909C;cursor:pointer;" onclick="showTierPopup('Silver')" title="Click to see top contributors">
+          <span class="kpi-label">🥈 SILVER SKUs <span style="font-size:9px;opacity:.6;">(click for detail)</span></span>
+          <span class="kpi-value" style="color:#78909C;" id="oee-tier-silver-cnt">7 SKUs</span>
+          <span class="kpi-delta" style="color:#78909C;">Moderate combined gap · improvement target</span>
         </div>
-        <div class="kpi-card" style="border-left:3px solid #721c24;">
-          <span class="kpi-label">🔴 Bronze POs (&lt; P50)</span>
-          <span class="kpi-value" style="color:#721c24;" id="oee-tier-bronze-cnt">3</span>
-          <span class="kpi-delta neg">High gap · priority action</span>
+        <div class="kpi-card" style="border-left:3px solid #8D6E63;cursor:pointer;" onclick="showTierPopup('Bronze')" title="Click to see top contributors">
+          <span class="kpi-label">🥉 BRONZE SKUs <span style="font-size:9px;opacity:.6;">(click for detail)</span></span>
+          <span class="kpi-value" style="color:#8D6E63;" id="oee-tier-bronze-cnt">4 SKUs</span>
+          <span class="kpi-delta neg">Highest combined gap · priority action</span>
         </div>
-        <div class="kpi-card" style="border-left:3px dashed var(--c-muted);opacity:0.7;">
-          <span class="kpi-label">Total GS GAP $ — Bronze</span>
-          <span class="kpi-value" style="color:var(--c-neg);" id="oee-tier-bronze-usd">$19.8K</span>
-          <span class="kpi-delta neg">Highest priority for recovery</span>
+        <div class="kpi-card" style="border-left:3px dashed var(--c-muted);">
+          <span class="kpi-label">Total GS GAP $ — Bronze SKUs</span>
+          <span class="kpi-value" style="color:var(--c-neg);" id="oee-tier-bronze-usd">$48.3K</span>
+          <span class="kpi-delta neg">Speed + OEE + Labour + Scrap combined</span>
         </div>
       </div>
 
-      <!-- ── Charts (KPI 3 & 5) ── -->
+      <!-- ── Charts (KPI 3) ── -->
       <div class="charts-grid">
         <div class="card">
-          <span class="card-title">GS OEE % vs Actual OEE % by SKU</span>
+          <div class="card-header-row">
+            <span class="card-title">GS OEE % vs Actual OEE % by SKU</span>
+            <div class="view-as-wrap">
+              <span class="view-as-label">View as:</span>
+              <select class="view-as-select" onchange="switchGapBarView(this.value)">
+                <option value="sku">By SKU</option>
+                <option value="family">By Family</option>
+                <option value="resource">By Resource</option>
+              </select>
+            </div>
+          </div>
           <div class="card-subtitle">Grouped by Family. Gap = GS − Actual. Formula: OEE % = (Ideal Time ÷ Actual Time) × 100.</div>
           <div class="chart-wrap" style="height:210px;"><canvas id="ch-oee-gap-bar"></canvas></div>
           <div class="legend-row">
@@ -2692,15 +2847,20 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
           </div>
         </div>
         <div class="card">
-          <span class="card-title">GS GAP % Trend over Time</span>
-          <div class="card-subtitle">GS GAP % = GS OEE − Actual OEE. Aggregated by summing raw It / At totals — never averaged.</div>
+          <div class="card-header-row">
+            <span class="card-title">GS GAP % Trend over Time</span>
+            <div class="view-as-wrap">
+              <span class="view-as-label">View as:</span>
+              <select class="view-as-select" onchange="switchGapTrendView(this.value)">
+                <option value="all">All SKUs (aggregate)</option>
+                <option value="top3">Top 3 SKUs</option>
+                <option value="family">By Family</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-subtitle">GS GAP % = GS OEE − Actual OEE. Aggregated by summing raw It / At totals — never averaged. Dashed line = GS benchmark.</div>
           <div class="chart-wrap" style="height:210px;"><canvas id="ch-oee-gap-trend"></canvas></div>
         </div>
-      </div>
-      <div class="card">
-        <span class="card-title">OEE Tier Distribution by Family</span>
-        <div class="card-subtitle">Count of POs per Gold / Silver / Bronze tier, grouped by Product Family. ⚠ Silver &amp; Bronze thresholds are configurable — not final.</div>
-        <div class="chart-wrap" style="height:200px;"><canvas id="ch-oee-tier"></canvas></div>
       </div>
 
       <!-- ── Deep-Dive Table (KPIs 3, 4, 5, 6) ── -->
@@ -2729,9 +2889,65 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
         </div>
         <div class="note-box" style="margin-top:8px;line-height:1.7;">
           <strong>Formula:</strong> OEE% = (It ÷ At) × 100 where It = Setup + (PO QTY ÷ Cs ÷ 60), At = Actual Setup + (PO QTY ÷ As ÷ 60). &nbsp;
-          <strong>GS Formula:</strong> GS OEE = P75 of ≥10 qualified POs per Family × Resource (never average OEE%). &nbsp;
+          <strong>GS Formula:</strong> GS OEE = P75 of qualified POs per Family × Resource (min: weekly ≥10 · monthly ≥6 · quarterly ≥4; never average OEE%). &nbsp;
           <strong>$ Formula:</strong> GS GAP $ = (GS OEE% − Actual OEE%) × Labour Hrs/1000u × (PO QTY ÷ 1000) × Plant Labour Rate. &nbsp;
-          <strong>Excluded:</strong> NPLs · Line trials · China rec variants · Z-variants · Families with &lt;10 POs.
+          <strong>Excluded:</strong> NPLs · Line trials · China rec variants · Z-variants · Families below GS minimum PO threshold.
+        </div>
+      </div>
+
+      <!-- ── Placeholder KPI Cards (Change 8) ── -->
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin:14px 0 6px;">
+        <span style="font-size:12px;font-weight:700;color:var(--c-text);">🔜 Additional KPI Modules — Coming Next</span>
+        <span style="font-size:10px;color:var(--c-muted);">Scope pending confirmation · Not included in current GAP calculation</span>
+      </div>
+      <div class="kpi-row" style="align-items:stretch;">
+        <div class="placeholder-card">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;font-weight:700;">🔧 Line Mechanical Downtime</span>
+            <span class="placeholder-badge unavailable">Data Unavailable</span>
+          </div>
+          <div style="font-size:10.5px;color:var(--c-muted);margin-bottom:8px;">Unplanned mechanical stoppages per line · minutes lost per PO · trend vs GS benchmark</div>
+          <div class="placeholder-filters">
+            <span>Line</span><span>Date Range</span><span>Downtime Type</span>
+          </div>
+          <div class="placeholder-timeframes">
+            <span>Rolling 13 weeks</span><span>FY-to-date</span>
+          </div>
+          <div class="placeholder-content-area">
+            <span style="font-size:10px;color:var(--c-muted);">SAP PM data feed not yet connected · Power BI binding TBD with Alena Shmeleva</span>
+          </div>
+        </div>
+        <div class="placeholder-card">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;font-weight:700;">⏱ Setup &amp; Changeover Time</span>
+            <span class="placeholder-badge pending">Pending Decision</span>
+          </div>
+          <div style="font-size:10.5px;color:var(--c-muted);margin-bottom:8px;">Avg setup time per SKU × Line · actual vs GS setup standard · reduction opportunity $</div>
+          <div class="placeholder-filters">
+            <span>Line</span><span>SKU Family</span><span>PO Size Bucket</span>
+          </div>
+          <div class="placeholder-timeframes">
+            <span>Rolling 13 weeks</span><span>FY-to-date</span>
+          </div>
+          <div class="placeholder-content-area">
+            <span style="font-size:10px;color:var(--c-muted);">GS setup standard definition pending client workshop (Kris Van Deursen) · metric scope TBD</span>
+          </div>
+        </div>
+        <div class="placeholder-card">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;font-weight:700;">💡 Recommendations Engine</span>
+            <span class="placeholder-badge pending">In Design</span>
+          </div>
+          <div style="font-size:10.5px;color:var(--c-muted);margin-bottom:8px;">Auto-generated improvement actions ranked by ROI · linked to specific PO gaps · owner assignment</div>
+          <div class="placeholder-filters">
+            <span>Priority Tier</span><span>Owner</span><span>Status</span>
+          </div>
+          <div class="placeholder-timeframes">
+            <span>Open actions</span><span>Completed (30d)</span>
+          </div>
+          <div class="placeholder-content-area">
+            <span style="font-size:10px;color:var(--c-muted);">Rules engine design pending · ML model dependency TBD with data science team</span>
+          </div>
         </div>
       </div>
     </div><!-- /cnt-oee-gap -->
@@ -2752,13 +2968,26 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
         </div>
       </div>
       <div class="card">
-        <span class="card-title">PO-Level OEE Detail</span>
+        <div class="card-header-row" style="margin-bottom:6px;">
+          <span class="card-title">PO-Level OEE Detail</span>
+          <div class="view-as-wrap">
+            <span class="view-as-label">Filter PO by:</span>
+            <select class="view-as-select" onchange="filterDVOEETable(this.value)">
+              <option value="all">All POs</option>
+              <option value="Small">Small POs</option>
+              <option value="Medium">Medium POs</option>
+              <option value="Large">Large POs</option>
+            </select>
+          </div>
+        </div>
         <div class="tbl-wrap">
           <table class="gs-tbl">
             <thead>
               <tr>
-                <th>PO Number</th><th>SKU</th><th>Resource</th><th>PO Size Bucket</th>
+                <th>PO Number</th>
                 <th class="r">PO Qty</th>
+                <th class="r">Avg SKU PO Qty</th>
+                <th>SKU</th><th>Resource</th><th>PO Size Bucket</th>
                 <th class="r">Actual OEE %</th>
                 <th class="r">GS OEE %</th>
                 <th class="r">Gap $ (lost throughput)</th>
@@ -2779,8 +3008,27 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
 
         <!-- LEFT: simulation parameters -->
         <div class="card" style="padding:16px;">
-          <span class="card-title" style="margin-bottom:10px;display:block;">🎛 Simulation Parameters</span>
+          <div class="card-header-row" style="margin-bottom:6px;">
+            <span class="card-title">🎛 Simulation Parameters</span>
+            <div class="view-as-wrap">
+              <span class="view-as-label">Load baseline from:</span>
+              <select class="view-as-select" id="oeewi-baseline-src" onchange="switchWhatIfBaseline(this.value)">
+                <option value="current">Current average OEE</option>
+                <option value="historical">Historical PO</option>
+              </select>
+            </div>
+          </div>
           <div class="card-subtitle" style="margin-bottom:12px;">Adjust inputs to simulate OEE improvement savings. Headcount is unreliable from SAP — use Labour Hrs/1000u as the primary efficiency proxy.</div>
+
+          <!-- Historical PO slicer — shown only when baseline = Historical PO -->
+          <div id="oeewi-hist-po-wrap" style="display:none;background:var(--c-panel);border:1px solid var(--c-border);border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+            <div style="font-size:11px;font-weight:700;color:var(--c-text);margin-bottom:6px;">📋 Select Historical PO</div>
+            <select id="oeewi-hist-po-select" class="view-as-select" style="width:100%;padding:5px 8px;font-size:11px;"
+                    onchange="renderWhatIfHistPO(this.value)">
+              <option value="">— Select a PO —</option>
+            </select>
+            <div id="oeewi-hist-po-meta" style="font-size:10px;color:var(--c-muted);margin-top:6px;line-height:1.6;"></div>
+          </div>
 
           <div style="display:flex;flex-direction:column;gap:12px;">
             <div>
@@ -4074,10 +4322,26 @@ function renderDVLabor() {
     <td class="r c-neg">${fmt(r.gapUSD)}</td>
   </tr>`).join('');
 }
+// Compute avg PO qty per SKU across PO_OEE (used for "Avg SKU PO Quantity" column)
+function getAvgSkuQty(sku) {
+  const rows = PO_OEE.filter(r => r.sku === sku);
+  if (!rows.length) return 0;
+  return Math.round(rows.reduce((s, r) => s + r.poQty, 0) / rows.length);
+}
+
+let _dvOeeFilter = 'all';
+function filterDVOEETable(val) {
+  _dvOeeFilter = val;
+  renderDVOEE();
+}
+
 function renderDVOEE() {
-  $$('tb-dv-oee').innerHTML = PO_OEE.map(r=>`<tr>
-    <td>${r.po}</td><td>${r.sku}</td><td>${r.res}</td><td>${r.poSz}</td>
+  const rows = _dvOeeFilter === 'all' ? PO_OEE : PO_OEE.filter(r => r.poSz === _dvOeeFilter);
+  $$('tb-dv-oee').innerHTML = rows.map(r => `<tr>
+    <td>${r.po}</td>
     <td class="r">${fmtN(r.poQty)}</td>
+    <td class="r">${fmtN(getAvgSkuQty(r.sku))}</td>
+    <td>${r.sku}</td><td>${r.res}</td><td>${r.poSz}</td>
     <td class="r">${r.actual}%</td><td class="r">${r.gs}%</td>
     <td class="r c-neg">${fmt(r.gapUSD)}</td>
   </tr>`).join('');
@@ -4089,6 +4353,204 @@ function renderDVScrap() {
     <td class="r">${r.fixed}</td><td class="r">${r.variable}</td>
     <td class="r c-neg">${fmt(r.totalUSD)}</td>
   </tr>`).join('');
+}
+
+/* ─── VIEW-AS SCENARIO SWITCHERS ─────────────────────── */
+
+function switchOEEResView(val) {
+  if (!REG['ch-oee-res']) return;
+  const ch = REG['ch-oee-res'];
+  if (val === 'two') {
+    ch.data.datasets[0].label = 'L67 — Actual OEE%';
+    ch.data.datasets[1].label = 'L67 — GS OEE%';
+    ch.data.datasets.splice(2, 0, {
+      label:'L68 — Actual OEE%', type:'line',
+      data:[58,60,61,59,62,60,63,59], borderColor:CC.purple, backgroundColor:'transparent',
+      tension:.35, pointRadius:3, borderDash:[4,4]
+    });
+  } else {
+    ch.data.datasets = ch.data.datasets.slice(0,2);
+    ch.data.datasets[0].label = 'Actual OEE%';
+    ch.data.datasets[1].label = 'GS OEE%';
+  }
+  ch.update();
+}
+
+function switchGapCardsView(val) {
+  const single = $$('gap-cards-single');
+  const multi  = $$('gap-cards-multi');
+  if (!single || !multi) return;
+  single.style.display = val === '1' ? '' : 'none';
+  multi.style.display  = val !== '1' ? '' : 'none';
+}
+
+function filterGapByResource(res) {
+  if (!REG['ch-oee-gap-bar']) return;
+  const ch = REG['ch-oee-gap-bar'];
+  const allLabels  = OEE_BY_SKU.labels;
+  const allActual  = OEE_BY_SKU.actual;
+  const allGs      = OEE_BY_SKU.gs;
+  const resMap = {L67:[0,1,2], L68:[3,4], L72:[5,6]};
+  const idxs = resMap[res] || allLabels.map((_,i)=>i);
+  ch.data.labels        = idxs.map(i=>allLabels[i]);
+  ch.data.datasets[0].data = idxs.map(i=>allActual[i]);
+  ch.data.datasets[1].data = idxs.map(i=>allGs[i]);
+  ch.update();
+}
+
+function switchGapBarView(val) {
+  if (!REG['ch-oee-gap-bar']) return;
+  const ch = REG['ch-oee-gap-bar'];
+  if (val === 'family') {
+    ch.data.labels = ['Mascara','Foundation','Serum','Cleanser','Moisturizer'];
+    ch.data.datasets[0].data = [59.0,65.2,61.8,56.4,70.1];
+    ch.data.datasets[1].data = [92.1,89.5,88.2,86.7,94.3];
+  } else if (val === 'resource') {
+    ch.data.labels = ['L67','L68','L72'];
+    ch.data.datasets[0].data = [61.8,60.4,59.2];
+    ch.data.datasets[1].data = [90.8,87.4,90.5];
+  } else {
+    ch.data.labels        = OEE_BY_SKU.labels;
+    ch.data.datasets[0].data = OEE_BY_SKU.actual;
+    ch.data.datasets[1].data = OEE_BY_SKU.gs;
+  }
+  ch.update();
+}
+
+function switchGapTrendView(val) {
+  if (!REG['ch-oee-gap-trend']) return;
+  const ch = REG['ch-oee-gap-trend'];
+  if (val === 'top3') {
+    ch.data.datasets = [
+      {label:'SKU-401 Cleanser',type:'line',data:[10.2,13.8,9.5,15.1,11.2,12.5,9.1,14.3],borderColor:CC.neg,fill:false,tension:.35,pointRadius:3},
+      {label:'SKU-102 Mascara', type:'line',data:[8.5,11.2,7.8,13.0,9.1,10.5,7.3,11.9],borderColor:CC.actual,fill:false,tension:.35,pointRadius:3},
+      {label:'SKU-301 Serum',   type:'line',data:[6.1,9.5,6.2,11.4,7.8,9.4,6.1,10.1],borderColor:CC.purple,fill:false,tension:.35,pointRadius:3},
+      {label:'GS Benchmark',type:'line',data:[5,5,5,5,5,5,5,5],borderColor:CC.gs,borderDash:[6,4],pointRadius:0,fill:false,borderWidth:1.5}
+    ];
+  } else if (val === 'family') {
+    ch.data.datasets = [
+      {label:'Mascara',    type:'line',data:[8.1,11.2,7.5,12.8,9.0,10.4,7.2,11.8],borderColor:CC.actual,fill:false,tension:.35,pointRadius:3},
+      {label:'Foundation', type:'line',data:[7.2,10.1,6.8,11.5,8.2,9.8,6.5,10.9],borderColor:CC.blue,fill:false,tension:.35,pointRadius:3},
+      {label:'Serum',      type:'line',data:[9.1,12.5,8.4,13.9,10.1,11.5,8.2,13.0],borderColor:CC.purple,fill:false,tension:.35,pointRadius:3},
+      {label:'GS Benchmark',type:'line',data:[5,5,5,5,5,5,5,5],borderColor:CC.gs,borderDash:[6,4],pointRadius:0,fill:false,borderWidth:1.5}
+    ];
+  } else {
+    ch.data.datasets = [
+      {label:'GS GAP %',type:'line',data:OEE_GAP_TREND_DATA,borderColor:CC.neg,fill:false,tension:.35,pointRadius:4,pointBackgroundColor:CC.neg,borderWidth:2},
+      {label:'GS Benchmark',type:'line',data:OEE_GAP_TREND_DATA.map(()=>5),borderColor:CC.gs,borderDash:[6,4],pointRadius:0,fill:false,borderWidth:1.5}
+    ];
+  }
+  ch.update();
+}
+
+/* ─── TIER POPUP (Change 3) ──────────────────────────── */
+
+const UNIFIED_TIER_DATA = {
+  Gold: [
+    {sku:'SKU-201 Foundation - Liquid',   family:'Foundation',res:'L67',speed:800,oee:600,labour:400,scrap:200},
+    {sku:'SKU-101 Mascara - Multi-purpose',family:'Mascara',  res:'L67',speed:700,oee:550,labour:350,scrap:150},
+    {sku:'SKU-501 Moisturizer SPF30',      family:'Moisturizer',res:'L72',speed:600,oee:500,labour:300,scrap:100},
+    {sku:'SKU-302 Serum Brightening',      family:'Serum',    res:'L68',speed:500,oee:450,labour:250,scrap:90},
+    {sku:'SKU-601 Cleanser Gentle',        family:'Cleanser', res:'L68',speed:450,oee:400,labour:200,scrap:80},
+  ],
+  Silver: [
+    {sku:'SKU-102 Mascara Multi',family:'Mascara',  res:'L67',speed:2100,oee:1800,labour:1200,scrap:500},
+    {sku:'SKU-401 Cleanser Foam',family:'Cleanser', res:'L72',speed:2000,oee:1700,labour:1100,scrap:450},
+    {sku:'SKU-301 Serum Anti-age',family:'Serum',   res:'L68',speed:1800,oee:1500,labour:1000,scrap:400},
+    {sku:'SKU-202 Foundation Matte',family:'Foundation',res:'L67',speed:1600,oee:1400,labour:900,scrap:350},
+    {sku:'SKU-502 Moisturizer Night',family:'Moisturizer',res:'L72',speed:1500,oee:1300,labour:800,scrap:300},
+    {sku:'SKU-303 Serum Vitamin C',family:'Serum',  res:'L68',speed:1400,oee:1200,labour:700,scrap:250},
+    {sku:'SKU-602 Cleanser Exfol', family:'Cleanser',res:'L68',speed:1300,oee:1100,labour:600,scrap:200},
+  ],
+  Bronze: [
+    {sku:'SKU-401 Cleanser Foaming',family:'Cleanser',res:'L72',speed:5800,oee:4900,labour:3200,scrap:1800},
+    {sku:'SKU-102 Mascara Multi-p', family:'Mascara', res:'L67',speed:5200,oee:4300,labour:2800,scrap:1500},
+    {sku:'SKU-301 Serum Anti-aging',family:'Serum',   res:'L68',speed:4800,oee:3900,labour:2400,scrap:1200},
+    {sku:'SKU-101 Mascara Multi-p', family:'Mascara', res:'L67',speed:4200,oee:3500,labour:2000,scrap:900},
+  ]
+};
+
+function tierBadgeKPI(val) {
+  const col = val > 3000 ? CC.neg : val > 1500 ? CC.yellow : CC.gs;
+  return `<span style="font-size:10px;background:${col}22;color:${col};border:1px solid ${col}55;border-radius:10px;padding:1px 6px;">${fmt(val)}</span>`;
+}
+
+function showTierPopup(tier) {
+  const colors = {Gold:'#B8860B', Silver:'#78909C', Bronze:'#8D6E63'};
+  const icons  = {Gold:'🥇', Silver:'🥈', Bronze:'🥉'};
+  const col = colors[tier] || 'var(--c-text)';
+  $$('tier-modal-title').textContent = `${icons[tier]||''} ${tier.toUpperCase()} SKUs — Top Contributors`;
+  $$('tier-modal-title').style.color = col;
+  const rows = (UNIFIED_TIER_DATA[tier] || []).slice(0,10);
+  $$('tb-tier-modal').innerHTML = rows.map(r => {
+    const total = r.speed + r.oee + r.labour + r.scrap;
+    return `<tr>
+      <td>${r.sku}</td>
+      <td>${r.family}</td>
+      <td>${r.res}</td>
+      <td class="r">${tierBadgeKPI(r.speed)}</td>
+      <td class="r">${tierBadgeKPI(r.oee)}</td>
+      <td class="r">${tierBadgeKPI(r.labour)}</td>
+      <td class="r">${tierBadgeKPI(r.scrap)}</td>
+      <td class="r" style="font-weight:700;color:${col};">${fmt(total)}</td>
+      <td style="text-align:center;">${oeeTierBadge(r.speed > 3000 ? 'Bronze' : r.speed > 1500 ? 'Silver' : 'Gold')}</td>
+      <td style="text-align:center;">${oeeTierBadge(r.oee   > 3000 ? 'Bronze' : r.oee   > 1500 ? 'Silver' : 'Gold')}</td>
+      <td style="text-align:center;">${oeeTierBadge(r.labour > 2000 ? 'Bronze' : r.labour > 1000 ? 'Silver' : 'Gold')}</td>
+      <td style="text-align:center;">${oeeTierBadge(r.scrap  > 1000 ? 'Bronze' : r.scrap  > 500  ? 'Silver' : 'Gold')}</td>
+    </tr>`;
+  }).join('');
+  $$('tier-modal-overlay').classList.add('open');
+}
+
+function closeTierPopup() {
+  $$('tier-modal-overlay').classList.remove('open');
+}
+
+/* ─── WHAT-IF BASELINE SWITCHER (Changes 1 & 7) ─────── */
+
+const HIST_POS_WHATIF = [
+  {id:'PO-2026-003',label:'PO-2026-003 · Foundation L67 · 120,000u',  oee:71, lh1k:2.8, rate:35, qty:120000},
+  {id:'PO-2026-001',label:'PO-2026-001 · Mascara L67 · 55,000u',       oee:62, lh1k:3.2, rate:35, qty:55000},
+  {id:'PO-2026-004',label:'PO-2026-004 · Serum L68 · 48,000u',         oee:58, lh1k:3.5, rate:38, qty:48000},
+  {id:'PO-2026-002',label:'PO-2026-002 · Mascara L67 · 22,000u (Small)',oee:54, lh1k:3.8, rate:35, qty:22000},
+  {id:'PO-2026-005',label:'PO-2026-005 · Cleanser L72 · 18,000u (Small)',oee:49, lh1k:4.1, rate:42, qty:18000},
+];
+
+function switchWhatIfBaseline(val) {
+  const wrap = $$('oeewi-hist-po-wrap');
+  if (!wrap) return;
+  if (val === 'historical') {
+    wrap.style.display = '';
+    const sel = $$('oeewi-hist-po-select');
+    if (sel && !sel.options.length || sel.options[0].value === '') {
+      sel.innerHTML = '<option value="">— Select a PO —</option>' +
+        HIST_POS_WHATIF.map(p => `<option value="${p.id}">${p.label}</option>`).join('');
+    }
+  } else {
+    wrap.style.display = 'none';
+    $$('oeewi-hist-po-meta').textContent = '';
+  }
+}
+
+function renderWhatIfHistPO(poId) {
+  if (!poId) return;
+  const po = HIST_POS_WHATIF.find(p => p.id === poId);
+  if (!po) return;
+  const oeeSlider = $$('oeewi-target-oee');
+  const lhInput   = $$('oeewi-lh-1k');
+  const rateInput = $$('oeewi-rate');
+  const qtyInput  = $$('oeewi-qty');
+  const baseLbl   = $$('oeewi-base-label');
+  if (oeeSlider) oeeSlider.value = 80;
+  if (lhInput)   lhInput.value   = po.lh1k;
+  if (rateInput) rateInput.value = po.rate;
+  if (qtyInput)  qtyInput.value  = po.qty;
+  if (baseLbl)   baseLbl.textContent = `PO baseline: ${po.oee}%`;
+  $$('oeewi-hist-po-meta').innerHTML =
+    `<strong>PO:</strong> ${po.id} &nbsp;·&nbsp; <strong>Actual OEE:</strong> ${po.oee}% &nbsp;·&nbsp;` +
+    `<strong>LH/1k:</strong> ${po.lh1k} &nbsp;·&nbsp; <strong>Rate:</strong> $${po.rate}/hr &nbsp;·&nbsp;` +
+    `<strong>Qty:</strong> ${fmtN(po.qty)} units`;
+  updateOEEWhatIf();
 }
 
 /* ─── OEE MODULE ─────────────────────────────────────── */
@@ -4121,62 +4583,89 @@ function initOEEGapCharts() {
     }
   });
 
-  // GAP % trend line
+  // GAP % trend line — no fill, GS benchmark dashed line (Change 4)
   init('ch-oee-gap-trend', {
     type: 'line',
     data: {
       labels: OEE_GAP_MONTHS,
       datasets: [
-        { label: 'GS GAP %', data: OEE_GAP_TREND_DATA, borderColor: CC.neg, backgroundColor: CC.neg+'22', tension: 0.35, fill: true, pointRadius: 4 },
-        { label: 'Target (0% gap)', data: Array(8).fill(0), borderColor: CC.gs, borderDash: [6,3], tension: 0, pointRadius: 0 },
+        { label: 'GS GAP %', data: OEE_GAP_TREND_DATA, borderColor: CC.neg, backgroundColor: 'transparent', tension: 0.35, fill: false, pointRadius: 4, pointBackgroundColor: CC.neg, borderWidth: 2 },
+        { label: 'GS Benchmark', data: Array(8).fill(5), borderColor: CC.gs, borderDash: [6,4], tension: 0, pointRadius: 0, fill: false, borderWidth: 1.5 },
       ]
     },
     options: { responsive:true, maintainAspectRatio:false,
-      plugins: { legend:{display:false}, tooltip:{backgroundColor:'#fff',borderColor:'rgba(0,0,0,0.15)',borderWidth:1,titleColor:'#1A2B3C',bodyColor:'#4A6580',padding:10} },
-      scales: { x:{grid:{color:CC.grid},ticks:{color:CC.text,font:{size:10}}}, y:{grid:{color:CC.grid},ticks:{color:CC.text,font:{size:10},callback:v=>v+'%'}} }
+      plugins: {
+        legend:{display:true, labels:{color:CC.text, font:{size:10}}},
+        tooltip:{
+          backgroundColor:'#fff', borderColor:'rgba(0,0,0,0.15)', borderWidth:1,
+          titleColor:'#1A2B3C', bodyColor:'#4A6580', padding:10,
+          callbacks:{
+            label: ctx => {
+              if (ctx.dataset.label === 'GS Benchmark') return 'GS Benchmark: ' + ctx.parsed.y + '%';
+              const gsVal = 5;
+              const diff  = (ctx.parsed.y - gsVal).toFixed(1);
+              return `GAP: ${ctx.parsed.y}% (${diff > 0 ? '+' : ''}${diff}pp vs GS benchmark)`;
+            }
+          }
+        }
+      },
+      scales: { x:{grid:{color:CC.grid},ticks:{color:CC.text,font:{size:10}}}, y:{min:0,grid:{color:CC.grid},ticks:{color:CC.text,font:{size:10},callback:v=>v+'%'}} }
     }
   });
 
-  // Tier distribution donut
-  const gold   = OEE_PO_DEEP.filter(r => r.tier === 'Gold').length;
-  const silver = OEE_PO_DEEP.filter(r => r.tier === 'Silver').length;
-  const bronze = OEE_PO_DEEP.filter(r => r.tier === 'Bronze').length;
-  init('ch-oee-tier', {
-    type: 'doughnut',
-    data: {
-      labels: ['Gold', 'Silver', 'Bronze'],
-      datasets: [{ data: [gold, silver, bronze], backgroundColor: [CC.gold+'cc', CC.silver+'cc', CC.bronze+'cc'], borderWidth: 0 }]
-    },
-    options: { responsive:true, maintainAspectRatio:false, plugins: { legend: { position:'right', labels:{color:CC.text,font:{size:11}} } } }
-  });
-
-  // Update tier count KPI cards
-  const bronzeUSD = OEE_PO_DEEP.filter(r => r.tier === 'Bronze').reduce((s, r) => s + r.impact, 0);
+  // Update unified tier KPI cards (SKU-level, all 4 KPIs composite)
+  const goldSkus   = (UNIFIED_TIER_DATA.Gold   || []).length;
+  const silverSkus = (UNIFIED_TIER_DATA.Silver || []).length;
+  const bronzeSkus = (UNIFIED_TIER_DATA.Bronze || []).length;
+  const bronzeUSD  = (UNIFIED_TIER_DATA.Bronze || []).reduce((s,r) => s + r.speed + r.oee + r.labour + r.scrap, 0);
   const el = (id, v) => { const e = $$(id); if (e) e.textContent = v; };
-  el('oee-tier-gold-cnt',   gold + ' POs');
-  el('oee-tier-silver-cnt', silver + ' POs');
-  el('oee-tier-bronze-cnt', bronze + ' POs');
+  el('oee-tier-gold-cnt',   goldSkus   + ' SKUs');
+  el('oee-tier-silver-cnt', silverSkus + ' SKUs');
+  el('oee-tier-bronze-cnt', bronzeSkus + ' SKUs');
   el('oee-tier-bronze-usd', fmt(bronzeUSD));
 }
 
 function renderOEEGapTable(reset) {
   if (reset) oeeGapOffset = 0;
-  const page = OEE_PO_DEEP.slice(oeeGapOffset, oeeGapOffset + OEE_GAP_PAGE);
-  const tbody = $$(  'tb-oee-gap');
+  const tbody = $$('tb-oee-gap');
   if (!tbody) return;
-  if (oeeGapOffset === 0) tbody.innerHTML = '';
-  tbody.innerHTML += page.map(r => `<tr>
-    <td>${r.res}</td>
-    <td>${r.family}</td>
-    <td>${r.cat}</td>
-    <td>${r.sku}</td>
-    <td>${r.po}</td>
-    <td class="r">${r.oee.toFixed(1)}%</td>
-    <td class="r" style="color:var(--c-gs)">${r.gsOee.toFixed(1)}%</td>
-    <td class="r" style="color:${r.gap > 5 ? 'var(--c-neg)' : 'var(--c-text)'}">${r.gap.toFixed(1)}%</td>
-    <td class="r c-neg">${r.impact > 0 ? fmt(r.impact) : '—'}</td>
-    <td>${oeeTierBadge(r.tier)}</td>
-  </tr>`).join('');
+
+  if (reset) {
+    // Full grouped render sorted by GS GAP $ desc within each family (Change 5)
+    const sorted = [...OEE_PO_DEEP].sort((a, b) => b.impact - a.impact);
+    const families = [...new Set(sorted.map(r => r.family))];
+    let html = '';
+    families.forEach(fam => {
+      const rows = sorted.filter(r => r.family === fam);
+      const famTotal = rows.reduce((s, r) => s + r.impact, 0);
+      html += `<tr class="family-group-hdr"><td colspan="10">${fam} &nbsp;<span style="font-weight:400;opacity:.7;">${rows.length} POs · Total GAP: ${fmt(famTotal)}</span></td></tr>`;
+      rows.forEach(r => {
+        html += `<tr>
+          <td>${r.res}</td>
+          <td>${r.family}</td>
+          <td>${r.cat}</td>
+          <td>${r.sku}</td>
+          <td>${r.po}</td>
+          <td class="r">${r.oee.toFixed(1)}%</td>
+          <td class="r" style="color:var(--c-gs)">${r.gsOee.toFixed(1)}%</td>
+          <td class="r" style="color:${r.gap > 5 ? 'var(--c-neg)' : 'var(--c-text)'}">${r.gap.toFixed(1)}%</td>
+          <td class="r c-neg">${r.impact > 0 ? fmt(r.impact) : '—'}</td>
+          <td>${oeeTierBadge(r.tier)}</td>
+        </tr>`;
+      });
+    });
+    tbody.innerHTML = html;
+  } else {
+    const page = OEE_PO_DEEP.slice(oeeGapOffset, oeeGapOffset + OEE_GAP_PAGE);
+    tbody.innerHTML += page.map(r => `<tr>
+      <td>${r.res}</td><td>${r.family}</td><td>${r.cat}</td><td>${r.sku}</td><td>${r.po}</td>
+      <td class="r">${r.oee.toFixed(1)}%</td>
+      <td class="r" style="color:var(--c-gs)">${r.gsOee.toFixed(1)}%</td>
+      <td class="r" style="color:${r.gap > 5 ? 'var(--c-neg)' : 'var(--c-text)'}">${r.gap.toFixed(1)}%</td>
+      <td class="r c-neg">${r.impact > 0 ? fmt(r.impact) : '—'}</td>
+      <td>${oeeTierBadge(r.tier)}</td>
+    </tr>`).join('');
+  }
   const btn = $$('btn-oee-gap-more');
   if (btn) btn.style.display = (oeeGapOffset + OEE_GAP_PAGE) < OEE_PO_DEEP.length ? '' : 'none';
 }
@@ -6521,6 +7010,36 @@ window.addEventListener('load', () => {
   <div class="chat-input-row">
     <input class="chat-input" id="chat-input" type="text" placeholder="Ask about GS, orders, performance…" onkeydown="if(event.key==='Enter')sendChat()">
     <button class="chat-send" onclick="sendChat()">➤</button>
+  </div>
+</div>
+
+<!-- ── Tier Detail Modal (Change 3) ── -->
+<div class="tier-modal-overlay" id="tier-modal-overlay" onclick="if(event.target===this)closeTierPopup()">
+  <div class="tier-modal">
+    <button class="tier-modal-close" onclick="closeTierPopup()">✕</button>
+    <h3 id="tier-modal-title">🥇 GOLD SKUs — Top 10 Contributors</h3>
+    <div style="font-size:10px;color:var(--c-muted);margin-bottom:12px;">Composite tier = dollarized total gap across Speed + OEE + Labour + Scrap. ⚠ Silver/Bronze thresholds pending Kris Van Deursen sign-off.</div>
+    <div class="tbl-wrap">
+      <table class="gs-tbl">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Family</th>
+            <th>Resource</th>
+            <th class="r">Speed GAP $</th>
+            <th class="r">OEE GAP $</th>
+            <th class="r">Labour GAP $</th>
+            <th class="r">Scrap GAP $</th>
+            <th class="r">Total GAP $</th>
+            <th style="text-align:center;">Speed</th>
+            <th style="text-align:center;">OEE</th>
+            <th style="text-align:center;">Labour</th>
+            <th style="text-align:center;">Scrap</th>
+          </tr>
+        </thead>
+        <tbody id="tb-tier-modal"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 </body>
