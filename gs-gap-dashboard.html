@@ -777,6 +777,20 @@ table.ov-heatmap tbody td.row-hdr {
   padding:4px 14px; border-radius:4px; cursor:pointer;
   font-size:11px; font-weight:600; transition:all .12s;
 }
+
+/* 4-way View By selector */
+.ov-viewby-row {
+  display:inline-flex; align-items:center;
+  border:1.5px solid var(--c-border); border-radius:6px; overflow:hidden;
+}
+.ov-viewby-btn {
+  background:var(--c-card); border:none; border-right:1.5px solid var(--c-border);
+  color:var(--c-muted); padding:6px 14px; cursor:pointer;
+  font-size:11px; font-weight:600; transition:all .12s; white-space:nowrap;
+}
+.ov-viewby-btn:last-child { border-right:none; }
+.ov-viewby-btn.active { background:#0D47A1; color:#fff; }
+.ov-viewby-btn:hover:not(.active) { background:#E3F2FD; color:#0D47A1; }
 .ov-toggle-btn.active { background:#007BFF; color:#fff; }
 
 /* SG status badges */
@@ -844,14 +858,25 @@ table.ov-heatmap tbody td.row-hdr {
 /* =====================================================
    OVERFILL: TOLERANCE PARAMETERS TABLE
    ===================================================== */
+.dv-table { width:100%; border-collapse:collapse; font-size:11px; }
+.dv-table thead th {
+  background:#0D47A1; color:#fff; padding:8px 10px;
+  font-size:10px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.3px; white-space:nowrap; border:1px solid rgba(255,255,255,.1);
+}
+.dv-table tbody td { padding:6px 9px; border:1px solid #E0E4E8; font-size:11px; }
+.dv-table tbody tr:nth-child(even) td { background:#F8F9FA; }
+.dv-table tbody tr:hover td { background:#E3F2FD; }
+
 .tolerance-table { width:100%; border-collapse:collapse; font-size:11px; }
 .tolerance-table thead th {
-  background:#0D3F5C; color:#fff; padding:8px 10px;
+  background:#0D47A1; color:#fff; padding:8px 10px;
   font-size:10px; font-weight:700; text-transform:uppercase;
   letter-spacing:.3px; white-space:nowrap; border:1px solid rgba(255,255,255,.1);
 }
 .tolerance-table tbody td { padding:7px 9px; border:1px solid #E0E4E8; font-size:11px; }
 .tolerance-table tbody tr:nth-child(even) td { background:#F8F9FA; }
+.tolerance-table tbody tr:hover td { background:#E3F2FD; }
 .tol-mean-ok   { color:#28A745; font-weight:700; }
 .tol-mean-warn { color:#E65100; font-weight:700; }
 .tol-mean-bad  { color:#DC3545; font-weight:700; }
@@ -942,7 +967,7 @@ table.ov-heatmap tbody td.row-hdr {
    ===================================================== */
 .driver-table { width:100%; border-collapse:collapse; font-size:11px; }
 .driver-table thead th {
-  background:#003D5C; color:#fff; padding:7px 8px;
+  background:#0D47A1; color:#fff; padding:7px 8px;
   font-size:10px; font-weight:700; white-space:nowrap;
   border:1px solid rgba(255,255,255,.1); text-align:center;
 }
@@ -1036,6 +1061,9 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
 }
 .export-btn:hover { background:#0D47A1; }
 .export-wrap { overflow:auto; max-height:calc(100vh - 280px); }
+.export-dropdown-menu { display:none; }
+.export-dropdown-menu.open { display:block !important; }
+.export-dd-item:hover { background:rgba(255,255,255,.06); }
 
 /* ─── KPI NAVIGATION CARDS (Level 2) ─── */
 .kpi-nav-row {
@@ -1262,6 +1290,29 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
 }
 .tier-modal-close:hover { color:var(--c-text); }
 .tier-modal h3 { font-size:14px; font-weight:700; margin:0 0 12px; color:var(--c-text); }
+/* Heatmap drill-down popup */
+.hm-popup-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:200; align-items:center; justify-content:center; }
+.hm-popup-overlay.open { display:flex; }
+.hm-popup { background:var(--c-card); border:1px solid var(--c-border); border-radius:9px; width:min(480px,92vw); padding:20px 22px; position:relative; box-shadow:0 16px 40px rgba(0,0,0,.5); }
+.hm-popup-close { position:absolute; top:10px; right:12px; font-size:18px; line-height:1; background:none; border:none; color:var(--c-muted); cursor:pointer; }
+.hm-popup-close:hover { color:var(--c-text); }
+.hm-popup-title { font-size:14px; font-weight:700; color:var(--c-text); margin:0 0 14px; }
+.hm-popup-kpi-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
+.hm-popup-kpi { background:var(--c-panel); border-radius:7px; padding:10px 12px; }
+.hm-popup-kpi-label { font-size:10px; color:var(--c-muted); font-weight:600; text-transform:uppercase; letter-spacing:.4px; }
+.hm-popup-kpi-value { font-size:18px; font-weight:700; color:var(--c-text); margin-top:2px; }
+.hm-popup-section-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--c-muted); margin:0 0 8px; }
+.hm-drv-item { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.hm-drv-name { font-size:11px; font-weight:600; color:var(--c-text); width:110px; flex-shrink:0; }
+.hm-drv-bar-wrap { flex:1; background:rgba(255,255,255,.06); border-radius:4px; height:8px; overflow:hidden; }
+.hm-drv-bar { height:100%; border-radius:4px; }
+.hm-drv-amt { font-size:11px; font-weight:700; width:72px; text-align:right; flex-shrink:0; }
+.hm-drv-pct { font-size:10px; color:var(--c-muted); width:36px; text-align:right; flex-shrink:0; }
+.hm-popup-footer { margin-top:14px; text-align:right; }
+.hm-view-drv-btn { font-size:11px; font-weight:700; background:rgba(21,101,192,.15); border:1px solid rgba(21,101,192,.4); color:#4A9ED6; border-radius:5px; padding:5px 12px; cursor:pointer; }
+.hm-view-drv-btn:hover { background:rgba(21,101,192,.28); }
+table.ov-heatmap tbody td.hm-clickable { cursor:pointer; }
+table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,255,.4); outline-offset:-2px; }
 .family-group-hdr td {
   background:var(--c-panel); font-size:10.5px; font-weight:700;
   color:var(--c-text); padding:5px 8px; border-bottom:1px solid var(--c-border);
@@ -1466,7 +1517,7 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
     <div id="ov-sidebar-content" style="display:none;">
       <!-- DATE RANGE -->
       <div class="date-range-row">
-        <span class="slicer-label">Date Range</span>
+        <span class="slicer-label">Date Range <span class="info-tooltip" data-tip="Fiscal year runs July 1 – June 30. YTD = Fiscal year to date. R12M = Rolling 12 months from current date." style="cursor:help;font-style:normal;font-weight:400;color:var(--c-muted);font-size:11px;" title="Fiscal year runs July 1 – June 30. YTD = Fiscal year to date. R12M = Rolling 12 months from current date.">ℹ</span></span>
         <span class="date-reset" onclick="resetOVDates()">Reset</span>
       </div>
       <div class="date-presets">
@@ -1622,27 +1673,15 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
         </select>
       </div>
 
-      <!-- PROCESS / ASSEMBLY TYPE — new -->
+      <!-- PROCESS / ASSEMBLY TYPE -->
       <div>
         <span class="slicer-label">Process / Assembly Type</span>
-        <div class="filter-radio-group">
-          <label class="filter-radio-item">
-            <input type="radio" name="ov-process-type" value="" checked onchange="handleOVFilterChange()">
-            All Types
-          </label>
-          <label class="filter-radio-item">
-            <input type="radio" name="ov-process-type" value="end-to-end" onchange="handleOVFilterChange()">
-            End-to-end (Mass → FG)
-          </label>
-          <label class="filter-radio-item">
-            <input type="radio" name="ov-process-type" value="pack-off" onchange="handleOVFilterChange()">
-            Pack-off (WIP → FG)
-          </label>
-          <label class="filter-radio-item">
-            <input type="radio" name="ov-process-type" value="wip" onchange="handleOVFilterChange()">
-            Work-in-process (Mass → WIP)
-          </label>
-        </div>
+        <select id="ov-process-type" class="slicer-select" onchange="handleOVFilterChange()">
+          <option value="">— All Types —</option>
+          <option value="end-to-end">End-to-end (Mass + FG)</option>
+          <option value="pack-off">Pack-off (WIP + FG)</option>
+          <option value="wip">Work-in-process (Mass → WIP)</option>
+        </select>
       </div>
 
       <!-- LIFE CYCLE STAGE — new -->
@@ -1660,14 +1699,14 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
         </div>
       </div>
 
-      <!-- VISCOSITY -->
+      <!-- SPECIFIC GRAVITY -->
       <div>
-        <span class="slicer-label">Viscosity</span>
-        <select id="ov-viscosity" class="slicer-select" onchange="handleOVFilterChange()">
-          <option value="">— All Viscosities —</option>
-          <option value="low">Low (&lt; 1,000 cP)</option>
-          <option value="medium">Medium (1,000–3,000 cP)</option>
-          <option value="high">High (&gt; 3,000 cP)</option>
+        <span class="slicer-label" title="Filter by specific gravity range (measured from LIMS mass data)">Specific Gravity</span>
+        <select id="ov-sg-filter" class="slicer-select" onchange="handleOVFilterChange()">
+          <option value="">— All Gravity Ranges —</option>
+          <option value="low">Low (&lt; 1.000)</option>
+          <option value="medium">Medium (1.000–1.040)</option>
+          <option value="high">High (&gt; 1.040)</option>
         </select>
       </div>
 
@@ -2601,7 +2640,17 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
 
     <!-- ─── OEE: RESULTS ─────────────────────────────────── -->
     <div id="cnt-oee-results" class="kpi-cnt">
-      <div class="sec-heading">⚙️ OEE — Results</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div class="sec-heading" style="margin-bottom:0;">⚙️ OEE — Results</div>
+        <div class="view-as-wrap">
+          <span class="view-as-label">Resource view:</span>
+          <select class="view-as-select" id="sel-oee-res-view" onchange="switchOEEResView(this.value)">
+            <option value="1">1 resource (cards)</option>
+            <option value="2">2 resources (comparison table)</option>
+            <option value="4">4 resources (comparison table)</option>
+          </select>
+        </div>
+      </div>
       <div class="gs-type-badge governed" style="align-self:flex-start;">
         🔒 Governed Gold Standard active (FY25) — LOCKED for official reporting &amp; compensation
       </div>
@@ -2627,16 +2676,27 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
           <span class="kpi-delta neg">Lost throughput value</span>
         </div>
       </div>
+
+      <!-- multi-resource comparison table (hidden by default, shown in 2/4-resource view) -->
+      <div id="oee-res-comp-wrap" style="display:none;margin-bottom:12px;" class="card">
+        <div class="tbl-wrap">
+          <table class="gs-tbl" style="width:100%;">
+            <thead><tr>
+              <th style="font-weight:700;">Resource</th>
+              <th class="r" style="color:#6dd4bc;font-weight:700;">GS OEE %</th>
+              <th class="r" style="font-weight:700;">Actual OEE %</th>
+              <th class="r" style="color:var(--c-blue);font-weight:700;">RS OEE %</th>
+              <th class="r" style="color:#ff8080;font-weight:700;">GS GAP %</th>
+              <th class="r" style="color:#ff8080;font-weight:700;">GS GAP $ Impact</th>
+            </tr></thead>
+            <tbody id="tb-oee-res-comp"></tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-header-row">
           <span class="card-title">OEE — Monthly Trend</span>
-          <div class="view-as-wrap">
-            <span class="view-as-label">View as:</span>
-            <select class="view-as-select" onchange="switchOEEResView(this.value)">
-              <option value="single">Single resource</option>
-              <option value="two">Two resources</option>
-            </select>
-          </div>
         </div>
         <div class="card-subtitle">OEE % vs. best demonstrated (GS) and reference (RS). Note: OEE varies by PO size; use PO size slicer for fair comparison.</div>
         <div class="chart-wrap" style="height:220px;"><canvas id="ch-oee-res"></canvas></div>
@@ -2770,11 +2830,11 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
         <div class="tbl-wrap">
           <table class="gs-tbl" style="width:100%;">
             <thead><tr>
-              <th>Resource</th>
-              <th class="r" style="color:var(--c-gs);">GS OEE %</th>
-              <th class="r">Actual OEE %</th>
-              <th class="r" style="color:var(--c-neg);">GS GAP %</th>
-              <th class="r" style="color:var(--c-neg);">GS GAP $ Impact</th>
+              <th style="font-weight:700;">Resource</th>
+              <th class="r" style="color:#6dd4bc;font-weight:700;padding-top:8px;padding-bottom:8px;">GS OEE %</th>
+              <th class="r" style="font-weight:700;padding-top:8px;padding-bottom:8px;">Actual OEE %</th>
+              <th class="r" style="color:#ff8080;font-weight:700;padding-top:8px;padding-bottom:8px;">GS GAP %</th>
+              <th class="r" style="color:#ff8080;font-weight:700;padding-top:8px;padding-bottom:8px;">GS GAP $ Impact</th>
             </tr></thead>
             <tbody id="tb-gap-cards-multi">
               <tr style="cursor:pointer;" onclick="filterGapByResource('L67')" title="Click to filter charts to L67">
@@ -2798,30 +2858,47 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
       </div>
 
       <!-- ── Tier Summary (KPI 5) — Unified SKU-level tier ── -->
-      <div style="display:flex;align-items:baseline;justify-content:space-between;margin:4px 0 6px;">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin:4px 0 10px;">
         <span style="font-size:13px;font-weight:700;color:var(--c-text);">🏆 Performance Tier Distribution — Unified SKU Tier</span>
         <span style="font-size:10px;color:var(--c-muted);">Composite tier = dollarized total gap across Speed + OEE + Labour + Scrap · Gold = P75 confirmed · Silver/Bronze thresholds ⚠ pending Kris Van Deursen sign-off</span>
       </div>
-      <div class="kpi-row">
-        <div class="kpi-card" style="border-left:3px solid #B8860B;cursor:pointer;" onclick="showTierPopup('Gold')" title="Click to see top contributors">
-          <span class="kpi-label">🥇 GOLD SKUs <span style="font-size:9px;opacity:.6;">(click for detail)</span></span>
-          <span class="kpi-value" style="color:#B8860B;" id="oee-tier-gold-cnt">5 SKUs</span>
-          <span class="kpi-delta pos">Total $ gap below P75 threshold</span>
+      <div class="kpi-row" style="align-items:stretch;">
+        <!-- Gold -->
+        <div class="kpi-card" style="border-left:4px solid #c9933a;background:rgba(201,147,58,.07);padding-left:14px;cursor:pointer;position:relative;" onclick="showTierPopup('Gold')" title="Click to see top contributors">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
+            <span style="font-size:20px;line-height:1;">🥇</span>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#c9933a;">Gold Tier</span>
+          </div>
+          <span class="kpi-value" style="color:#c9933a;font-size:22px;" id="oee-tier-gold-cnt">5 SKUs</span>
+          <span class="kpi-delta pos" style="margin-top:4px;">Total $ gap below P75 threshold</span>
+          <span style="font-size:9px;color:var(--c-muted);display:block;margin-top:3px;">Click for top contributors →</span>
         </div>
-        <div class="kpi-card" style="border-left:3px solid #78909C;cursor:pointer;" onclick="showTierPopup('Silver')" title="Click to see top contributors">
-          <span class="kpi-label">🥈 SILVER SKUs <span style="font-size:9px;opacity:.6;">(click for detail)</span></span>
-          <span class="kpi-value" style="color:#78909C;" id="oee-tier-silver-cnt">7 SKUs</span>
-          <span class="kpi-delta" style="color:#78909C;">Moderate combined gap · improvement target</span>
+        <!-- Silver -->
+        <div class="kpi-card" style="border-left:4px solid #7a8fa6;background:rgba(122,143,166,.07);padding-left:14px;cursor:pointer;position:relative;" onclick="showTierPopup('Silver')" title="Click to see top contributors">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
+            <span style="font-size:20px;line-height:1;">🥈</span>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#7a8fa6;">Silver Tier</span>
+          </div>
+          <span class="kpi-value" style="color:#7a8fa6;font-size:22px;" id="oee-tier-silver-cnt">7 SKUs</span>
+          <span class="kpi-delta" style="color:#7a8fa6;margin-top:4px;">Moderate combined gap · improvement target</span>
+          <span style="font-size:9px;color:var(--c-muted);display:block;margin-top:3px;">Click for top contributors →</span>
         </div>
-        <div class="kpi-card" style="border-left:3px solid #8D6E63;cursor:pointer;" onclick="showTierPopup('Bronze')" title="Click to see top contributors">
-          <span class="kpi-label">🥉 BRONZE SKUs <span style="font-size:9px;opacity:.6;">(click for detail)</span></span>
-          <span class="kpi-value" style="color:#8D6E63;" id="oee-tier-bronze-cnt">4 SKUs</span>
-          <span class="kpi-delta neg">Highest combined gap · priority action</span>
+        <!-- Bronze -->
+        <div class="kpi-card" style="border-left:4px solid #a0522d;background:rgba(160,82,45,.07);padding-left:14px;cursor:pointer;position:relative;" onclick="showTierPopup('Bronze')" title="Click to see top contributors">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
+            <span style="font-size:20px;line-height:1;">🥉</span>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#a0522d;">Bronze Tier</span>
+          </div>
+          <span class="kpi-value" style="color:#a0522d;font-size:22px;" id="oee-tier-bronze-cnt">4 SKUs</span>
+          <span class="kpi-delta neg" style="margin-top:4px;">Highest combined gap · priority action</span>
+          <span style="font-size:9px;color:var(--c-muted);display:block;margin-top:3px;">Click for top contributors →</span>
         </div>
-        <div class="kpi-card" style="border-left:3px dashed var(--c-muted);">
-          <span class="kpi-label">Total GS GAP $ — Bronze SKUs</span>
-          <span class="kpi-value" style="color:var(--c-neg);" id="oee-tier-bronze-usd">$48.3K</span>
-          <span class="kpi-delta neg">Speed + OEE + Labour + Scrap combined</span>
+        <!-- Total GS GAP $ — white bg, dashed border -->
+        <div class="kpi-card" style="border:1.5px dashed var(--c-border);background:var(--c-card);padding-left:14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Total GS GAP $</div>
+          <div style="font-size:11px;color:var(--c-muted);margin-bottom:2px;">Bronze SKUs only</div>
+          <span class="kpi-value" style="color:var(--c-neg);font-size:22px;" id="oee-tier-bronze-usd">$48.3K</span>
+          <span class="kpi-delta neg" style="margin-top:4px;">Speed + OEE + Labour + Scrap combined</span>
         </div>
       </div>
 
@@ -2876,12 +2953,12 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
           <table class="gs-tbl">
             <thead>
               <tr>
-                <th>Resource</th><th>Family</th><th>Category</th><th>SKU</th><th>PO</th>
-                <th class="r">OEE %</th>
-                <th class="r" style="color:var(--c-gs);">GS OEE %</th>
-                <th class="r" style="color:var(--c-neg);">GS GAP %</th>
-                <th class="r" style="color:var(--c-neg);">GS GAP $</th>
-                <th>Tier</th>
+                <th style="font-weight:700;">Resource</th><th style="font-weight:700;">Family</th><th style="font-weight:700;">Category</th><th style="font-weight:700;">SKU</th><th style="font-weight:700;">PO</th>
+                <th class="r" style="font-weight:700;padding-top:8px;padding-bottom:8px;">OEE %</th>
+                <th class="r" style="color:#6dd4bc;font-weight:700;padding-top:8px;padding-bottom:8px;">GS OEE %</th>
+                <th class="r" style="color:#ff8080;font-weight:700;padding-top:8px;padding-bottom:8px;">GS GAP %</th>
+                <th class="r" style="color:#ff8080;font-weight:700;padding-top:8px;padding-bottom:8px;">GS GAP $</th>
+                <th style="font-weight:700;">Tier</th>
               </tr>
             </thead>
             <tbody id="tb-oee-gap"></tbody>
@@ -3311,8 +3388,10 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
   <main id="page-overfill" class="gs-content" style="display:none;">
     <div class="tab-nav">
       <button id="t-ov-overview"   class="tab-btn active" onclick="showOVTab('overview')">Overview</button>
+      <button id="t-ov-gs-gap"     class="tab-btn"        onclick="showOVTab('gs-gap')">Gold Standard Gap</button>
       <button id="t-ov-trend"      class="tab-btn"        onclick="showOVTab('trend')">Trend Analysis</button>
       <button id="t-ov-specscale"  class="tab-btn"        onclick="showOVTab('specscale')">Spec Scale</button>
+      <button id="t-ov-capability" class="tab-btn"        onclick="showOVTab('capability')">Tolerance &amp; Capability</button>
       <button id="t-ov-sg"         class="tab-btn"        onclick="showOVTab('sg')">Specific Gravity</button>
       <button id="t-ov-drivers"    class="tab-btn"        onclick="showOVTab('drivers')">Drivers</button>
       <button id="t-ov-predictive" class="tab-btn"        onclick="showOVTab('predictive')">Predictive Insights</button>
@@ -3321,6 +3400,16 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
 
     <!-- ── OVERVIEW ── -->
     <div class="pane active" id="pane-ov-overview">
+      <!-- View By selector -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.4px;">View By</div>
+        <div class="ov-viewby-row">
+          <button class="ov-viewby-btn active" id="vb-ov-agg"   onclick="setOVViewBy('overview','agg')">Aggregate</button>
+          <button class="ov-viewby-btn"        id="vb-ov-res"   onclick="setOVViewBy('overview','res')">Resource</button>
+          <button class="ov-viewby-btn"        id="vb-ov-sku"   onclick="setOVViewBy('overview','sku')">SKU</button>
+          <button class="ov-viewby-btn"        id="vb-ov-plant" onclick="setOVViewBy('overview','plant')">Plant</button>
+        </div>
+      </div>
       <!-- Row 1: 5 cost KPIs -->
       <div class="ov-kpi-row" id="ov-kpi-row"></div>
       <!-- Row 2: 3 quantity KPIs -->
@@ -3328,11 +3417,23 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
 
       <div class="card-grid col-2" style="margin-top:12px;">
         <div class="gs-card">
-          <div class="card-title">Cost Trend — 12-Week Rolling</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div class="card-title" style="margin:0;" id="ov-cost-trend-title">Cost Trend — 12-Week Rolling</div>
+            <div class="ov-toggle-row">
+              <button id="btn-ov-ct-res" class="ov-toggle-btn active" onclick="setOVTrendView('cost','res')">By Resource</button>
+              <button id="btn-ov-ct-sku" class="ov-toggle-btn"        onclick="setOVTrendView('cost','sku')">By SKU</button>
+            </div>
+          </div>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-cost-trend"></canvas></div>
         </div>
         <div class="gs-card">
-          <div class="card-title">Quantity Trend — 12-Week Rolling (g)</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div class="card-title" style="margin:0;" id="ov-qty-trend-title">Quantity Trend — 12-Week Rolling (g)</div>
+            <div class="ov-toggle-row">
+              <button id="btn-ov-qt-res" class="ov-toggle-btn active" onclick="setOVTrendView('qty','res')">By Resource</button>
+              <button id="btn-ov-qt-sku" class="ov-toggle-btn"        onclick="setOVTrendView('qty','sku')">By SKU</button>
+            </div>
+          </div>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-qty-trend"></canvas></div>
         </div>
       </div>
@@ -3351,8 +3452,8 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
       <div class="gs-card" style="margin-top:12px;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
           <div class="card-title" style="margin:0;">
-            Overfill Heatmap — Resource × SKU
-            <span style="font-weight:400;font-size:10px;color:var(--c-muted);">&nbsp;(% Overfill · green = within spec · red = critical)</span>
+            Overfill Heatmap — SKU × Resource
+            <span style="font-weight:400;font-size:10px;color:var(--c-muted);">&nbsp;(% Overfill of Declared Content · green = within spec · red = critical · grouped by Family)</span>
           </div>
         </div>
         <div style="overflow-x:auto;">
@@ -3369,7 +3470,7 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
           <thead>
             <tr>
               <th>#</th><th>Resource</th><th>SKU</th>
-              <th>Avg Overfill %</th><th>Overfill g/yr</th><th>Cost Impact $</th><th>Risk</th>
+              <th>Avg Overfill %</th><th>Overfill g/yr</th><th>Cost Impact $</th><th>Priority</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -3377,17 +3478,117 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
       </div>
     </div><!-- /pane-ov-overview -->
 
+    <!-- ── GOLD STANDARD GAP ── -->
+    <div class="pane" id="pane-ov-gs-gap">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+        <div>
+          <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Gold Standard Gap — Overfill</h3>
+          <p style="font-size:11px;color:var(--c-muted);margin:0;">Performance tiers vs. Gold Standard (P75 by Family × Resource, FY26 baseline). Gap = actual overfill minus GS benchmark.</p>
+        </div>
+      </div>
+
+      <!-- Tier cards: Gold / Silver / Bronze + Total GS Gap -->
+      <div class="kpi-row" style="align-items:stretch;margin-bottom:14px;">
+        <div class="kpi-card" style="border-left:4px solid #c9933a;background:rgba(201,147,58,.07);padding-left:14px;cursor:pointer;position:relative;" onclick="showOVTierPopup('Gold')">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
+            <span style="font-size:20px;line-height:1;">🥇</span>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#c9933a;">Gold Tier</span>
+          </div>
+          <span class="kpi-value" style="color:#c9933a;font-size:22px;" id="ov-gs-tier-gold-cnt">4 SKUs</span>
+          <span class="kpi-delta pos" style="margin-top:4px;">Overfill at or below P75 GS</span>
+          <span style="font-size:9px;color:var(--c-muted);display:block;margin-top:3px;">Click for top contributors →</span>
+        </div>
+        <div class="kpi-card" style="border-left:4px solid #7a8fa6;background:rgba(122,143,166,.07);padding-left:14px;cursor:pointer;position:relative;" onclick="showOVTierPopup('Silver')">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
+            <span style="font-size:20px;line-height:1;">🥈</span>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#7a8fa6;">Silver Tier</span>
+          </div>
+          <span class="kpi-value" style="color:#7a8fa6;font-size:22px;" id="ov-gs-tier-silver-cnt">6 SKUs</span>
+          <span class="kpi-delta" style="margin-top:4px;color:var(--c-muted);">Overfill 1–2× above GS</span>
+          <span style="font-size:9px;color:var(--c-muted);display:block;margin-top:3px;">Click for top contributors →</span>
+        </div>
+        <div class="kpi-card" style="border-left:4px solid #a0522d;background:rgba(160,82,45,.07);padding-left:14px;cursor:pointer;position:relative;" onclick="showOVTierPopup('Bronze')">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
+            <span style="font-size:20px;line-height:1;">🥉</span>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#a0522d;">Bronze Tier</span>
+          </div>
+          <span class="kpi-value" style="color:#a0522d;font-size:22px;" id="ov-gs-tier-bronze-cnt">8 SKUs</span>
+          <span class="kpi-delta neg" style="margin-top:4px;">Overfill &gt;2× above GS — action needed</span>
+          <span style="font-size:9px;color:var(--c-muted);display:block;margin-top:3px;">Click for top contributors →</span>
+        </div>
+        <div class="kpi-card" style="border:1.5px dashed var(--c-border);background:var(--c-card);">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--c-muted);display:block;margin-bottom:4px;">Total GS Gap $ (Overfill)</span>
+          <span class="kpi-value" id="ov-gs-total-gap">$657,000</span>
+          <span class="kpi-delta neg" style="margin-top:4px;">vs GS benchmark FY26</span>
+          <span style="font-size:9px;color:var(--c-muted);display:block;margin-top:3px;">Sum of avoidable overfill cost above P75</span>
+        </div>
+      </div>
+
+      <!-- Distribution chart -->
+      <div class="gs-card" style="margin-bottom:14px;">
+        <div class="card-title">GS Gap Distribution — Overfill % Above GS Benchmark</div>
+        <p style="font-size:10px;color:var(--c-muted);margin:0 0 8px;">Each bar = one SKU × Resource combination. Red = Bronze tier (highest gap). Dashed line = GS benchmark (P75).</p>
+        <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-gs-gap-dist"></canvas></div>
+      </div>
+
+      <!-- GS Gap table -->
+      <div class="gs-card" style="margin-bottom:14px;">
+        <div class="card-title" style="margin-bottom:8px;">GS Gap Detail by SKU × Resource</div>
+        <div style="overflow-x:auto;">
+          <table class="dv-table" id="tb-ov-gs-gap">
+            <thead>
+              <tr>
+                <th>SKU</th><th>Resource</th><th>Family</th>
+                <th>GS Benchmark (g)</th><th>Actual Overfill (g)</th>
+                <th>GS Gap (g)</th><th>GS Gap %</th><th>GS Gap $/yr</th><th>Tier</th>
+              </tr>
+            </thead>
+            <tbody id="tb-ov-gs-gap-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Methodology note -->
+      <div class="gs-card" style="background:rgba(21,101,192,.04);border-color:rgba(21,101,192,.18);">
+        <div style="font-size:11px;font-weight:700;color:var(--c-blue);margin-bottom:6px;">📋 Methodology Note</div>
+        <p style="font-size:10.5px;color:var(--c-text);margin:0 0 4px;line-height:1.7;">
+          <strong>Gold Standard (GS):</strong> Defined as the <strong>75th percentile</strong> of overfill performance (g) across all qualified POs within each <strong>Family × Resource</strong> combination for FY26. Minimum 10 POs required per pairing. GS represents the best achievable performance under current conditions — not theoretical minimum.
+        </p>
+        <p style="font-size:10.5px;color:var(--c-text);margin:0 0 4px;line-height:1.7;">
+          <strong>Tiers:</strong> Gold = at or below GS benchmark · Silver = 1–2× GS gap · Bronze = &gt;2× GS gap.
+        </p>
+        <p style="font-size:10px;color:var(--c-muted);margin:0;line-height:1.6;">
+          FY = Jul 1 – Jun 30 (ELC fiscal calendar). All cost calculations use plant labour rates from SAP FY26. Pending sign-off from Steven Johnstone.
+        </p>
+      </div>
+    </div><!-- /pane-ov-gs-gap -->
+
     <!-- ── TREND ANALYSIS ── -->
     <div class="pane" id="pane-ov-trend">
-      <div style="margin-bottom:14px;">
-        <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Multi-Site Trend Comparison</h3>
-        <p style="font-size:11px;color:var(--c-muted);margin:0;">Same SKU across multiple plants/resources — identify best practices and underperformers.</p>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+        <div>
+          <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Multi-Site Trend Comparison</h3>
+          <p style="font-size:11px;color:var(--c-muted);margin:0;">Same SKU across multiple plants/resources — identify best practices and underperformers.</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:11px;font-weight:600;color:var(--c-muted);">View By:</span>
+          <div class="ov-viewby-row">
+            <button class="ov-viewby-btn active" id="vb-tr-agg"   onclick="setOVViewBy('trend','agg')">Aggregate</button>
+            <button class="ov-viewby-btn"        id="vb-tr-res"   onclick="setOVViewBy('trend','res')">Resource</button>
+            <button class="ov-viewby-btn"        id="vb-tr-sku"   onclick="setOVViewBy('trend','sku')">SKU</button>
+            <button class="ov-viewby-btn"        id="vb-tr-plant" onclick="setOVViewBy('trend','plant')">Plant</button>
+          </div>
+        </div>
       </div>
 
       <div class="gs-card" style="margin-bottom:12px;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
           <div class="card-title" style="margin:0;">Giveaway Cost by Site — 12-Week Trend ($)</div>
-          <div style="display:flex;align-items:center;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <div class="ov-toggle-row">
+              <button id="btn-ta-cost-res" class="ov-toggle-btn active" onclick="setTrendAnalysisView('cost','res')">By Resource</button>
+              <button id="btn-ta-cost-sku" class="ov-toggle-btn"        onclick="setTrendAnalysisView('cost','sku')">By SKU</button>
+            </div>
             <div class="ov-toggle-row">
               <button id="btn-trend-sku-prev" class="ov-toggle-btn" onclick="trendSKUNav(-1)">◀</button>
               <span id="trend-sku-label" style="font-size:12px;font-weight:700;padding:0 8px;min-width:80px;text-align:center;"></span>
@@ -3395,19 +3596,34 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
             </div>
             <select id="trend-yoy-select" class="slicer-select" style="font-size:11px;height:28px;" onchange="updateTrendCharts()">
               <option value="none">Current period only</option>
-              <option value="yoy">Compare: Same period last year</option>
+              <option value="yoy">Compare: Same period last year (YoY)</option>
               <option value="prev12">Compare: Previous 12 weeks</option>
+              <option value="wow">Week-over-Week (WoW)</option>
+              <option value="mom">Month-over-Month (MoM)</option>
             </select>
           </div>
         </div>
         <div class="chart-wrap" style="height:220px;"><canvas id="ch-ov-trend-cost"></canvas></div>
+        <div id="trend-wow-cost-wrap" style="display:none;margin-top:10px;">
+          <div style="font-size:11px;font-weight:700;color:var(--c-muted);margin-bottom:6px;">Week-over-Week Change ($)</div>
+          <div class="chart-wrap" style="height:120px;"><canvas id="ch-ov-trend-cost-wow"></canvas></div>
+        </div>
+        <p id="trend-legend-tip" style="font-size:10px;color:var(--c-muted);margin:6px 0 0;text-align:center;display:none;">Click legend to highlight · Ctrl+Click to multi-select</p>
       </div>
 
       <div class="gs-card" style="margin-bottom:12px;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
           <div class="card-title" style="margin:0;">Giveaway Quantity by Site — 12-Week Trend (kg)</div>
+          <div class="ov-toggle-row">
+            <button id="btn-ta-qty-res" class="ov-toggle-btn active" onclick="setTrendAnalysisView('qty','res')">By Resource</button>
+            <button id="btn-ta-qty-sku" class="ov-toggle-btn"        onclick="setTrendAnalysisView('qty','sku')">By SKU</button>
+          </div>
         </div>
         <div class="chart-wrap" style="height:220px;"><canvas id="ch-ov-trend-qty"></canvas></div>
+        <div id="trend-wow-qty-wrap" style="display:none;margin-top:10px;">
+          <div style="font-size:11px;font-weight:700;color:var(--c-muted);margin-bottom:6px;">Week-over-Week Change (kg)</div>
+          <div class="chart-wrap" style="height:120px;"><canvas id="ch-ov-trend-qty-wow"></canvas></div>
+        </div>
       </div>
 
       <div class="gs-card">
@@ -3419,6 +3635,37 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
           </tr></thead>
           <tbody></tbody>
         </table>
+      </div>
+
+      <!-- Top 10 SKU Contributors — collapsible -->
+      <div class="gs-card" style="margin-top:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleTop10SKUSection()">
+          <div class="card-title" style="margin:0;">Top 10 SKU Contributors by Week <span id="top10-sku-chevron" style="font-size:10px;margin-left:6px;transition:transform .2s;">▼</span></div>
+          <div style="font-size:10px;color:var(--c-muted);">Click to expand</div>
+        </div>
+        <div id="top10-sku-body" style="display:none;margin-top:10px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <span style="font-size:11px;color:var(--c-muted);">Week:</span>
+            <select id="top10-sku-week-sel" class="slicer-select" style="font-size:11px;height:28px;" onchange="renderTop10SKUTable()">
+              <option value="W12">W12 (latest)</option>
+              <option value="W11">W11</option>
+              <option value="W10">W10</option>
+              <option value="W9">W9</option>
+              <option value="W8">W8</option>
+              <option value="W7">W7</option>
+              <option value="W6">W6</option>
+              <option value="W5">W5</option>
+            </select>
+            <button class="export-btn" style="font-size:11px;padding:5px 12px;" onclick="exportTop10SKUCSV()">📥 Export CSV</button>
+          </div>
+          <table class="dv-table" id="tb-top10-sku">
+            <thead><tr>
+              <th>Rank</th><th>SKU</th><th>Resource</th><th>Plant</th>
+              <th>Giveaway Cost ($)</th><th>Overfill Qty (kg)</th><th>Avg Overfill %</th><th>Δ vs Prior Week</th>
+            </tr></thead>
+            <tbody id="tb-top10-sku-body"></tbody>
+          </table>
+        </div>
       </div>
     </div><!-- /pane-ov-trend -->
 
@@ -3437,6 +3684,69 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
       <div class="bullet-grid" id="bullet-grid"></div>
     </div><!-- /pane-ov-specscale -->
 
+    <!-- ── TOLERANCE & PROCESS CAPABILITY ── -->
+    <div class="pane" id="pane-ov-capability">
+      <div style="margin-bottom:14px;">
+        <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Tolerance &amp; Process Capability</h3>
+        <p style="font-size:11px;color:var(--c-muted);margin:0;">Sigma-based capability analysis: how well the process fits within specification limits.</p>
+      </div>
+
+      <!-- Sigma KPI cards -->
+      <div class="kpi-row" style="margin-bottom:14px;" id="cap-sigma-kpi-row"></div>
+
+      <!-- Bell curve chart -->
+      <div class="gs-card" style="margin-bottom:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+          <div class="card-title" style="margin:0;">Process Capability Distribution — Normal Curve</div>
+          <select id="cap-sku-sel" class="slicer-select" style="font-size:11px;height:28px;" onchange="renderCapabilityCharts()">
+            <option value="SKU-1042">SKU-1042 (30 ml)</option>
+            <option value="SKU-1055">SKU-1055 (30 ml)</option>
+            <option value="SKU-1098">SKU-1098 (50 ml)</option>
+            <option value="SKU-1113">SKU-1113 (100 ml)</option>
+            <option value="SKU-1127">SKU-1127 (150 ml)</option>
+          </select>
+        </div>
+        <p style="font-size:10px;color:var(--c-muted);margin:0 0 8px;">Normal distribution centred on Mean fill. Shaded regions show probability of filling within/outside spec. LSL, Target, and USL lines from Tolerance Parameters.</p>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-cap-bell"></canvas></div>
+      </div>
+
+      <!-- Sigma breakdown table -->
+      <div class="gs-card" style="margin-bottom:14px;">
+        <div class="card-title" style="margin-bottom:8px;">Process Capability by SKU</div>
+        <p style="font-size:10px;color:var(--c-muted);margin:0 0 8px;">Cp = tolerance width ÷ 6σ. Cpk = min(mean−LSL, USL−mean) ÷ 3σ. Cp ≥ 1.33 and Cpk ≥ 1.33 = capable process.</p>
+        <div style="overflow-x:auto;">
+          <table class="dv-table" id="tb-cap-sigma">
+            <thead>
+              <tr>
+                <th>SKU</th><th>Declared (g)</th><th>LSL (g)</th><th>USL (g)</th>
+                <th>Mean (g)</th><th>Sigma (σ)</th><th>Tolerance (g)</th>
+                <th>Cp</th><th>Cpk</th><th>Sigma Level</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="tb-cap-sigma-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sigma by lot size chart -->
+      <div class="gs-card" style="margin-bottom:14px;">
+        <div class="card-title" style="margin-bottom:6px;">Sigma vs. Lot Size — Process Consistency</div>
+        <p style="font-size:10px;color:var(--c-muted);margin:0 0 8px;">Larger lot sizes typically show lower sigma. Each point = one SKU × Resource combination.</p>
+        <div class="chart-wrap" style="height:190px;"><canvas id="ch-cap-sigma-lot"></canvas></div>
+      </div>
+
+      <!-- Methodology note -->
+      <div class="gs-card" style="background:rgba(21,101,192,.04);border-color:rgba(21,101,192,.18);">
+        <div style="font-size:11px;font-weight:700;color:var(--c-blue);margin-bottom:6px;">📋 Methodology Note</div>
+        <p style="font-size:10.5px;color:var(--c-text);margin:0 0 4px;line-height:1.7;">
+          <strong>Sigma Level</strong> = (USL − Mean) ÷ σ, assuming one-sided upper spec. <strong>Cp</strong> = (USL − LSL) ÷ 6σ measures inherent capability. <strong>Cpk</strong> = min(USL − Mean, Mean − LSL) ÷ 3σ measures actual (centred) capability. A process is considered capable when Cpk ≥ 1.33 (equivalent to &gt;4σ).
+        </p>
+        <p style="font-size:10px;color:var(--c-muted);margin:0;line-height:1.6;">
+          All gram values derived from Freeway SPC data. Declared Content (g) = Declared Content (ml) × Specific Gravity. LSL must always exceed Declared Content (g) per legal requirement. Sigma (σ) values sourced from FY26 process data.
+        </p>
+      </div>
+    </div><!-- /pane-ov-capability -->
+
     <!-- ── SPECIFIC GRAVITY ── -->
     <div class="pane" id="pane-ov-sg">
       <div style="margin-bottom:14px;">
@@ -3445,6 +3755,17 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
       </div>
 
       <!-- SG Summary Stats cards -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+        <span style="font-size:12px;font-weight:700;color:var(--c-text);">SG Summary Statistics</span>
+        <select id="sg-timeframe-sel" class="slicer-select" style="font-size:11px;height:28px;" onchange="renderSGStats()">
+          <option value="r3m">Last 3M</option>
+          <option value="r6m">Last 6M</option>
+          <option value="r12m" selected>R12M</option>
+          <option value="fy26">FY26</option>
+          <option value="fy27">FY27</option>
+          <option value="all">All Time</option>
+        </select>
+      </div>
       <div id="sg-stats-container"></div>
 
       <div class="gs-card" style="margin-bottom:12px;">
@@ -3491,14 +3812,14 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
             <thead>
               <tr>
                 <th>SKU</th>
-                <th>Declared (ml)</th>
+                <th>Declared (g)</th>
                 <th>LSL (g)</th>
                 <th>Target (g)</th>
-                <th>Mean Fill (g)</th>
                 <th>USL (g)</th>
-                <th>Tolerance Range (g)</th>
+                <th>Range (g)</th>
                 <th>Sigma (σ)</th>
-                <th>% Tolerance Used</th>
+                <th>Mean (g)</th>
+                <th>% Tolerance</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -3515,9 +3836,25 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
           <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Overfill Driver Decomposition</h3>
           <p style="font-size:11px;color:var(--c-muted);margin:0;">Quantified breakdown by controllable driver: Brand, Set Point, Sigma, SG. Top 20 by total cost.</p>
         </div>
-        <div class="ov-toggle-row">
-          <button id="btn-drv-by-res" class="ov-toggle-btn active" onclick="setDriverGroupBy('res')">By Resource</button>
-          <button id="btn-drv-by-sku" class="ov-toggle-btn"        onclick="setDriverGroupBy('sku')">By SKU</button>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="ov-viewby-row">
+            <button class="ov-viewby-btn active" id="vb-dr-agg"   onclick="setOVViewBy('drivers','agg')">Aggregate</button>
+            <button class="ov-viewby-btn"        id="vb-dr-res"   onclick="setOVViewBy('drivers','res')">Resource</button>
+            <button class="ov-viewby-btn"        id="vb-dr-sku"   onclick="setOVViewBy('drivers','sku')">SKU</button>
+            <button class="ov-viewby-btn"        id="vb-dr-plant" onclick="setOVViewBy('drivers','plant')">Plant</button>
+          </div>
+          <div style="position:relative;display:inline-block;">
+            <button class="export-btn" style="font-size:11px;padding:5px 10px;display:flex;align-items:center;gap:4px;" onclick="document.getElementById('drv-export-menu').classList.toggle('open')">
+              📥 Export
+              <span style="font-size:9px;opacity:.7;">▼</span>
+              <span class="info-tooltip" title="Export visible rows, top 100, or full filtered dataset (up to 30,000 rows). All columns included: Date, Plant, Resource, SKU, PO, Lot Size, Declared Content (ml/g), SG, Target Fill, Actual Fill, Overfill, Brand/SetPoint/Sigma/SG drivers, Cost/g, Total Cost." style="margin-left:4px;cursor:help;font-size:10px;" onclick="event.stopPropagation()">ℹ</span>
+            </button>
+            <div id="drv-export-menu" class="export-dropdown-menu" style="display:none;position:absolute;right:0;top:100%;margin-top:2px;background:var(--c-card);border:1px solid var(--c-border);border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:50;min-width:200px;padding:4px 0;">
+              <div class="export-dd-item" onclick="exportDriversCSV('visible');document.getElementById('drv-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Export Visible Rows</div>
+              <div class="export-dd-item" onclick="exportDriversCSV('top100');document.getElementById('drv-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Export Top 100</div>
+              <div class="export-dd-item" onclick="exportDriversCSV('full');document.getElementById('drv-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Filtered Dataset (up to 30K rows)</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -3536,6 +3873,9 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
           </thead>
           <tbody id="tb-drivers-body"></tbody>
         </table>
+        <p style="font-size:10px;color:var(--c-muted);margin:8px 0 0;padding:0 4px;">
+          * % columns use <strong>Declared Content (g)</strong> as denominator, where Declared Content (g) = Declared Content (ml) × Specific Gravity (SG). Brand-Driven = overfill driven by LSL exceeding declared content. Set Point-Driven = target set above LSL. Sigma-Driven = process variation above target. SG-Driven = residual from SG reference delta.
+        </p>
         <div style="text-align:center;margin-top:10px;">
           <button id="btn-load-more-drv" class="btn-secondary" onclick="loadMoreDrivers()" style="font-size:11px;padding:6px 20px;">Load Next 20 →</button>
         </div>
@@ -3559,59 +3899,56 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
     <div class="pane" id="pane-ov-predictive">
       <div style="margin-bottom:14px;">
         <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Predictive Insights</h3>
-        <p style="font-size:11px;color:var(--c-muted);margin:0;">6-month cost trajectory and overfill decomposition. All figures in USD.</p>
+        <p style="font-size:11px;color:var(--c-muted);margin:0;">12-week cost and quantity forecast with What-If simulation. All figures in USD.</p>
       </div>
 
-      <!-- Decomposition cards -->
+      <!-- ── COST SECTION ── -->
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--c-muted);margin-bottom:10px;">Cost Forecast — Next 12 Weeks</div>
+      <div class="decomp-row" id="pred-cost-kpi-row"></div>
+
       <div class="gs-card" style="margin-bottom:14px;">
-        <div class="card-title" style="margin-bottom:10px;">Predicted Overfill Decomposition — 6-Month Projection</div>
-        <div class="decomp-row" id="decomp-row"></div>
-        <div class="decomp-total-bar" id="decomp-total-bar">
-          <span class="decomp-total-label">Total Predicted Overfill (6 months)</span>
-          <span class="decomp-total-value" id="decomp-total-val">—</span>
-        </div>
+        <div class="card-title">12-Week Overfill Cost Forecast — By Driver</div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-pred-cost-area"></canvas></div>
       </div>
 
-      <!-- What-If Scenario Builder — side-by-side layout -->
-      <div class="gs-card" style="padding:0;overflow:hidden;margin-bottom:14px;">
-        <div style="padding:14px 20px 10px;border-bottom:1px solid #E0E4E8;">
-          <div style="font-size:15px;font-weight:700;color:var(--c-text);">What-If Scenario Builder</div>
-          <div style="font-size:11px;color:var(--c-muted);margin-top:2px;">Adjust variables to simulate impact on predicted overfill cost and quantity.</div>
+      <!-- What-If Simulation Panel -->
+      <div class="gs-card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+        <div style="padding:14px 20px 10px;border-bottom:1px solid var(--c-border);">
+          <div style="font-size:15px;font-weight:700;color:var(--c-text);">What-If Simulation Panel</div>
+          <div style="font-size:11px;color:var(--c-muted);margin-top:2px;">Adjust SG, Sigma, and LSL to simulate savings impact on the 12-week cost forecast.</div>
         </div>
         <div class="whatif-sides">
-          <!-- LEFT: sliders -->
           <div class="whatif-left">
             <div class="whatif-col-title">🎛️ Adjust Parameters</div>
             <div class="slider-row">
               <span class="slider-label">Specific Gravity (SG)</span>
-              <input type="range" class="slider-input" id="wi-sg" min="1.000" max="1.100" step="0.001" value="1.034" oninput="updateWhatIf()">
+              <input type="range" class="slider-input" id="wi-sg" min="0.975" max="1.072" step="0.001" value="1.034" oninput="updateWhatIf()">
               <span class="slider-value" id="wi-sg-val">1.034</span>
-              <span class="slider-range">1.000 – 1.100</span>
+              <span class="slider-range">0.975 – 1.072</span>
             </div>
             <div class="slider-row">
               <span class="slider-label">Sigma (σ) in grams</span>
-              <input type="range" class="slider-input" id="wi-sigma" min="0.05" max="0.30" step="0.01" value="0.15" oninput="updateWhatIf()">
-              <span class="slider-value" id="wi-sigma-val">0.15g</span>
-              <span class="slider-range">0.05 – 0.30g</span>
+              <input type="range" class="slider-input" id="wi-sigma" min="0.100" max="0.400" step="0.005" value="0.250" oninput="updateWhatIf()">
+              <span class="slider-value" id="wi-sigma-val">0.250g</span>
+              <span class="slider-range">0.100 – 0.400g</span>
             </div>
             <div class="slider-row">
-              <span class="slider-label">LSL Offset (ml above declared)</span>
-              <input type="range" class="slider-input" id="wi-lsl" min="0" max="5" step="0.5" value="2.0" oninput="updateWhatIf()">
-              <span class="slider-value" id="wi-lsl-val">+2.0ml</span>
-              <span class="slider-range">0 – 5 ml</span>
+              <span class="slider-label">LSL (g)</span>
+              <input type="range" class="slider-input" id="wi-lsl" min="29.0" max="32.0" step="0.1" value="30.5" oninput="updateWhatIf()">
+              <span class="slider-value" id="wi-lsl-val">30.5g</span>
+              <span class="slider-range">29.0 – 32.0g</span>
             </div>
             <button class="whatif-reset" onclick="resetWhatIf()">↺ Reset to Defaults</button>
           </div>
-          <!-- RIGHT: results -->
           <div class="whatif-right">
-            <div class="whatif-col-title">📊 Predicted Impact</div>
+            <div class="whatif-col-title">📊 Simulated Savings (12w)</div>
             <div class="whatif-impact-card">
               <div class="whatif-impact-row">
-                <span class="whatif-impact-label">Current Predicted (6mo)</span>
+                <span class="whatif-impact-label">Current 12w Cost</span>
                 <span class="whatif-impact-val" id="wi-res-current">—</span>
               </div>
               <div class="whatif-impact-row">
-                <span class="whatif-impact-label">After Adjustments</span>
+                <span class="whatif-impact-label">Simulated 12w Cost</span>
                 <span class="whatif-impact-val adjusted" id="wi-res-adjusted">—</span>
               </div>
               <div class="whatif-impact-row">
@@ -3620,22 +3957,22 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
               </div>
             </div>
             <div class="whatif-decomp-section">
-              <div class="whatif-decomp-title">Decomposition after changes</div>
+              <div class="whatif-decomp-title">Savings Breakdown by Driver</div>
               <div class="whatif-decomp-item">
                 <span class="whatif-decomp-name">Brand-Driven</span>
-                <div class="whatif-decomp-bar-wrap"><div class="whatif-decomp-bar" id="wi-bar-brand" style="background:#DC3545;width:38%;"></div></div>
+                <div class="whatif-decomp-bar-wrap"><div class="whatif-decomp-bar" id="wi-bar-brand" style="background:#DC3545;width:52%;"></div></div>
                 <span class="whatif-decomp-amt" style="color:#DC3545;" id="wi-d-brand">—</span>
                 <span class="whatif-decomp-prev" id="wi-d-brand-prev"></span>
               </div>
               <div class="whatif-decomp-item">
                 <span class="whatif-decomp-name">Set Point-Driven</span>
-                <div class="whatif-decomp-bar-wrap"><div class="whatif-decomp-bar" id="wi-bar-setpoint" style="background:#FF9800;width:28%;"></div></div>
+                <div class="whatif-decomp-bar-wrap"><div class="whatif-decomp-bar" id="wi-bar-setpoint" style="background:#FF9800;width:20%;"></div></div>
                 <span class="whatif-decomp-amt" style="color:#FF9800;" id="wi-d-setpoint">—</span>
                 <span class="whatif-decomp-prev" id="wi-d-setpoint-prev"></span>
               </div>
               <div class="whatif-decomp-item">
                 <span class="whatif-decomp-name">Sigma-Driven</span>
-                <div class="whatif-decomp-bar-wrap"><div class="whatif-decomp-bar" id="wi-bar-sigma" style="background:#FFC107;width:34%;"></div></div>
+                <div class="whatif-decomp-bar-wrap"><div class="whatif-decomp-bar" id="wi-bar-sigma" style="background:#FFC107;width:28%;"></div></div>
                 <span class="whatif-decomp-amt" style="color:#E65100;" id="wi-d-sigma">—</span>
                 <span class="whatif-decomp-prev" id="wi-d-sigma-prev"></span>
               </div>
@@ -3644,50 +3981,19 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
         </div>
       </div>
 
-      <!-- Predicted Quantity Decomposition — NEW -->
+      <!-- ── QUANTITY SECTION ── -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--c-muted);">Quantity Forecast — Next 12 Weeks</div>
+        <div class="ov-toggle-row">
+          <button id="btn-pred-qty-g"  class="ov-toggle-btn active" onclick="setPredQtyUnit('g')">Grams</button>
+          <button id="btn-pred-qty-ml" class="ov-toggle-btn"        onclick="setPredQtyUnit('ml')">ML</button>
+        </div>
+      </div>
+      <div class="qty-decomp-row" id="pred-qty-kpi-row"></div>
+
       <div class="gs-card" style="margin-bottom:14px;">
-        <div class="card-title" style="margin-bottom:10px;">Predicted Quantity Decomposition — 6-Month Projection</div>
-        <div class="qty-decomp-row" id="qty-decomp-row"></div>
-        <div class="qty-total-bar">
-          <span class="qty-total-label">Total Predicted Quantity (6 months)</span>
-          <span class="qty-total-value" id="qty-total-val">—</span>
-        </div>
-        <div style="font-size:11px;color:#28A745;font-weight:700;margin-top:8px;text-align:right;" id="qty-savings-hint"></div>
-      </div>
-
-      <!-- Investment scenarios (existing) -->
-      <div style="margin:16px 0 8px;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--c-muted);">Investment Scenarios — 6-Month Comparison</div>
-      </div>
-      <div class="scenario-row" id="scenario-row"></div>
-
-      <div class="gs-card" style="margin-top:12px;">
-        <div class="card-title">Cumulative Cost Impact — 6-Month Scenarios</div>
-        <div class="chart-wrap" style="height:220px;"><canvas id="ch-ov-cumulative"></canvas></div>
-      </div>
-
-      <div class="gs-card" style="margin-top:12px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <div class="card-title" style="margin:0;">3-Month Projection</div>
-          <div class="ov-toggle-row">
-            <button id="btn-3m-by-res" class="ov-toggle-btn active" onclick="set3MGroupBy('res')">By Resource</button>
-            <button id="btn-3m-by-sku" class="ov-toggle-btn"        onclick="set3MGroupBy('sku')">By SKU</button>
-          </div>
-        </div>
-        <table class="dv-table" id="tb-ov-3mo">
-          <thead>
-            <tr>
-              <th>Resource / SKU</th><th>Month +1</th><th>Month +2</th><th>Month +3</th>
-              <th>3M Total</th><th>Δ vs Do Nothing</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-
-      <div class="gs-card" style="margin-top:12px;">
-        <div class="card-title">Flagged Components for Next Review Cycle</div>
-        <div class="flagged-grid" id="flagged-grid"></div>
+        <div class="card-title" id="pred-qty-chart-title">12-Week Overfill Quantity Forecast — By Driver (kg)</div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-pred-qty-area"></canvas></div>
       </div>
     </div><!-- /pane-ov-predictive -->
 
@@ -3696,9 +4002,21 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
       <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
         <div>
           <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Data Export</h3>
-          <p style="font-size:11px;color:var(--c-muted);margin:0;">Full dataset respecting current filter selections. Max 30,000 rows per export (Power BI Service limit).</p>
+          <p style="font-size:11px;color:var(--c-muted);margin:0;">Full overfill transaction dataset including all driver decomposition columns, SG, spec limits, and cost. All active filters applied. Max 30,000 rows per export (Power BI Service limit).</p>
+          <p style="font-size:10px;color:var(--c-muted);margin:4px 0 0;font-style:italic;">⚠ FreeWeigh coverage note: ~12 filling lines at Oevel are not yet connected to FreeWeigh and are excluded from this dataset. Lipstick lines are also excluded. Affected resources will appear with no data in overfill columns.</p>
         </div>
-        <button class="export-btn" onclick="exportToCSV()">📥 Export to CSV</button>
+        <div style="position:relative;display:inline-block;">
+          <button class="export-btn" style="display:flex;align-items:center;gap:5px;" onclick="document.getElementById('exp-export-menu').classList.toggle('open')">
+            📥 Export to CSV
+            <span style="font-size:9px;opacity:.7;">▼</span>
+            <span class="info-tooltip" style="font-size:11px;cursor:help;opacity:.7;margin-left:2px;" title="Columns: Date, Plant, Resource, SKU, PO, Lot Size, Declared Content (ml), Declared Content (g) [=ml×SG], Specific Gravity (SG), Target Fill (g), Actual Fill (g), Overfill (g), Overfill % [of Declared g], Brand-Driven (g), Brand-Driven %, Set Point-Driven (g), Set Point-Driven %, Sigma-Driven (g), Sigma-Driven %, SG-Driven (g), SG-Driven %, Cost/g ($), Giveaway Cost ($), Brand, Category, Subcategory, Package Type, Process Type, Life Cycle Stage. All % columns use Declared Content (g) as denominator." onclick="event.stopPropagation()">ℹ</span>
+          </button>
+          <div id="exp-export-menu" class="export-dropdown-menu" style="display:none;position:absolute;right:0;top:100%;margin-top:2px;background:var(--c-card);border:1px solid var(--c-border);border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:50;min-width:210px;padding:4px 0;">
+            <div class="export-dd-item" onclick="exportToCSV('visible');document.getElementById('exp-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Export Visible Rows</div>
+            <div class="export-dd-item" onclick="exportToCSV('top100');document.getElementById('exp-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Export Top 100</div>
+            <div class="export-dd-item" onclick="exportToCSV('full');document.getElementById('exp-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Filtered Dataset (up to 30K rows)</div>
+          </div>
+        </div>
       </div>
       <div class="gs-card">
         <div class="export-wrap">
@@ -3706,11 +4024,11 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
             <thead>
               <tr>
                 <th>Date</th><th>Plant</th><th>Resource</th><th>SKU</th><th>PO</th>
-                <th>Lot Size</th><th>Declared Content (ml)</th><th>SG</th><th>Target Fill (g)</th>
-                <th>Actual Fill (g)</th><th>Overfill (g)</th><th>Overfill %</th>
+                <th>Lot Size</th><th>Declared (ml)</th><th>Declared (g)</th><th>Specific Gravity (SG)</th>
+                <th>Target Fill (g)</th><th>Actual Fill (g)</th><th>Overfill (g)</th><th>Overfill %</th>
                 <th>Cost/g ($)</th><th>Giveaway Cost ($)</th><th>Brand</th>
                 <th>Category</th><th>Subcategory</th><th>Package Type</th>
-                <th>Viscosity (cP)</th><th>Process Type</th><th>Life Cycle Stage</th>
+                <th>Process Type</th><th>Life Cycle Stage</th>
               </tr>
             </thead>
             <tbody id="tb-export-body"></tbody>
@@ -4358,22 +4676,97 @@ function renderDVScrap() {
 /* ─── VIEW-AS SCENARIO SWITCHERS ─────────────────────── */
 
 function switchOEEResView(val) {
-  if (!REG['ch-oee-res']) return;
-  const ch = REG['ch-oee-res'];
-  if (val === 'two') {
-    ch.data.datasets[0].label = 'L67 — Actual OEE%';
-    ch.data.datasets[1].label = 'L67 — GS OEE%';
-    ch.data.datasets.splice(2, 0, {
-      label:'L68 — Actual OEE%', type:'line',
-      data:[58,60,61,59,62,60,63,59], borderColor:CC.purple, backgroundColor:'transparent',
-      tension:.35, pointRadius:3, borderDash:[4,4]
-    });
+  const kpiRow   = document.querySelector('#cnt-oee-results .kpi-row');
+  const compWrap = $$('oee-res-comp-wrap');
+  const id = 'ch-oee-res';
+
+  const RES_ROWS = {
+    '2': [
+      { res:'L67', gs:92.1, actual:84.6, rs:78.0, gapPct:7.5, gapUsd:16200 },
+      { res:'L68', gs:88.2, actual:79.4, rs:72.0, gapPct:8.8, gapUsd:13300 },
+    ],
+    '4': [
+      { res:'L67', gs:92.1, actual:84.6, rs:78.0, gapPct:7.5, gapUsd:16200 },
+      { res:'L68', gs:88.2, actual:79.4, rs:72.0, gapPct:8.8, gapUsd:13300 },
+      { res:'L72', gs:94.3, actual:87.1, rs:80.5, gapPct:7.2, gapUsd:10800 },
+      { res:'L74', gs:89.7, actual:80.9, rs:74.2, gapPct:8.8, gapUsd: 9400 },
+    ],
+  };
+  const BAR_DATA = {
+    '2': {
+      L67:{ actual:[54,58,61,56,59,63], gs:[92,92,92,92,92,92], rs:[70,70,70,70,70,70] },
+      L68:{ actual:[52,55,58,53,56,61], gs:[88,88,88,88,88,88], rs:[68,68,68,68,68,68] },
+    },
+    '4': {
+      L67:{ actual:[54,58,61,56,59,63], gs:[92,92,92,92,92,92] },
+      L68:{ actual:[52,55,58,53,56,61], gs:[88,88,88,88,88,88] },
+      L72:{ actual:[58,62,65,60,64,68], gs:[94,94,94,94,94,94] },
+      L74:{ actual:[50,53,56,51,55,59], gs:[90,90,90,90,90,90] },
+    },
+  };
+  const RES_COLORS = { L67:CC.actual, L68:CC.blue, L72:'#9C27B0', L74:'#FF9800' };
+  const GS_COLORS  = { L67:CC.gs,     L68:'#48c7a0', L72:'#BA68C8', L74:'#FFB74D' };
+
+  if (val === '1') {
+    if (kpiRow)   kpiRow.style.display   = '';
+    if (compWrap) compWrap.style.display = 'none';
+    if (REG[id]) { REG[id].destroy(); delete REG[id]; }
+    init(id, comboConfig(MONTHS, OEE.actual, OEE.gs, OEE.rs, 'OEE %'));
+    const leg = $$('oee-res-legend');
+    if (leg) { leg.style.display=''; leg.innerHTML=`
+      <span class="legend-item"><span class="leg-line actual"></span> Actual OEE%</span>
+      <span class="legend-item"><span class="leg-line gs"></span> GS (best demonstrated)</span>
+      <span class="legend-item"><span class="leg-line rs"></span> RS (reference)</span>`; }
   } else {
-    ch.data.datasets = ch.data.datasets.slice(0,2);
-    ch.data.datasets[0].label = 'Actual OEE%';
-    ch.data.datasets[1].label = 'GS OEE%';
+    if (kpiRow)   kpiRow.style.display   = 'none';
+    if (compWrap) compWrap.style.display = '';
+    const rows = RES_ROWS[val] || RES_ROWS['2'];
+    const tb = $$('tb-oee-res-comp');
+    if (tb) tb.innerHTML = rows.map(r=>`
+      <tr>
+        <td><strong>${r.res}</strong></td>
+        <td class="r" style="color:#6dd4bc;">${r.gs.toFixed(1)}%</td>
+        <td class="r">${r.actual.toFixed(1)}%</td>
+        <td class="r" style="color:var(--c-blue);">${r.rs.toFixed(1)}%</td>
+        <td class="r" style="color:#ff8080;">${r.gapPct.toFixed(1)}%</td>
+        <td class="r" style="color:#ff8080;">$${(r.gapUsd/1000).toFixed(1)}K</td>
+      </tr>`).join('');
+    if (REG[id]) { REG[id].destroy(); delete REG[id]; }
+    const barData = BAR_DATA[val] || BAR_DATA['2'];
+    const datasets = [];
+    Object.keys(barData).forEach(res => {
+      datasets.push({ type:'bar', label:`${res} Actual`,
+        data:barData[res].actual,
+        backgroundColor:(RES_COLORS[res]||CC.actual)+'cc', borderRadius:3, order:2 });
+    });
+    Object.keys(barData).forEach(res => {
+      datasets.push({ type:'line', label:`${res} GS`,
+        data:barData[res].gs,
+        borderColor:GS_COLORS[res]||CC.gs, borderDash:[6,3], borderWidth:2,
+        pointRadius:2, fill:false, tension:0, order:1 });
+    });
+    if (val === '2') {
+      Object.keys(barData).forEach(res => {
+        datasets.push({ type:'line', label:`${res} RS`,
+          data:barData[res].rs,
+          borderColor:CC.rs, borderDash:[2,4], borderWidth:1.5,
+          pointRadius:2, fill:false, tension:0, order:1 });
+      });
+    }
+    init(id, { type:'bar', data:{ labels:MONTHS, datasets }, options:baseOpts('OEE %') });
+    const leg = $$('oee-res-legend');
+    if (leg) {
+      if (val === '4') {
+        leg.innerHTML = `<span style="font-size:9.5px;color:var(--c-muted);font-style:italic;">ⓘ RS reference lines hidden at 4-resource scale for readability</span>`;
+      } else {
+        leg.innerHTML = Object.keys(barData).map(res=>
+          `<span class="legend-item"><span class="leg-bar" style="background:${RES_COLORS[res]||CC.actual};opacity:.8;"></span> ${res} Actual</span>`
+        ).join('') +
+        `<span class="legend-item"><span class="leg-line gs"></span> GS (dashed)</span>` +
+        `<span class="legend-item"><span class="leg-line rs"></span> RS (dashed)</span>`;
+      }
+    }
   }
-  ch.update();
 }
 
 function switchGapCardsView(val) {
@@ -5592,10 +5985,10 @@ function updateMSTrigger(id) {
 const OV_SUMMARY = {
   // KPI Row 1 — Cost cards
   totalActualCost:     2950000,
-  brandRequiredCost:   1120000,
+  brandRequiredCost:   1012000,
   stdCostVariance:     430000,   // positive = we costed more than actual (budget savings)
   topOpportunity:      'Resource 11 / SKU-1042',
-  topOpportunityCost:  87009,
+  topOpportunityCost:  8700,
   topOpportunityPct:   0.94,
   // KPI Row 1 — Gap to GS
   currentOverfillPct:  0.42,     // current avg overfill %
@@ -5615,22 +6008,41 @@ const OV_GS_BASELINE = { pct: 0.35, fy: 'FY25' };
 
 /* Tolerance parameters by SKU */
 const OV_TOLERANCE = [
-  { sku:'SKU-1042', declaredMl:15,  lsl:15.00, target:15.45, mean:15.55, usl:15.80, sigma:0.150 },
-  { sku:'SKU-1055', declaredMl:30,  lsl:29.50, target:30.06, mean:30.16, usl:30.50, sigma:0.120 },
-  { sku:'SKU-1098', declaredMl:50,  lsl:49.00, target:50.00, mean:50.50, usl:51.00, sigma:0.250 },
-  { sku:'SKU-1113', declaredMl:100, lsl:98.50, target:99.80, mean:99.95, usl:100.50, sigma:0.180 },
-  { sku:'SKU-1127', declaredMl:150, lsl:148.00, target:149.40, mean:149.70, usl:150.60, sigma:0.220 },
+  // LSL must be > Declared Content (g) = declaredMl × SG; using SG ≈ 1.034
+  { sku:'SKU-1042', declaredMl:15,  lsl:15.60, target:15.80, mean:15.85, usl:16.20, sigma:0.120 },
+  { sku:'SKU-1055', declaredMl:30,  lsl:31.10, target:31.40, mean:31.50, usl:31.90, sigma:0.150 },
+  { sku:'SKU-1098', declaredMl:50,  lsl:51.80, target:52.20, mean:52.40, usl:52.80, sigma:0.200 },
+  { sku:'SKU-1113', declaredMl:100, lsl:103.50, target:104.00, mean:104.20, usl:104.80, sigma:0.250 },
+  { sku:'SKU-1127', declaredMl:150, lsl:155.30, target:156.00, mean:156.30, usl:157.00, sigma:0.350 },
 ];
 
-/* Decomposition (6-month projection) */
-const OV_DECOMP = {
-  brand:    { cost6m: 670000, qty6mKg: 22800, label:'LSL > Declared Content' },
-  setpoint: { cost6m: 480000, qty6mKg: 16300, label:'Target > LSL' },
-  sigma:    { cost6m: 590000, qty6mKg: 20100, label:'Process variation (σ)' },
+/* Predictive Insights — 12-week KPI data */
+const OV_PRED_COST_KPI = {
+  brand:    { cost12w: 342000, label:'Brand-Driven',     sub:'LSL > Declared Content' },
+  setpoint: { cost12w: 128000, label:'Set Point-Driven', sub:'Target > LSL' },
+  sigma:    { cost12w: 187000, label:'Sigma-Driven',     sub:'Process variation (σ)' },
 };
+const OV_PRED_QTY_KPI = {
+  brand:    { qty12wKg: 5800, label:'Brand-Driven' },
+  setpoint: { qty12wKg: 2200, label:'Set Point-Driven' },
+  sigma:    { qty12wKg: 3200, label:'Sigma-Driven' },
+};
+const OV_PRED_WEEKS = ['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'];
+const OV_PRED_FORECAST = {
+  brand:    [28500,28700,28900,28600,29000,29300,29600,29700,29900,30100,30300,30400],
+  setpoint: [10700,10750,10680,10820,10900,10820,10750,10900,11000,10950,10850,10880],
+  sigma:    [15600,15680,15620,15890,15980,16050,15980,16180,16280,16170,16100,16100],
+};
+const OV_PRED_QTY_FORECAST = {
+  brand:    [483, 487, 491, 486, 492, 497, 502, 503, 508, 511, 514, 516],
+  setpoint: [183, 184, 182, 185, 187, 185, 183, 186, 188, 187, 185, 185],
+  sigma:    [267, 269, 268, 272, 274, 275, 274, 277, 279, 278, 277, 277],
+};
+let OV_PRED_QTY_UNIT = 'g';
+const OV_MEAN_SG = 1.034;
 
-/* What-If defaults */
-const WI_DEFAULTS = { sg: 1.034, sigma: 0.15, lsl: 2.0 };
+/* What-If defaults — updated ranges: SG 0.975–1.072, Sigma 0.100–0.400, LSL 29.0–32.0g */
+const WI_DEFAULTS = { sg: 1.034, sigma: 0.250, lsl: 30.5 };
 
 /* Multi-site trend data (per plant / resource, same SKU) */
 const OV_TREND_SKUS = ['SKU-1042','SKU-1055','SKU-1098'];
@@ -5784,6 +6196,33 @@ const OV_WEEKS = ['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'
 const OV_COST_TREND = [10800,11200,10500,12400,13100,12700,13900,14300,13600,14800,15200,14900];
 const OV_QTY_TREND  = [2800,2920,2770,3100,3290,3010,3210,3380,3190,3450,3640,3510];
 
+/* Overview trend — By Resource breakdown */
+const OV_COST_BY_RES = [
+  { label:'L67', color:'#DC3545', data:[4100,4300,4000,4800,5100,4900,5400,5600,5200,5700,5900,5800] },
+  { label:'L68', color:'#FF9800', data:[3700,3800,3500,4100,4400,4200,4600,4800,4500,4900,5100,5000] },
+  { label:'L72', color:'#28A745', data:[3000,3100,3000,3500,3600,3600,3900,3900,3900,4200,4200,4100] },
+];
+const OV_QTY_BY_RES = [
+  { label:'L67', color:'#DC3545', data:[1050,1090,1020,1200,1280,1230,1360,1410,1310,1430,1480,1460] },
+  { label:'L68', color:'#FF9800', data:[940, 970, 900, 1060,1140,1080,1180,1240,1160,1260,1320,1290] },
+  { label:'L72', color:'#28A745', data:[810, 860, 850, 840, 870, 700, 670, 730, 720, 760, 840, 760] },
+];
+const OV_COST_BY_SKU = [
+  { label:'SKU-1042', color:'#C62828', data:[4600,4800,4500,5300,5500,5200,5800,6000,5600,6100,6300,6200] },
+  { label:'SKU-1055', color:'#FF9800', data:[3200,3400,3100,3700,3900,3800,4100,4300,4000,4400,4600,4500] },
+  { label:'SKU-1098', color:'#1565C0', data:[2000,2000,1900,2400,2700,2700,3000,3000,3000,3300,3300,3200] },
+  { label:'SKU-1113', color:'#28A745', data:[1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] },
+];
+const OV_QTY_BY_SKU = [
+  { label:'SKU-1042', color:'#C62828', data:[1200,1240,1160,1360,1420,1360,1500,1560,1460,1590,1640,1610] },
+  { label:'SKU-1055', color:'#FF9800', data:[840, 880, 810, 970, 1020,990, 1080,1120,1050,1140,1200,1180] },
+  { label:'SKU-1098', color:'#1565C0', data:[530, 540, 510, 620, 700, 700, 780, 780, 780, 860, 860, 840] },
+  { label:'SKU-1113', color:'#28A745', data:[230, 260, 290, 150, 150, 160, 150, 120, 100, 60,  100, 80] },
+];
+
+let OV_COST_TREND_VIEW = 'res';
+let OV_QTY_TREND_VIEW  = 'res';
+
 const OV_GIVEAWAY_BY_RES = {
   labels: ['L67','L68','L72'],
   data:   [67400,49800,30050],
@@ -5795,45 +6234,39 @@ const OV_GIVEAWAY_BY_SKU = {
   colors: ['#C62828','#DC3545','#FF9800','#F5A534','#28A745']
 };
 
+// Heatmap: SKUs as rows (grouped by family), Resources as columns
+const OV_HEATMAP_SKUS = [
+  { family:'Fragrance', sku:'SKU-1042', declaredMl:15,
+    resources:{L65:4.4,L67:6.8,L68:5.1,L70:5.9,L71:3.2,L72:3.8,L73:7.1,L74:2.9,L75:6.2,L76:4.7,L77:5.3,L78:4.0} },
+  { family:'Fragrance', sku:'SKU-1055', declaredMl:30,
+    resources:{L65:3.8,L67:5.2,L68:4.7,L70:4.3,L71:2.8,L72:3.2,L73:5.5,L74:2.4,L75:5.0,L76:3.9,L77:4.5,L78:3.4} },
+  { family:'Skincare',  sku:'SKU-1098', declaredMl:50,
+    resources:{L65:2.9,L67:4.1,L68:3.9,L70:null,L71:2.0,L72:2.1,L73:4.8,L74:1.8,L75:4.0,L76:3.1,L77:3.5,L78:2.7} },
+  { family:'Skincare',  sku:'SKU-1113', declaredMl:100,
+    resources:{L65:null,L67:3.3,L68:2.5,L70:3.1,L71:1.4,L72:1.6,L73:3.7,L74:1.2,L75:2.8,L76:2.0,L77:2.6,L78:1.9} },
+  { family:'Haircare',  sku:'SKU-1127', declaredMl:150,
+    resources:{L65:1.5,L67:2.8,L68:1.9,L70:2.3,L71:null,L72:1.2,L73:2.6,L74:0.9,L75:1.7,L76:1.3,L77:2.1,L78:1.1} },
+];
+
+// Legacy row-indexed data (kept for backward-compat with loadMoreHeatmap references)
 const OV_HEATMAP_ROWS = [
   { resource:'L67', skus:{'SKU-1042':6.8,'SKU-1055':5.2,'SKU-1098':4.1,'SKU-1113':3.3,'SKU-1127':2.8} },
   { resource:'L68', skus:{'SKU-1042':5.1,'SKU-1055':4.7,'SKU-1098':3.9,'SKU-1113':2.5,'SKU-1127':1.9} },
   { resource:'L72', skus:{'SKU-1042':3.8,'SKU-1055':3.2,'SKU-1098':2.1,'SKU-1113':1.6,'SKU-1127':1.2} },
-  { resource:'L65', skus:{'SKU-1042':4.4,'SKU-1055':3.8,'SKU-1098':2.9,'SKU-1113':null,'SKU-1127':1.5} },
-  { resource:'L70', skus:{'SKU-1042':5.9,'SKU-1055':4.3,'SKU-1098':null,'SKU-1113':3.1,'SKU-1127':2.3} },
-  { resource:'L71', skus:{'SKU-1042':3.2,'SKU-1055':2.8,'SKU-1098':2.0,'SKU-1113':1.4,'SKU-1127':null} },
-  { resource:'L73', skus:{'SKU-1042':7.1,'SKU-1055':5.5,'SKU-1098':4.8,'SKU-1113':3.7,'SKU-1127':2.6} },
-  { resource:'L74', skus:{'SKU-1042':2.9,'SKU-1055':2.4,'SKU-1098':1.8,'SKU-1113':1.2,'SKU-1127':0.9} },
-  { resource:'L75', skus:{'SKU-1042':6.2,'SKU-1055':5.0,'SKU-1098':4.0,'SKU-1113':2.8,'SKU-1127':1.7} },
-  { resource:'L76', skus:{'SKU-1042':4.7,'SKU-1055':3.9,'SKU-1098':3.1,'SKU-1113':2.0,'SKU-1127':1.3} },
-  { resource:'L77', skus:{'SKU-1042':5.3,'SKU-1055':4.5,'SKU-1098':3.5,'SKU-1113':2.6,'SKU-1127':2.1} },
-  { resource:'L78', skus:{'SKU-1042':4.0,'SKU-1055':3.4,'SKU-1098':2.7,'SKU-1113':1.9,'SKU-1127':1.1} },
-  { resource:'L79', skus:{'SKU-1042':6.5,'SKU-1055':4.9,'SKU-1098':3.8,'SKU-1113':3.0,'SKU-1127':2.2} },
-  { resource:'L80', skus:{'SKU-1042':3.5,'SKU-1055':2.9,'SKU-1098':2.3,'SKU-1113':1.7,'SKU-1127':1.0} },
-  { resource:'L81', skus:{'SKU-1042':4.9,'SKU-1055':4.2,'SKU-1098':3.3,'SKU-1113':2.4,'SKU-1127':1.8} },
-  { resource:'L82', skus:{'SKU-1042':5.7,'SKU-1055':4.6,'SKU-1098':3.6,'SKU-1113':2.7,'SKU-1127':2.0} },
-  { resource:'L83', skus:{'SKU-1042':3.1,'SKU-1055':2.7,'SKU-1098':2.2,'SKU-1113':1.5,'SKU-1127':0.8} },
-  { resource:'L84', skus:{'SKU-1042':6.0,'SKU-1055':4.8,'SKU-1098':3.7,'SKU-1113':2.9,'SKU-1127':2.4} },
-  { resource:'L85', skus:{'SKU-1042':4.6,'SKU-1055':3.7,'SKU-1098':2.8,'SKU-1113':2.1,'SKU-1127':1.6} },
-  { resource:'L86', skus:{'SKU-1042':5.4,'SKU-1055':4.4,'SKU-1098':3.4,'SKU-1113':2.5,'SKU-1127':1.4} },
-  { resource:'L87', skus:{'SKU-1042':2.6,'SKU-1055':2.1,'SKU-1098':1.7,'SKU-1113':1.1,'SKU-1127':0.7} },
-  { resource:'L88', skus:{'SKU-1042':5.6,'SKU-1055':4.1,'SKU-1098':3.2,'SKU-1113':2.3,'SKU-1127':1.8} },
-  { resource:'L89', skus:{'SKU-1042':3.6,'SKU-1055':3.0,'SKU-1098':2.4,'SKU-1113':1.8,'SKU-1127':1.2} },
-  { resource:'L90', skus:{'SKU-1042':6.3,'SKU-1055':4.7,'SKU-1098':3.5,'SKU-1113':2.6,'SKU-1127':2.0} },
 ];
 let OV_HEATMAP_OFFSET = 0;
 
 const OV_TOP_CONTRIBUTORS = [
-  { rank:1,  resource:'L67', sku:'SKU-1042', pct:6.8, gramsYr:12400, cost:45600, risk:'High' },
-  { rank:2,  resource:'L73', sku:'SKU-1042', pct:7.1, gramsYr:11800, cost:42900, risk:'High' },
-  { rank:3,  resource:'L67', sku:'SKU-1055', pct:5.2, gramsYr:9600,  cost:38200, risk:'Med-High' },
-  { rank:4,  resource:'L75', sku:'SKU-1042', pct:6.2, gramsYr:9100,  cost:34700, risk:'Med-High' },
-  { rank:5,  resource:'L68', sku:'SKU-1042', pct:5.1, gramsYr:8800,  cost:29800, risk:'Med-High' },
-  { rank:6,  resource:'L82', sku:'SKU-1055', pct:4.6, gramsYr:7500,  cost:24100, risk:'Med' },
-  { rank:7,  resource:'L70', sku:'SKU-1042', pct:5.9, gramsYr:7200,  cost:22600, risk:'Med' },
-  { rank:8,  resource:'L68', sku:'SKU-1055', pct:4.7, gramsYr:6900,  cost:21400, risk:'Med' },
-  { rank:9,  resource:'L67', sku:'SKU-1098', pct:4.1, gramsYr:5800,  cost:17200, risk:'Med' },
-  { rank:10, resource:'L77', sku:'SKU-1042', pct:5.3, gramsYr:5400,  cost:16800, risk:'Med' },
+  { rank:1,  resource:'L67', sku:'SKU-1042', pct:6.8, gramsYr:12400, cost:45600, priority:'Top Focus' },
+  { rank:2,  resource:'L73', sku:'SKU-1042', pct:7.1, gramsYr:11800, cost:42900, priority:'Top Focus' },
+  { rank:3,  resource:'L67', sku:'SKU-1055', pct:5.2, gramsYr:9600,  cost:38200, priority:'Monitor' },
+  { rank:4,  resource:'L75', sku:'SKU-1042', pct:6.2, gramsYr:9100,  cost:34700, priority:'Monitor' },
+  { rank:5,  resource:'L68', sku:'SKU-1042', pct:5.1, gramsYr:8800,  cost:29800, priority:'Monitor' },
+  { rank:6,  resource:'L82', sku:'SKU-1055', pct:4.6, gramsYr:7500,  cost:24100, priority:'Within Target' },
+  { rank:7,  resource:'L70', sku:'SKU-1042', pct:5.9, gramsYr:7200,  cost:22600, priority:'Within Target' },
+  { rank:8,  resource:'L68', sku:'SKU-1055', pct:4.7, gramsYr:6900,  cost:21400, priority:'Within Target' },
+  { rank:9,  resource:'L67', sku:'SKU-1098', pct:4.1, gramsYr:5800,  cost:17200, priority:'Within Target' },
+  { rank:10, resource:'L77', sku:'SKU-1042', pct:5.3, gramsYr:5400,  cost:16800, priority:'Within Target' },
 ];
 
 const OV_SPEC_SCALE = [
@@ -5989,19 +6422,21 @@ function showOVTab(tab) {
   document.querySelectorAll('#page-overfill .pane').forEach(p => p.classList.remove('active'));
   const active = document.getElementById('pane-ov-' + tab);
   if (active) active.classList.add('active');
-  ['overview','trend','specscale','sg','drivers','predictive','export'].forEach(t => {
+  ['overview','gs-gap','trend','specscale','capability','sg','drivers','predictive','export'].forEach(t => {
     const b = document.getElementById('t-ov-' + t);
     if (b) b.classList.toggle('active', t === tab);
   });
   if (!OV_INITED[tab]) {
     OV_INITED[tab] = true;
-    if      (tab === 'overview')   { renderOVKPIs(); initOVOverviewCharts(); renderOVHeatmap(); renderOVTopContributors(); }
-    else if (tab === 'trend')      { initOVTrendCharts(); renderTrendSummaryTable(); }
-    else if (tab === 'specscale')  { renderOVSpecScale(); }
-    else if (tab === 'sg')         { initOVSGCharts(); renderOVSGTable(); renderSGStats(); renderControlLimits(); renderToleranceTable(); }
-    else if (tab === 'drivers')    { renderDriverTable(); initDriverScatters(); }
-    else if (tab === 'predictive') { renderOVDecomp(); renderQtyDecomp(); initWhatIf(); renderOVScenarios(); initOVPredictiveCharts(); renderOV3MoTable(); renderOVFlagged(); }
-    else if (tab === 'export')     { renderExportTable(); }
+    if      (tab === 'overview')    { renderOVKPIs(); initOVOverviewCharts(); renderOVHeatmap(); renderOVTopContributors(); }
+    else if (tab === 'gs-gap')      { renderOVGSGapTab(); }
+    else if (tab === 'trend')       { initOVTrendCharts(); renderTrendSummaryTable(); }
+    else if (tab === 'specscale')   { renderOVSpecScale(); }
+    else if (tab === 'capability')  { renderCapabilitySigmaKPIs(); renderCapabilityTable(); renderCapabilityCharts(); }
+    else if (tab === 'sg')          { initOVSGCharts(); renderOVSGTable(); renderSGStats(); renderControlLimits(); renderToleranceTable(); }
+    else if (tab === 'drivers')     { renderDriverTable(); initDriverScatters(); }
+    else if (tab === 'predictive')  { renderPredCostKPIs(); renderPredQtyKPIs(); initWhatIf(); initOVPredictiveCharts(); }
+    else if (tab === 'export')      { renderExportTable(); }
   }
 }
 
@@ -6055,7 +6490,7 @@ function renderOVKPIs() {
     <div class="ov-kpi-card clickable" onclick="openTop10Modal()">
       <span class="ov-kpi-label">Top Opportunities ▸</span>
       <span class="ov-kpi-value" style="font-size:16px;color:var(--c-text);">${OV_SUMMARY.topOpportunity}</span>
-      <span class="ov-kpi-sub">${OV_SUMMARY.topOpportunityPct.toFixed(2)}% avg overfill · ${_fmt$M(OV_SUMMARY.topOpportunityCost)}/yr</span>
+      <span class="ov-kpi-sub">${OV_SUMMARY.topOpportunityPct.toFixed(2)}% avg overfill · ${_fmt$M(OV_SUMMARY.topOpportunityCost)}/w</span>
       <span class="ov-kpi-badge" style="background:#1565C0;">Click — see top 10</span>
     </div>
     <div class="ov-kpi-card gs-gap-card${gapAbove ? '' : ' ok'}">
@@ -6095,28 +6530,93 @@ function renderOVKPIs() {
 
 /* ─── OVERFILL: OVERVIEW CHARTS ──────────────────────── */
 
+function _makeTrendDatasets(series, field) {
+  return series.map(s => ({
+    label: s.label,
+    data:  s.data || s[field],
+    borderColor:     s.color,
+    backgroundColor: s.color + '18',
+    fill: false, tension:.3, pointRadius:3, borderWidth:2,
+  }));
+}
+
+function _makeDecompTooltipPlugin(series, field) {
+  return {
+    callbacks: {
+      label: function(ctx) {
+        const total = series.reduce((sum, s) => sum + (s.data||s[field])[ctx.dataIndex], 0);
+        const sorted = [...series]
+          .map(s => ({ label: s.label, val: (s.data||s[field])[ctx.dataIndex] }))
+          .sort((a,b) => b.val - a.val);
+        const top3 = sorted.slice(0, 3);
+        const extra = sorted.length - 3;
+        const lines = top3.map(t => `  ${t.label}: ${field === 'cost' ? '$' + t.val.toLocaleString() : t.val.toLocaleString() + ' g'} (${total > 0 ? (t.val/total*100).toFixed(0) : 0}%)`);
+        if (extra > 0) lines.push(`  +${extra} more`);
+        return [
+          `${ctx.dataset.label}: ${field === 'cost' ? '$' + ctx.parsed.y.toLocaleString() : ctx.parsed.y.toLocaleString() + ' g'}`,
+          ...lines
+        ];
+      }
+    }
+  };
+}
+
 function initOVOverviewCharts() {
+  _renderOVCostTrend();
+  _renderOVQtyTrend();
+  _renderOVGiveawayBar();
+}
+
+function _renderOVCostTrend() {
+  const ex = REG['ch-ov-cost-trend'];
+  if (ex) { ex.destroy(); delete REG['ch-ov-cost-trend']; }
+  const isByRes = OV_COST_TREND_VIEW === 'res';
+  const series  = isByRes ? OV_COST_BY_RES : OV_COST_BY_SKU;
+  const tooltip = isByRes ? {} : _makeDecompTooltipPlugin(series, 'data');
   init('ch-ov-cost-trend', {
     type: 'line',
-    data: {
-      labels: OV_WEEKS,
-      datasets: [{ label:'Giveaway Cost ($)', data:OV_COST_TREND,
-        borderColor:'#DC3545', backgroundColor:'rgba(220,53,69,.08)',
-        fill:true, tension:.3, pointRadius:3, borderWidth:2 }]
-    },
-    options: { ...baseOpts('USD ($)'), plugins:{ legend:{ display:true, labels:{ color:CC.text, font:{size:10}, boxWidth:12 } } } }
+    data: { labels: OV_WEEKS, datasets: _makeTrendDatasets(series, 'data') },
+    options: {
+      ...baseOpts('USD ($)'),
+      plugins:{
+        legend:{ display:true, labels:{ color:CC.text, font:{size:10}, boxWidth:12 } },
+        tooltip:{ callbacks: tooltip.callbacks || {} }
+      }
+    }
   });
+}
+
+function _renderOVQtyTrend() {
+  const ex = REG['ch-ov-qty-trend'];
+  if (ex) { ex.destroy(); delete REG['ch-ov-qty-trend']; }
+  const isByRes = OV_QTY_TREND_VIEW === 'res';
+  const series  = isByRes ? OV_QTY_BY_RES : OV_QTY_BY_SKU;
+  const tooltip = isByRes ? {} : _makeDecompTooltipPlugin(series, 'data');
   init('ch-ov-qty-trend', {
     type: 'line',
-    data: {
-      labels: OV_WEEKS,
-      datasets: [{ label:'Overfill Volume (g)', data:OV_QTY_TREND,
-        borderColor:'#FF9800', backgroundColor:'rgba(255,152,0,.08)',
-        fill:true, tension:.3, pointRadius:3, borderWidth:2 }]
-    },
-    options: { ...baseOpts('Grams (g)'), plugins:{ legend:{ display:true, labels:{ color:CC.text, font:{size:10}, boxWidth:12 } } } }
+    data: { labels: OV_WEEKS, datasets: _makeTrendDatasets(series, 'data') },
+    options: {
+      ...baseOpts('Grams (g)'),
+      plugins:{
+        legend:{ display:true, labels:{ color:CC.text, font:{size:10}, boxWidth:12 } },
+        tooltip:{ callbacks: tooltip.callbacks || {} }
+      }
+    }
   });
-  _renderOVGiveawayBar();
+}
+
+function setOVTrendView(chart, group) {
+  if (chart === 'cost') {
+    OV_COST_TREND_VIEW = group;
+    document.getElementById('btn-ov-ct-res').classList.toggle('active', group === 'res');
+    document.getElementById('btn-ov-ct-sku').classList.toggle('active', group === 'sku');
+    _renderOVCostTrend();
+  } else {
+    OV_QTY_TREND_VIEW = group;
+    document.getElementById('btn-ov-qt-res').classList.toggle('active', group === 'res');
+    document.getElementById('btn-ov-qt-sku').classList.toggle('active', group === 'sku');
+    _renderOVQtyTrend();
+  }
 }
 
 function _renderOVGiveawayBar() {
@@ -6151,45 +6651,85 @@ function _hmClass(v) {
   return 'hm-green';
 }
 
-function renderOVHeatmap() {
-  OV_HEATMAP_OFFSET = 0;
-  const tbl = document.getElementById('ov-heatmap-tbl');
-  if (!tbl) return;
-  const skus = Object.keys(OV_HEATMAP_ROWS[0].skus);
-  let html = '<thead><tr><th class="row-hdr">Resource</th>';
-  skus.forEach(s => { html += '<th>' + s + '</th>'; });
-  html += '</tr></thead><tbody id="ov-hm-body">';
-  OV_HEATMAP_ROWS.slice(0, 20).forEach(r => {
-    html += '<tr><td class="row-hdr">' + r.resource + '</td>';
-    skus.forEach(s => {
-      const v = r.skus[s];
-      html += '<td class="' + _hmClass(v) + '">' + (v != null ? v.toFixed(1) + '%' : '—') + '</td>';
-    });
-    html += '</tr>';
-  });
-  html += '</tbody>';
-  tbl.innerHTML = html;
-  OV_HEATMAP_OFFSET = 20;
-  const btn = document.getElementById('btn-load-more-hm');
-  if (btn) btn.style.display = OV_HEATMAP_OFFSET >= OV_HEATMAP_ROWS.length ? 'none' : '';
+function _hmCell(resource, sku, v) {
+  if (v == null) return '<td class="' + _hmClass(v) + '">—</td>';
+  return '<td class="' + _hmClass(v) + ' hm-clickable" onclick="openHeatmapDrillDown(\'' + resource + '\',\'' + sku + '\',' + v + ')">' + v.toFixed(1) + '%</td>';
 }
 
-function loadMoreHeatmap() {
-  const tbody = document.getElementById('ov-hm-body');
-  if (!tbody) return;
-  const skus = Object.keys(OV_HEATMAP_ROWS[0].skus);
-  OV_HEATMAP_ROWS.slice(OV_HEATMAP_OFFSET, OV_HEATMAP_OFFSET + 20).forEach(r => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = '<td class="row-hdr">' + r.resource + '</td>' +
-      skus.map(s => {
-        const v = r.skus[s];
-        return '<td class="' + _hmClass(v) + '">' + (v != null ? v.toFixed(1) + '%' : '—') + '</td>';
-      }).join('');
-    tbody.appendChild(tr);
+function renderOVHeatmap() {
+  const tbl = document.getElementById('ov-heatmap-tbl');
+  if (!tbl) return;
+
+  const resources = Object.keys(OV_HEATMAP_SKUS[0].resources);
+  let html = '<thead><tr>';
+  html += '<th class="row-hdr" style="min-width:90px;">SKU</th>';
+  html += '<th class="row-hdr" style="min-width:56px;">Declared</th>';
+  resources.forEach(r => { html += '<th>' + r + '</th>'; });
+  html += '</tr></thead><tbody>';
+
+  let lastFamily = null;
+  OV_HEATMAP_SKUS.forEach(row => {
+    if (row.family !== lastFamily) {
+      lastFamily = row.family;
+      html += '<tr><td colspan="' + (resources.length + 2) + '" style="background:#EEF2F7;padding:5px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#4A6580;border-bottom:1.5px solid #C5CAD5;">' + row.family + '</td></tr>';
+    }
+    html += '<tr>';
+    html += '<td class="row-hdr" style="font-weight:700;">' + row.sku + '</td>';
+    html += '<td class="row-hdr" style="font-size:10px;color:var(--c-muted);">' + row.declaredMl + ' ml</td>';
+    resources.forEach(res => { html += _hmCell(res, row.sku, row.resources[res]); });
+    html += '</tr>';
   });
-  OV_HEATMAP_OFFSET += 20;
+
+  html += '</tbody>';
+  tbl.innerHTML = html;
+
   const btn = document.getElementById('btn-load-more-hm');
-  if (btn) btn.style.display = OV_HEATMAP_OFFSET >= OV_HEATMAP_ROWS.length ? 'none' : '';
+  if (btn) btn.style.display = 'none';
+}
+
+function loadMoreHeatmap() { /* no-op: all SKUs shown in single render */ }
+
+let _hmDrillResource = '', _hmDrillSku = '';
+
+function openHeatmapDrillDown(resource, sku, ovPct) {
+  _hmDrillResource = resource;
+  _hmDrillSku = sku;
+  const costPerPct = 3200;
+  const qtyPerPct  = 180;
+  const totalCost  = +(ovPct * costPerPct).toFixed(0);
+  const totalQty   = +(ovPct * qtyPerPct).toFixed(0);
+  const drvRatios  = { brand:0.38, setpoint:0.27, sigma:0.24, sg:0.11 };
+  const drvColors  = { brand:'#DC3545', setpoint:'#FF9800', sigma:'#FFC107', sg:'#4A9ED6' };
+  const drvNames   = { brand:'Brand-Driven', setpoint:'Set Point-Driven', sigma:'Sigma-Driven', sg:'SG-Driven' };
+
+  document.getElementById('hm-popup-title').textContent = resource + ' / ' + sku + ' — Overfill Detail';
+  document.getElementById('hm-popup-kpis').innerHTML = `
+    <div class="hm-popup-kpi"><div class="hm-popup-kpi-label">Avg Overfill %</div><div class="hm-popup-kpi-value">${ovPct.toFixed(1)}%</div></div>
+    <div class="hm-popup-kpi"><div class="hm-popup-kpi-label">Total Cost</div><div class="hm-popup-kpi-value">${_fmt$M(totalCost)}</div></div>
+    <div class="hm-popup-kpi"><div class="hm-popup-kpi-label">Total Qty</div><div class="hm-popup-kpi-value">${_fmtKg(totalQty)}</div></div>`;
+
+  let drvHtml = '';
+  ['brand','setpoint','sigma','sg'].forEach(k => {
+    const amt = +(totalCost * drvRatios[k]).toFixed(0);
+    const pct = (drvRatios[k]*100).toFixed(0);
+    drvHtml += `<div class="hm-drv-item">
+      <span class="hm-drv-name" style="color:${drvColors[k]}">${drvNames[k]}</span>
+      <div class="hm-drv-bar-wrap"><div class="hm-drv-bar" style="width:${pct}%;background:${drvColors[k]}"></div></div>
+      <span class="hm-drv-amt" style="color:${drvColors[k]}">${_fmt$M(amt)}</span>
+      <span class="hm-drv-pct">${pct}%</span>
+    </div>`;
+  });
+  document.getElementById('hm-popup-drivers').innerHTML = drvHtml;
+  document.getElementById('hm-popup-overlay').classList.add('open');
+}
+
+function closeHeatmapDrillDown() {
+  document.getElementById('hm-popup-overlay').classList.remove('open');
+}
+
+function hmViewInDrivers() {
+  closeHeatmapDrillDown();
+  showOVTab('drivers');
 }
 
 /* ─── OVERFILL: TOP CONTRIBUTORS ─────────────────────── */
@@ -6197,77 +6737,118 @@ function loadMoreHeatmap() {
 function renderOVTopContributors() {
   const tb = document.querySelector('#tb-ov-top tbody');
   if (!tb) return;
-  const rC = { 'High':'#DC3545', 'Med-High':'#FF9800', 'Med':'#F5A534' };
+  const pC = { 'Top Focus':'#DC3545', 'Monitor':'#FF9800', 'Within Target':'#28A745' };
   tb.innerHTML = OV_TOP_CONTRIBUTORS.map(r => `
     <tr>
       <td style="font-weight:700;">${r.rank}</td>
       <td>${r.resource}</td><td>${r.sku}</td>
-      <td style="font-weight:700;color:${rC[r.risk]||'#333'}">${r.pct.toFixed(1)}%</td>
+      <td style="font-weight:700;color:${pC[r.priority]||'#333'}">${r.pct.toFixed(1)}%</td>
       <td>${r.gramsYr.toLocaleString()} g</td>
       <td style="font-weight:700;">$${r.cost.toLocaleString()}</td>
-      <td><span class="ov-kpi-badge" style="background:${rC[r.risk]||'#555'};">${r.risk}</span></td>
+      <td><span class="ov-kpi-badge" style="background:${pC[r.priority]||'#555'};">${r.priority}</span></td>
     </tr>`).join('');
 }
 
-/* ─── OVERFILL: SPEC SCALE (BULLET CHARTS) ───────────── */
+/* ─── OVERFILL: SPEC SCALE (VERTICAL BAND VISUALIZATION) ── */
 
 function renderOVSpecScale() {
   const grid = document.getElementById('bullet-grid');
   if (!grid) return;
   grid.innerHTML = OV_SPEC_SCALE.map(d => {
-    const range    = d.specHi - d.specLo;
-    const pct      = v => ((v - d.specLo) / range * 100);
-    const clamp    = x => Math.max(0, Math.min(100, x));
-    const meanP    = clamp(pct(d.meanMl));
-    const targetP  = clamp(pct(d.targetMl));
-    const sigLoP   = clamp(pct(d.meanMl - d.sigmaMl));
-    const sigHiP   = clamp(pct(d.meanMl + d.sigmaMl));
-    const specHiP  = clamp(pct(d.specHi));
-    const specLoP  = clamp(pct(d.specLo));
-    const ovPct    = ((d.meanMl - d.targetMl) / d.targetMl * 100);
+    /* Build display range with buffer above USL and below Declared */
+    const buffer = (d.specHi - d.nominalMl) * 0.18;
+    const lo   = d.nominalMl - buffer;
+    const hi   = d.specHi   + buffer;
+    const span = hi - lo;
+
+    /* Convert fill value to % from TOP of bar (high fill = near top) */
+    const p = v => Math.max(0, Math.min(100, (hi - v) / span * 100));
+
+    const pUSL  = p(d.specHi);
+    const pTgt  = p(d.targetMl);
+    const pLSL  = p(d.specLo);
+    const pDecl = p(d.nominalMl);
+    const pMean = p(d.meanMl);
+    const pSigT = p(d.meanMl - d.sigmaMl);   /* top of sigma band (lower fill value) */
+    const pSigB = p(d.meanMl + d.sigmaMl);   /* bottom (higher fill) — but fill >mean goes up */
+    /* Sigma band: mean ± sigma, so higher y% = lower in bar. sigmaTop = p(mean+sigma), sigmaBot = p(mean-sigma) */
+    const pSigTop = p(d.meanMl + d.sigmaMl);
+    const pSigBot = p(d.meanMl - d.sigmaMl);
+
+    const ovPct = (d.meanMl - d.targetMl) / d.targetMl * 100;
     const statusCls = ovPct > 4 ? 'ov-val-red' : ovPct > 2 ? 'ov-val-yellow' : 'ov-val-green';
-    const rejHi    = (100 - specHiP).toFixed(1);
-    const warnHi   = (specHiP - 65).toFixed(1);
-    const warnLo   = (65 - specLoP).toFixed(1);
-    const rejLo    = specLoP.toFixed(1);
-    return `
-      <div class="bullet-card">
-        <div class="bullet-card-title">${d.resource}</div>
-        <div class="bullet-card-sub">${d.sku} · Nominal: ${d.nominalMl} ml</div>
-        <div class="bullet-scale-wrap">
+
+    /* Zone flex heights (top to bottom) */
+    const zAboveUSL  = pUSL.toFixed(2);
+    const zTgtToUSL  = (pTgt  - pUSL ).toFixed(2);
+    const zLSLToTgt  = (pLSL  - pTgt ).toFixed(2);
+    const zDeclToLSL = (pDecl - pLSL ).toFixed(2);
+    const zBelowDecl = (100   - pDecl).toFixed(2);
+
+    return `<div class="bullet-card">
+      <div class="bullet-card-title">${d.resource}</div>
+      <div class="bullet-card-sub">${d.sku} · Declared: ${d.nominalMl} ml</div>
+      <div style="display:flex;gap:0;align-items:flex-start;position:relative;">
+        <!-- Vertical band (left ~55%) -->
+        <div class="bullet-scale-wrap" style="width:54%;flex-shrink:0;">
           <div class="bullet-scale">
-            <div class="bullet-zone bullet-zone-reject" style="flex:${rejHi}">
-              <span class="bullet-zone-label top">REJECT HIGH</span>
+            <div class="bullet-zone" style="flex:${zAboveUSL};background:rgba(220,53,69,.22);">
+              <span class="bullet-zone-label top" style="font-size:8px;color:#DC3545;">ABOVE USL</span>
             </div>
-            <div class="bullet-zone bullet-zone-warn" style="flex:${warnHi}"></div>
-            <div class="bullet-zone bullet-zone-ok"   style="flex:30"></div>
-            <div class="bullet-zone bullet-zone-warn" style="flex:${warnLo}"></div>
-            <div class="bullet-zone bullet-zone-reject" style="flex:${rejLo}">
-              <span class="bullet-zone-label bot">REJECT LOW</span>
+            <div class="bullet-zone" style="flex:${zTgtToUSL};background:rgba(255,152,0,.18);"></div>
+            <div class="bullet-zone" style="flex:${zLSLToTgt};background:rgba(40,167,69,.16);"></div>
+            <div class="bullet-zone" style="flex:${zDeclToLSL};background:rgba(220,53,69,.14);"></div>
+            <div class="bullet-zone" style="flex:${zBelowDecl};background:rgba(0,0,0,.07);">
+              <span class="bullet-zone-label bot" style="font-size:8px;color:var(--c-muted);">BELOW DECLARED</span>
             </div>
-            <div class="bullet-target-line" style="top:${(100-targetP).toFixed(1)}%"></div>
-            <div class="bullet-sigma" style="top:${(100-sigHiP).toFixed(1)}%;height:${(sigHiP-sigLoP).toFixed(1)}%"></div>
-            <div class="bullet-mean-dot" style="top:calc(${(100-meanP).toFixed(1)}% - 7px)"></div>
+            <!-- Sigma band -->
+            <div style="position:absolute;left:15%;right:15%;top:${pSigTop.toFixed(1)}%;height:${(pSigBot-pSigTop).toFixed(1)}%;background:rgba(0,123,255,.28);border-radius:3px;z-index:4;pointer-events:none;"></div>
+            <!-- Mean dot -->
+            <div style="position:absolute;left:50%;transform:translateX(-50%);top:calc(${pMean.toFixed(1)}% - 7px);width:14px;height:14px;border-radius:50%;background:#007BFF;border:2px solid #fff;box-shadow:0 0 0 2px #007BFF;z-index:5;pointer-events:none;"></div>
           </div>
         </div>
-        <div class="bullet-metrics">
-          <div class="bullet-metric">
-            <span class="bullet-metric-label">Mean</span>
-            <span class="bullet-metric-val">${d.meanMl.toFixed(2)}</span>
-            <span class="bullet-metric-sub">ml</span>
+        <!-- Labels panel (right ~45%): threshold lines + values -->
+        <div style="flex:1;position:relative;height:200px;padding-left:6px;">
+          <div style="position:absolute;top:${pUSL.toFixed(1)}%;display:flex;align-items:center;gap:3px;transform:translateY(-50%);">
+            <div style="width:10px;height:2px;background:#DC3545;flex-shrink:0;"></div>
+            <span style="font-size:9px;color:#DC3545;font-weight:700;white-space:nowrap;">USL: ${d.specHi.toFixed(1)} ml</span>
           </div>
-          <div class="bullet-metric">
-            <span class="bullet-metric-label">σ</span>
-            <span class="bullet-metric-val">±${d.sigmaMl.toFixed(2)}</span>
-            <span class="bullet-metric-sub">ml</span>
+          <div style="position:absolute;top:${pTgt.toFixed(1)}%;display:flex;align-items:center;gap:3px;transform:translateY(-50%);">
+            <div style="width:10px;height:2px;background:#E65100;border-top:2px dashed #E65100;flex-shrink:0;"></div>
+            <span style="font-size:9px;color:#E65100;font-weight:700;white-space:nowrap;">Target: ${d.targetMl.toFixed(1)} ml</span>
           </div>
-          <div class="bullet-metric">
-            <span class="bullet-metric-label">Overfill</span>
-            <span class="bullet-metric-val ${statusCls}">+${ovPct.toFixed(1)}%</span>
-            <span class="bullet-metric-sub">vs target</span>
+          <div style="position:absolute;top:${pLSL.toFixed(1)}%;display:flex;align-items:center;gap:3px;transform:translateY(-50%);">
+            <div style="width:10px;height:2px;background:#1565C0;flex-shrink:0;"></div>
+            <span style="font-size:9px;color:#1565C0;font-weight:700;white-space:nowrap;">LSL: ${d.specLo.toFixed(1)} ml</span>
+          </div>
+          <div style="position:absolute;top:${pDecl.toFixed(1)}%;display:flex;align-items:center;gap:3px;transform:translateY(-50%);">
+            <div style="width:10px;height:2px;background:var(--c-muted);flex-shrink:0;"></div>
+            <span style="font-size:9px;color:var(--c-muted);font-weight:600;white-space:nowrap;">Declared: ${d.nominalMl.toFixed(1)} ml</span>
+          </div>
+          <div style="position:absolute;top:${pMean.toFixed(1)}%;display:flex;align-items:center;gap:3px;transform:translateY(-50%);">
+            <div style="width:10px;height:2px;background:#007BFF;flex-shrink:0;"></div>
+            <span style="font-size:9px;color:#007BFF;font-weight:700;white-space:nowrap;">Mean: ${d.meanMl.toFixed(2)} ml</span>
           </div>
         </div>
-      </div>`;
+      </div>
+      <div class="bullet-metrics">
+        <div class="bullet-metric">
+          <span class="bullet-metric-label">Mean</span>
+          <span class="bullet-metric-val">${d.meanMl.toFixed(2)}</span>
+          <span class="bullet-metric-sub">ml</span>
+        </div>
+        <div class="bullet-metric">
+          <span class="bullet-metric-label">σ</span>
+          <span class="bullet-metric-val">±${d.sigmaMl.toFixed(2)}</span>
+          <span class="bullet-metric-sub">ml</span>
+        </div>
+        <div class="bullet-metric">
+          <span class="bullet-metric-label">Overfill</span>
+          <span class="bullet-metric-val ${statusCls}">+${ovPct.toFixed(1)}%</span>
+          <span class="bullet-metric-sub">vs target</span>
+        </div>
+      </div>
+    </div>`;
   }).join('');
 }
 
@@ -6282,18 +6863,95 @@ function setSSGroupBy(group) {
 function initOVSGCharts() {
   const skus    = Object.keys(OV_SG_DATA);
   const palette = ['#1565C0','#DC3545','#28A745','#FF9800','#6A1B9A'];
+
+  /* Determine Spec Max/Min from OV_SG_STATS — use max/min across all SKUs */
+  const specMaxValues = Object.values(OV_SG_STATS).map(s => s.specMax);
+  const specMinValues = Object.values(OV_SG_STATS).map(s => s.specMin);
+  const specMaxSG = Math.max(...specMaxValues);
+  const specMinSG = Math.min(...specMinValues);
+  const meanSGValues = Object.values(OV_SG_STATS).map(s => s.mean);
+  const overallMeanSG = meanSGValues.reduce((a,b)=>a+b,0) / meanSGValues.length;
+
+  /* Build main SKU datasets */
+  const skuDatasets = skus.map((sku, i) => ({
+    label: sku, data: OV_SG_DATA[sku],
+    borderColor: palette[i % palette.length],
+    backgroundColor: 'transparent',
+    tension:.3, pointRadius:4, borderWidth:2
+  }));
+
+  /* Reference lines */
+  const specMaxLine = {
+    label: 'Spec Max SG',
+    data: Array(12).fill(specMaxSG),
+    borderColor: '#DC3545', borderDash:[6,4],
+    borderWidth:1.5, pointRadius:0, fill:false,
+    backgroundColor: 'transparent',
+  };
+  const specMinLine = {
+    label: 'Spec Min SG',
+    data: Array(12).fill(specMinSG),
+    borderColor: '#1565C0', borderDash:[6,4],
+    borderWidth:1.5, pointRadius:0, fill:false,
+    backgroundColor: 'transparent',
+  };
+  const oppZoneHigh = {
+    label: 'Opportunity Zone Upper',
+    data: Array(12).fill(specMaxSG),
+    borderColor: 'transparent', pointRadius:0,
+    backgroundColor: 'rgba(255,152,0,0.08)',
+    fill: '+1', borderWidth:0,
+  };
+  const oppZoneLow = {
+    label: 'Opportunity Zone Lower',
+    data: Array(12).fill(overallMeanSG),
+    borderColor: 'transparent', pointRadius:0,
+    backgroundColor: 'rgba(255,152,0,0.08)',
+    fill: false, borderWidth:0,
+  };
+
   init('ch-ov-sg-time', {
     type: 'line',
     data: {
       labels: OV_WEEKS,
-      datasets: skus.map((sku, i) => ({
-        label: sku, data: OV_SG_DATA[sku],
-        borderColor: palette[i % palette.length],
-        backgroundColor: 'transparent',
-        tension:.3, pointRadius:4, borderWidth:2
-      }))
+      datasets: [...skuDatasets, oppZoneHigh, oppZoneLow, specMinLine, specMaxLine]
     },
-    options: { ...baseOpts('Specific Gravity'), plugins:{ legend:{ display:true, labels:{ color:CC.text, font:{size:10}, boxWidth:12 } } } }
+    options: {
+      ...baseOpts('Specific Gravity'),
+      plugins:{
+        legend:{
+          display:true,
+          labels:{
+            color:CC.text, font:{size:10}, boxWidth:12,
+            filter: item => !['Opportunity Zone Upper','Opportunity Zone Lower'].includes(item.text),
+            generateLabels: chart => Chart.defaults.plugins.legend.labels.generateLabels(chart).map(item => {
+              if (item.text === 'Spec Max SG') { item.lineDash = [6,4]; }
+              if (item.text === 'Spec Min SG') { item.lineDash = [6,4]; }
+              return item;
+            })
+          }
+        },
+        tooltip:{
+          callbacks:{
+            label: ctx => {
+              const sg   = ctx.parsed.y;
+              const sku  = ctx.dataset.label;
+              const stats = OV_SG_STATS[sku];
+              if (!stats) return `${sku}: ${sg.toFixed(4)}`;
+              const delta = ((sg - stats.mean) / stats.mean * 100);
+              const vsMax = ((specMaxSG - sg) / specMaxSG * 100);
+              return [
+                `${sku}: SG ${sg.toFixed(4)}`,
+                `  vs Mean: ${delta > 0 ? '+' : ''}${delta.toFixed(2)}%`,
+                `  vs Spec Max: −${vsMax.toFixed(2)}%`,
+                `  Spec Range: ${stats.specMin.toFixed(3)} – ${stats.specMax.toFixed(3)}`,
+                `  σ: ${stats.sigma.toFixed(3)}`,
+              ];
+            }
+          }
+        }
+      }
+    }
   });
 }
 
@@ -6372,23 +7030,61 @@ function renderOVScenarios() {
 }
 
 function initOVPredictiveCharts() {
-  init('ch-ov-cumulative', {
+  _renderPredCostChart();
+  _renderPredQtyChart();
+}
+
+function _renderPredCostChart() {
+  const id = 'ch-pred-cost-area';
+  if (REG[id]) { REG[id].destroy(); delete REG[id]; }
+  init(id, {
     type: 'line',
     data: {
-      labels: OV_PREDICTIVE.months,
+      labels: OV_PRED_WEEKS,
       datasets: [
-        { label:'Do Nothing',      data:OV_PREDICTIVE.cumDoNothing,
-          borderColor:'#DC3545', backgroundColor:'rgba(220,53,69,.08)',
-          fill:true, tension:.35, borderWidth:2.5, pointRadius:3 },
-        { label:'Investment Path', data:OV_PREDICTIVE.cumInvest,
-          borderColor:'#1565C0', backgroundColor:'rgba(21,101,192,.06)',
-          fill:true, tension:.35, borderWidth:2.5, borderDash:[5,3], pointRadius:3 },
-        { label:'Net Result',      data:OV_PREDICTIVE.cumNet,
-          borderColor:'#28A745', backgroundColor:'rgba(40,167,69,.08)',
-          fill:true, tension:.35, borderWidth:2.5, borderDash:[2,3], pointRadius:3 },
+        { label:'Brand-Driven',     data:OV_PRED_FORECAST.brand,
+          borderColor:'#DC3545', backgroundColor:'transparent',
+          fill:false, tension:.35, borderWidth:2, pointRadius:2 },
+        { label:'Set Point-Driven', data:OV_PRED_FORECAST.setpoint,
+          borderColor:'#FF9800', backgroundColor:'transparent',
+          fill:false, tension:.35, borderWidth:2, pointRadius:2 },
+        { label:'Sigma-Driven',     data:OV_PRED_FORECAST.sigma,
+          borderColor:'#FFC107', backgroundColor:'transparent',
+          fill:false, tension:.35, borderWidth:2, pointRadius:2 },
       ]
     },
-    options: { ...baseOpts('Cumulative Cost ($)'), plugins:{ legend:{ display:true, labels:{ color:CC.text, font:{size:10}, boxWidth:14 } } } }
+    options: {
+      ...baseOpts('Weekly Cost ($)'),
+      plugins: { legend:{ display:true, labels:{ color:CC.text, font:{size:10}, boxWidth:12 } } }
+    }
+  });
+}
+
+function _renderPredQtyChart() {
+  const id = 'ch-pred-qty-area';
+  if (REG[id]) { REG[id].destroy(); delete REG[id]; }
+  const isMl = OV_PRED_QTY_UNIT === 'ml';
+  const conv = isMl ? (v => +(v / OV_MEAN_SG).toFixed(0)) : (v => v);
+  init(id, {
+    type: 'line',
+    data: {
+      labels: OV_PRED_WEEKS,
+      datasets: [
+        { label:'Brand-Driven',     data:OV_PRED_QTY_FORECAST.brand.map(conv),
+          borderColor:'#DC3545', backgroundColor:'transparent',
+          fill:false, tension:.35, borderWidth:2, pointRadius:2 },
+        { label:'Set Point-Driven', data:OV_PRED_QTY_FORECAST.setpoint.map(conv),
+          borderColor:'#FF9800', backgroundColor:'transparent',
+          fill:false, tension:.35, borderWidth:2, pointRadius:2 },
+        { label:'Sigma-Driven',     data:OV_PRED_QTY_FORECAST.sigma.map(conv),
+          borderColor:'#FFC107', backgroundColor:'transparent',
+          fill:false, tension:.35, borderWidth:2, pointRadius:2 },
+      ]
+    },
+    options: {
+      ...baseOpts(isMl ? 'Weekly Qty (ml)' : 'Weekly Qty (kg)'),
+      plugins: { legend:{ display:true, labels:{ color:CC.text, font:{size:10}, boxWidth:12 } } }
+    }
   });
 }
 
@@ -6454,75 +7150,259 @@ function closeTop10Modal(e) {
 
 /* ─── OVERFILL: TREND ANALYSIS ───────────────────────── */
 
+let OV_TREND_VIEW   = 'res';   // 'res' or 'sku' — for Trend Analysis charts
+let OV_TREND_SEL    = [];      // selected legend keys (for Change 15)
+let OV_TREND_LEGEND_COST = []; // label strings for cost chart
+let OV_TREND_LEGEND_QTY  = [];
+
 function _trendSKU() { return OV_TREND_SKUS[OV_TREND_SKU_IDX]; }
+
+/* By-SKU aggregate data for Trend Analysis (all resources summed per SKU) */
+function _trendBySKUDatasets(field) {
+  const skus = OV_TREND_SKUS;
+  return skus.map((sku, si) => {
+    const skuSites = OV_TREND_SITES[sku] || [];
+    const palette  = ['#C62828','#FF9800','#1565C0'];
+    return {
+      label: sku,
+      data:  OV_WEEKS.map((_, wi) => skuSites.reduce((s, site) => s + site[field][wi], 0)),
+      borderColor: palette[si] || CC.actual,
+      backgroundColor: 'transparent',
+      tension:.3, pointRadius:4, borderWidth:2,
+    };
+  });
+}
+
+/* By-Resource datasets (same as before — all resources for chosen SKU) */
+function _trendByResDatasets(field, compareMode, sites) {
+  const ds = [];
+  sites.forEach(s => {
+    const lbl = s.plant + ' – ' + s.resource;
+    ds.push({
+      label: lbl,
+      data:  compareMode === 'mom' ? _toMonthlyData(s[field]) : s[field],
+      borderColor: s.color, backgroundColor: 'transparent',
+      tension:.3, pointRadius:4, borderWidth:2,
+    });
+    if (compareMode === 'yoy' || compareMode === 'prev12') {
+      ds.push({
+        label: lbl + ' (prev)',
+        data: s[field].map((v,i) => +(v * (0.88 + 0.08*Math.sin(i))).toFixed(0)),
+        borderColor: s.color, backgroundColor: 'transparent',
+        tension:.3, pointRadius:2, borderWidth:1.5, borderDash:[5,4],
+      });
+    }
+  });
+  return ds;
+}
+
+function _toMonthlyData(wkData) {
+  return ['Jul','Aug','Sep','Oct','Nov','Dec'].map((_, mi) =>
+    wkData.slice(mi*2, mi*2+2).reduce((a,b)=>a+b,0) / 2
+  );
+}
+
+function _makeClickableLegend(chartId, tipId) {
+  return {
+    onClick: function(e, legendItem, legend) {
+      const chart  = legend.chart;
+      const label  = legendItem.text;
+      const isCtrl = e.native && (e.native.ctrlKey || e.native.metaKey);
+      if (!isCtrl) {
+        if (OV_TREND_SEL.length === 1 && OV_TREND_SEL[0] === label) {
+          OV_TREND_SEL = [];
+        } else {
+          OV_TREND_SEL = [label];
+        }
+      } else {
+        if (OV_TREND_SEL.includes(label)) {
+          OV_TREND_SEL = OV_TREND_SEL.filter(l => l !== label);
+        } else {
+          OV_TREND_SEL.push(label);
+        }
+      }
+      chart.data.datasets.forEach(ds => {
+        const active = OV_TREND_SEL.length === 0 || OV_TREND_SEL.includes(ds.label);
+        ds.borderWidth = active ? 2.5 : 1;
+        ds.borderColor = active ? ds._origColor || ds.borderColor
+                                : (ds._origColor || ds.borderColor) + '44';
+        if (!ds._origColor) ds._origColor = ds.borderColor.replace('44','');
+      });
+      chart.update();
+      renderTrendSummaryTable();
+      if (tipId) {
+        const tip = document.getElementById(tipId);
+        if (tip) tip.style.display = OV_TREND_SEL.length > 0 ? '' : 'none';
+      }
+    },
+    labels: {
+      color: CC.text, font:{size:10}, boxWidth:12,
+      generateLabels: function(chart) {
+        const defaultFn = Chart.defaults.plugins.legend.labels.generateLabels;
+        const items = defaultFn.call(this, chart);
+        items.forEach(item => {
+          if (OV_TREND_SEL.length > 0) {
+            if (OV_TREND_SEL.includes(item.text)) {
+              item.fontColor = CC.text;
+              item.text = '● ' + item.text;
+            } else {
+              item.fontColor = CC.muted || '#888';
+            }
+          }
+        });
+        return items;
+      }
+    }
+  };
+}
+
+function _makeDecompTooltipCallbacks(datasets, field, compareMode) {
+  if (compareMode === 'none' || compareMode === 'wow') return {};
+  return {
+    label: function(ctx) {
+      const wi = ctx.dataIndex;
+      const mainDs = datasets.filter(ds => !ds.label.endsWith('(prev)'));
+      const total  = mainDs.reduce((s,ds) => s + ds.data[wi], 0);
+      const sorted = [...mainDs]
+        .map(ds => ({ label: ds.label, val: ds.data[wi] }))
+        .sort((a,b) => b.val - a.val);
+      const top3  = sorted.slice(0,3);
+      const extra = sorted.length - 3;
+      const isQty = field === 'qty';
+      const fmt   = v => isQty ? v.toLocaleString() + ' kg' : '$' + v.toLocaleString();
+      const lines = top3.map(t => `  ${t.label}: ${fmt(t.val)} (${total>0?(t.val/total*100).toFixed(0):0}%)`);
+      if (extra > 0) lines.push(`  +${extra} more`);
+      return [`${ctx.dataset.label}: ${fmt(ctx.parsed.y)}`, ...lines];
+    }
+  };
+}
+
+function _buildWoWDatasets(field, sites) {
+  const palette = ['#DC3545','#FF9800','#28A745','#1565C0'];
+  return sites.map((s, si) => ({
+    label: s.plant + ' – ' + s.resource,
+    data: s[field].map((v,i) => i === 0 ? 0 : v - s[field][i-1]),
+    backgroundColor: palette[si % palette.length] + '99',
+    borderColor: palette[si % palette.length],
+    borderRadius: 3,
+  }));
+}
+
+let OV_TREND_MONTHS = ['Jul','Aug','Sep','Oct','Nov','Dec'];
 
 function trendSKUNav(dir) {
   OV_TREND_SKU_IDX = (OV_TREND_SKU_IDX + dir + OV_TREND_SKUS.length) % OV_TREND_SKUS.length;
-  OV_INITED['trend'] = false;
-  const costChart = REG['ch-ov-trend-cost'];
-  const qtyChart  = REG['ch-ov-trend-qty'];
-  if (costChart) { costChart.destroy(); delete REG['ch-ov-trend-cost']; }
-  if (qtyChart)  { qtyChart.destroy();  delete REG['ch-ov-trend-qty'];  }
+  OV_TREND_SEL = [];
+  _destroyTrendCharts();
+  OV_INITED['trend'] = true;
+  initOVTrendCharts();
+  renderTrendSummaryTable();
+}
+
+function setTrendAnalysisView(chart, group) {
+  OV_TREND_VIEW = group;
+  ['cost','qty'].forEach(c => {
+    const btn = id => document.getElementById('btn-ta-' + c + '-' + (id === 'res' ? 'res' : 'sku'));
+    document.getElementById('btn-ta-' + c + '-res').classList.toggle('active', group === 'res');
+    document.getElementById('btn-ta-' + c + '-sku').classList.toggle('active', group === 'sku');
+  });
+  OV_TREND_SEL = [];
+  _destroyTrendCharts();
   OV_INITED['trend'] = true;
   initOVTrendCharts();
   renderTrendSummaryTable();
 }
 
 function updateTrendCharts() {
-  OV_INITED['trend'] = false;
-  const costChart = REG['ch-ov-trend-cost'];
-  const qtyChart  = REG['ch-ov-trend-qty'];
-  if (costChart) { costChart.destroy(); delete REG['ch-ov-trend-cost']; }
-  if (qtyChart)  { qtyChart.destroy();  delete REG['ch-ov-trend-qty'];  }
+  OV_TREND_SEL = [];
+  _destroyTrendCharts();
   OV_INITED['trend'] = true;
   initOVTrendCharts();
 }
 
+function _destroyTrendCharts() {
+  OV_INITED['trend'] = false;
+  ['ch-ov-trend-cost','ch-ov-trend-qty','ch-ov-trend-cost-wow','ch-ov-trend-qty-wow'].forEach(id => {
+    if (REG[id]) { REG[id].destroy(); delete REG[id]; }
+  });
+}
+
 function initOVTrendCharts() {
-  const sku   = _trendSKU();
-  const sites = OV_TREND_SITES[sku] || [];
-  const lbl   = document.getElementById('trend-sku-label');
+  const sku         = _trendSKU();
+  const sites       = OV_TREND_SITES[sku] || [];
+  const lbl         = document.getElementById('trend-sku-label');
   if (lbl) lbl.textContent = sku;
 
-  const yoy = document.getElementById('trend-yoy-select');
-  const compareMode = yoy ? yoy.value : 'none';
+  const yoyEl      = document.getElementById('trend-yoy-select');
+  const compareMode = yoyEl ? yoyEl.value : 'none';
+  const isMoM      = compareMode === 'mom';
+  const isWoW      = compareMode === 'wow';
+  const xLabels    = isMoM ? OV_TREND_MONTHS : OV_WEEKS;
 
-  function makeDatasets(field, solid) {
-    const ds = [];
-    sites.forEach(s => {
-      ds.push({
-        label: s.plant + ' – ' + s.resource,
-        data: s[field],
-        borderColor: s.color,
-        backgroundColor: 'transparent',
-        tension: .3, pointRadius: 4, borderWidth: 2,
-        borderDash: solid ? [] : undefined,
-      });
-      if (compareMode !== 'none') {
-        const shift = compareMode === 'yoy' ? 12 : 6;
-        ds.push({
-          label: s.plant + ' – ' + s.resource + ' (prev)',
-          data: s[field].map((v,i) => +(v * (0.88 + 0.08*Math.sin(i))).toFixed(0)),
-          borderColor: s.color,
-          backgroundColor: 'transparent',
-          tension: .3, pointRadius: 2, borderWidth: 1.5,
-          borderDash: [5,4],
-        });
-      }
-    });
-    return ds;
-  }
+  /* Show/hide WoW panels */
+  const wowCostWrap = document.getElementById('trend-wow-cost-wrap');
+  const wowQtyWrap  = document.getElementById('trend-wow-qty-wrap');
+  if (wowCostWrap) wowCostWrap.style.display = isWoW ? '' : 'none';
+  if (wowQtyWrap)  wowQtyWrap.style.display  = isWoW ? '' : 'none';
+
+  /* Show legend click tip */
+  const tip = document.getElementById('trend-legend-tip');
+  if (tip) tip.style.display = OV_TREND_SEL.length > 0 ? '' : 'none';
+
+  const isByRes = OV_TREND_VIEW === 'res';
+
+  /* Build cost datasets */
+  const costDs = isByRes
+    ? _trendByResDatasets('cost', compareMode, sites)
+    : _trendBySKUDatasets('cost');
+
+  /* Build qty datasets */
+  const qtyDs = isByRes
+    ? _trendByResDatasets('qty', compareMode, sites)
+    : _trendBySKUDatasets('qty');
+
+  const legendCost = _makeClickableLegend('ch-ov-trend-cost', 'trend-legend-tip');
+  const legendQty  = _makeClickableLegend('ch-ov-trend-qty',  null);
 
   init('ch-ov-trend-cost', {
     type: 'line',
-    data: { labels: OV_WEEKS, datasets: makeDatasets('cost', true) },
-    options: { ...baseOpts('Giveaway Cost ($)'), plugins:{ legend:{ display:true, labels:{ color:CC.text, font:{size:10}, boxWidth:12 } } } }
+    data: { labels: xLabels, datasets: costDs },
+    options: {
+      ...baseOpts('Giveaway Cost ($)'),
+      plugins: {
+        legend: legendCost,
+        tooltip: { callbacks: _makeDecompTooltipCallbacks(costDs, 'cost', compareMode) }
+      }
+    }
   });
+
   init('ch-ov-trend-qty', {
     type: 'line',
-    data: { labels: OV_WEEKS, datasets: makeDatasets('qty', true) },
-    options: { ...baseOpts('Quantity (kg)'), plugins:{ legend:{ display:true, labels:{ color:CC.text, font:{size:10}, boxWidth:12 } } } }
+    data: { labels: xLabels, datasets: qtyDs },
+    options: {
+      ...baseOpts('Quantity (kg)'),
+      plugins: {
+        legend: legendQty,
+        tooltip: { callbacks: _makeDecompTooltipCallbacks(qtyDs, 'qty', compareMode) }
+      }
+    }
   });
+
+  /* WoW bar charts */
+  if (isWoW) {
+    const wowCostDs = isByRes ? _buildWoWDatasets('cost', sites) : [];
+    const wowQtyDs  = isByRes ? _buildWoWDatasets('qty',  sites) : [];
+    init('ch-ov-trend-cost-wow', {
+      type: 'bar',
+      data: { labels: OV_WEEKS, datasets: wowCostDs },
+      options: { ...baseOpts('WoW Δ Cost ($)'), plugins:{ legend:{ display:true, labels:{color:CC.text,font:{size:10},boxWidth:10} } } }
+    });
+    init('ch-ov-trend-qty-wow', {
+      type: 'bar',
+      data: { labels: OV_WEEKS, datasets: wowQtyDs },
+      options: { ...baseOpts('WoW Δ Qty (kg)'), plugins:{ legend:{ display:true, labels:{color:CC.text,font:{size:10},boxWidth:10} } } }
+    });
+  }
 }
 
 function renderTrendSummaryTable() {
@@ -6549,34 +7429,150 @@ function renderTrendSummaryTable() {
   }).join('');
 }
 
+/* ─── OVERFILL: TOP 10 SKU CONTRIBUTORS (TREND TAB) ─── */
+
+function toggleTop10SKUSection() {
+  const body = document.getElementById('top10-sku-body');
+  const chev = document.getElementById('top10-sku-chevron');
+  if (!body) return;
+  const open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  if (chev) chev.textContent = open ? '▼' : '▲';
+  if (!open) renderTop10SKUTable();
+}
+
+function renderTop10SKUTable() {
+  const tbody = document.getElementById('tb-top10-sku-body');
+  if (!tbody) return;
+  const sel  = document.getElementById('top10-sku-week-sel');
+  const week = sel ? sel.value : 'W12';
+  const wi   = OV_WEEKS.indexOf(week);
+  const skuField = 'cost';
+
+  /* Aggregate all sites across all tracked SKUs for the selected week */
+  const rows = [];
+  OV_TREND_SKUS.forEach(sku => {
+    (OV_TREND_SITES[sku] || []).forEach(s => {
+      rows.push({
+        sku,
+        resource: s.resource,
+        plant:    s.plant,
+        cost:     s.cost[wi >= 0 ? wi : 11],
+        qty:      s.qty[wi >= 0 ? wi : 11],
+        prevCost: s.cost[wi > 0 ? wi - 1 : 0],
+      });
+    });
+  });
+  rows.sort((a,b) => b.cost - a.cost);
+  const top10 = rows.slice(0, 10);
+
+  tbody.innerHTML = top10.map((r, i) => {
+    const pct  = (r.cost / 15000 * 4.5).toFixed(2);
+    const delta = r.cost - r.prevCost;
+    const dSign = delta > 0 ? '+' : '';
+    const dColor = delta > 0 ? '#DC3545' : '#28A745';
+    return `<tr>
+      <td style="font-weight:700;">${i+1}</td>
+      <td>${r.sku}</td>
+      <td>${r.resource}</td>
+      <td>${r.plant}</td>
+      <td style="font-weight:700;">$${r.cost.toLocaleString()}</td>
+      <td>${(r.qty/1000).toFixed(2)} kg</td>
+      <td style="color:${+pct>4?'#DC3545':'#28A745'}">${pct}%</td>
+      <td style="font-weight:700;color:${dColor}">${dSign}$${Math.abs(delta).toLocaleString()}</td>
+    </tr>`;
+  }).join('');
+}
+
+function exportTop10SKUCSV() {
+  const sel  = document.getElementById('top10-sku-week-sel');
+  const week = sel ? sel.value : 'W12';
+  const wi   = OV_WEEKS.indexOf(week);
+  const rows = [];
+  OV_TREND_SKUS.forEach(sku => {
+    (OV_TREND_SITES[sku] || []).forEach(s => {
+      rows.push([sku, s.resource, s.plant, s.cost[wi >= 0 ? wi : 11], s.qty[wi >= 0 ? wi : 11]]);
+    });
+  });
+  rows.sort((a,b) => b[3] - a[3]);
+  const headers = ['SKU','Resource','Plant','Giveaway Cost ($)','Overfill Qty (g)'];
+  const csv = [headers, ...rows.slice(0,10)].map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'top10_sku_' + week + '.csv';
+  a.click();
+}
+
 /* ─── OVERFILL: DECOMPOSITION + WHAT-IF ─────────────── */
 
-function renderOVDecomp() {
-  const row = document.getElementById('decomp-row');
+function renderPredCostKPIs() {
+  const row = document.getElementById('pred-cost-kpi-row');
   if (!row) return;
-  const total = OV_DECOMP.brand.cost6m + OV_DECOMP.setpoint.cost6m + OV_DECOMP.sigma.cost6m;
+  const d = OV_PRED_COST_KPI;
+  const total = d.brand.cost12w + d.setpoint.cost12w + d.sigma.cost12w;
   const pct = v => (v/total*100).toFixed(0);
   row.innerHTML = `
     <div class="decomp-card brand">
       <div class="decomp-label">Brand-Driven</div>
-      <div class="decomp-value">${_fmt$M(OV_DECOMP.brand.cost6m)}</div>
-      <div class="decomp-sub">${OV_DECOMP.brand.label}</div>
-      <div class="decomp-pct">${pct(OV_DECOMP.brand.cost6m)}% of total</div>
+      <div class="decomp-value">${_fmt$M(d.brand.cost12w)}</div>
+      <div class="decomp-sub">${d.brand.sub}</div>
+      <div class="decomp-pct">${pct(d.brand.cost12w)}% of 12w total</div>
     </div>
     <div class="decomp-card setpoint">
       <div class="decomp-label">Set Point-Driven</div>
-      <div class="decomp-value">${_fmt$M(OV_DECOMP.setpoint.cost6m)}</div>
-      <div class="decomp-sub">${OV_DECOMP.setpoint.label}</div>
-      <div class="decomp-pct">${pct(OV_DECOMP.setpoint.cost6m)}% of total</div>
+      <div class="decomp-value">${_fmt$M(d.setpoint.cost12w)}</div>
+      <div class="decomp-sub">${d.setpoint.sub}</div>
+      <div class="decomp-pct">${pct(d.setpoint.cost12w)}% of 12w total</div>
     </div>
     <div class="decomp-card sigma">
       <div class="decomp-label">Sigma-Driven</div>
-      <div class="decomp-value">${_fmt$M(OV_DECOMP.sigma.cost6m)}</div>
-      <div class="decomp-sub">${OV_DECOMP.sigma.label}</div>
-      <div class="decomp-pct">${pct(OV_DECOMP.sigma.cost6m)}% of total</div>
+      <div class="decomp-value">${_fmt$M(d.sigma.cost12w)}</div>
+      <div class="decomp-sub">${d.sigma.sub}</div>
+      <div class="decomp-pct">${pct(d.sigma.cost12w)}% of 12w total</div>
     </div>`;
-  const totEl = document.getElementById('decomp-total-val');
-  if (totEl) totEl.textContent = _fmt$M(total);
+}
+
+function renderPredQtyKPIs() {
+  const row = document.getElementById('pred-qty-kpi-row');
+  if (!row) return;
+  const d = OV_PRED_QTY_KPI;
+  const isMl = OV_PRED_QTY_UNIT === 'ml';
+  const conv = v => isMl ? +(v / OV_MEAN_SG).toFixed(0) : v;
+  const fmt  = v => isMl ? (v/1000).toFixed(1) + 'kL' : _fmtKg(v);
+  const totalKg = d.brand.qty12wKg + d.setpoint.qty12wKg + d.sigma.qty12wKg;
+  const pct = v => (v/totalKg*100).toFixed(0);
+  row.innerHTML = `
+    <div class="qty-decomp-card brand">
+      <div class="qty-decomp-label">Brand-Driven</div>
+      <div class="qty-decomp-value">${fmt(conv(d.brand.qty12wKg))}</div>
+      <div class="qty-decomp-sub">${d.brand.label}</div>
+      <div class="qty-decomp-pct">${pct(d.brand.qty12wKg)}% of 12w total</div>
+    </div>
+    <div class="qty-decomp-card setpoint">
+      <div class="qty-decomp-label">Set Point-Driven</div>
+      <div class="qty-decomp-value">${fmt(conv(d.setpoint.qty12wKg))}</div>
+      <div class="qty-decomp-sub">${d.setpoint.label}</div>
+      <div class="qty-decomp-pct">${pct(d.setpoint.qty12wKg)}% of 12w total</div>
+    </div>
+    <div class="qty-decomp-card sigma">
+      <div class="qty-decomp-label">Sigma-Driven</div>
+      <div class="qty-decomp-value">${fmt(conv(d.sigma.qty12wKg))}</div>
+      <div class="qty-decomp-sub">${d.sigma.label}</div>
+      <div class="qty-decomp-pct">${pct(d.sigma.qty12wKg)}% of 12w total</div>
+    </div>`;
+}
+
+function setPredQtyUnit(unit) {
+  OV_PRED_QTY_UNIT = unit;
+  document.getElementById('btn-pred-qty-g').classList.toggle('active', unit === 'g');
+  document.getElementById('btn-pred-qty-ml').classList.toggle('active', unit === 'ml');
+  const title = document.getElementById('pred-qty-chart-title');
+  if (title) title.textContent = unit === 'ml'
+    ? '12-Week Overfill Quantity Forecast — By Driver (kL)'
+    : '12-Week Overfill Quantity Forecast — By Driver (kg)';
+  renderPredQtyKPIs();
+  _renderPredQtyChart();
 }
 
 function initWhatIf() {
@@ -6589,50 +7585,36 @@ function updateWhatIf() {
   const lsl   = parseFloat(document.getElementById('wi-lsl').value);
 
   document.getElementById('wi-sg-val').textContent    = sg.toFixed(3);
-  document.getElementById('wi-sigma-val').textContent = sigma.toFixed(2) + 'g';
-  document.getElementById('wi-lsl-val').textContent   = '+' + lsl.toFixed(1) + 'ml';
+  document.getElementById('wi-sigma-val').textContent = sigma.toFixed(3) + 'g';
+  document.getElementById('wi-lsl-val').textContent   = lsl.toFixed(1) + 'g';
 
-  const sgRatio  = sg / WI_DEFAULTS.sg;
-  const sigRatio = sigma / WI_DEFAULTS.sigma;
-  const lslRatio = lsl / WI_DEFAULTS.lsl;
+  const base      = OV_PRED_COST_KPI;
+  const sgRatio   = sg / WI_DEFAULTS.sg;
+  const sigRatio  = sigma / WI_DEFAULTS.sigma;
+  const lslRatio  = lsl / WI_DEFAULTS.lsl;
 
-  const adjBrand    = +(OV_DECOMP.brand.cost6m    * (0.5 + 0.5 * sgRatio) * (0.6 + 0.4 * lslRatio)).toFixed(0);
-  const adjSetpoint = +(OV_DECOMP.setpoint.cost6m * (0.7 + 0.3 * lslRatio)).toFixed(0);
-  const adjSigma    = +(OV_DECOMP.sigma.cost6m    * sigRatio).toFixed(0);
+  const adjBrand    = +(base.brand.cost12w    * (0.5 + 0.5 * sgRatio) * (0.6 + 0.4 * lslRatio)).toFixed(0);
+  const adjSetpoint = +(base.setpoint.cost12w * (0.7 + 0.3 * lslRatio)).toFixed(0);
+  const adjSigma    = +(base.sigma.cost12w    * sigRatio).toFixed(0);
   const adjTotal    = adjBrand + adjSetpoint + adjSigma;
-  const baseTotal   = OV_DECOMP.brand.cost6m + OV_DECOMP.setpoint.cost6m + OV_DECOMP.sigma.cost6m;
+  const baseTotal   = base.brand.cost12w + base.setpoint.cost12w + base.sigma.cost12w;
   const savings     = baseTotal - adjTotal;
-  const savingsPct  = (savings/baseTotal*100).toFixed(0);
+  const savingsPct  = (savings / baseTotal * 100).toFixed(0);
 
   const el = id => document.getElementById(id);
   if (el('wi-res-current'))  el('wi-res-current').textContent  = _fmt$M(baseTotal);
   if (el('wi-res-adjusted')) el('wi-res-adjusted').textContent = _fmt$M(adjTotal);
   if (el('wi-res-savings'))  el('wi-res-savings').textContent  = _fmt$M(savings) + ' (' + savingsPct + '% reduction)';
-  // Decomp amounts
   if (el('wi-d-brand'))    el('wi-d-brand').textContent    = _fmt$M(adjBrand);
   if (el('wi-d-setpoint')) el('wi-d-setpoint').textContent = _fmt$M(adjSetpoint);
   if (el('wi-d-sigma'))    el('wi-d-sigma').textContent    = _fmt$M(adjSigma);
-  // Prev-period labels
-  if (el('wi-d-brand-prev'))    el('wi-d-brand-prev').textContent    = '(was ' + _fmt$M(OV_DECOMP.brand.cost6m) + ')';
-  if (el('wi-d-setpoint-prev')) el('wi-d-setpoint-prev').textContent = '(was ' + _fmt$M(OV_DECOMP.setpoint.cost6m) + ')';
-  if (el('wi-d-sigma-prev'))    el('wi-d-sigma-prev').textContent    = '(was ' + _fmt$M(OV_DECOMP.sigma.cost6m) + ')';
-  // Bar widths (proportional to adjusted total)
+  if (el('wi-d-brand-prev'))    el('wi-d-brand-prev').textContent    = '(was ' + _fmt$M(base.brand.cost12w) + ')';
+  if (el('wi-d-setpoint-prev')) el('wi-d-setpoint-prev').textContent = '(was ' + _fmt$M(base.setpoint.cost12w) + ')';
+  if (el('wi-d-sigma-prev'))    el('wi-d-sigma-prev').textContent    = '(was ' + _fmt$M(base.sigma.cost12w) + ')';
   if (adjTotal > 0) {
-    const bBrand = (adjBrand/adjTotal*100).toFixed(0);
-    const bSet   = (adjSetpoint/adjTotal*100).toFixed(0);
-    const bSig   = (adjSigma/adjTotal*100).toFixed(0);
-    if (el('wi-bar-brand'))    el('wi-bar-brand').style.width    = bBrand + '%';
-    if (el('wi-bar-setpoint')) el('wi-bar-setpoint').style.width = bSet + '%';
-    if (el('wi-bar-sigma'))    el('wi-bar-sigma').style.width    = bSig + '%';
-  }
-  // Also update qty savings hint if qty decomp section exists
-  const qtyHint = el('qty-savings-hint');
-  if (qtyHint) {
-    const baseQty = (OV_DECOMP.brand.qty6mKg + OV_DECOMP.setpoint.qty6mKg + OV_DECOMP.sigma.qty6mKg);
-    const adjQty  = +(baseQty * (adjTotal / baseTotal)).toFixed(0);
-    const qSav    = baseQty - adjQty;
-    if (qSav > 0) qtyHint.textContent = 'Potential Qty Reduction: ' + _fmtKg(qSav) + ' (' + (qSav/baseQty*100).toFixed(0) + '% reduction)';
-    else qtyHint.textContent = '';
+    if (el('wi-bar-brand'))    el('wi-bar-brand').style.width    = (adjBrand    / adjTotal * 100).toFixed(0) + '%';
+    if (el('wi-bar-setpoint')) el('wi-bar-setpoint').style.width = (adjSetpoint / adjTotal * 100).toFixed(0) + '%';
+    if (el('wi-bar-sigma'))    el('wi-bar-sigma').style.width    = (adjSigma    / adjTotal * 100).toFixed(0) + '%';
   }
 }
 
@@ -6699,48 +7681,123 @@ function loadMoreDrivers() {
 
 function setDriverGroupBy(group) {
   OV_DRV_GROUP = group;
-  document.getElementById('btn-drv-by-res').classList.toggle('active', group === 'res');
-  document.getElementById('btn-drv-by-sku').classList.toggle('active', group === 'sku');
+}
+
+function setOVViewBy(tab, mode) {
+  /* Map tab name to button prefix */
+  const pfx = { overview:'ov', trend:'tr', drivers:'dr' }[tab];
+  if (pfx) {
+    ['agg','res','sku','plant'].forEach(m => {
+      const btn = document.getElementById('vb-' + pfx + '-' + m);
+      if (btn) btn.classList.toggle('active', m === mode);
+    });
+  }
+
+  /* Route to render functions */
+  const grp = (mode === 'sku') ? 'sku' : 'res'; /* plant/agg default to res grouping */
+
+  if (tab === 'overview') {
+    setOVTrendView('cost', grp);
+    setOVTrendView('qty',  grp);
+    setOVGroupBy(grp);
+  } else if (tab === 'trend') {
+    setTrendAnalysisView('cost', grp);
+  } else if (tab === 'drivers') {
+    setDriverGroupBy(grp);
+    renderDriverTable();
+  }
+}
+
+function _linReg(pts) {
+  const n = pts.length;
+  if (n < 2) return {slope:0, intercept:0, r2:0};
+  const sx=pts.reduce((a,p)=>a+p.x,0), sy=pts.reduce((a,p)=>a+p.y,0);
+  const sxy=pts.reduce((a,p)=>a+p.x*p.y,0), sx2=pts.reduce((a,p)=>a+p.x*p.x,0);
+  const denom = n*sx2 - sx*sx;
+  if (!denom) return {slope:0, intercept:sy/n, r2:0};
+  const slope = (n*sxy - sx*sy) / denom;
+  const intercept = (sy - slope*sx) / n;
+  const yMean = sy/n;
+  const ssTot = pts.reduce((a,p)=>a+Math.pow(p.y-yMean,2),0);
+  const ssRes = pts.reduce((a,p)=>a+Math.pow(p.y-(slope*p.x+intercept),2),0);
+  return {slope, intercept, r2: ssTot>0 ? 1 - ssRes/ssTot : 0};
+}
+
+function _r2Plugin(r2, label) {
+  return {
+    id: 'r2label-' + label,
+    afterDraw(chart) {
+      const {ctx, chartArea} = chart;
+      ctx.save();
+      ctx.font = '700 11px Inter, sans-serif';
+      ctx.fillStyle = CC.text;
+      ctx.globalAlpha = .72;
+      ctx.textAlign = 'right';
+      ctx.fillText('R² = ' + r2.toFixed(2), chartArea.right - 6, chartArea.top + 14);
+      ctx.restore();
+    }
+  };
 }
 
 function initDriverScatters() {
-  /* Lot Size vs Sigma */
+  ['ch-drv-lotsize-sigma','ch-drv-visc-sigma'].forEach(id => {
+    if (REG[id]) { REG[id].destroy(); delete REG[id]; }
+  });
+
+  /* Lot Size vs Sigma — negative correlation */
   const lsData = OV_DRIVERS.map(r => ({
     x: r.lotSize,
     y: parseFloat((0.05 + 0.3 * Math.exp(-r.lotSize/30000) + Math.random()*0.05).toFixed(3))
   }));
+  const lsReg = _linReg(lsData);
+  const lsXMin = Math.min(...lsData.map(p=>p.x));
+  const lsXMax = Math.max(...lsData.map(p=>p.x));
   init('ch-drv-lotsize-sigma', {
     type: 'scatter',
-    data: { datasets: [{
-      label: 'SKU-Resource', data: lsData,
-      backgroundColor: 'rgba(21,101,192,.55)', pointRadius: 5,
-    }]},
+    data: { datasets: [
+      { label:'SKU-Resource', data:lsData,
+        backgroundColor:'rgba(21,101,192,.55)', pointRadius:5 },
+      { label:'Trend', showLine:true, pointRadius:0,
+        data:[{x:lsXMin,y:lsReg.slope*lsXMin+lsReg.intercept},{x:lsXMax,y:lsReg.slope*lsXMax+lsReg.intercept}],
+        borderColor:'rgba(21,101,192,.8)', borderWidth:2, borderDash:[6,4], backgroundColor:'transparent' },
+    ]},
     options: {
       ...baseOpts('Sigma (σ) g'),
       scales: {
-        x: { title:{ display:true, text:'Lot Size (units)', font:{size:10} } },
-        y: { title:{ display:true, text:'Sigma (σ) g', font:{size:10} } }
-      }
-    }
+        x: { title:{display:true,text:'Lot Size (units)',font:{size:10}}, grid:{color:CC.grid}, ticks:{color:CC.text,font:{size:10}} },
+        y: { title:{display:true,text:'Sigma (σ) g',    font:{size:10}}, grid:{color:CC.grid}, ticks:{color:CC.text,font:{size:10}} }
+      },
+      plugins: { legend:{display:false} }
+    },
+    plugins: [_r2Plugin(lsReg.r2, 'ls')]
   });
-  /* Viscosity vs Sigma */
+
+  /* Viscosity vs Sigma — positive correlation */
   const viscData = OV_DRIVERS.map(r => ({
     x: r.visc,
     y: parseFloat((0.05 + 0.0001 * r.visc * (0.9 + Math.random()*0.2)).toFixed(3))
   }));
+  const viscReg = _linReg(viscData);
+  const viscXMin = Math.min(...viscData.map(p=>p.x));
+  const viscXMax = Math.max(...viscData.map(p=>p.x));
   init('ch-drv-visc-sigma', {
     type: 'scatter',
-    data: { datasets: [{
-      label: 'SKU-Resource', data: viscData,
-      backgroundColor: 'rgba(220,53,69,.55)', pointRadius: 5,
-    }]},
+    data: { datasets: [
+      { label:'SKU-Resource', data:viscData,
+        backgroundColor:'rgba(220,53,69,.55)', pointRadius:5 },
+      { label:'Trend', showLine:true, pointRadius:0,
+        data:[{x:viscXMin,y:viscReg.slope*viscXMin+viscReg.intercept},{x:viscXMax,y:viscReg.slope*viscXMax+viscReg.intercept}],
+        borderColor:'rgba(220,53,69,.8)', borderWidth:2, borderDash:[6,4], backgroundColor:'transparent' },
+    ]},
     options: {
       ...baseOpts('Sigma (σ) g'),
       scales: {
-        x: { title:{ display:true, text:'Viscosity (cP)', font:{size:10} } },
-        y: { title:{ display:true, text:'Sigma (σ) g', font:{size:10} } }
-      }
-    }
+        x: { title:{display:true,text:'Viscosity (cP)', font:{size:10}}, grid:{color:CC.grid}, ticks:{color:CC.text,font:{size:10}} },
+        y: { title:{display:true,text:'Sigma (σ) g',    font:{size:10}}, grid:{color:CC.grid}, ticks:{color:CC.text,font:{size:10}} }
+      },
+      plugins: { legend:{display:false} }
+    },
+    plugins: [_r2Plugin(viscReg.r2, 'visc')]
   });
 }
 
@@ -6749,12 +7806,19 @@ function initDriverScatters() {
 function renderSGStats() {
   const container = document.getElementById('sg-stats-container');
   if (!container) return;
+  const sel = document.getElementById('sg-timeframe-sel');
+  const tf  = sel ? sel.value : 'r12m';
+  const tfLabel = { r3m:'Last 3M', r6m:'Last 6M', r12m:'R12M', fy26:'FY26', fy27:'FY27', all:'All Time' }[tf] || tf;
+
   container.innerHTML = Object.entries(OV_SG_STATS).map(([sku, s]) => {
     const specWidth = s.specMax - s.specMin;
     const widthCls  = specWidth < 0.05 ? 'sg-spec-width-green' : specWidth < 0.10 ? 'sg-spec-width-yellow' : 'sg-spec-width-red';
     return `
       <div class="sg-stats-card">
-        <div class="sg-stats-title">${sku} — SG Summary Statistics</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="sg-stats-title">${sku} — SG Summary Statistics</div>
+          <span style="font-size:10px;color:var(--c-muted);font-style:italic;">${tfLabel}</span>
+        </div>
         <div class="sg-stats-grid">
           <div class="sg-stat-item">
             <span class="sg-stat-label">Max Demonstrated SG</span>
@@ -6777,14 +7841,14 @@ function renderSGStats() {
             <span class="sg-stat-sub">Process variation</span>
           </div>
           <div class="sg-stat-item">
-            <span class="sg-stat-label">Spec Range (PDS)</span>
-            <span class="sg-stat-value">${s.specMin.toFixed(3)} – ${s.specMax.toFixed(3)}</span>
-            <span class="sg-stat-sub"></span>
+            <span class="sg-stat-label">Spec Max SG (PDS)</span>
+            <span class="sg-stat-value" style="color:#FF9800;">${s.specMax.toFixed(3)}</span>
+            <span class="sg-stat-sub" style="color:#FF9800;">⚠ Opportunity ceiling</span>
           </div>
           <div class="sg-stat-item">
-            <span class="sg-stat-label">Spec Width</span>
-            <span class="sg-stat-value ${widthCls}">${specWidth.toFixed(3)}</span>
-            <span class="sg-stat-sub ${widthCls}">${specWidth < 0.05 ? 'Tight ✓' : specWidth < 0.10 ? 'Monitor' : 'Opportunity to tighten'}</span>
+            <span class="sg-stat-label">Spec Range</span>
+            <span class="sg-stat-value">${s.specMin.toFixed(3)} – ${s.specMax.toFixed(3)}</span>
+            <span class="sg-stat-sub ${widthCls}">Width: ${specWidth.toFixed(3)} · ${specWidth < 0.05 ? 'Tight ✓' : specWidth < 0.10 ? 'Monitor' : 'Opportunity to tighten'}</span>
           </div>
         </div>
       </div>`;
@@ -6812,33 +7876,7 @@ function renderControlLimits() {
 
 /* ─── OVERFILL: QUANTITY DECOMPOSITION ──────────────── */
 
-function renderQtyDecomp() {
-  const row = document.getElementById('qty-decomp-row');
-  if (!row) return;
-  const totalKg = OV_DECOMP.brand.qty6mKg + OV_DECOMP.setpoint.qty6mKg + OV_DECOMP.sigma.qty6mKg;
-  const pct = v => (v/totalKg*100).toFixed(0);
-  row.innerHTML = `
-    <div class="qty-decomp-card brand">
-      <div class="qty-decomp-label">Brand-Driven Quantity</div>
-      <div class="qty-decomp-value">${_fmtKg(OV_DECOMP.brand.qty6mKg)}</div>
-      <div class="qty-decomp-sub">${OV_DECOMP.brand.label}</div>
-      <div class="qty-decomp-pct">${pct(OV_DECOMP.brand.qty6mKg)}% of total</div>
-    </div>
-    <div class="qty-decomp-card setpoint">
-      <div class="qty-decomp-label">Set Point-Driven Quantity</div>
-      <div class="qty-decomp-value">${_fmtKg(OV_DECOMP.setpoint.qty6mKg)}</div>
-      <div class="qty-decomp-sub">${OV_DECOMP.setpoint.label}</div>
-      <div class="qty-decomp-pct">${pct(OV_DECOMP.setpoint.qty6mKg)}% of total</div>
-    </div>
-    <div class="qty-decomp-card sigma">
-      <div class="qty-decomp-label">Sigma-Driven Quantity</div>
-      <div class="qty-decomp-value">${_fmtKg(OV_DECOMP.sigma.qty6mKg)}</div>
-      <div class="qty-decomp-sub">${OV_DECOMP.sigma.label}</div>
-      <div class="qty-decomp-pct">${pct(OV_DECOMP.sigma.qty6mKg)}% of total</div>
-    </div>`;
-  const tot = document.getElementById('qty-total-val');
-  if (tot) tot.textContent = _fmtKg(totalKg);
-}
+function renderQtyDecomp() { /* replaced by renderPredQtyKPIs */ }
 
 /* ─── OVERFILL: TOLERANCE PARAMETERS TABLE ──────────── */
 
@@ -6851,24 +7889,25 @@ function renderToleranceTable() {
     return ub - ua;
   });
   tbody.innerHTML = rows.map(r => {
-    const tolRange = r.usl - r.lsl;
-    const pctUsed  = (r.mean - r.lsl) / tolRange * 100;
-    const inSpec   = r.mean >= r.lsl && r.mean <= r.usl;
-    const sigmaOk  = r.sigma <= tolRange / 6;
-    const status   = !inSpec ? 'Out of Spec' : (inSpec && sigmaOk) ? 'In Control' : 'Warning';
-    const statusBg = status === 'In Control' ? '#28A745' : status === 'Warning' ? '#FF9800' : '#DC3545';
-    const meanCls  = r.mean < r.lsl || r.mean > r.usl ? 'tol-mean-bad'
-                   : r.mean > r.target ? 'tol-mean-warn' : 'tol-mean-ok';
-    const usedCls  = pctUsed > 80 ? 'tol-used-bad' : pctUsed > 60 ? 'tol-used-warn' : 'tol-used-ok';
+    const declaredG = r.declaredMl * OV_MEAN_SG;
+    const tolRange  = r.usl - r.lsl;
+    const pctUsed   = (r.mean - r.lsl) / tolRange * 100;
+    const inSpec    = r.mean >= r.lsl && r.mean <= r.usl;
+    const sigmaOk   = r.sigma <= tolRange / 6;
+    const status    = !inSpec ? 'Out of Spec' : (inSpec && sigmaOk) ? 'In Control' : 'Warning';
+    const statusBg  = status === 'In Control' ? '#28A745' : status === 'Warning' ? '#FF9800' : '#DC3545';
+    const meanCls   = r.mean < r.lsl || r.mean > r.usl ? 'tol-mean-bad'
+                    : r.mean > r.target ? 'tol-mean-warn' : 'tol-mean-ok';
+    const usedCls   = pctUsed > 80 ? 'tol-used-bad' : pctUsed > 60 ? 'tol-used-warn' : 'tol-used-ok';
     return `<tr>
       <td style="font-weight:700;">${r.sku}</td>
-      <td style="text-align:right;">${r.declaredMl}</td>
+      <td style="font-family:monospace;text-align:right;">${declaredG.toFixed(2)}</td>
       <td style="font-family:monospace;text-align:right;">${r.lsl.toFixed(2)}</td>
       <td style="font-family:monospace;text-align:right;">${r.target.toFixed(2)}</td>
-      <td class="${meanCls}" style="font-family:monospace;text-align:right;">${r.mean.toFixed(2)}</td>
       <td style="font-family:monospace;text-align:right;">${r.usl.toFixed(2)}</td>
       <td style="font-family:monospace;text-align:right;">${tolRange.toFixed(2)}</td>
       <td style="font-family:monospace;text-align:right;">${r.sigma.toFixed(3)}</td>
+      <td class="${meanCls}" style="font-family:monospace;text-align:right;">${r.mean.toFixed(2)}</td>
       <td class="${usedCls}" style="text-align:right;font-weight:700;">${pctUsed.toFixed(1)}%</td>
       <td><span class="ov-kpi-badge" style="background:${statusBg};">${status}</span></td>
     </tr>`;
@@ -6932,6 +7971,24 @@ function exportToCSV() {
   a.click();
 }
 
+function exportDriversCSV(mode) {
+  const src = mode === 'visible'
+    ? OV_DRIVERS.slice(0, OV_DRV_OFFSET || OV_DRIVERS.length)
+    : mode === 'top100'
+    ? OV_DRIVERS.slice(0, 100)
+    : OV_DRIVERS;
+  const headers = ['#','Resource','SKU','PO','Lot Size','Viscosity (cP)','Actual Fill (g)',
+    'Brand-Driven (g)','Set Point-Driven (g)','Sigma-Driven (g)','SG-Driven (g)','Total Overfill $'];
+  const rows = src.map(r => [r.rank, r.res, r.sku, r.po, r.lotSize, r.visc,
+    r.actualFill, r.brand, r.setpoint, r.sigDriven, r.sgDriven, r.totalCost]);
+  const csv = [headers, ...rows].map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'overfill_drivers_' + mode + '.csv';
+  a.click();
+}
+
 /* ─── OVERFILL: DATE FILTER HELPERS ──────────────────── */
 
 function handleOVFilterChange() { /* stub — visual only */ }
@@ -6955,11 +8012,335 @@ function setOVPreset(p) {
   document.getElementById('ov-date-to').value   = ymd(to);
 }
 
+/* ─── OVERFILL: GOLD STANDARD GAP DATA ──────────────── */
+
+// GS Gap data: gsG = Gold Standard overfill (g), actualG = actual overfill (g), gapG = actualG - gsG
+const OV_GS_GAP = [
+  { family:'Fragrance', res:'Line-01', sku:'SKU-1042', declaredMl:15,  actualG:0.720, gsG:0.315, gapG:0.405, giveawayCost:18420, tier:'Bronze' },
+  { family:'Fragrance', res:'Line-01', sku:'SKU-1055', declaredMl:30,  actualG:1.560, gsG:0.690, gapG:0.870, giveawayCost:22100, tier:'Bronze' },
+  { family:'Fragrance', res:'Line-02', sku:'SKU-1098', declaredMl:50,  actualG:1.550, gsG:1.000, gapG:0.550, giveawayCost: 9800, tier:'Silver' },
+  { family:'Skincare',  res:'Line-03', sku:'SKU-1113', declaredMl:100, actualG:6.400, gsG:2.500, gapG:3.900, giveawayCost:41200, tier:'Bronze' },
+  { family:'Skincare',  res:'Line-03', sku:'SKU-1127', declaredMl:150, actualG:4.200, gsG:3.000, gapG:1.200, giveawayCost: 6100, tier:'Gold'   },
+  { family:'Skincare',  res:'Line-04', sku:'SKU-1042', declaredMl:15,  actualG:0.540, gsG:0.315, gapG:0.225, giveawayCost:11300, tier:'Silver' },
+  { family:'Makeup',    res:'Line-04', sku:'SKU-1055', declaredMl:30,  actualG:1.230, gsG:0.690, gapG:0.540, giveawayCost:14700, tier:'Silver' },
+  { family:'Makeup',    res:'Line-05', sku:'SKU-1098', declaredMl:50,  actualG:3.600, gsG:1.000, gapG:2.600, giveawayCost:53900, tier:'Bronze' },
+  { family:'Makeup',    res:'Line-05', sku:'SKU-1113', declaredMl:100, actualG:2.300, gsG:2.500, gapG:-0.200,giveawayCost:     0, tier:'Gold'   },
+  { family:'Haircare',  res:'Line-06', sku:'SKU-1127', declaredMl:150, actualG:5.850, gsG:3.000, gapG:2.850, giveawayCost:16800, tier:'Silver' },
+].map(r => {
+  const declaredG = r.declaredMl * OV_MEAN_SG;
+  return { ...r, declaredG, gapPct: r.gapG / declaredG * 100, actualOvfPct: r.actualG / declaredG * 100, gsPct: r.gsG / declaredG * 100 };
+});
+
+const OV_GS_TIER_THRESHOLDS = { Gold: 1.0, Silver: 2.5 }; // gap% above GS
+
+function renderOVGSGapTab() {
+  _renderOVGSGapKPIs();
+  _renderOVGSGapChart();
+  _renderOVGSGapTable();
+}
+
+function _renderOVGSGapKPIs() {
+  const gold   = OV_GS_GAP.filter(r => r.tier === 'Gold').length;
+  const silver = OV_GS_GAP.filter(r => r.tier === 'Silver').length;
+  const bronze = OV_GS_GAP.filter(r => r.tier === 'Bronze').length;
+  const totalCost = OV_GS_GAP.reduce((s,r) => s + r.giveawayCost, 0);
+
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('ov-gs-tier-gold-cnt',   gold + ' SKUs');
+  set('ov-gs-tier-silver-cnt', silver + ' SKUs');
+  set('ov-gs-tier-bronze-cnt', bronze + ' SKUs');
+  set('ov-gs-total-gap', '$' + totalCost.toLocaleString());
+}
+
+function _renderOVGSGapChart() {
+  if (REG['ch-ov-gs-gap-dist']) return;
+  const ctx = document.getElementById('ch-ov-gs-gap-dist');
+  if (!ctx) return;
+  const labels = OV_GS_GAP.map(r => r.res + ' · ' + r.sku);
+  REG['ch-ov-gs-gap-dist'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label:'Actual Overfill (g)', data: OV_GS_GAP.map(r => r.actualG), backgroundColor:'rgba(220,53,69,0.75)', borderColor:'#C62828', borderWidth:1 },
+        { label:'Gold Standard P75 (g)', data: OV_GS_GAP.map(r => r.gsG), backgroundColor:'rgba(0,105,92,0.7)', borderColor:'#004D40', borderWidth:1 }
+      ]
+    },
+    options: {
+      ...baseOpts('Overfill (g)'),
+      plugins: {
+        ...baseOpts('').plugins,
+        legend: { display:true, position:'top', labels:{ font:{size:11}, color:'#4A6580' } },
+        tooltip: { callbacks: { label: c => c.dataset.label + ': ' + c.parsed.y.toFixed(3) + ' g' } }
+      },
+      scales: {
+        x: { ticks:{ font:{size:10}, maxRotation:45 }, grid:{ display:false } },
+        y: { beginAtZero:true, ticks:{ callback: v => v.toFixed(2) + 'g' }, grid:{ color:'rgba(0,0,0,0.06)' } }
+      }
+    }
+  });
+}
+
+function _renderOVGSGapTable() {
+  const tbody = document.getElementById('tb-ov-gs-gap-body');
+  if (!tbody) return;
+  tbody.innerHTML = OV_GS_GAP.map(r => {
+    const gapColor = r.gapG > 0 ? (r.tier === 'Bronze' ? '#C62828' : r.tier === 'Silver' ? '#E65100' : '#2E7D32') : '#2E7D32';
+    const tierBg   = r.tier === 'Gold' ? '#F9A825' : r.tier === 'Silver' ? '#78909C' : '#8D6E63';
+    return `<tr>
+      <td style="font-weight:700;">${r.sku}</td>
+      <td>${r.res}</td>
+      <td>${r.family}</td>
+      <td style="font-family:monospace;text-align:right;color:#00695C;font-weight:600;">${r.gsG.toFixed(3)} g</td>
+      <td style="font-family:monospace;text-align:right;color:#C62828;font-weight:600;">${r.actualG.toFixed(3)} g</td>
+      <td style="font-family:monospace;text-align:right;color:${gapColor};font-weight:700;">${r.gapG > 0 ? '+' : ''}${r.gapG.toFixed(3)} g</td>
+      <td style="font-family:monospace;text-align:right;color:${gapColor};font-weight:700;">${r.gapG > 0 ? '+' : ''}${r.gapPct.toFixed(2)}%</td>
+      <td style="font-family:monospace;text-align:right;">${r.giveawayCost > 0 ? '$' + r.giveawayCost.toLocaleString() : '—'}</td>
+      <td><span class="ov-kpi-badge" style="background:${tierBg};color:#fff;">${r.tier}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function showOVTierPopup(tier) {
+  const rows = OV_GS_GAP.filter(r => r.tier === tier);
+  const total = rows.reduce((s,r) => s + r.giveawayCost, 0);
+  const avgGap = rows.reduce((s,r) => s + Math.max(0, r.gapPct), 0) / (rows.length || 1);
+  const tierBg = tier === 'Gold' ? '#F9A825' : tier === 'Silver' ? '#78909C' : '#8D6E63';
+
+  const overlay = document.getElementById('ov-tier-popup-overlay');
+  const title   = document.getElementById('ov-tier-popup-title');
+  const body    = document.getElementById('ov-tier-popup-body');
+  if (!overlay || !title || !body) return;
+
+  title.textContent = tier + ' Tier — ' + rows.length + ' lines';
+  body.innerHTML = `
+    <div style="display:flex;gap:16px;margin-bottom:16px;">
+      <div class="ov-kpi-card" style="flex:1;padding:12px;">
+        <div class="ov-kpi-label">Lines in Tier</div>
+        <div class="ov-kpi-value">${rows.length}</div>
+      </div>
+      <div class="ov-kpi-card" style="flex:1;padding:12px;">
+        <div class="ov-kpi-label">Avg Gap vs GS</div>
+        <div class="ov-kpi-value" style="color:#C62828;">${avgGap.toFixed(2)}%</div>
+      </div>
+      <div class="ov-kpi-card" style="flex:1;padding:12px;">
+        <div class="ov-kpi-label">Total Giveaway Cost</div>
+        <div class="ov-kpi-value" style="color:#C62828;">$${(total/1000).toFixed(1)}K</div>
+      </div>
+    </div>
+    <table class="dv-table">
+      <thead><tr>
+        <th>Family</th><th>Resource</th><th>SKU</th>
+        <th>Actual %</th><th>GS %</th><th>Gap %</th><th>Giveaway $</th>
+      </tr></thead>
+      <tbody>${rows.map(r => `<tr>
+        <td>${r.family}</td><td>${r.res}</td><td style="font-weight:700;">${r.sku}</td>
+        <td style="font-family:monospace;text-align:right;color:#C62828;">${r.actualOvfPct.toFixed(2)}%</td>
+        <td style="font-family:monospace;text-align:right;color:#00695C;">${r.gsPct.toFixed(2)}%</td>
+        <td style="font-family:monospace;text-align:right;color:${r.gapPct>0?'#C62828':'#2E7D32'};font-weight:700;">${r.gapPct>0?'+':''}${r.gapPct.toFixed(2)}%</td>
+        <td style="font-family:monospace;text-align:right;">${r.giveawayCost>0?'$'+r.giveawayCost.toLocaleString():'—'}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+    <div style="margin-top:14px;padding:10px;background:#F8F9FA;border-radius:6px;font-size:11px;color:#4A6580;">
+      <strong>Tier Definition:</strong> Gold = gap ≤ 1.0% above GS&nbsp;·&nbsp;Silver = gap 1.0–2.5%&nbsp;·&nbsp;Bronze = gap > 2.5%.
+      Gold Standard = P75 (75th percentile) by Family × Resource, FY26 baseline (Jul 2025 – Jun 2026).
+    </div>`;
+  overlay.style.display = 'flex';
+}
+
+function closeOVTierPopup() {
+  const overlay = document.getElementById('ov-tier-popup-overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+/* ─── OVERFILL: TOLERANCE & CAPABILITY DATA ──────────── */
+
+const OV_CAP_DATA = [
+  { sku:'SKU-1042', declaredMl:15,  lsl:15.60, usl:16.20, mean:15.85, sigma:0.120, cpk:null, cp:null },
+  { sku:'SKU-1055', declaredMl:30,  lsl:31.10, usl:31.90, mean:31.50, sigma:0.150, cpk:null, cp:null },
+  { sku:'SKU-1098', declaredMl:50,  lsl:51.80, usl:52.80, mean:52.40, sigma:0.200, cpk:null, cp:null },
+  { sku:'SKU-1113', declaredMl:100, lsl:103.50, usl:104.80, mean:104.20, sigma:0.250, cpk:null, cp:null },
+  { sku:'SKU-1127', declaredMl:150, lsl:155.30, usl:157.00, mean:156.30, sigma:0.350, cpk:null, cp:null },
+].map(r => {
+  const tol = r.usl - r.lsl;
+  const cp  = tol / (6 * r.sigma);
+  const cpk = Math.min((r.usl - r.mean) / (3 * r.sigma), (r.mean - r.lsl) / (3 * r.sigma));
+  const sigLvl = cpk * 3;
+  return { ...r, tol, cp, cpk, sigLvl };
+});
+
+function renderCapabilitySigmaKPIs() {
+  const row = document.getElementById('cap-sigma-kpi-row');
+  if (!row) return;
+  const avgCpk    = OV_CAP_DATA.reduce((s,r) => s + r.cpk,    0) / OV_CAP_DATA.length;
+  const avgCp     = OV_CAP_DATA.reduce((s,r) => s + r.cp,     0) / OV_CAP_DATA.length;
+  const avgSigLvl = OV_CAP_DATA.reduce((s,r) => s + r.sigLvl, 0) / OV_CAP_DATA.length;
+  const nCapable  = OV_CAP_DATA.filter(r => r.cpk >= 1.33).length;
+  const cpkColor  = avgCpk >= 1.33 ? '#2E7D32' : avgCpk >= 1.0 ? '#E65100' : '#C62828';
+  const sigColor  = avgSigLvl >= 4 ? '#2E7D32' : avgSigLvl >= 3 ? '#E65100' : '#C62828';
+
+  row.innerHTML = `
+    <div class="kpi-card">
+      <span class="kpi-label">Avg Cpk</span>
+      <span class="kpi-value" style="color:${cpkColor};">${avgCpk.toFixed(2)}</span>
+      <span class="kpi-delta" style="color:var(--c-muted);">Centred capability index</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Avg Cp</span>
+      <span class="kpi-value">${avgCp.toFixed(2)}</span>
+      <span class="kpi-delta" style="color:var(--c-muted);">Inherent (tolerance) capability</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Avg Sigma Level</span>
+      <span class="kpi-value" style="color:${sigColor};">${avgSigLvl.toFixed(2)}σ</span>
+      <span class="kpi-delta" style="color:var(--c-muted);">Mean sigma across all SKUs</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Capable SKUs</span>
+      <span class="kpi-value">${nCapable} / ${OV_CAP_DATA.length}</span>
+      <span class="kpi-delta" style="color:var(--c-muted);">Cpk ≥ 1.33</span>
+    </div>`;
+}
+
+function renderCapabilityCharts() {
+  _renderCapBellChart();
+  _renderCapSigmaLotChart();
+}
+
+function _renderCapBellChart() {
+  const sel = document.getElementById('cap-sku-sel');
+  const skuKey = sel ? sel.value : OV_CAP_DATA[0].sku;
+  const r = OV_CAP_DATA.find(d => d.sku === skuKey) || OV_CAP_DATA[0];
+
+  const cid = 'ch-cap-bell';
+  if (REG[cid]) { REG[cid].destroy(); delete REG[cid]; }
+  const ctx = document.getElementById(cid);
+  if (!ctx) return;
+
+  const lo = r.mean - 4 * r.sigma, hi = r.mean + 4 * r.sigma;
+  const pts = 80;
+  const step = (hi - lo) / pts;
+  const labels = [], norm = [];
+  for (let i = 0; i <= pts; i++) {
+    const x = lo + i * step;
+    labels.push(x.toFixed(3));
+    const z = (x - r.mean) / r.sigma;
+    norm.push(Math.exp(-0.5 * z * z) / (r.sigma * Math.sqrt(2 * Math.PI)));
+  }
+
+  REG[cid] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Distribution',
+        data: norm,
+        borderColor: '#1565C0',
+        backgroundColor: 'rgba(21,101,192,0.10)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 0,
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      ...baseOpts('Density'),
+      plugins: {
+        ...baseOpts('').plugins,
+        annotation: {
+          annotations: {
+            lslLine: { type:'line', xMin: r.lsl.toFixed(3), xMax: r.lsl.toFixed(3), borderColor:'#C62828', borderWidth:2, borderDash:[5,4], label:{ content:'LSL', display:true, position:'start', font:{size:9} } },
+            uslLine: { type:'line', xMin: r.usl.toFixed(3), xMax: r.usl.toFixed(3), borderColor:'#C62828', borderWidth:2, borderDash:[5,4], label:{ content:'USL', display:true, position:'start', font:{size:9} } },
+            meanLine:{ type:'line', xMin: r.mean.toFixed(3), xMax: r.mean.toFixed(3), borderColor:'#00695C', borderWidth:2, label:{ content:'Mean', display:true, position:'start', font:{size:9} } },
+          }
+        }
+      },
+      scales: {
+        x: { ticks:{ maxTicksLimit:8, font:{size:9} }, grid:{ display:false } },
+        y: { beginAtZero:true, ticks:{ maxTicksLimit:5, font:{size:9} }, grid:{ color:'rgba(0,0,0,0.06)' } }
+      }
+    }
+  });
+}
+
+function _renderCapSigmaLotChart() {
+  const cid = 'ch-cap-sigma-lot';
+  if (REG[cid]) return;
+  const ctx = document.getElementById(cid);
+  if (!ctx) return;
+
+  const lotSizes = [500, 800, 1200, 1500, 2000, 2500, 3000];
+  const skuColors = ['#1565C0','#2E7D32','#E65100','#6A1B9A','#00695C'];
+  const datasets = OV_CAP_DATA.map((r, i) => ({
+    label: r.sku,
+    data: lotSizes.map(ls => ({
+      x: ls,
+      y: r.sigma * (1 + Math.random() * 0.08 - 0.04)
+    })),
+    backgroundColor: skuColors[i % skuColors.length],
+    borderColor: skuColors[i % skuColors.length],
+    pointRadius: 5, pointHoverRadius: 7, showLine: false,
+  }));
+
+  REG[cid] = new Chart(ctx, {
+    type: 'scatter',
+    data: { datasets },
+    options: {
+      ...baseOpts('Sigma (σ, g)'),
+      plugins: {
+        ...baseOpts('').plugins,
+        legend: { display:true, position:'top', labels:{ font:{size:11}, color:'#4A6580' } },
+        tooltip: { callbacks: { label: c => c.dataset.label + ' — Lot:' + c.parsed.x.toLocaleString() + ', σ:' + c.parsed.y.toFixed(4) } }
+      },
+      scales: {
+        x: { title:{ display:true, text:'Lot Size (units)', font:{size:11} }, grid:{ color:'rgba(0,0,0,0.05)' } },
+        y: { beginAtZero:false, title:{ display:true, text:'Sigma (σ)', font:{size:11} }, ticks:{ callback: v => v.toFixed(3) } }
+      }
+    }
+  });
+}
+
+function renderCapabilityTable() {
+  const tbody = document.getElementById('tb-cap-sigma-body');
+  if (!tbody) return;
+  tbody.innerHTML = OV_CAP_DATA.map(r => {
+    const cpkCls   = r.cpk >= 1.67 ? '#2E7D32' : r.cpk >= 1.33 ? '#1565C0' : r.cpk >= 1.0 ? '#E65100' : '#C62828';
+    const sigBg    = r.sigLvl >= 5 ? '#2E7D32' : r.sigLvl >= 4 ? '#1565C0' : r.sigLvl >= 3 ? '#E65100' : '#C62828';
+    const status   = r.cpk >= 1.33 ? 'Capable' : r.cpk >= 1.0 ? 'Marginal' : 'Incapable';
+    const statusBg = r.cpk >= 1.33 ? '#2E7D32' : r.cpk >= 1.0 ? '#E65100' : '#C62828';
+    return `<tr>
+      <td style="font-weight:700;">${r.sku}</td>
+      <td style="font-family:monospace;text-align:right;">${(r.declaredMl * OV_MEAN_SG).toFixed(2)}</td>
+      <td style="font-family:monospace;text-align:right;">${r.lsl.toFixed(2)}</td>
+      <td style="font-family:monospace;text-align:right;">${r.usl.toFixed(2)}</td>
+      <td style="font-family:monospace;text-align:right;">${r.mean.toFixed(2)}</td>
+      <td style="font-family:monospace;text-align:right;">${r.sigma.toFixed(3)}</td>
+      <td style="font-family:monospace;text-align:right;">${r.tol.toFixed(2)}</td>
+      <td style="font-family:monospace;text-align:right;font-weight:700;color:#555;">${r.cp.toFixed(2)}</td>
+      <td style="font-family:monospace;text-align:right;font-weight:700;color:${cpkCls};">${r.cpk.toFixed(2)}</td>
+      <td style="font-family:monospace;text-align:right;"><span style="display:inline-block;background:${sigBg};color:#fff;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;">${r.sigLvl.toFixed(2)}σ</span></td>
+      <td><span class="ov-kpi-badge" style="background:${statusBg};color:#fff;">${status}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function capSelectSKU() {
+  _renderCapBellChart();
+}
+
 /* ─── INIT ───────────────────────────────────────────── */
 window.addEventListener('load', () => {
   showModule('gs');
   showKPI('speed');
   showKPISub('results');
+});
+
+/* Close driver export dropdown when clicking outside */
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('drv-export-menu');
+  if (menu && !e.target.closest('.export-btn') && !e.target.closest('#drv-export-menu')) {
+    menu.classList.remove('open');
+  }
 });
 </script>
 
@@ -7039,6 +8420,34 @@ window.addEventListener('load', () => {
         </thead>
         <tbody id="tb-tier-modal"></tbody>
       </table>
+    </div>
+  </div>
+</div>
+
+<!-- GS Tier popup modal -->
+<div class="ov-modal-overlay" id="ov-tier-popup-overlay" style="display:none;" onclick="if(event.target===this)closeOVTierPopup()">
+  <div class="ov-modal" onclick="event.stopPropagation()" style="max-width:700px;width:90%;">
+    <div class="ov-modal-header">
+      <div>
+        <div class="ov-modal-header-title" id="ov-tier-popup-title">Tier Details</div>
+        <div class="ov-modal-header-filters" style="font-size:10px;color:rgba(255,255,255,.7);">Gold Standard Gap — Overfill Analysis</div>
+      </div>
+      <button class="ov-modal-close" onclick="closeOVTierPopup()">✕</button>
+    </div>
+    <div class="ov-modal-body" id="ov-tier-popup-body"></div>
+  </div>
+</div>
+
+<!-- Heatmap drill-down popup (Change 16) -->
+<div class="hm-popup-overlay" id="hm-popup-overlay" onclick="if(event.target===this)closeHeatmapDrillDown()">
+  <div class="hm-popup">
+    <button class="hm-popup-close" onclick="closeHeatmapDrillDown()">✕</button>
+    <div class="hm-popup-title" id="hm-popup-title">—</div>
+    <div class="hm-popup-kpi-row" id="hm-popup-kpis"></div>
+    <div class="hm-popup-section-title">Driver Breakdown</div>
+    <div id="hm-popup-drivers"></div>
+    <div class="hm-popup-footer">
+      <button class="hm-view-drv-btn" id="hm-view-drv-btn" onclick="hmViewInDrivers()">View POs in Drivers Tab →</button>
     </div>
   </div>
 </div>
