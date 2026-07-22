@@ -3461,29 +3461,74 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         </div>
       </div>
 
-      <div class="gs-card" style="margin-top:12px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <div class="card-title" style="margin:0;" id="ov-bar-title">Giveaway by Resource</div>
-          <div class="ov-toggle-row">
-            <button id="btn-ov-by-res" class="ov-toggle-btn active" onclick="setOVGroupBy('res')">By Resource</button>
-            <button id="btn-ov-by-sku" class="ov-toggle-btn"        onclick="setOVGroupBy('sku')">By SKU</button>
+      <!-- Row 3: Giveaway bar (40%) + Grouped bar chart (60%) -->
+      <div style="display:grid;grid-template-columns:2fr 3fr;gap:12px;margin-top:12px;">
+        <div class="gs-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div class="card-title" style="margin:0;" id="ov-bar-title">Giveaway by Resource</div>
+            <div class="ov-toggle-row">
+              <button id="btn-ov-by-res" class="ov-toggle-btn active" onclick="setOVGroupBy('res')">By Resource</button>
+              <button id="btn-ov-by-sku" class="ov-toggle-btn"        onclick="setOVGroupBy('sku')">By SKU</button>
+            </div>
+          </div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-giveaway-bar"></canvas></div>
+        </div>
+        <div class="gs-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div>
+              <div class="card-title" style="margin:0;">Actual Overfill % vs Brand Required Overfill % by SKU</div>
+              <div style="font-size:10px;color:var(--c-muted);margin-top:2px;">Grouped by Family. Gap = Actual – Brand Required. Shows actual overfill vs minimum required aesthetic buffer (Declared Content – LSL).</div>
+            </div>
+            <div style="flex-shrink:0;margin-left:10px;">
+              <select id="sel-avb-view" class="slicer-select" style="font-size:11px;height:26px;" onchange="setAVBView(this.value)">
+                <option value="sku">By SKU</option>
+                <option value="res">By Resource</option>
+              </select>
+            </div>
+          </div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-avb"></canvas></div>
+          <div class="legend-row" style="margin-top:8px;">
+            <div class="legend-item"><span style="display:inline-block;width:14px;height:14px;background:#1976D2;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Actual Overfill %</div>
+            <div class="legend-item"><span style="display:inline-block;width:14px;height:14px;background:#2E7D32;border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Brand Required Overfill %</div>
           </div>
         </div>
-        <div class="chart-wrap" style="height:180px;"><canvas id="ch-ov-giveaway-bar"></canvas></div>
       </div>
 
-      <div class="gs-card" style="margin-top:12px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <div class="card-title" style="margin:0;">
-            Overfill Heatmap — SKU × Resource
-            <span style="font-weight:400;font-size:10px;color:var(--c-muted);">&nbsp;(% Overfill of Declared Content · green = within spec · red = critical · grouped by Family)</span>
+      <!-- Row 4: GAP Trend (50%) + Heatmap (50%) -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div class="gs-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div>
+              <div class="card-title" style="margin:0;">Overfill GAP % Trend over Time</div>
+              <div style="font-size:10px;color:var(--c-muted);margin-top:2px;">GAP = Actual Overfill – Brand Required Overfill. Aggregated by summing raw grams. Dashed = GS Benchmark.</div>
+            </div>
+            <div style="flex-shrink:0;margin-left:10px;">
+              <select id="sel-gap-trend-view" class="slicer-select" style="font-size:11px;height:26px;" onchange="setGapTrendView(this.value)">
+                <option value="all">All SKUs (aggregate)</option>
+                <option value="multi">Multi-SKU (up to 4)</option>
+                <option value="single">Single SKU</option>
+              </select>
+            </div>
+          </div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-gap-trend"></canvas></div>
+          <div class="legend-row" style="margin-top:8px;">
+            <div class="legend-item"><span style="display:inline-block;width:18px;height:2px;background:#C62828;margin-right:4px;vertical-align:middle;"></span>Overfill GAP %</div>
+            <div class="legend-item"><span style="display:inline-block;width:18px;height:0;border-top:2px dashed #9E9E9E;margin-right:4px;vertical-align:middle;"></span>GS Benchmark</div>
           </div>
         </div>
-        <div style="overflow-x:auto;">
-          <table class="ov-heatmap" id="ov-heatmap-tbl"></table>
-        </div>
-        <div style="text-align:center;margin-top:10px;">
-          <button id="btn-load-more-hm" class="btn-secondary" onclick="loadMoreHeatmap()" style="font-size:11px;padding:6px 20px;">Load Next 20 →</button>
+        <div class="gs-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div class="card-title" style="margin:0;">
+              Overfill Heatmap — SKU × Resource
+              <span style="font-weight:400;font-size:10px;color:var(--c-muted);">&nbsp;(% Overfill · green = low · red = critical)</span>
+            </div>
+          </div>
+          <div style="overflow-x:auto;max-height:260px;overflow-y:auto;">
+            <table class="ov-heatmap" id="ov-heatmap-tbl"></table>
+          </div>
+          <div style="text-align:center;margin-top:6px;">
+            <button id="btn-load-more-hm" class="btn-secondary" onclick="loadMoreHeatmap()" style="font-size:11px;padding:4px 16px;">Load Next 20 →</button>
+          </div>
         </div>
       </div>
 
@@ -3892,12 +3937,19 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
               <th>Sigma-Driven (g)</th><th>%</th>
               <th>SG-Driven (g)</th><th>%</th>
               <th>Total Overfill $</th>
+              <th>Costing Lot Size</th>
+              <th>Standard Costed OV ($) <span class="info-tooltip" title="Standard Costed Overfill from SAP MM03 Material Master. Represents initial planned overfill cost at SKU setup. Current standard cost used (historical cost changes not tracked). Data source: MM03 transaction, Controlling Area Cost field." style="cursor:help;font-size:11px;color:var(--c-muted);">ℹ</span></th>
+              <th>Std Cost Variance ($)</th>
+              <th>Scrap % (Costed)</th>
             </tr>
           </thead>
           <tbody id="tb-drivers-body"></tbody>
         </table>
         <p style="font-size:10px;color:var(--c-muted);margin:8px 0 0;padding:0 4px;">
           * % columns use <strong>Declared Content (g)</strong> as denominator, where Declared Content (g) = Declared Content (ml) × Specific Gravity (SG). Brand-Driven = overfill driven by LSL exceeding declared content. Set Point-Driven = target set above LSL. Sigma-Driven = process variation above target. SG-Driven = residual from SG reference delta.
+        </p>
+        <p style="font-size:10px;color:var(--c-muted);margin:6px 0 0;padding:0 4px;border-top:1px solid #E0E0E0;padding-top:6px;">
+          ⚠ Standard Costed Overfill uses current standard cost from SAP MM03. Historical cost changes are not tracked, so variance calculations for older POs may not reflect original costing. Source tables: MARA, MBEW (Steve to provide exact field mappings by Monday per July 10 meeting).
         </p>
         <div style="text-align:center;margin-top:10px;">
           <button id="btn-load-more-drv" class="btn-secondary" onclick="loadMoreDrivers()" style="font-size:11px;padding:6px 20px;">Load Next 20 →</button>
@@ -4032,7 +4084,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <button class="export-btn" style="display:flex;align-items:center;gap:5px;" onclick="document.getElementById('exp-export-menu').classList.toggle('open')">
             📥 Export to CSV
             <span style="font-size:9px;opacity:.7;">▼</span>
-            <span class="info-tooltip" style="font-size:11px;cursor:help;opacity:.7;margin-left:2px;" title="Columns: Date, Plant, Resource, SKU, PO, Lot Size, Declared Content (ml), Declared Content (g) [=ml×SG], Specific Gravity (SG), Target Fill (g), Actual Fill (g), Overfill (g), Overfill % [of Declared g], Brand-Driven (g), Brand-Driven %, Set Point-Driven (g), Set Point-Driven %, Sigma-Driven (g), Sigma-Driven %, SG-Driven (g), SG-Driven %, Cost/g ($), Giveaway Cost ($), Brand, Category, Subcategory, Package Type, Process Type, Life Cycle Stage. All % columns use Declared Content (g) as denominator." onclick="event.stopPropagation()">ℹ</span>
+            <span class="info-tooltip" style="font-size:11px;cursor:help;opacity:.7;margin-left:2px;" title="Columns: Date, Plant, Resource, SKU, PO, Lot Size, Declared Content (ml), Declared Content (g) [=ml×SG], Specific Gravity (SG), Target Fill (g), Actual Fill (g), Overfill (g), Overfill % [of Declared g], Brand-Driven (g), Brand-Driven %, Set Point-Driven (g), Set Point-Driven %, Sigma-Driven (g), Sigma-Driven %, SG-Driven (g), SG-Driven %, Cost/g ($), Giveaway Cost ($), Standard Costed OV ($), Std Cost Variance ($), Costing Lot Size (units), Scrap % (Costed), Brand, Category, Subcategory, Package Type, Process Type, Life Cycle Stage. All % columns use Declared Content (g) as denominator." onclick="event.stopPropagation()">ℹ</span>
           </button>
           <div id="exp-export-menu" class="export-dropdown-menu" style="display:none;position:absolute;right:0;top:100%;margin-top:2px;background:var(--c-card);border:1px solid var(--c-border);border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:50;min-width:210px;padding:4px 0;">
             <div class="export-dd-item" onclick="exportToCSV('visible');document.getElementById('exp-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Export Visible Rows</div>
@@ -4049,7 +4101,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
                 <th>Date</th><th>Plant</th><th>Resource</th><th>SKU</th><th>PO</th>
                 <th>Lot Size</th><th>Declared (ml)</th><th>Declared (g)</th><th>Specific Gravity (SG)</th>
                 <th>Target Fill (g)</th><th>Actual Fill (g)</th><th>Overfill (g)</th><th>Overfill %</th>
-                <th>Cost/g ($)</th><th>Giveaway Cost ($)</th><th>Brand</th>
+                <th>Cost/g ($)</th><th>Giveaway Cost ($)</th><th>Std Costed OV ($)</th><th>Std Cost Var ($)</th><th>Costing Lot Size</th><th>Scrap % (Costed)</th><th>Brand</th>
                 <th>Category</th><th>Subcategory</th><th>Package Type</th>
                 <th>Process Type</th><th>Life Cycle Stage</th>
               </tr>
@@ -6010,7 +6062,7 @@ const OV_SUMMARY = {
   // KPI Row 1 — Cost cards
   totalActualCost:     2950000,
   brandRequiredCost:   1012000,
-  stdCostVariance:     430000,   // positive = we costed more than actual (budget savings)
+  stdCostVariance:     430000,   // positive = actual > standard (over budget)
   topOpportunity:      'Resource 11 / SKU-1042',
   topOpportunityCost:  8700,
   topOpportunityPct:   0.94,
@@ -6113,31 +6165,31 @@ const OV_TREND_SITES = {
 
 /* Driver decomposition detail rows */
 const OV_DRIVERS = [
-  { rank:1,  res:'L67', sku:'SKU-1042', po:'PO-10234', lotSize:8500,  visc:2100, actualFill:31.44, brand:0.62, setpoint:0.35, sigDriven:0.58, sgDriven:0.09, totalCost:45600 },
-  { rank:2,  res:'L73', sku:'SKU-1042', po:'PO-10235', lotSize:7200,  visc:2050, actualFill:31.86, brand:0.60, setpoint:0.33, sigDriven:0.72, sgDriven:0.11, totalCost:42900 },
-  { rank:3,  res:'L67', sku:'SKU-1055', po:'PO-10236', lotSize:12000, visc:1800, actualFill:52.60, brand:0.55, setpoint:0.28, sigDriven:0.70, sgDriven:0.07, totalCost:38200 },
-  { rank:4,  res:'L75', sku:'SKU-1042', po:'PO-10237', lotSize:6800,  visc:2300, actualFill:31.21, brand:0.58, setpoint:0.31, sigDriven:0.62, sgDriven:0.10, totalCost:34700 },
-  { rank:5,  res:'L68', sku:'SKU-1042', po:'PO-10238', lotSize:9500,  visc:2000, actualFill:31.10, brand:0.55, setpoint:0.30, sigDriven:0.50, sgDriven:0.08, totalCost:29800 },
-  { rank:6,  res:'L82', sku:'SKU-1055', po:'PO-10239', lotSize:15000, visc:1750, actualFill:52.35, brand:0.52, setpoint:0.27, sigDriven:0.52, sgDriven:0.06, totalCost:24100 },
-  { rank:7,  res:'L70', sku:'SKU-1042', po:'PO-10240', lotSize:7600,  visc:2150, actualFill:30.89, brand:0.57, setpoint:0.29, sigDriven:0.56, sgDriven:0.08, totalCost:22600 },
-  { rank:8,  res:'L68', sku:'SKU-1055', po:'PO-10241', lotSize:11000, visc:1820, actualFill:52.35, brand:0.51, setpoint:0.26, sigDriven:0.55, sgDriven:0.06, totalCost:21400 },
-  { rank:9,  res:'L67', sku:'SKU-1098', po:'PO-10242', lotSize:5200,  visc:2800, actualFill:15.73, brand:0.48, setpoint:0.22, sigDriven:0.62, sgDriven:0.12, totalCost:17200 },
-  { rank:10, res:'L77', sku:'SKU-1042', po:'PO-10243', lotSize:8800,  visc:2000, actualFill:30.95, brand:0.53, setpoint:0.28, sigDriven:0.44, sgDriven:0.07, totalCost:16800 },
-  { rank:11, res:'L79', sku:'SKU-1042', po:'PO-10244', lotSize:7400,  visc:2100, actualFill:31.33, brand:0.56, setpoint:0.31, sigDriven:0.50, sgDriven:0.09, totalCost:15200 },
-  { rank:12, res:'L84', sku:'SKU-1042', po:'PO-10245', lotSize:6200,  visc:2200, actualFill:31.08, brand:0.54, setpoint:0.28, sigDriven:0.48, sgDriven:0.08, totalCost:14100 },
-  { rank:13, res:'L65', sku:'SKU-1042', po:'PO-10246', lotSize:8100,  visc:1950, actualFill:30.76, brand:0.51, setpoint:0.26, sigDriven:0.45, sgDriven:0.07, totalCost:13400 },
-  { rank:14, res:'L90', sku:'SKU-1042', po:'PO-10247', lotSize:7900,  visc:2050, actualFill:31.15, brand:0.55, setpoint:0.29, sigDriven:0.49, sgDriven:0.08, totalCost:12800 },
-  { rank:15, res:'L86', sku:'SKU-1055', po:'PO-10248', lotSize:13000, visc:1780, actualFill:52.18, brand:0.49, setpoint:0.25, sigDriven:0.43, sgDriven:0.06, totalCost:11900 },
-  { rank:16, res:'L81', sku:'SKU-1042', po:'PO-10249', lotSize:7000,  visc:2100, actualFill:30.97, brand:0.52, setpoint:0.27, sigDriven:0.42, sgDriven:0.07, totalCost:11300 },
-  { rank:17, res:'L76', sku:'SKU-1098', po:'PO-10250', lotSize:4800,  visc:2750, actualFill:15.64, brand:0.45, setpoint:0.20, sigDriven:0.56, sgDriven:0.11, totalCost:10800 },
-  { rank:18, res:'L85', sku:'SKU-1042', po:'PO-10251', lotSize:8300,  visc:2000, actualFill:30.83, brand:0.50, setpoint:0.26, sigDriven:0.38, sgDriven:0.06, totalCost:10200 },
-  { rank:19, res:'L88', sku:'SKU-1055', po:'PO-10252', lotSize:14000, visc:1800, actualFill:52.09, brand:0.47, setpoint:0.24, sigDriven:0.40, sgDriven:0.05, totalCost:9600 },
-  { rank:20, res:'L72', sku:'SKU-1042', po:'PO-10253', lotSize:9200,  visc:1980, actualFill:30.54, brand:0.44, setpoint:0.22, sigDriven:0.35, sgDriven:0.05, totalCost:9100 },
-  { rank:21, res:'L78', sku:'SKU-1055', po:'PO-10254', lotSize:10500, visc:1820, actualFill:51.94, brand:0.46, setpoint:0.23, sigDriven:0.37, sgDriven:0.05, totalCost:8500 },
-  { rank:22, res:'L83', sku:'SKU-1042', po:'PO-10255', lotSize:7700,  visc:2080, actualFill:30.41, brand:0.43, setpoint:0.21, sigDriven:0.33, sgDriven:0.05, totalCost:7800 },
-  { rank:23, res:'L74', sku:'SKU-1113', po:'PO-10256', lotSize:22000, visc:1200, actualFill:30.29, brand:0.35, setpoint:0.18, sigDriven:0.25, sgDriven:0.03, totalCost:6900 },
-  { rank:24, res:'L80', sku:'SKU-1042', po:'PO-10257', lotSize:8600,  visc:2050, actualFill:30.37, brand:0.42, setpoint:0.21, sigDriven:0.30, sgDriven:0.04, totalCost:6400 },
-  { rank:25, res:'L87', sku:'SKU-1127', po:'PO-10258', lotSize:32000, visc:950,  actualFill:50.21, brand:0.28, setpoint:0.14, sigDriven:0.18, sgDriven:0.02, totalCost:5200 },
+  { rank:1,  res:'L67', sku:'SKU-1042', po:'PO-10234', lotSize:8500,  visc:2100, actualFill:31.44, brand:0.62, setpoint:0.35, sigDriven:0.58, sgDriven:0.09, totalCost:45600, costingLotSize:9000,  stdCostedOV:42300, stdCostVar:3300, scrapPct:2.5 },
+  { rank:2,  res:'L73', sku:'SKU-1042', po:'PO-10235', lotSize:7200,  visc:2050, actualFill:31.86, brand:0.60, setpoint:0.33, sigDriven:0.72, sgDriven:0.11, totalCost:42900, costingLotSize:7000,  stdCostedOV:40100, stdCostVar:2800, scrapPct:2.5 },
+  { rank:3,  res:'L67', sku:'SKU-1055', po:'PO-10236', lotSize:12000, visc:1800, actualFill:52.60, brand:0.55, setpoint:0.28, sigDriven:0.70, sgDriven:0.07, totalCost:38200, costingLotSize:12000, stdCostedOV:35800, stdCostVar:2400, scrapPct:2.2 },
+  { rank:4,  res:'L75', sku:'SKU-1042', po:'PO-10237', lotSize:6800,  visc:2300, actualFill:31.21, brand:0.58, setpoint:0.31, sigDriven:0.62, sgDriven:0.10, totalCost:34700, costingLotSize:7000,  stdCostedOV:32400, stdCostVar:2300, scrapPct:2.5 },
+  { rank:5,  res:'L68', sku:'SKU-1042', po:'PO-10238', lotSize:9500,  visc:2000, actualFill:31.10, brand:0.55, setpoint:0.30, sigDriven:0.50, sgDriven:0.08, totalCost:29800, costingLotSize:10000, stdCostedOV:27900, stdCostVar:1900, scrapPct:2.3 },
+  { rank:6,  res:'L82', sku:'SKU-1055', po:'PO-10239', lotSize:15000, visc:1750, actualFill:52.35, brand:0.52, setpoint:0.27, sigDriven:0.52, sgDriven:0.06, totalCost:24100, costingLotSize:15000, stdCostedOV:22800, stdCostVar:1300, scrapPct:2.5 },
+  { rank:7,  res:'L70', sku:'SKU-1042', po:'PO-10240', lotSize:7600,  visc:2150, actualFill:30.89, brand:0.57, setpoint:0.29, sigDriven:0.56, sgDriven:0.08, totalCost:22600, costingLotSize:8000,  stdCostedOV:21200, stdCostVar:1400, scrapPct:2.5 },
+  { rank:8,  res:'L68', sku:'SKU-1055', po:'PO-10241', lotSize:11000, visc:1820, actualFill:52.35, brand:0.51, setpoint:0.26, sigDriven:0.55, sgDriven:0.06, totalCost:21400, costingLotSize:11000, stdCostedOV:19900, stdCostVar:1500, scrapPct:2.5 },
+  { rank:9,  res:'L67', sku:'SKU-1098', po:'PO-10242', lotSize:5200,  visc:2800, actualFill:15.73, brand:0.48, setpoint:0.22, sigDriven:0.62, sgDriven:0.12, totalCost:17200, costingLotSize:5000,  stdCostedOV:15800, stdCostVar:1400, scrapPct:2.5 },
+  { rank:10, res:'L77', sku:'SKU-1042', po:'PO-10243', lotSize:8800,  visc:2000, actualFill:30.95, brand:0.53, setpoint:0.28, sigDriven:0.44, sgDriven:0.07, totalCost:16800, costingLotSize:9000,  stdCostedOV:15500, stdCostVar:1300, scrapPct:2.5 },
+  { rank:11, res:'L79', sku:'SKU-1042', po:'PO-10244', lotSize:7400,  visc:2100, actualFill:31.33, brand:0.56, setpoint:0.31, sigDriven:0.50, sgDriven:0.09, totalCost:15200, costingLotSize:7000,  stdCostedOV:14000, stdCostVar:1200, scrapPct:2.5 },
+  { rank:12, res:'L84', sku:'SKU-1042', po:'PO-10245', lotSize:6200,  visc:2200, actualFill:31.08, brand:0.54, setpoint:0.28, sigDriven:0.48, sgDriven:0.08, totalCost:14100, costingLotSize:6000,  stdCostedOV:12900, stdCostVar:1200, scrapPct:2.5 },
+  { rank:13, res:'L65', sku:'SKU-1042', po:'PO-10246', lotSize:8100,  visc:1950, actualFill:30.76, brand:0.51, setpoint:0.26, sigDriven:0.45, sgDriven:0.07, totalCost:13400, costingLotSize:8000,  stdCostedOV:12200, stdCostVar:1200, scrapPct:2.5 },
+  { rank:14, res:'L90', sku:'SKU-1042', po:'PO-10247', lotSize:7900,  visc:2050, actualFill:31.15, brand:0.55, setpoint:0.29, sigDriven:0.49, sgDriven:0.08, totalCost:12800, costingLotSize:8000,  stdCostedOV:11600, stdCostVar:1200, scrapPct:2.5 },
+  { rank:15, res:'L86', sku:'SKU-1055', po:'PO-10248', lotSize:13000, visc:1780, actualFill:52.18, brand:0.49, setpoint:0.25, sigDriven:0.43, sgDriven:0.06, totalCost:11900, costingLotSize:13000, stdCostedOV:10700, stdCostVar:1200, scrapPct:2.5 },
+  { rank:16, res:'L81', sku:'SKU-1042', po:'PO-10249', lotSize:7000,  visc:2100, actualFill:30.97, brand:0.52, setpoint:0.27, sigDriven:0.42, sgDriven:0.07, totalCost:11300, costingLotSize:7000,  stdCostedOV:10400, stdCostVar:900,  scrapPct:2.5 },
+  { rank:17, res:'L76', sku:'SKU-1098', po:'PO-10250', lotSize:4800,  visc:2750, actualFill:15.64, brand:0.45, setpoint:0.20, sigDriven:0.56, sgDriven:0.11, totalCost:10800, costingLotSize:5000,  stdCostedOV:9900,  stdCostVar:900,  scrapPct:2.5 },
+  { rank:18, res:'L85', sku:'SKU-1042', po:'PO-10251', lotSize:8300,  visc:2000, actualFill:30.83, brand:0.50, setpoint:0.26, sigDriven:0.38, sgDriven:0.06, totalCost:10200, costingLotSize:8000,  stdCostedOV:9300,  stdCostVar:900,  scrapPct:2.5 },
+  { rank:19, res:'L88', sku:'SKU-1055', po:'PO-10252', lotSize:14000, visc:1800, actualFill:52.09, brand:0.47, setpoint:0.24, sigDriven:0.40, sgDriven:0.05, totalCost:9600,  costingLotSize:14000, stdCostedOV:8700,  stdCostVar:900,  scrapPct:2.5 },
+  { rank:20, res:'L72', sku:'SKU-1042', po:'PO-10253', lotSize:9200,  visc:1980, actualFill:30.54, brand:0.44, setpoint:0.22, sigDriven:0.35, sgDriven:0.05, totalCost:9100,  costingLotSize:9000,  stdCostedOV:8200,  stdCostVar:900,  scrapPct:2.5 },
+  { rank:21, res:'L78', sku:'SKU-1055', po:'PO-10254', lotSize:10500, visc:1820, actualFill:51.94, brand:0.46, setpoint:0.23, sigDriven:0.37, sgDriven:0.05, totalCost:8500,  costingLotSize:11000, stdCostedOV:7700,  stdCostVar:800,  scrapPct:2.5 },
+  { rank:22, res:'L83', sku:'SKU-1042', po:'PO-10255', lotSize:7700,  visc:2080, actualFill:30.41, brand:0.43, setpoint:0.21, sigDriven:0.33, sgDriven:0.05, totalCost:7800,  costingLotSize:8000,  stdCostedOV:7100,  stdCostVar:700,  scrapPct:2.5 },
+  { rank:23, res:'L74', sku:'SKU-1113', po:'PO-10256', lotSize:22000, visc:1200, actualFill:30.29, brand:0.35, setpoint:0.18, sigDriven:0.25, sgDriven:0.03, totalCost:6900,  costingLotSize:22000, stdCostedOV:6200,  stdCostVar:700,  scrapPct:2.5 },
+  { rank:24, res:'L80', sku:'SKU-1042', po:'PO-10257', lotSize:8600,  visc:2050, actualFill:30.37, brand:0.42, setpoint:0.21, sigDriven:0.30, sgDriven:0.04, totalCost:6400,  costingLotSize:9000,  stdCostedOV:5800,  stdCostVar:700,  scrapPct:2.5 },
+  { rank:25, res:'L87', sku:'SKU-1127', po:'PO-10258', lotSize:32000, visc:950,  actualFill:50.21, brand:0.28, setpoint:0.14, sigDriven:0.18, sgDriven:0.02, totalCost:5200,  costingLotSize:32000, stdCostedOV:4500,  stdCostVar:700,  scrapPct:2.5 },
 ];
 let OV_DRV_OFFSET = 0;
 let OV_DRV_GROUP = 'res';
@@ -6145,7 +6197,7 @@ let OV_DRV_GROUP = 'res';
 /* SG stats per SKU */
 const OV_SG_STATS = {
   'SKU-1042': { maxDemo:1.044, mean:1.034, median:1.033, sigma:0.006, specMin:1.004, specMax:1.072 },
-  'SKU-1055': { maxDemo:1.005, mean:0.999, median:0.999, sigma:0.003, specMin:0.975, specMax:1.025 },
+  'SKU-1055': { maxDemo:1.085, mean:0.999, median:0.999, sigma:0.003, specMin:0.975, specMax:1.025 },
   'SKU-1098': { maxDemo:1.063, mean:1.054, median:1.054, sigma:0.005, specMin:1.030, specMax:1.080 },
   'SKU-1113': { maxDemo:1.023, mean:1.016, median:1.016, sigma:0.004, specMin:0.995, specMax:1.040 },
 };
@@ -6200,6 +6252,10 @@ const OV_EXPORT_DATA = (function() {
         overfillPct: overfillPct.toFixed(2),
         costPg: costPg.toFixed(4),
         giveawayCost: (overfill * costPg).toFixed(2),
+        stdCostedOV: (overfill * costPg * 0.92).toFixed(2),
+        stdCostVar: (overfill * costPg * 0.08).toFixed(2),
+        costingLotSize: [10000, 15000, 8000, 25000, 35000][si],
+        scrapPct: [2.5, 2.2, 2.8, 2.0, 1.8][si],
         brand: brands[si],
         pkgType: pkgs[si],
         visc: viscMap[si],
@@ -6217,6 +6273,33 @@ const OV_EXPORT_DATA = (function() {
 let OV_EXP_OFFSET = 0;
 
 const OV_WEEKS = ['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'];
+
+/* Overview — Actual vs Brand Required % by SKU/Resource */
+const OV_AVB_BY_SKU = {
+  labels:   ['Mascara Multi','Mascara Vol','Fndn Liquid','Fndn Cream','Serum Anti-age','Serum Vitamin','Moist. SPF'],
+  families: ['Makeup','Makeup','Skincare','Skincare','Skincare','Skincare','Skincare'],
+  actual:   [6.8, 7.1, 6.2, 5.9, 4.8, 4.1, 5.5],
+  brandReq: [3.8, 3.5, 4.2, 4.0, 3.2, 2.8, 3.9],
+};
+const OV_AVB_BY_RES = {
+  labels:   ['L65','L67','L68','L70','L72','L73','L74'],
+  actual:   [5.1, 6.8, 5.9, 5.5, 4.8, 7.1, 4.4],
+  brandReq: [3.5, 3.8, 4.0, 3.7, 3.2, 3.5, 3.4],
+};
+let OV_AVB_VIEW = 'sku';
+
+/* Overview — GAP % Trend */
+const OV_GAP_TREND_MONTHS  = ['Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'];
+const OV_GAP_TREND_ALL     = [8.2, 12.1, 10.5, 13.4, 9.8, 6.2, 11.3, 12.0];
+const OV_GAP_TREND_GS_BENCH = 5.0;
+const OV_GAP_TREND_MULTI = [
+  { label:'SKU-1042', color:'#C62828', data:[9.1,13.2,11.4,14.8,10.9,7.1,12.4,13.2] },
+  { label:'SKU-1055', color:'#1976D2', data:[7.4,10.9, 9.2,11.8, 8.6,5.4,10.1,11.2] },
+  { label:'SKU-1098', color:'#2E7D32', data:[6.8,10.5, 8.8,11.2, 8.0,5.0, 9.8,10.8] },
+  { label:'SKU-1113', color:'#F57C00', data:[5.9, 9.8, 7.6,10.4, 7.2,4.5, 9.0,10.0] },
+];
+let OV_GAP_TREND_VIEW = 'all';
+
 const OV_COST_TREND = [10800,11200,10500,12400,13100,12700,13900,14300,13600,14800,15200,14900];
 const OV_QTY_TREND  = [2800,2920,2770,3100,3290,3010,3210,3380,3190,3450,3640,3510];
 
@@ -6483,7 +6566,7 @@ function renderOVKPIs() {
 
   // ── Row 1: 5 Cost KPIs ──────────────────────────────────
   const varSign  = OV_SUMMARY.stdCostVariance >= 0;
-  const varColor = varSign ? '#28A745' : '#DC3545';
+  const varColor = varSign ? '#C62828' : '#2E7D32';
   const varPfx   = varSign ? '+' : '';
 
   const gap      = OV_SUMMARY.currentOverfillPct - OV_GS_BASELINE.pct;
@@ -6506,10 +6589,10 @@ function renderOVKPIs() {
       <span class="ov-kpi-badge" style="background:#FF9800;">Aesthetic req.</span>
     </div>
     <div class="ov-kpi-card">
-      <span class="ov-kpi-label">Standard Cost Variance</span>
+      <span class="ov-kpi-label">Standard Cost Variance <span title="Standard Cost Variance = Actual Overfill Cost − Standard Costed Overfill. Positive (+$430K) = spending MORE than originally budgeted (over budget). Negative = spending LESS (savings). ⚠ Uses current standard cost from SAP MM03 — historical cost changes not tracked." style="cursor:help;font-size:11px;margin-left:4px;color:var(--c-muted);">ℹ</span></span>
       <span class="ov-kpi-value" style="color:${varColor};">${varPfx}${_fmt$M(Math.abs(OV_SUMMARY.stdCostVariance))}</span>
-      <span class="ov-kpi-sub">Costed vs. Actual · SAP MM03</span>
-      <span class="ov-kpi-badge" style="background:${varColor};">${varSign ? '▲ Budget savings' : '▼ Cost overrun'}</span>
+      <span class="ov-kpi-sub">Actual - Standard Costed · SAP MM03 (current cost)</span>
+      <span class="ov-kpi-badge" style="background:${varColor};">${varSign ? '⚠ Over Budget' : '✓ Under Budget'}</span>
     </div>
     <div class="ov-kpi-card clickable" onclick="openTop10Modal()">
       <span class="ov-kpi-label">Top Opportunities ▸</span>
@@ -6589,6 +6672,8 @@ function initOVOverviewCharts() {
   _renderOVCostTrend();
   _renderOVQtyTrend();
   _renderOVGiveawayBar();
+  _renderOVAVBChart();
+  _renderOVGapTrend();
 }
 
 function _renderOVCostTrend() {
@@ -6661,6 +6746,179 @@ function setOVGroupBy(group) {
   document.getElementById('btn-ov-by-res').classList.toggle('active', group === 'res');
   document.getElementById('btn-ov-by-sku').classList.toggle('active', group === 'sku');
   _renderOVGiveawayBar();
+}
+
+/* ─── OVERFILL: AVB GROUPED BAR CHART ──────────────────── */
+
+function _renderOVAVBChart() {
+  const ex = REG['ch-ov-avb'];
+  if (ex) { ex.destroy(); delete REG['ch-ov-avb']; }
+  const src = OV_AVB_VIEW === 'sku' ? OV_AVB_BY_SKU : OV_AVB_BY_RES;
+  init('ch-ov-avb', {
+    type: 'bar',
+    data: {
+      labels: src.labels,
+      datasets: [
+        {
+          label: 'Actual Overfill %',
+          data: src.actual,
+          backgroundColor: '#1976D2',
+          borderRadius: 3,
+          barPercentage: 0.4,
+          categoryPercentage: 0.7,
+        },
+        {
+          label: 'Brand Required Overfill %',
+          data: src.brandReq,
+          backgroundColor: '#2E7D32',
+          borderRadius: 3,
+          barPercentage: 0.4,
+          categoryPercentage: 0.7,
+        },
+      ]
+    },
+    options: {
+      ...baseOpts('Overfill %'),
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(10,37,64,0.95)',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          titleColor: '#FFFFFF',
+          bodyColor: 'rgba(255,255,255,0.8)',
+          padding: 10,
+          cornerRadius: 6,
+          callbacks: {
+            title: function(ctx) { return ctx[0].label; },
+            afterBody: function(ctx) {
+              const idx = ctx[0].dataIndex;
+              const act = src.actual[idx];
+              const brq = src.brandReq[idx];
+              const gap = (act - brq).toFixed(1);
+              return [
+                '',
+                'Actual Overfill: ' + act.toFixed(1) + '%',
+                'Brand Required: ' + brq.toFixed(1) + '%',
+                'Gap: ' + (gap >= 0 ? '+' : '') + gap + '%',
+              ];
+            },
+            label: function() { return null; },
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#4A6580', font: { size: 10 } } },
+        y: {
+          grid: { color: '#E8E8E8' },
+          ticks: { color: '#4A6580', font: { size: 10 }, callback: function(v) { return v + '%'; } },
+          min: 0, max: 12,
+          title: { display: true, text: 'Overfill %', color: '#4A6580', font: { size: 10 } }
+        }
+      }
+    }
+  });
+}
+
+function setAVBView(v) {
+  OV_AVB_VIEW = v;
+  _renderOVAVBChart();
+}
+
+/* ─── OVERFILL: GAP % TREND CHART ──────────────────────── */
+
+function _renderOVGapTrend() {
+  const ex = REG['ch-ov-gap-trend'];
+  if (ex) { ex.destroy(); delete REG['ch-ov-gap-trend']; }
+
+  const benchData = OV_GAP_TREND_MONTHS.map(function() { return OV_GAP_TREND_GS_BENCH; });
+  const benchDS = {
+    label: 'GS Benchmark',
+    data: benchData,
+    borderColor: '#9E9E9E',
+    borderDash: [6, 4],
+    borderWidth: 2,
+    pointRadius: 0,
+    fill: false,
+    tension: 0,
+    order: 0,
+  };
+
+  let datasets;
+  if (OV_GAP_TREND_VIEW === 'multi') {
+    datasets = OV_GAP_TREND_MULTI.map(function(s) {
+      return {
+        label: s.label,
+        data: s.data,
+        borderColor: s.color,
+        backgroundColor: 'transparent',
+        fill: false,
+        tension: 0.3,
+        pointRadius: 4,
+        borderWidth: 2,
+        order: 1,
+      };
+    });
+    datasets.push(benchDS);
+  } else {
+    datasets = [
+      {
+        label: 'Overfill GAP %',
+        data: OV_GAP_TREND_ALL,
+        borderColor: '#C62828',
+        backgroundColor: 'transparent',
+        fill: false,
+        tension: 0.3,
+        pointRadius: 5,
+        pointBackgroundColor: '#C62828',
+        borderWidth: 2,
+        order: 1,
+      },
+      benchDS,
+    ];
+  }
+
+  init('ch-ov-gap-trend', {
+    type: 'line',
+    data: { labels: OV_GAP_TREND_MONTHS, datasets: datasets },
+    options: {
+      ...baseOpts('GAP %'),
+      plugins: {
+        legend: {
+          display: OV_GAP_TREND_VIEW === 'multi',
+          labels: { color: '#4A6580', font: { size: 10 }, boxWidth: 12 }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(10,37,64,0.95)',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          titleColor: '#FFFFFF',
+          bodyColor: 'rgba(255,255,255,0.8)',
+          padding: 10,
+          cornerRadius: 6,
+          callbacks: {
+            afterBody: function() {
+              return ['GS Benchmark: ' + OV_GAP_TREND_GS_BENCH.toFixed(1) + '%'];
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#4A6580', font: { size: 10 } } },
+        y: {
+          grid: { color: '#E8E8E8' },
+          ticks: { color: '#4A6580', font: { size: 10 }, callback: function(v) { return v + '%'; } },
+          min: 0, max: 16,
+          title: { display: true, text: 'GAP %', color: '#4A6580', font: { size: 10 } }
+        }
+      }
+    }
+  });
+}
+
+function setGapTrendView(v) {
+  OV_GAP_TREND_VIEW = v;
+  _renderOVGapTrend();
 }
 
 /* ─── OVERFILL: HEATMAP ──────────────────────────────── */
@@ -7719,6 +7977,14 @@ function _appendDriverRows(from, to) {
       <td style="font-family:monospace;">+${r.sgDriven.toFixed(2)}</td>
       <td class="driver-pct-blue">${sgg}%</td>
       <td style="font-weight:700;">$${r.totalCost.toLocaleString()}</td>`;
+    const varC  = r.stdCostVar >= 0 ? '#C62828' : '#2E7D32';
+    const varBg = r.stdCostVar >= 0 ? '#FFEBEE' : '#E8F5E9';
+    const varPf = r.stdCostVar >= 0 ? '+' : '';
+    tr.innerHTML += `
+      <td>${r.costingLotSize.toLocaleString()}</td>
+      <td>$${r.stdCostedOV.toLocaleString()}</td>
+      <td style="color:${varC};background:${varBg};font-weight:700;">${varPf}$${Math.abs(r.stdCostVar).toLocaleString()}</td>
+      <td>${r.scrapPct.toFixed(1)}%</td>`;
     tbody.appendChild(tr);
   });
 }
@@ -7862,14 +8128,19 @@ function renderSGStats() {
   const tfLabel = { r3m:'Last 3M', r6m:'Last 6M', r12m:'R12M', fy26:'FY26', fy27:'FY27', all:'All Time' }[tf] || tf;
 
   container.innerHTML = Object.entries(OV_SG_STATS).map(([sku, s]) => {
-    const specWidth = s.specMax - s.specMin;
-    const widthCls  = specWidth < 0.05 ? 'sg-spec-width-green' : specWidth < 0.10 ? 'sg-spec-width-yellow' : 'sg-spec-width-red';
+    const specWidth  = s.specMax - s.specMin;
+    const widthCls   = specWidth < 0.05 ? 'sg-spec-width-green' : specWidth < 0.10 ? 'sg-spec-width-yellow' : 'sg-spec-width-red';
+    const isOutOfSpec = s.maxDemo > s.specMax;
     return `
       <div class="sg-stats-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div class="sg-stats-title">${sku} — SG Summary Statistics</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <div class="sg-stats-title">${sku} — SG Summary Statistics</div>
+            ${isOutOfSpec ? '<span style="background:#FFF3E0;border:1px solid #FFA726;color:#E65100;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;">⚠ Out of Spec</span>' : ''}
+          </div>
           <span style="font-size:10px;color:var(--c-muted);font-style:italic;">${tfLabel}</span>
         </div>
+        ${isOutOfSpec ? `<p style="font-size:10px;color:#E65100;margin:6px 0 4px;padding:4px 8px;background:#FFF3E0;border-radius:4px;">⚠ Max Demonstrated SG (${s.maxDemo.toFixed(3)}) exceeds Spec Max (${s.specMax.toFixed(3)}). Review with R&D.</p>` : ''}
         <div class="sg-stats-grid">
           <div class="sg-stat-item">
             <span class="sg-stat-label">Max Demonstrated SG</span>
@@ -7990,6 +8261,10 @@ function _appendExportRows(from, to) {
       <td>${r.overfillG}</td>
       <td style="font-weight:700;color:${+r.overfillPct>4?'#DC3545':'#333'}">${r.overfillPct}%</td>
       <td>${r.costPg}</td><td>$${r.giveawayCost}</td>
+      <td>$${r.stdCostedOV}</td>
+      <td style="color:${+r.stdCostVar>=0?'#C62828':'#2E7D32'};font-weight:700;">${+r.stdCostVar>=0?'+':''}$${Math.abs(+r.stdCostVar).toFixed(2)}</td>
+      <td>${r.costingLotSize.toLocaleString()}</td>
+      <td>${r.scrapPct}%</td>
       <td>${r.brand}</td><td>${r.category||'—'}</td><td>${r.subcategory||'—'}</td>
       <td>${r.pkgType}</td><td>${r.visc.toLocaleString()}</td>
       <td>${r.processType||'—'}</td><td>${r.lifeCycleStage||'—'}</td>`;
@@ -8007,10 +8282,12 @@ function loadMoreExport() {
 function exportToCSV() {
   const headers = ['Date','Plant','Resource','SKU','PO','Lot Size','Declared Content (ml)','SG',
     'Target Fill (g)','Actual Fill (g)','Overfill (g)','Overfill %','Cost/g','Giveaway Cost ($)',
+    'Standard Costed OV ($)','Std Cost Variance ($)','Costing Lot Size','Scrap % (Costed)',
     'Brand','Category','Subcategory','Package Type','Viscosity (cP)','Process Type','Life Cycle Stage'];
   const rows = OV_EXPORT_DATA.map(r => [
     r.date, r.plant, r.res, r.sku, r.po, r.lotSize, r.declaredMl, r.sg,
     r.targetFill, r.actualFill, r.overfillG, r.overfillPct, r.costPg, r.giveawayCost,
+    r.stdCostedOV, r.stdCostVar, r.costingLotSize, r.scrapPct,
     r.brand, r.category||'', r.subcategory||'', r.pkgType, r.visc,
     r.processType||'', r.lifeCycleStage||''
   ]);
@@ -8029,9 +8306,11 @@ function exportDriversCSV(mode) {
     ? OV_DRIVERS.slice(0, 100)
     : OV_DRIVERS;
   const headers = ['#','Resource','SKU','PO','Lot Size','Viscosity (cP)','Actual Fill (g)',
-    'Brand-Driven (g)','Set Point-Driven (g)','Sigma-Driven (g)','SG-Driven (g)','Total Overfill $'];
+    'Brand-Driven (g)','Set Point-Driven (g)','Sigma-Driven (g)','SG-Driven (g)','Total Overfill $',
+    'Costing Lot Size','Standard Costed OV ($)','Std Cost Variance ($)','Scrap % (Costed)'];
   const rows = src.map(r => [r.rank, r.res, r.sku, r.po, r.lotSize, r.visc,
-    r.actualFill, r.brand, r.setpoint, r.sigDriven, r.sgDriven, r.totalCost]);
+    r.actualFill, r.brand, r.setpoint, r.sigDriven, r.sgDriven, r.totalCost,
+    r.costingLotSize, r.stdCostedOV, r.stdCostVar, r.scrapPct]);
   const csv = [headers, ...rows].map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
   const blob = new Blob([csv], {type:'text/csv'});
   const a = document.createElement('a');
