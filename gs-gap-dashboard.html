@@ -1758,6 +1758,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <div class="knc-kpi">Labor</div>
           <div class="knc-val">9 <span class="knc-unit">hrs/1000u</span></div>
           <div class="knc-delta">▲ +2 vs GS</div>
+          <div class="knc-delta" style="color:var(--c-neg);margin-top:2px;">LE: 87%</div>
         </div>
       </button>
       <button class="kpi-nav-card" id="knc-oee" onclick="showKPI('oee')">
@@ -2548,116 +2549,535 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
 
     </div><!-- /cnt-speed-whatif -->
 
-    <!-- ─── LABOR: RESULTS ──────────────────────────────── -->
+    <!-- ─── LABOUR: RESULTS ─────────────────────────────────── -->
     <div id="cnt-labor-results" class="kpi-cnt">
-      <div class="sec-heading">👥 Labor — Results</div>
-      <div id="gs-status-bar-labor" class="gs-type-badge governed" style="align-self:flex-start;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div class="sec-heading" style="margin-bottom:0;">👥 Labour — Results</div>
+        <div class="view-as-wrap">
+          <span class="view-as-label">Resource view:</span>
+          <select class="view-as-select" id="sel-lb-res-view" onchange="switchLBResView(this.value)">
+            <option value="1">1 resource (cards)</option>
+            <option value="2">2 resources (comparison table)</option>
+            <option value="4">4 resources (comparison table)</option>
+          </select>
+        </div>
+      </div>
+      <div class="gs-type-badge governed" style="align-self:flex-start;">
         🔒 Governed Gold Standard active (FY25) — LOCKED for official reporting &amp; compensation
       </div>
-      <div class="kpi-row">
+
+      <div id="lb-res-cards" class="kpi-row">
         <div class="kpi-card">
-          <span class="kpi-label">Actual Labor hrs / 1000u</span>
-          <span class="kpi-value">9 <small>hrs/1000u</small></span>
-          <span class="kpi-delta neg">▲ +2 vs GS</span>
+          <span class="kpi-label">Actual LE</span>
+          <span class="kpi-value" style="color:#2E7D32;">87 <small>%</small></span>
+          <span class="kpi-delta pos">▲ +12% vs plan</span>
         </div>
         <div class="kpi-card">
-          <span class="kpi-label">GS (Best Demonstrated)</span>
-          <span class="kpi-value" style="color:var(--c-gs);">7 <small>hrs/1000u</small></span>
+          <span class="kpi-label">GS LE (Best Demonstrated)</span>
+          <span class="kpi-value" style="color:var(--c-gs);">94 <small>%</small></span>
           <span class="kpi-delta">FY25 locked baseline</span>
         </div>
         <div class="kpi-card">
-          <span class="kpi-label">Labor Gap to GS</span>
-          <span class="kpi-value" style="color:var(--c-neg);">2 <small>hrs/1000u</small></span>
-          <span class="kpi-delta neg">Excess per 1,000 units</span>
+          <span class="kpi-label">LE GAP %</span>
+          <span class="kpi-value" style="color:var(--c-neg);">13 <small>%</small></span>
+          <span class="kpi-delta neg">Gap to 100% plan</span>
         </div>
         <div class="kpi-card">
-          <span class="kpi-label">Labor Savings Potential</span>
-          <span class="kpi-value">$28.5K</span>
-          <span class="kpi-delta neg">Annualized at plan volume</span>
+          <span class="kpi-label">LE GAP $ Impact</span>
+          <span class="kpi-value" style="color:var(--c-neg);">$18.4K</span>
+          <span class="kpi-delta neg">Lost efficiency value</span>
         </div>
       </div>
+
+      <div id="lb-res-comp-wrap" style="display:none;" class="card">
+        <div class="tbl-wrap">
+          <table class="gs-tbl" style="width:100%;">
+            <thead><tr style="background:#1a3a4a;">
+              <th style="font-weight:700;color:#ffffff;padding-top:10px;padding-bottom:10px;">Resource</th>
+              <th class="r" style="font-weight:700;color:#ffffff;padding-top:10px;padding-bottom:10px;">Actual LE %</th>
+              <th class="r" style="font-weight:700;color:#6dd4bc;padding-top:10px;padding-bottom:10px;">GS LE %</th>
+              <th class="r" style="font-weight:700;color:#ff8080;padding-top:10px;padding-bottom:10px;">LE GAP %</th>
+              <th class="r" style="font-weight:700;color:#ff8080;padding-top:10px;padding-bottom:10px;">LE GAP $ Impact</th>
+            </tr></thead>
+            <tbody id="tb-lb-res-comp"></tbody>
+          </table>
+        </div>
+        <p style="font-size:10px;color:var(--c-muted);font-style:italic;margin:6px 4px 0;">↕ Click a row to filter all charts on this tab to that resource.</p>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin:4px 0;">
+        <span style="font-size:10px;color:var(--c-muted);margin-right:6px;align-self:center;">⚠ Pending client preference confirmation</span>
+        <div class="ov-toggle-row" style="font-size:10px;">
+          <button class="ov-toggle-btn active" id="lb-view-pct" onclick="setLBView('pct')">% LE</button>
+          <button class="ov-toggle-btn"        id="lb-view-hrs" onclick="setLBView('hrs')">hrs/1000u</button>
+        </div>
+      </div>
+
       <div class="card">
-        <span class="card-title">Labor hours per 1000 units — Monthly Trend</span>
-        <div class="card-subtitle">Actual labor hrs/1000u vs. best demonstrated (GS) and reference (RS). Exclusions: speed &lt;5/&gt;150 UPM, qty &lt;10, line trials.</div>
-        <div class="chart-wrap" style="height:220px;"><canvas id="ch-crew-res"></canvas></div>
-        <div class="legend-row">
-          <span class="legend-item"><span class="leg-line actual"></span> Actual Hrs/1000u</span>
+        <div class="card-header-row">
+          <span class="card-title">Labour Efficiency — Monthly Trend</span>
+        </div>
+        <div class="card-subtitle" id="lb-trend-subtitle">LE % &gt; 100% indicates better than planned efficiency. LE varies by PO size — use unit size slicer for fair comparison.</div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-lb-trend"></canvas></div>
+        <div class="legend-row" id="lb-trend-legend">
+          <span class="legend-item"><span class="leg-line actual" style="border-color:#2E7D32;"></span> Actual LE %</span>
           <span class="legend-item"><span class="leg-line gs"></span> GS (best demonstrated)</span>
           <span class="legend-item"><span class="leg-line rs"></span> RS (reference)</span>
         </div>
+        <div id="lb-multires-note" style="display:none;font-size:10px;color:var(--c-muted);margin-top:6px;font-style:italic;">RS reference lines hidden in multi-resource view for clarity.</div>
       </div>
-      <div class="note-box">📌 For PO-level detail, trend charts by line, and crew size analysis — click <strong>Deep View</strong> tab above.</div>
-      <div class="info-box">
-        <div class="info-box-title">ℹ Labor Methodology</div>
-        <div class="info-item"><strong>Labor hrs / 1000u:</strong> Total labor hours ÷ 1,000 units produced (including setup/teardown). Same PO/run exclusions as Speed.</div>
-        <div class="info-item"><strong>GS (Gold Standard):</strong> Best demonstrated performance for this line. FY25 governed baseline — locked for reporting.</div>
-        <div class="info-item"><strong>Gap Impact $:</strong> (Actual − GS hrs/1000u) × planned units / 1000 × labor rate. Labor cost rate: <em>pending Steven Johnstone confirmation</em>.</div>
-      </div>
+      <div class="note-box">📌 For PO-level detail and trend charts by line — click <strong>Deep View</strong> tab above.</div>
     </div><!-- /cnt-labor-results -->
 
-    <!-- ─── LABOR: PREDICTIONS ───────────────────────────── -->
+    <!-- ─── LABOUR: PREDICTIONS ──────────────────────────────── -->
     <div id="cnt-labor-predictions" class="kpi-cnt">
-      <div class="sec-heading">👥 Labor — Predictions</div>
-      <div class="note-box">📋 Planned production schedule for Labor analysis — sourced from SAP planned orders. Same SKU/line/period filters as Speed Predictions.</div>
+      <div class="sec-heading">👥 Labour — Predictions</div>
+
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <span class="kpi-label">Total Predicted LE GAP $ (FY Remainder)</span>
+          <span class="kpi-value" style="color:var(--c-neg);">$48,600</span>
+          <span class="kpi-delta neg">Non-NPL POs · fiscal year remainder</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Avg Predicted LE %</span>
+          <span class="kpi-value" style="color:var(--c-blue);">89.2 <small>%</small></span>
+          <span class="kpi-delta">Weighted by PO volume</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">High-Confidence Predictions</span>
+          <span class="kpi-value" style="color:var(--c-gs);">5 / 9 <small>POs</small></span>
+          <span class="kpi-delta">≥10 historical POs per SKU-Line</span>
+        </div>
+      </div>
+
       <div class="card">
-        <span class="card-title">Planned Labor Hours by Period</span>
-        <div class="card-subtitle">Projected labor requirements at current GS efficiency vs. actual efficiency gap.</div>
-        <div style="padding:32px;text-align:center;color:var(--c-muted);font-size:12px;">Labor Predictions chart — coming in next iteration</div>
+        <div class="flex-row" style="margin-bottom:6px;">
+          <div>
+            <span class="card-title">📈 Predicted LE % — Fiscal Year Remainder (Aug 26 – Jun 27)</span>
+            <div class="card-subtitle">Time-series based on historical LE at SKU × Resource level. Each dot = one future PO. GS LE = P75 benchmark (dashed).</div>
+          </div>
+          <div class="note-box" style="font-size:10px;padding:4px 10px;margin:0;align-self:flex-start;white-space:nowrap;">⚠ ML model scope TBD with data science team — current: historical avg baseline</div>
+        </div>
+        <div class="chart-wrap" style="height:220px;"><canvas id="ch-lb-pred"></canvas></div>
+        <div class="legend-row">
+          <span class="legend-item"><span class="leg-line actual" style="border-color:#2E7D32;"></span> Predicted LE%</span>
+          <span class="legend-item"><span class="leg-line gs"></span> GS LE% (P75)</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="flex-row" style="margin-bottom:6px;">
+          <div>
+            <span class="card-title">📊 Future PO Opportunities — Predicted LE GAP $</span>
+            <div class="card-subtitle">Non-NPL · Non-line-trial · SAP planned orders · sorted by predicted dollar impact. Labour cost: plant FY rate from SAP.</div>
+          </div>
+          <button onclick="loadMoreLBPred()" style="font-size:11px;color:var(--c-blue);background:none;border:1px solid var(--c-blue);padding:4px 14px;border-radius:4px;cursor:pointer;white-space:nowrap;align-self:flex-start;">Load More</button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="gs-tbl">
+            <thead><tr>
+              <th>Month</th><th>SKU</th><th>Resource</th><th>Family</th>
+              <th class="r">Pred. LE %</th>
+              <th class="r" style="color:#6dd4bc;">GS LE %</th>
+              <th class="r" style="color:#ff8080;">GAP %</th>
+              <th class="r" style="color:#ff8080;">Pred. GAP $</th>
+              <th>Confidence</th>
+            </tr></thead>
+            <tbody id="tb-lb-pred"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="note-box" style="line-height:1.7;border:1px solid #E65100;background:#FFF8F0;">
+        <strong>✅ Included:</strong> Non-NPL · Non-line-trial (7th digit ≠ R) · Non-China-rec (7th digit ≠ C) · ≥10 historical POs per SKU × Resource (low-freq: 3–5 minimum). &nbsp;
+        <strong style="color:#D97706;">⚠ Data Quality Flags:</strong> If a line trial was run on a different Resource than the future PO's assigned line, a warning will appear in the UI. &nbsp;
+        <strong style="color:#D97706;">⏳ Pending:</strong> ML / multivariate regression model (scope TBD with data science team). Labour cost uses SAP plant FY rate (plant-specific). Gold Standard time frame (FY vs rolling) pending client confirmation. &nbsp;
+        <strong>Formula:</strong> Predicted GAP $ = (GS LE% − Predicted LE%) × Labour Hrs/1000u × (Vol ÷ 1000) × Plant Rate.
       </div>
     </div><!-- /cnt-labor-predictions -->
 
-    <!-- ─── LABOR: GAP ANALYSIS ──────────────────────────── -->
+    <!-- ─── LABOUR: GAP ANALYSIS ($) ─────────────────────────── -->
     <div id="cnt-labor-gap" class="kpi-cnt">
-      <div class="sec-heading">👥 Labor — Gap Analysis ($)</div>
-      <div class="note-box">💰 Labor gap financial impact — RS GAP (operational) and GS GAP (structural) expressed in dollars at planned volume.</div>
-      <div class="card">
-        <span class="card-title">Labor Gap by Resource ($)</span>
-        <div class="card-subtitle">Lines sorted by labor gap $ — identify priority targets for crew efficiency improvement.</div>
-        <div style="padding:32px;text-align:center;color:var(--c-muted);font-size:12px;">Labor Gap Analysis chart — coming in next iteration</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div class="sec-heading" style="margin-bottom:0;">👥 Labour — Gap Analysis ($)</div>
+        <div class="view-as-wrap">
+          <span class="view-as-label">Resource view:</span>
+          <select class="view-as-select" id="sel-lb-gap-view" onchange="switchLBGapView(this.value)">
+            <option value="1">1 resource (cards)</option>
+            <option value="2">2 resources (comparison table)</option>
+            <option value="4">4 resources (comparison table)</option>
+          </select>
+        </div>
+      </div>
+      <div class="gs-type-badge governed" style="align-self:flex-start;margin-bottom:8px;">
+        🔒 GS LE = P75 of ≥10 qualified POs per Family × Resource | FY25 locked baseline &nbsp;·&nbsp; ⚠ Silver/Bronze thresholds configurable — pending confirmation from Kris Van Deursen
+      </div>
+
+      <div id="lb-gap-cards-single" class="kpi-row">
+        <div class="kpi-card">
+          <span class="kpi-label">GS LE % (P75 Benchmark)</span>
+          <span class="kpi-value" style="color:var(--c-gs);">94.0 <small>%</small></span>
+          <span class="kpi-delta">Mascara × L67 · FY25 · 28 POs</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Actual LE % (Selected)</span>
+          <span class="kpi-value">87.3 <small>%</small></span>
+          <span class="kpi-delta pos" style="color:#2E7D32;">▲ +7.3 pts vs plan</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">GS GAP %</span>
+          <span class="kpi-value" style="color:var(--c-neg);">6.7 <small>%</small></span>
+          <span class="kpi-delta neg">Avg weighted by PO volume</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">GS GAP $ Impact</span>
+          <span class="kpi-value" style="color:var(--c-neg);">$22.1K</span>
+          <span class="kpi-delta neg">Selected filters · YTD</span>
+        </div>
+      </div>
+
+      <div id="lb-gap-comp-wrap" style="display:none;" class="card">
+        <div class="tbl-wrap">
+          <table class="gs-tbl" style="width:100%;">
+            <thead><tr style="background:#1a3a4a;">
+              <th style="font-weight:700;color:#ffffff;padding-top:10px;padding-bottom:10px;">Resource</th>
+              <th class="r" style="font-weight:700;color:#6dd4bc;padding-top:10px;padding-bottom:10px;">GS LE %</th>
+              <th class="r" style="font-weight:700;color:#ffffff;padding-top:10px;padding-bottom:10px;">Actual LE %</th>
+              <th class="r" style="font-weight:700;color:#ff8080;padding-top:10px;padding-bottom:10px;">GS GAP %</th>
+              <th class="r" style="font-weight:700;color:#ff8080;padding-top:10px;padding-bottom:10px;">GS GAP $ Impact</th>
+            </tr></thead>
+            <tbody id="tb-lb-gap-comp"></tbody>
+          </table>
+        </div>
+        <p style="font-size:10px;color:var(--c-muted);font-style:italic;margin:6px 4px 0;">↕ Click a row to filter all charts on this tab to that resource.</p>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 4px;">
+        <span style="font-size:11px;font-weight:700;color:var(--c-text);">🏆 Performance Tier Distribution — Unified SKU Tier</span>
+        <span style="font-size:10px;color:var(--c-muted);font-style:italic;" title="⚠ Composite gap may include correlated OEE and Labour components — methodology pending final sign-off. Double-counting risk flagged (Ivan Kravchenko, Jul 22 session).">
+          Composite tier = dollarized total gap across Speed + OEE + Labour + Scrap · Gold = P75 confirmed · Silver/Bronze ⚠ pending Kris Van Deursen sign-off &nbsp; ℹ
+        </span>
+      </div>
+      <div class="kpi-row" style="gap:8px;">
+        <div class="gs-card" style="flex:1;cursor:pointer;border-left:4px solid #c9933a;background:#fdf6ec;" onclick="showLBTierModal('gold')">
+          <div class="card-title" style="color:#c9933a;margin-bottom:4px;">🥇 GOLD SKUs <small style="font-weight:400;font-size:10px;">(CLICK FOR DETAIL)</small></div>
+          <div style="font-size:28px;font-weight:800;color:#c9933a;line-height:1.1;">8 <small style="font-size:14px;">SKUs</small></div>
+          <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Total $ gap below P75 threshold</div>
+        </div>
+        <div class="gs-card" style="flex:1;cursor:pointer;border-left:4px solid #7a8fa6;background:#f2f4f7;" onclick="showLBTierModal('silver')">
+          <div class="card-title" style="color:#5a7a96;margin-bottom:4px;">🥈 SILVER SKUs <small style="font-weight:400;font-size:10px;">(CLICK FOR DETAIL)</small></div>
+          <div style="font-size:28px;font-weight:800;color:#5a7a96;line-height:1.1;">6 <small style="font-size:14px;">SKUs</small></div>
+          <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Moderate combined gap · improvement target</div>
+        </div>
+        <div class="gs-card" style="flex:1;cursor:pointer;border-left:4px solid #a0522d;background:#fdf0e8;" onclick="showLBTierModal('bronze')">
+          <div class="card-title" style="color:#a0522d;margin-bottom:4px;">🥉 BRONZE SKUs <small style="font-weight:400;font-size:10px;">(CLICK FOR DETAIL)</small></div>
+          <div style="font-size:28px;font-weight:800;color:#a0522d;line-height:1.1;">3 <small style="font-size:14px;">SKUs</small></div>
+          <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Highest combined gap · priority action</div>
+        </div>
+        <div class="gs-card" style="flex:1;border-left:4px dashed #a0522d;background:#fff;">
+          <div class="card-title" style="margin-bottom:4px;">TOTAL GS GAP $ — BRONZE SKUs</div>
+          <div style="font-size:28px;font-weight:800;color:#e05252;line-height:1.1;">$38,700</div>
+          <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Speed + OEE + Labour + Scrap combined</div>
+        </div>
+      </div>
+
+      <div class="charts-grid" style="margin-top:8px;">
+        <div class="card">
+          <div class="flex-row" style="margin-bottom:4px;">
+            <div>
+              <span class="card-title">GS LE % vs Actual LE % by SKU</span>
+              <div class="card-subtitle">Grouped by Family. Gap = GS − Actual. Formula: LE % = (Planned Hrs / Actual Hrs) × 100.</div>
+            </div>
+            <select class="view-as-select" style="align-self:flex-start;" onchange="switchLBGapBarView(this.value)">
+              <option value="1">1 resource selected</option>
+              <option value="2">2 resources selected</option>
+              <option value="3">3+ resources — small multiples</option>
+            </select>
+          </div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-lb-gap-bar"></canvas></div>
+          <div class="legend-row">
+            <span class="legend-item"><span style="display:inline-block;width:12px;height:12px;background:#1565C0;border-radius:2px;margin-right:4px;"></span>Actual LE %</span>
+            <span class="legend-item"><span style="display:inline-block;width:12px;height:12px;background:#2E7D32;border-radius:2px;margin-right:4px;"></span>GS LE %</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="flex-row" style="margin-bottom:4px;">
+            <div>
+              <span class="card-title">GS LE GAP % Trend Over Time</span>
+              <div class="card-subtitle">GS LE GAP % = GS LE − Actual LE. Aggregated by summing raw Ph / Ah totals — never averaged.</div>
+            </div>
+            <select class="view-as-select" style="align-self:flex-start;" onchange="switchLBGapTrendView(this.value)">
+              <option value="single">Single SKU</option>
+              <option value="multi">Multi-SKU (up to 4)</option>
+            </select>
+          </div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-lb-gap-trend"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:8px;">
+        <div class="flex-row" style="margin-bottom:6px;">
+          <div>
+            <span class="card-title">📋 GS LE GAP Deep Dive — All POs</span>
+            <div class="card-subtitle">Sorted by GS GAP $ impact desc. Grouped by Family.</div>
+          </div>
+          <button onclick="loadMoreLBPO()" style="font-size:11px;color:var(--c-blue);background:none;border:1px solid var(--c-blue);padding:4px 14px;border-radius:4px;cursor:pointer;white-space:nowrap;align-self:flex-start;">Load More</button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="gs-tbl" style="width:100%;">
+            <thead><tr>
+              <th>Resource</th><th>Family</th><th>Category / SKU</th><th>PO</th>
+              <th class="r">LE %</th>
+              <th class="r" style="color:#6dd4bc;">GS LE %</th>
+              <th class="r" style="color:#ff8080;">GS GAP %</th>
+              <th class="r" style="color:#ff8080;">GS GAP $</th>
+              <th>Tier</th>
+            </tr></thead>
+            <tbody id="tb-lb-po-rows"></tbody>
+          </table>
+        </div>
+        <p style="font-size:10px;color:var(--c-muted);margin:8px 4px 0;padding-top:6px;border-top:1px solid #E0E0E0;line-height:1.6;">
+          Formula: LE % = (Planned Hrs / Actual Hrs) × 100 where Planned Hrs = Raw Hours × (Qty Plan / Qty Produced), Actual Hrs = Run Hours + Setup Hours (0020+0030 + direct + service).
+          GS Formula: GS LE = P75 of ≥10 qualified POs per Family × Resource (never average LE%).
+          $ Formula: GS LE GAP $ = (GS LE% − Actual LE%) × Labour Hrs/1000u × (PO QTY ÷ 1000) × Plant Labour Rate.
+          Excluded: NPLs · Line trials · China rec variants · Z-variants · Families with &lt;10 POs (low-frequency: 3–5 minimum).
+          ⚠ Pending confirmation from Steven Johnstone whether Actual Hours includes unplanned downtime beyond 0020/0030.
+        </p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
+        <div class="gs-card" style="opacity:0.7;background:#f5f5f5;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+            <div>
+              <div class="card-title" style="color:var(--c-muted);">Setup Time Variance — Planned vs Actual</div>
+              <div class="card-subtitle">min, max, median, mean per SKU-Line, 3 time frames</div>
+            </div>
+            <span title="Granular setup time breakdown not available in SAP for this phase. Only aggregate downtime (0020 + 0030) exists. Future phase: manual sheets, RME tickets, or partial data approximation." style="cursor:help;font-size:11px;color:var(--c-muted);">ℹ</span>
+          </div>
+          <span style="background:#FFEBEE;color:#C62828;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;">🔴 Data Not Available</span>
+        </div>
+        <div class="gs-card" style="opacity:0.7;background:#f5f5f5;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+            <div>
+              <div class="card-title" style="color:var(--c-muted);">Time on Task vs UPH</div>
+              <div class="card-subtitle">Sub-process level statistical control chart</div>
+            </div>
+            <span title="Sub-process level measurement not available. Future: Cognex scanners or LIDAR-based time-on-task per conveyor station." style="cursor:help;font-size:11px;color:var(--c-muted);">ℹ</span>
+          </div>
+          <span style="background:#FFEBEE;color:#C62828;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;">🔴 Data Not Available</span>
+        </div>
+        <div class="gs-card" style="opacity:0.7;background:#f5f5f5;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+            <div>
+              <div class="card-title" style="color:var(--c-muted);">Planning Accuracy — Overbias vs Underbias</div>
+              <div class="card-subtitle">Systematic variance in planned hours per SKU</div>
+            </div>
+            <span title="Planned hours may be systematically over- or under-estimated per SKU. Future phase: identify bias direction and tighten process controls. Data source TBD." style="cursor:help;font-size:11px;color:var(--c-muted);">ℹ</span>
+          </div>
+          <span style="background:#FFF8E1;color:#E65100;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;">🟡 Criteria Pending</span>
+        </div>
+        <div class="gs-card" style="opacity:0.7;background:#f5f5f5;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+            <div>
+              <div class="card-title" style="color:var(--c-muted);">Process Path Measurement &amp; Deviations</div>
+              <div class="card-subtitle">Actual hours by sub-process step</div>
+            </div>
+            <span title="Sub-process step measurement (e.g. hopping, cartoning per 1,000 units) not available. No standardised process card exists. Future phases may use industry-standard time studies." style="cursor:help;font-size:11px;color:var(--c-muted);">ℹ</span>
+          </div>
+          <span style="background:#FFEBEE;color:#C62828;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;">🔴 Data Not Available</span>
+        </div>
+        <div class="gs-card" style="opacity:0.7;background:#f5f5f5;grid-column:span 2;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+            <div>
+              <div class="card-title" style="color:var(--c-muted);">Recommendations</div>
+              <div class="card-subtitle">Downtime, SKU complexity, labour shortage, speed improvement — prioritised by $ impact</div>
+            </div>
+            <span title="BRD requirements: (a) Prioritise by $ impact across Speed, OEE, Labour, Scrap. (b) Short-term: speed adjustment, operator training, setup parameter review, changeover sequencing. Criteria and formula TBD pending client sign-off." style="cursor:help;font-size:11px;color:var(--c-muted);">ℹ</span>
+          </div>
+          <span style="background:#FFF8E1;color:#E65100;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;">🟡 Criteria Pending</span>
+        </div>
       </div>
     </div><!-- /cnt-labor-gap -->
 
-    <!-- ─── LABOR: DEEP VIEW ─────────────────────────────── (moved from page-dv) -->
+    <!-- ─── LABOUR: DEEP VIEW ────────────────────────────────── -->
     <div id="cnt-labor-dv" class="kpi-cnt">
-      <div class="sec-heading">👥 Labor hours per 1000 units — Deep View</div>
+      <div class="sec-heading">👥 Labour — Deep View</div>
+
       <div class="charts-grid">
         <div class="card">
-          <span class="card-title">Actual hrs/1000u vs. GS and RS over time</span>
-          <div class="card-subtitle">Labor hours per 1,000 units produced</div>
-          <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-labor-trend"></canvas></div>
+          <span class="card-title">LE % vs. best demonstrated over time</span>
+          <div class="card-subtitle">LE varies by PO size — use unit size slicer for fair comparison.</div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-lb-dv-trend"></canvas></div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="leg-line actual" style="border-color:#2E7D32;"></span> Actual LE %</span>
+            <span class="legend-item"><span class="leg-line gs"></span> GS LE % (P75, dot markers)</span>
+            <span class="legend-item"><span class="leg-line rs"></span> RS LE % (reference, dot markers)</span>
+          </div>
         </div>
         <div class="card">
-          <span class="card-title">Hrs/1000u by line (sorted by gap to GS)</span>
-          <div class="card-subtitle">Lines with highest excess labor hrs/1000u appear first</div>
-          <div class="chart-wrap" style="height:200px;"><canvas id="ch-dv-labor-res"></canvas></div>
+          <span class="card-title">LE segmented by PO size</span>
+          <div class="card-subtitle">Small POs typically have lower LE due to changeover frequency (confirmed Jun 23).</div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-lb-dv-size"></canvas></div>
         </div>
       </div>
-      <div class="card">
-        <span class="card-title">PO-Level Labor Detail</span>
+
+      <div class="card" style="margin-top:8px;">
+        <div class="flex-row" style="margin-bottom:6px;">
+          <div>
+            <span class="card-title">PO-Level Labour Efficiency Detail</span>
+            <div class="card-subtitle">Sorted by Gap $ descending. PO Quantity = units in this PO. Avg SKU PO Quantity = historical avg for this SKU.</div>
+          </div>
+          <select class="view-as-select" style="align-self:flex-start;" onchange="switchLBDVFilter(this.value)">
+            <option value="all">Filter PO by: All POs</option>
+            <option value="sku">Selected SKU</option>
+            <option value="res">Selected Resource</option>
+          </select>
+        </div>
         <div class="tbl-wrap">
-          <table class="gs-tbl">
-            <thead>
-              <tr>
-                <th>PO Number</th><th>SKU</th><th>Resource</th>
-                <th class="r">Actual Hrs/1000u</th>
-                <th class="r">GS Hrs/1000u</th>
-                <th class="r">RS Hrs/1000u</th>
-                <th class="r">Gap $ (excess × rate)</th>
-              </tr>
-            </thead>
-            <tbody id="tb-dv-labor"></tbody>
+          <table class="gs-tbl" style="width:100%;">
+            <thead><tr>
+              <th>PO Number</th>
+              <th class="r">PO Quantity</th>
+              <th class="r">Avg SKU PO Qty</th>
+              <th>SKU</th>
+              <th>Resource</th>
+              <th>PO Size Bucket</th>
+              <th class="r">Actual LE %</th>
+              <th class="r" style="color:#6dd4bc;">GS LE %</th>
+              <th class="r" style="color:#ff8080;">Gap $ (lost efficiency)</th>
+            </tr></thead>
+            <tbody id="tb-lb-dv"></tbody>
           </table>
         </div>
       </div>
     </div><!-- /cnt-labor-dv -->
 
-    <!-- ─── LABOR: WHAT-IF ───────────────────────────────── -->
+    <!-- ─── LABOUR: WHAT-IF ($) ──────────────────────────────── -->
     <div id="cnt-labor-whatif" class="kpi-cnt">
-      <div class="sec-heading">👥 Labor — What-If ($)</div>
-      <div class="note-box">💰 Simulate the impact of crew size and labor rate changes on total labor gap cost.</div>
-      <div class="card">
-        <span class="card-title">Labor What-If Simulator</span>
-        <div style="padding:32px;text-align:center;color:var(--c-muted);font-size:12px;">Labor What-If simulation — coming in next iteration</div>
+      <div class="sec-heading">👥 Labour — What-If Simulation ($)</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px;align-items:start;">
+        <div class="card">
+          <span class="card-title">⚙ Simulation Parameters</span>
+          <div class="card-subtitle" style="margin-bottom:10px;">Adjust inputs to simulate LE improvement savings. Headcount excluded — use Labour Hrs/1000u as proxy.</div>
+
+          <div style="margin-bottom:10px;">
+            <span class="slicer-label">Load baseline from:</span>
+            <select class="view-as-select" style="width:100%;margin-top:4px;" id="lb-wi-baseline" onchange="switchLBWIBaseline(this.value)">
+              <option value="manual">Manual entry</option>
+              <option value="historical">Historical PO</option>
+              <option value="best">Best GS PO</option>
+            </select>
+          </div>
+
+          <div id="lb-wi-po-slicer" style="display:none;margin-bottom:10px;">
+            <span class="slicer-label">Select Historical PO:</span>
+            <select class="view-as-select" style="width:100%;margin-top:4px;" onchange="loadLBWIPO(this.value)">
+              <option value="">— select PO —</option>
+              <option value="PO-7841">PO-7841 — SKU-101 / Mascara Multi — L67</option>
+              <option value="PO-7863">PO-7863 — SKU-101 / Mascara Multi — L67</option>
+              <option value="PO-7891">PO-7891 — SKU-112 / Mascara Volume — L67</option>
+              <option value="PO-7902">PO-7902 — SKU-202 / Foundation Liquid — L67</option>
+              <option value="PO-7924">PO-7924 — SKU-301 / Serum Anti-aging — L68</option>
+            </select>
+            <p style="font-size:10px;color:var(--c-muted);font-style:italic;margin:4px 0 0;">Simulation is PO-bound. Time period filter determines available PO list.</p>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span class="slicer-label">Target LE %</span>
+              <strong id="lb-wi-le-val" style="font-size:13px;color:var(--c-blue);">95%</strong>
+            </div>
+            <input type="range" id="lb-wi-le" min="50" max="150" value="95" step="1"
+              oninput="$('lb-wi-le-val').textContent=this.value+'%';calcLBWI()"
+              style="width:100%;">
+            <p style="font-size:10px;color:var(--c-muted);margin:2px 0 0;">LE can exceed 100% — range extended to 150%</p>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span class="slicer-label">Labour Hrs / 1,000 units</span>
+              <strong id="lb-wi-hrs-val" style="font-size:13px;color:var(--c-blue);">3.2</strong>
+            </div>
+            <input type="range" id="lb-wi-hrs" min="0.5" max="20" value="3.2" step="0.1"
+              oninput="$('lb-wi-hrs-val').textContent=parseFloat(this.value).toFixed(1);calcLBWI()"
+              style="width:100%;">
+            <p style="font-size:10px;color:var(--c-muted);margin:2px 0 0;">Total labour hours per 1000u produced (SAP 0020+0030 + direct + service)</p>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span class="slicer-label">Labour Cost / Hour ($)</span>
+              <strong id="lb-wi-rate-val" style="font-size:13px;color:var(--c-blue);">$35</strong>
+            </div>
+            <input type="range" id="lb-wi-rate" min="15" max="80" value="35" step="1"
+              oninput="$('lb-wi-rate-val').textContent='$'+this.value;calcLBWI()"
+              style="width:100%;">
+            <p style="font-size:10px;color:var(--c-muted);margin:2px 0 0;">Plant-specific FY rate from SAP cost table (⚠ pending Steven Johnstone sign-off)</p>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span class="slicer-label">PO Quantity (units)</span>
+              <strong id="lb-wi-qty-val" style="font-size:13px;color:var(--c-blue);">48,000</strong>
+            </div>
+            <input type="range" id="lb-wi-qty" min="1000" max="200000" value="48000" step="1000"
+              oninput="$('lb-wi-qty-val').textContent=parseInt(this.value).toLocaleString();calcLBWI()"
+              style="width:100%;">
+          </div>
+
+          <div class="labor-disclaimer-box" style="margin-top:4px;padding:8px 10px;background:#FFF8E1;border:1px solid #F9A825;border-radius:5px;font-size:10px;color:#5D4037;line-height:1.6;">
+            ⚠ <strong>Headcount note:</strong> Number of people on the line is not reliably available from SAP. Use Labour Hrs/1000u as the primary efficiency proxy (includes all direct + service hours booked to the PO).
+          </div>
+        </div>
+
+        <div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+            <div class="kpi-card">
+              <span class="kpi-label">CURRENT LE %</span>
+              <span class="kpi-value" id="lb-wi-out-current">87 <small>%</small></span>
+              <span class="kpi-delta">Historical PO</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">SIMULATED LE %</span>
+              <span class="kpi-value" id="lb-wi-out-sim" style="color:var(--c-blue);">95 <small>%</small></span>
+              <span class="kpi-delta pos">▲ +8 pts vs current</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">GS LE % (P75)</span>
+              <span class="kpi-value" style="color:var(--c-gs);">94 <small>%</small></span>
+              <span class="kpi-delta">Benchmark — Mascara × L67</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">$ SAVINGS VS CURRENT LE</span>
+              <span class="kpi-value" id="lb-wi-out-savings" style="color:var(--c-gs);">$72</span>
+              <span class="kpi-delta">Operational Gap recovered</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">$ REMAINING GAP VS GS</span>
+              <span class="kpi-value" id="lb-wi-out-gs-gap">—</span>
+              <span class="kpi-delta">Engineering/structural gap</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">LABOUR SAVINGS POTENTIAL ($)</span>
+              <span class="kpi-value" id="lb-wi-out-potential" style="color:#E65100;">$72</span>
+              <span class="kpi-delta">(Labour hrs/1000u × Δ LE% × rate)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <span class="card-title">📊 $ Savings at Incremental LE Improvement Steps</span>
+        <div class="card-subtitle">Cumulative $ savings vs current LE at +1%, +2%, +5%, +10% improvement steps. RS GAP terminology per team alignment.</div>
+        <div class="chart-wrap" style="height:200px;"><canvas id="ch-lb-wi"></canvas></div>
+      </div>
+
+      <div class="note-box" style="line-height:1.7;">
+        <strong>RS GAP terminology:</strong> Per team alignment (Kris Van Deursen), RS GAP = operational gap between Reference Standard and Actual. Engineering GAP = GS − RS. &nbsp;
+        <strong>Formula used:</strong> $ Savings = (Target LE% − Current LE%) ÷ 100 × Labour Hrs/1000u × (PO QTY ÷ 1000) × Labour Rate. &nbsp;
+        ⚠ Labour rate: SAP plant FY rate (plant-specific). Headcount excluded — use Labour Hrs/1000u as proxy.
       </div>
     </div><!-- /cnt-labor-whatif -->
 
@@ -5868,8 +6288,7 @@ function showKPIContent(kpi, sub) {
       if (sub === 'dv')          { initDVSpeedCharts(); renderDVSpeed(); }
       if (sub === 'whatif')      { renderWhatIfTable(); initWhatIfCharts(); updateWhatIfSimulation(); }
     } else if (kpi === 'labor') {
-      if (sub === 'results')     { initLaborResultsCharts(); }
-      if (sub === 'dv')          { initDVLaborCharts(); renderDVLabor(); }
+      showLBContent(sub);
     } else if (kpi === 'oee') {
       if (sub === 'results')     { initOEEResultsCharts(); }
       if (sub === 'dv')          { initDVOEECharts(); renderDVOEE(); }
@@ -6299,6 +6718,99 @@ const OV_GAP_TREND_MULTI = [
   { label:'SKU-1113', color:'#F57C00', data:[5.9, 9.8, 7.6,10.4, 7.2,4.5, 9.0,10.0] },
 ];
 let OV_GAP_TREND_VIEW = 'all';
+
+/* ═══════════════════════════════════════════════════════════════
+   LABOUR KPI — Data Constants
+   ═══════════════════════════════════════════════════════════════ */
+
+const LB_SUMMARY = {
+  actualLE: 87,
+  gsLE: 94,
+  rsLE: 98,
+  leGapPct: 13,
+  gsGapPct: 7,
+  gsGapUSD: 22100,
+  leGapUSD: 18400,
+  laborHrsPer1k: 3.2,
+  laborRate: 35,
+  family: 'Mascara',
+  resource: 'L67',
+};
+
+const LB_RES_COMP = [
+  { res:'L67', actual:87,  gs:94,  rs:98,  leGap:13, gsGap:7,  gsGapUSD:10200 },
+  { res:'L68', actual:79,  gs:91,  rs:95,  leGap:21, gsGap:12, gsGapUSD:8200  },
+  { res:'L72', actual:92,  gs:96,  rs:101, leGap:8,  gsGap:4,  gsGapUSD:5400  },
+  { res:'L74', actual:74,  gs:89,  rs:94,  leGap:26, gsGap:15, gsGapUSD:11800 },
+];
+
+const LB_TREND_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun'];
+const LB_TREND_ACTUAL = [81,  85,  79,  91,  87,  89 ];
+const LB_TREND_GS     = [94,  94,  94,  94,  94,  94 ];
+const LB_TREND_RS     = [98,  98,  98,  98,  98,  98 ];
+
+const LB_TREND_MULTI = [
+  { res:'L67', color:'#2E7D32', gs:94,  data:[81,85,79,91,87,89] },
+  { res:'L68', color:'#1565C0', gs:91,  data:[74,78,72,85,79,82] },
+  { res:'L72', color:'#E65100', gs:96,  data:[88,90,85,95,92,94] },
+  { res:'L74', color:'#6A1B9A', gs:89,  data:[70,73,68,80,74,77] },
+];
+
+const LB_PRED_MONTHS = ['Aug 26','Sep 26','Oct 26','Nov 26','Dec 26','Jan 27'];
+const LB_PRED_ACTUAL = [88.4, 85.1, 86.3, 83.7, 81.2, 92.4];
+const LB_PRED_GS     = [94.0, 94.0, 91.2, 89.4, 88.8, 96.1];
+
+const LB_PRED_POS = [
+  { month:'Aug 26', sku:'SKU-101 / Mascara Multi',     res:'L67', family:'Mascara',    predLE:88.4, gsLE:94.0, gapPct:5.6, gapUSD:5800, conf:'High',   confColor:'#2E7D32' },
+  { month:'Sep 26', sku:'SKU-112 / Mascara Volume',    res:'L67', family:'Mascara',    predLE:85.1, gsLE:94.0, gapPct:8.9, gapUSD:7200, conf:'High',   confColor:'#2E7D32' },
+  { month:'Oct 26', sku:'SKU-202 / Foundation Liquid', res:'L67', family:'Foundation', predLE:86.3, gsLE:91.2, gapPct:4.9, gapUSD:4100, conf:'High',   confColor:'#2E7D32' },
+  { month:'Nov 26', sku:'SKU-301 / Serum Anti-aging',  res:'L68', family:'Serum',      predLE:83.7, gsLE:89.4, gapPct:5.7, gapUSD:4600, conf:'Medium', confColor:'#E65100' },
+  { month:'Dec 26', sku:'SKU-401 / Cleanser Foaming',  res:'L68', family:'Cleanser',   predLE:81.2, gsLE:88.8, gapPct:7.6, gapUSD:3300, conf:'Medium', confColor:'#E65100' },
+  { month:'Jan 27', sku:'SKU-501 / Moisturizer SPF',   res:'L72', family:'Moisturizer',predLE:92.4, gsLE:96.1, gapPct:3.7, gapUSD:2600, conf:'High',   confColor:'#2E7D32' },
+];
+let LB_PRED_OFFSET = 0;
+
+const LB_GAP_TREND_MONTHS = ['Nov 24','Dec 24','Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25'];
+const LB_GAP_TREND_DATA   = [4.1, 6.8, 9.2, 11.4, 8.7, 5.3, 7.0, 6.7];
+
+const LB_PO_ROWS = [
+  { family:'Mascara',    sku:'SKU-101 / Mascara Multi',      res:'L67', po:'PO-7841', actualLE:90.2, gsLE:94.0, gsGapPct:3.8,  gsGapUSD:420,   tier:'gold'   },
+  { family:'Mascara',    sku:'SKU-101 / Mascara Multi',      res:'L67', po:'PO-7863', actualLE:83.1, gsLE:94.0, gsGapPct:10.9, gsGapUSD:2100,  tier:'silver' },
+  { family:'Mascara',    sku:'SKU-112 / Mascara Volume',     res:'L67', po:'PO-7891', actualLE:71.4, gsLE:94.0, gsGapPct:22.6, gsGapUSD:6200,  tier:'bronze' },
+  { family:'Foundation', sku:'SKU-202 / Foundation Liquid',  res:'L67', po:'PO-8012', actualLE:85.2, gsLE:91.2, gsGapPct:6.0,  gsGapUSD:980,   tier:'silver' },
+];
+let LB_PO_OFFSET = 0;
+
+const LB_DV_POS = [
+  { po:'PO-2026-005', qty:38000, avgQty:43500, sku:'SKU-401 / Cleanser–Foaming',   res:'L72', bucket:'Small',  actualLE:71, gsLE:91, gapUSD:14800 },
+  { po:'PO-2026-002', qty:44000, avgQty:43500, sku:'SKU-102 / Mascara–Multi',       res:'L67', bucket:'Small',  actualLE:79, gsLE:94, gapUSD:11200 },
+  { po:'PO-2026-004', qty:51000, avgQty:43500, sku:'SKU-301 / Serum–Anti-aging',    res:'L68', bucket:'Medium', actualLE:84, gsLE:91, gapUSD:7600  },
+  { po:'PO-2026-001', qty:48000, avgQty:43500, sku:'SKU-101 / Mascara–Multi',       res:'L67', bucket:'Medium', actualLE:87, gsLE:94, gapUSD:5800  },
+  { po:'PO-2026-003', qty:55000, avgQty:43500, sku:'SKU-201 / Foundation–Liquid',   res:'L67', bucket:'Large',  actualLE:91, gsLE:94, gapUSD:2400  },
+];
+
+const LB_TOP10 = [
+  { rank:1, sku:'SKU-401', family:'Cleanser',   res:'L72', leGAP:14800, oeeGAP:9200,  speedGAP:6100, scrapGAP:2100, total:32200, tier:'bronze' },
+  { rank:2, sku:'SKU-112', family:'Mascara',    res:'L67', leGAP:6200,  oeeGAP:12400, speedGAP:8200, scrapGAP:1800, total:28600, tier:'bronze' },
+  { rank:3, sku:'SKU-102', family:'Mascara',    res:'L67', leGAP:11200, oeeGAP:7300,  speedGAP:4100, scrapGAP:900,  total:23500, tier:'bronze' },
+  { rank:4, sku:'SKU-301', family:'Serum',      res:'L68', leGAP:7600,  oeeGAP:8900,  speedGAP:3200, scrapGAP:1400, total:21100, tier:'silver' },
+  { rank:5, sku:'SKU-101', family:'Mascara',    res:'L67', leGAP:5800,  oeeGAP:7800,  speedGAP:5600, scrapGAP:1200, total:20400, tier:'silver' },
+  { rank:6, sku:'SKU-201', family:'Foundation', res:'L67', leGAP:2400,  oeeGAP:9400,  speedGAP:4800, scrapGAP:700,  total:17300, tier:'silver' },
+  { rank:7, sku:'SKU-202', family:'Foundation', res:'L68', leGAP:980,   oeeGAP:6200,  speedGAP:3900, scrapGAP:600,  total:11680, tier:'silver' },
+  { rank:8, sku:'SKU-501', family:'Moisturizer',res:'L72', leGAP:2600,  oeeGAP:4100,  speedGAP:2200, scrapGAP:400,  total:9300,  tier:'gold'   },
+  { rank:9, sku:'SKU-101', family:'Mascara',    res:'L68', leGAP:420,   oeeGAP:3200,  speedGAP:1800, scrapGAP:300,  total:5720,  tier:'gold'   },
+  { rank:10,sku:'SKU-201', family:'Foundation', res:'L72', leGAP:0,     oeeGAP:2100,  speedGAP:1400, scrapGAP:200,  total:3700,  tier:'gold'   },
+];
+
+const LB_AVB_SKUS = {
+  labels:  ['Mascara Multi','Mascara Vol','Fndn Liquid','Serum Anti-age','Cleanser Foam','Moisturizer SPF'],
+  actual:  [87, 80, 85, 84, 71, 92],
+  gs:      [94, 94, 91, 89, 88, 96],
+};
+
+let LB_INITED = {};
+let LB_RES_VIEW = '1';
+let LB_GAP_VIEW = '1';
 
 const OV_COST_TREND = [10800,11200,10500,12400,13100,12700,13900,14300,13600,14800,15200,14900];
 const OV_QTY_TREND  = [2800,2920,2770,3100,3290,3010,3210,3380,3190,3450,3640,3510];
@@ -8672,6 +9184,510 @@ document.addEventListener('click', (e) => {
     menu.classList.remove('open');
   }
 });
+
+/* ═══════════════════════════════════════════════════════════════
+   LABOUR KPI — Render & Interaction Functions
+   ═══════════════════════════════════════════════════════════════ */
+
+function showLBContent(sub) {
+  if (sub === 'results'     && !LB_INITED.results)     { initLBResults();     LB_INITED.results     = true; }
+  if (sub === 'predictions' && !LB_INITED.predictions) { initLBPred();        LB_INITED.predictions = true; }
+  if (sub === 'gap'         && !LB_INITED.gap)         { initLBGap();         LB_INITED.gap         = true; }
+  if (sub === 'dv'          && !LB_INITED.dv)          { initLBDV();          LB_INITED.dv          = true; }
+  if (sub === 'whatif'      && !LB_INITED.whatif)      { initLBWhatIf();      LB_INITED.whatif      = true; }
+}
+
+/* ── RESULTS ─────────────────────────────────────────────────── */
+
+function initLBResults() {
+  _renderLBTrendChart('1');
+  renderLBResComp();
+}
+
+function _renderLBTrendChart(view) {
+  const ex = REG['ch-lb-trend'];
+  if (ex) { ex.destroy(); delete REG['ch-lb-trend']; }
+
+  if (view === '1') {
+    init('ch-lb-trend', {
+      type: 'bar',
+      data: {
+        labels: LB_TREND_MONTHS,
+        datasets: [
+          { label:'Actual LE %', data:LB_TREND_ACTUAL, backgroundColor:'#2E7D32', borderRadius:3, order:3 },
+          { label:'GS LE %',     type:'line', data:LB_TREND_GS, borderColor:'#00695C', borderWidth:2.5,
+            borderDash:[6,4], pointRadius:4, pointBackgroundColor:'#00695C', fill:false, order:2 },
+          { label:'RS LE %',     type:'line', data:LB_TREND_RS, borderColor:'#E65100', borderWidth:1.5,
+            borderDash:[2,3], pointRadius:3, pointBackgroundColor:'#E65100', fill:false, order:1 },
+        ]
+      },
+      options: {
+        ...baseOpts('LE %'),
+        plugins: { ...baseOpts().plugins, legend:{ display:false } },
+        scales: {
+          x: { grid:{display:false}, ticks:{color:'#4A6580',font:{size:10}} },
+          y: { grid:{color:'#E8E8E8'}, min:0, max:130,
+               ticks:{color:'#4A6580',font:{size:10},callback:v=>v+'%'},
+               title:{display:true,text:'LE %',color:'#4A6580',font:{size:10}} }
+        }
+      }
+    });
+    const note = $('lb-multires-note');
+    if (note) note.style.display = 'none';
+  } else {
+    const count = parseInt(view);
+    const resources = LB_TREND_MULTI.slice(0, count);
+    init('ch-lb-trend', {
+      type: 'bar',
+      data: {
+        labels: LB_TREND_MONTHS,
+        datasets: resources.flatMap((r) => [
+          { label: r.res + ' Actual', data: r.data, backgroundColor: r.color + 'cc', borderRadius:2,
+            stack: 'actual', barPercentage:0.4, categoryPercentage:0.7 },
+        ]).concat(resources.map(r => ({
+          label: r.res + ' GS', type:'line', data: LB_TREND_MONTHS.map(()=>r.gs),
+          borderColor: r.color, borderWidth:1.5, borderDash:[5,3], pointRadius:0, fill:false,
+        })))
+      },
+      options: {
+        ...baseOpts('LE %'),
+        plugins: { ...baseOpts().plugins, legend:{ display:true, labels:{color:'#4A6580',font:{size:9},boxWidth:10} } },
+        scales: {
+          x: { grid:{display:false}, ticks:{color:'#4A6580',font:{size:10}} },
+          y: { grid:{color:'#E8E8E8'}, min:0, max:130,
+               ticks:{color:'#4A6580',font:{size:10},callback:v=>v+'%'},
+               title:{display:true,text:'LE %',color:'#4A6580',font:{size:10}} }
+        }
+      }
+    });
+    const note = $('lb-multires-note');
+    if (note) note.style.display = '';
+  }
+}
+
+function renderLBResComp() {
+  const tbody = $('tb-lb-res-comp');
+  if (!tbody) return;
+  tbody.innerHTML = LB_RES_COMP.map((r,i) => {
+    const bg = i%2===0 ? '#ffffff' : '#f8fafc';
+    const gapColor = r.gsGap > 0 ? '#C62828' : '#2E7D32';
+    const usdColor = r.gsGapUSD > 0 ? '#C62828' : '#2E7D32';
+    return `<tr style="background:${bg};cursor:pointer;" onclick="">
+      <td style="font-weight:700;">${r.res}</td>
+      <td class="r">${r.actual}%</td>
+      <td class="r" style="color:#6dd4bc;font-weight:700;">${r.gs}%</td>
+      <td class="r" style="color:${gapColor};font-weight:700;">${r.leGap > 0 ? '+' : ''}${r.leGap}%</td>
+      <td class="r" style="color:${usdColor};font-weight:700;">$${r.gsGapUSD.toLocaleString()}</td>
+    </tr>`;
+  }).join('');
+}
+
+function switchLBResView(v) {
+  LB_RES_VIEW = v;
+  const cards = $('lb-res-cards');
+  const comp  = $('lb-res-comp-wrap');
+  if (v === '1') {
+    if (cards) cards.style.display = '';
+    if (comp)  comp.style.display  = 'none';
+    _renderLBTrendChart('1');
+  } else {
+    if (cards) cards.style.display = 'none';
+    if (comp)  comp.style.display  = '';
+    _renderLBTrendChart(v);
+    renderLBResComp();
+  }
+}
+
+function setLBView(mode) {
+  const pctBtn = $('lb-view-pct');
+  const hrsBtn = $('lb-view-hrs');
+  if (pctBtn) pctBtn.classList.toggle('active', mode==='pct');
+  if (hrsBtn) hrsBtn.classList.toggle('active', mode==='hrs');
+  const sub = $('lb-trend-subtitle');
+  if (sub) sub.textContent = mode === 'pct'
+    ? 'LE % > 100% indicates better than planned efficiency. LE varies by PO size — use unit size slicer for fair comparison.'
+    : 'Labour hours per 1,000 units produced. Lower = more efficient. GS = best demonstrated. ⚠ Pending client preference confirmation.';
+}
+
+/* ── PREDICTIONS ─────────────────────────────────────────────── */
+
+function initLBPred() {
+  init('ch-lb-pred', {
+    type: 'line',
+    data: {
+      labels: LB_PRED_MONTHS,
+      datasets: [
+        { label:'Predicted LE %', data:LB_PRED_ACTUAL, borderColor:'#2E7D32', backgroundColor:'transparent',
+          fill:false, tension:0.3, pointRadius:5, pointBackgroundColor:'#2E7D32', borderWidth:2 },
+        { label:'GS LE % (P75)', data:LB_PRED_GS, borderColor:'#00695C', borderDash:[6,4],
+          borderWidth:2, pointRadius:0, fill:false },
+      ]
+    },
+    options: {
+      ...baseOpts('LE %'),
+      plugins: { ...baseOpts().plugins, legend:{ display:true, labels:{color:'#4A6580',font:{size:10},boxWidth:12} } },
+      scales: {
+        x: { grid:{display:false}, ticks:{color:'#4A6580',font:{size:10}} },
+        y: { grid:{color:'#E8E8E8'}, min:70, max:110,
+             ticks:{color:'#4A6580',font:{size:10},callback:v=>v+'%'},
+             title:{display:true,text:'LE %',color:'#4A6580',font:{size:10}} }
+      }
+    }
+  });
+  LB_PRED_OFFSET = 0;
+  renderLBPredTable();
+}
+
+function renderLBPredTable() {
+  const tbody = $('tb-lb-pred');
+  if (!tbody) return;
+  const rows = LB_PRED_POS.slice(0, LB_PRED_OFFSET + 6);
+  tbody.innerHTML = rows.map((r,i) => {
+    const bg = i%2===0 ? '#fff' : '#f8fafc';
+    const gapColor = r.gapPct > 0 ? '#C62828' : '#2E7D32';
+    const confDot = { 'High':'🟢', 'Medium':'🟡', 'Low':'🔴' }[r.conf] || '⚪';
+    return `<tr style="background:${bg};">
+      <td>${r.month}</td><td style="font-size:11px;">${r.sku}</td><td>${r.res}</td><td>${r.family}</td>
+      <td class="r">${r.predLE}%</td>
+      <td class="r" style="color:#6dd4bc;">${r.gsLE}%</td>
+      <td class="r" style="color:${gapColor};font-weight:700;">${r.gapPct > 0 ? '+' : ''}${r.gapPct}%</td>
+      <td class="r" style="color:${gapColor};font-weight:700;">$${r.gapUSD.toLocaleString()}</td>
+      <td><span style="color:${r.confColor};font-weight:700;">${confDot} ${r.conf}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function loadMoreLBPred() {
+  LB_PRED_OFFSET = Math.min(LB_PRED_OFFSET + 6, LB_PRED_POS.length);
+  renderLBPredTable();
+}
+
+/* ── GAP ANALYSIS ────────────────────────────────────────────── */
+
+function initLBGap() {
+  _renderLBGapBar();
+  _renderLBGapTrend();
+  renderLBGapComp();
+  LB_PO_OFFSET = 0;
+  renderLBPOTable();
+}
+
+function _renderLBGapBar() {
+  const ex = REG['ch-lb-gap-bar'];
+  if (ex) { ex.destroy(); delete REG['ch-lb-gap-bar']; }
+  init('ch-lb-gap-bar', {
+    type:'bar',
+    data:{
+      labels: LB_AVB_SKUS.labels,
+      datasets:[
+        { label:'Actual LE %', data:LB_AVB_SKUS.actual, backgroundColor:'#1565C0', borderRadius:3, barPercentage:0.4, categoryPercentage:0.7 },
+        { label:'GS LE %',     data:LB_AVB_SKUS.gs,     backgroundColor:'#2E7D32', borderRadius:3, barPercentage:0.4, categoryPercentage:0.7 },
+      ]
+    },
+    options:{
+      ...baseOpts('LE %'),
+      plugins:{ ...baseOpts().plugins, legend:{ display:false } },
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#4A6580',font:{size:10}}},
+        y:{grid:{color:'#E8E8E8'},min:0,max:110,
+           ticks:{color:'#4A6580',font:{size:10},callback:v=>v+'%'},
+           title:{display:true,text:'LE %',color:'#4A6580',font:{size:10}}}
+      }
+    }
+  });
+}
+
+function _renderLBGapTrend() {
+  const ex = REG['ch-lb-gap-trend'];
+  if (ex) { ex.destroy(); delete REG['ch-lb-gap-trend']; }
+  init('ch-lb-gap-trend', {
+    type:'line',
+    data:{
+      labels: LB_GAP_TREND_MONTHS,
+      datasets:[
+        { label:'GS LE GAP %', data:LB_GAP_TREND_DATA, borderColor:'#C62828', backgroundColor:'transparent',
+          fill:false, tension:0.3, pointRadius:5, pointBackgroundColor:'#C62828', borderWidth:2 },
+        { label:'GS Benchmark (P75)', data:LB_GAP_TREND_MONTHS.map(()=>0),
+          borderColor:'#00695C', borderDash:[6,4], borderWidth:2, pointRadius:0, fill:false },
+      ]
+    },
+    options:{
+      ...baseOpts('GAP %'),
+      plugins:{ ...baseOpts().plugins, legend:{ display:true, labels:{color:'#4A6580',font:{size:10},boxWidth:12} } },
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#4A6580',font:{size:10}}},
+        y:{grid:{color:'#E8E8E8'},
+           ticks:{color:'#4A6580',font:{size:10},callback:v=>v+'%'},
+           title:{display:true,text:'GS GAP %',color:'#4A6580',font:{size:10}}}
+      }
+    }
+  });
+}
+
+function renderLBGapComp() {
+  const tbody = $('tb-lb-gap-comp');
+  if (!tbody) return;
+  tbody.innerHTML = LB_RES_COMP.map((r,i) => {
+    const bg = i%2===0 ? '#fff' : '#f8fafc';
+    const gapColor = r.gsGap > 0 ? '#C62828' : '#2E7D32';
+    const usdColor = r.gsGapUSD > 0 ? '#C62828' : '#2E7D32';
+    return `<tr style="background:${bg};cursor:pointer;" onclick="">
+      <td style="font-weight:700;">${r.res}</td>
+      <td class="r" style="color:#6dd4bc;font-weight:700;">${r.gs}%</td>
+      <td class="r">${r.actual}%</td>
+      <td class="r" style="color:${gapColor};font-weight:700;">${r.gsGap > 0 ? '+' : ''}${r.gsGap}%</td>
+      <td class="r" style="color:${usdColor};font-weight:700;">$${r.gsGapUSD.toLocaleString()}</td>
+    </tr>`;
+  }).join('');
+}
+
+function switchLBGapView(v) {
+  LB_GAP_VIEW = v;
+  const single = $('lb-gap-cards-single');
+  const comp   = $('lb-gap-comp-wrap');
+  if (v === '1') {
+    if (single) single.style.display = '';
+    if (comp)   comp.style.display   = 'none';
+  } else {
+    if (single) single.style.display = 'none';
+    if (comp)   comp.style.display   = '';
+    renderLBGapComp();
+  }
+}
+
+function switchLBGapBarView(v) { _renderLBGapBar(); }
+function switchLBGapTrendView(v) { _renderLBGapTrend(); }
+
+function renderLBPOTable() {
+  const tbody = $('tb-lb-po-rows');
+  if (!tbody) return;
+  const tiers = { gold:'🥇', silver:'🥈', bronze:'🥉' };
+  const tierBg = { gold:'#FDF6EC', silver:'#F2F4F7', bronze:'#FDF0E8' };
+  let html = '';
+  let lastFamily = null;
+  LB_PO_ROWS.slice(0, LB_PO_OFFSET + 8).forEach((r,i) => {
+    if (r.family !== lastFamily) {
+      lastFamily = r.family;
+      html += `<tr style="background:#F5F5F0;"><td colspan="9" style="font-weight:700;color:#5C4033;padding:8px 10px;font-size:11px;">${r.family}</td></tr>`;
+    }
+    const bg = i%2===0 ? '#fff' : '#f8fafc';
+    const leColor = r.actualLE >= r.gsLE ? '#2E7D32' : '#C62828';
+    const gapColor = r.gsGapPct > 0 ? '#C62828' : '#2E7D32';
+    html += `<tr style="background:${bg};">
+      <td>${r.res}</td>
+      <td>${r.family}</td>
+      <td style="font-size:11px;">${r.sku}</td>
+      <td>${r.po}</td>
+      <td class="r" style="color:${leColor};font-weight:700;">${r.actualLE}%</td>
+      <td class="r" style="color:#6dd4bc;">${r.gsLE}%</td>
+      <td class="r" style="color:${gapColor};font-weight:700;">${r.gsGapPct > 0 ? '+' : ''}${r.gsGapPct}%</td>
+      <td class="r" style="color:${gapColor};font-weight:700;">$${r.gsGapUSD.toLocaleString()}</td>
+      <td><span style="background:${tierBg[r.tier]};padding:2px 6px;border-radius:3px;font-size:11px;">${tiers[r.tier]} ${r.tier.charAt(0).toUpperCase()+r.tier.slice(1)}</span></td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+}
+
+function loadMoreLBPO() {
+  LB_PO_OFFSET = Math.min(LB_PO_OFFSET + 8, LB_PO_ROWS.length);
+  renderLBPOTable();
+}
+
+function showLBTierModal(tier) {
+  const modal  = document.getElementById('lb-tier-modal');
+  const title  = document.getElementById('lb-tier-modal-title');
+  const tbody  = document.getElementById('tb-lb-tier-modal');
+  if (!modal || !title || !tbody) return;
+  const labels = { gold:'🥇 Top 10 Contributors — Gold Tier', silver:'🥈 Top 10 Contributors — Silver Tier', bronze:'🥉 Top 10 Contributors — Bronze Tier' };
+  title.textContent = labels[tier] || 'Top 10 Contributors';
+  const tiers = { gold:'🥇', silver:'🥈', bronze:'🥉' };
+  tbody.innerHTML = LB_TOP10.map((r,i) => {
+    const bg = i%2===0 ? '#fff' : '#f8fafc';
+    const leColor = r.leGAP > 0 ? '#C62828' : '#2E7D32';
+    return `<tr style="background:${bg};">
+      <td style="font-weight:700;">${r.rank}</td>
+      <td>${r.sku}</td><td>${r.family}</td><td>${r.res}</td>
+      <td class="r" style="color:${leColor};font-weight:700;">$${r.leGAP.toLocaleString()}</td>
+      <td class="r">$${r.oeeGAP.toLocaleString()}</td>
+      <td class="r">$${r.speedGAP.toLocaleString()}</td>
+      <td class="r">$${r.scrapGAP.toLocaleString()}</td>
+      <td class="r" style="font-weight:700;color:#C62828;">$${r.total.toLocaleString()}</td>
+      <td style="font-size:16px;">${tiers[r.tier]}</td>
+    </tr>`;
+  }).join('');
+  modal.style.display = 'flex';
+}
+
+function closeLBTierModal() {
+  const modal = document.getElementById('lb-tier-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+/* ── DEEP VIEW ───────────────────────────────────────────────── */
+
+function initLBDV() {
+  init('ch-lb-dv-trend', {
+    type:'bar',
+    data:{
+      labels: LB_TREND_MONTHS,
+      datasets:[
+        { label:'Actual LE %', data:LB_TREND_ACTUAL, backgroundColor:'#2E7D32', borderRadius:3, order:3 },
+        { label:'GS LE %', type:'line', data:LB_TREND_GS, borderColor:'#00695C', borderWidth:2,
+          borderDash:[6,4], pointRadius:4, pointBackgroundColor:'#00695C', fill:false, order:2 },
+        { label:'RS LE %', type:'line', data:LB_TREND_RS, borderColor:'#E65100', borderWidth:1.5,
+          borderDash:[2,3], pointRadius:3, pointBackgroundColor:'#E65100', fill:false, order:1 },
+      ]
+    },
+    options:{
+      ...baseOpts('LE %'),
+      plugins:{ ...baseOpts().plugins, legend:{ display:true, labels:{color:'#4A6580',font:{size:10},boxWidth:10} } },
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#4A6580',font:{size:10}}},
+        y:{grid:{color:'#E8E8E8'},min:0,max:130,
+           ticks:{color:'#4A6580',font:{size:10},callback:v=>v+'%'},
+           title:{display:true,text:'LE %',color:'#4A6580',font:{size:10}}}
+      }
+    }
+  });
+
+  init('ch-lb-dv-size', {
+    type:'bar',
+    data:{
+      labels:['Small','Medium','Large'],
+      datasets:[
+        { label:'Actual LE %', data:[75, 85, 90], backgroundColor:['#1565C0','#1976D2','#42A5F5'], borderRadius:4 },
+        { label:'GS LE %', type:'line', data:[94,94,94], borderColor:'#00695C', borderDash:[6,4],
+          borderWidth:2, pointRadius:4, fill:false },
+        { label:'RS LE %', type:'line', data:[98,98,98], borderColor:'#E65100', borderDash:[2,3],
+          borderWidth:1.5, pointRadius:3, fill:false },
+      ]
+    },
+    options:{
+      ...baseOpts('LE %'),
+      plugins:{ ...baseOpts().plugins, legend:{ display:true, labels:{color:'#4A6580',font:{size:10},boxWidth:10} } },
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#4A6580',font:{size:10}}},
+        y:{grid:{color:'#E8E8E8'},min:0,max:130,
+           ticks:{color:'#4A6580',font:{size:10},callback:v=>v+'%'},
+           title:{display:true,text:'LE %',color:'#4A6580',font:{size:10}}}
+      }
+    }
+  });
+
+  renderLBDVTable();
+}
+
+function renderLBDVTable() {
+  const tbody = $('tb-lb-dv');
+  if (!tbody) return;
+  tbody.innerHTML = LB_DV_POS.map((r,i) => {
+    const bg = i%2===0 ? '#fff' : '#f8fafc';
+    const leColor = r.actualLE >= r.gsLE ? '#2E7D32' : '#C62828';
+    const gapColor = r.gapUSD > 0 ? '#C62828' : '#2E7D32';
+    return `<tr style="background:${bg};">
+      <td style="font-weight:700;">${r.po}</td>
+      <td class="r">${r.qty.toLocaleString()}</td>
+      <td class="r" style="color:var(--c-muted);">${r.avgQty.toLocaleString()}</td>
+      <td style="font-size:11px;">${r.sku}</td>
+      <td>${r.res}</td>
+      <td><span style="background:#EDF2F7;padding:2px 8px;border-radius:10px;font-size:10px;">${r.bucket}</span></td>
+      <td class="r" style="color:${leColor};font-weight:700;">${r.actualLE}%</td>
+      <td class="r" style="color:#6dd4bc;">${r.gsLE}%</td>
+      <td class="r" style="color:${gapColor};font-weight:700;">$${r.gapUSD.toLocaleString()}</td>
+    </tr>`;
+  }).join('');
+}
+
+function switchLBDVFilter(v) { /* demo-only toggle */ }
+
+/* ── WHAT-IF ─────────────────────────────────────────────────── */
+
+const LB_WI_CURRENT = 87;
+const LB_WI_GS      = 94;
+
+function initLBWhatIf() {
+  calcLBWI();
+}
+
+function calcLBWI() {
+  const target   = parseFloat(document.getElementById('lb-wi-le') ? document.getElementById('lb-wi-le').value : 95);
+  const hrs      = parseFloat(document.getElementById('lb-wi-hrs') ? document.getElementById('lb-wi-hrs').value : 3.2);
+  const rate     = parseFloat(document.getElementById('lb-wi-rate') ? document.getElementById('lb-wi-rate').value : 35);
+  const qty      = parseFloat(document.getElementById('lb-wi-qty') ? document.getElementById('lb-wi-qty').value : 48000);
+  const current  = LB_WI_CURRENT;
+  const gs       = LB_WI_GS;
+
+  const savings     = ((target - current) / 100) * hrs * (qty / 1000) * rate;
+  const gsGapLeft   = Math.max(0, (gs - target) / 100 * hrs * (qty / 1000) * rate);
+  const potential   = ((gs - current) / 100) * hrs * (qty / 1000) * rate;
+
+  const fmt = function(v) { return (v < 0 ? '-' : '') + '$' + Math.abs(v).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,','); };
+
+  const outSim  = $('lb-wi-out-sim');
+  const outSav  = $('lb-wi-out-savings');
+  const outGs   = $('lb-wi-out-gs-gap');
+  const outPot  = $('lb-wi-out-potential');
+
+  if (outSim)  outSim.innerHTML = target.toFixed(0) + ' <small>%</small>';
+  if (outSav)  { outSav.textContent = fmt(savings);  outSav.style.color = savings >= 0 ? '#2E7D32' : '#C62828'; }
+  if (outGs)   outGs.textContent  = gsGapLeft > 0 ? fmt(gsGapLeft) : '—';
+  if (outPot)  outPot.textContent = fmt(Math.abs(potential));
+
+  _renderLBWIChart(target, hrs, rate, qty, current);
+}
+
+function _renderLBWIChart(target, hrs, rate, qty, current) {
+  const ex = REG['ch-lb-wi'];
+  if (ex) { ex.destroy(); delete REG['ch-lb-wi']; }
+  const steps = [1,2,5,10].map(function(d) {
+    return { label: '+' + d + '%', saving: (d / 100) * hrs * (qty / 1000) * rate };
+  });
+  steps.unshift({ label: 'Current (' + current + '%→' + target + '%)', saving: ((target-current)/100)*hrs*(qty/1000)*rate });
+  init('ch-lb-wi', {
+    type:'bar',
+    data:{
+      labels: steps.map(function(s){return s.label;}),
+      datasets:[{ label:'$ Savings', data:steps.map(function(s){return s.saving;}),
+        backgroundColor: steps.map(function(s){ return s.saving >= 0 ? '#2E7D32' : '#C62828'; }), borderRadius:3 }]
+    },
+    options:{
+      ...baseOpts('$ Savings'),
+      plugins:{ ...baseOpts().plugins, legend:{display:false} },
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#4A6580',font:{size:10}}},
+        y:{grid:{color:'#E8E8E8'},
+           ticks:{color:'#4A6580',font:{size:10},callback:function(v){return '$'+Math.abs(v/1000).toFixed(1)+'K';}},
+           title:{display:true,text:'$ Savings',color:'#4A6580',font:{size:10}}}
+      }
+    }
+  });
+}
+
+function switchLBWIBaseline(v) {
+  const slicer = $('lb-wi-po-slicer');
+  if (slicer) slicer.style.display = v === 'historical' ? '' : 'none';
+  if (v === 'best') {
+    const leSlider = document.getElementById('lb-wi-le');
+    const leVal = $('lb-wi-le-val');
+    if (leSlider) { leSlider.value = LB_WI_GS; if (leVal) leVal.textContent = LB_WI_GS + '%'; calcLBWI(); }
+  }
+}
+
+function loadLBWIPO(po) {
+  const map = {
+    'PO-7841': { le:90, qty:44000 }, 'PO-7863': { le:83, qty:38000 },
+    'PO-7891': { le:71, qty:51000 }, 'PO-7902': { le:85, qty:48000 },
+    'PO-7924': { le:84, qty:55000 },
+  };
+  const d = map[po]; if (!d) return;
+  const leS = document.getElementById('lb-wi-le');
+  const qS  = document.getElementById('lb-wi-qty');
+  const leV = $('lb-wi-le-val');
+  const qV  = $('lb-wi-qty-val');
+  if (leS) { leS.value = d.le; if (leV) leV.textContent = d.le + '%'; }
+  if (qS)  { qS.value  = d.qty; if (qV) qV.textContent = d.qty.toLocaleString(); }
+  calcLBWI();
+}
 </script>
 
 <!-- =====================================================
@@ -8781,5 +9797,27 @@ document.addEventListener('click', (e) => {
     </div>
   </div>
 </div>
+
+  <!-- Labour Tier Modal -->
+  <div id="lb-tier-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;" onclick="if(event.target===this)closeLBTierModal()">
+    <div style="background:#fff;border-radius:10px;padding:20px;max-width:950px;width:95%;max-height:80vh;overflow-y:auto;position:relative;">
+      <button onclick="closeLBTierModal()" style="position:absolute;top:10px;right:14px;font-size:18px;background:none;border:none;cursor:pointer;color:#666;">✕</button>
+      <div id="lb-tier-modal-title" style="font-size:15px;font-weight:700;margin-bottom:12px;"></div>
+      <div class="tbl-wrap">
+        <table class="gs-tbl" style="width:100%;">
+          <thead><tr>
+            <th>Rank</th><th>SKU</th><th>Family</th><th>Resource</th>
+            <th class="r" style="color:#6dd4bc;">LE GAP $</th>
+            <th class="r">OEE GAP $</th>
+            <th class="r">Speed GAP $</th>
+            <th class="r">Scrap GAP $</th>
+            <th class="r" style="color:#ff8080;">Total GAP $</th>
+            <th>Tier</th>
+          </tr></thead>
+          <tbody id="tb-lb-tier-modal"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
