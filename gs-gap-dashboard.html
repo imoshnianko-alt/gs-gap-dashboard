@@ -609,9 +609,9 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
   padding:16px 18px; display:flex; flex-direction:column; gap:4px;
   box-shadow:0px 1px 3px rgba(0,0,0,0.1);
 }
-.ov-kpi-label { font-size:10px; font-weight:700; color:var(--c-muted); text-transform:uppercase; letter-spacing:.5px; }
+.ov-kpi-label { font-size:10px; font-weight:700; color:#111; text-transform:uppercase; letter-spacing:.5px; }
 .ov-kpi-value { font-size:30px; font-weight:700; line-height:1; color:var(--c-text); }
-.ov-kpi-sub   { font-size:11px; color:var(--c-muted); }
+.ov-kpi-sub   { font-size:11px; color:#6b6b6b; }
 .ov-kpi-badge {
   display:inline-block; padding:2px 7px; border-radius:3px;
   font-size:10px; font-weight:700; color:#fff; background:#DC3545;
@@ -828,8 +828,7 @@ table.ov-heatmap tbody td.row-hdr {
    ===================================================== */
 .ov-kpi-row   { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
 .ov-kpi-row-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px; }
-.ov-kpi-card.clickable { cursor:pointer; transition:box-shadow .15s,transform .1s; }
-.ov-kpi-card.clickable:hover { box-shadow:0 4px 12px rgba(0,0,0,.13); transform:translateY(-1px); }
+.ov-kpi-card.clickable { cursor:default; }
 /* Gap to GS card */
 .ov-kpi-card.gs-gap-card { border-left:4px solid #DC3545; }
 .ov-kpi-card.gs-gap-card.ok { border-left-color:#28A745; }
@@ -1582,20 +1581,20 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         <span class="date-reset" onclick="resetOVDates()">Reset</span>
       </div>
       <div class="date-presets">
-        <button class="date-preset" onclick="setOVPreset('4w')">Last 4W</button>
-        <button class="date-preset" onclick="setOVPreset('3m')">Last 3M</button>
-        <button class="date-preset" onclick="setOVPreset('ytd')">YTD</button>
-        <button class="date-preset" onclick="setOVPreset('r12')">R12M</button>
-        <button class="date-preset" onclick="setOVPreset('fy26')">FY26</button>
-        <button class="date-preset" onclick="setOVPreset('fy27')">FY27</button>
+        <button class="date-preset" id="ov-dp-4w"   onclick="setOVPreset('4w')">Last 4W</button>
+        <button class="date-preset" id="ov-dp-3m"   onclick="setOVPreset('3m')">Last 3M</button>
+        <button class="date-preset" id="ov-dp-ytd"  onclick="setOVPreset('ytd')">YTD</button>
+        <button class="date-preset" id="ov-dp-r12"  onclick="setOVPreset('r12')">R12M</button>
+        <button class="date-preset active" id="ov-dp-fy26" onclick="setOVPreset('fy26')">FY26</button>
+        <button class="date-preset" id="ov-dp-fy27" onclick="setOVPreset('fy27')">FY27</button>
       </div>
       <div class="date-field">
         <label>From</label>
-        <input type="date" id="ov-date-from" value="2025-01-01" onchange="handleOVFilterChange()">
+        <input type="date" id="ov-date-from" value="2025-07-01" onchange="handleOVFilterChange()">
       </div>
       <div class="date-field">
         <label>To</label>
-        <input type="date" id="ov-date-to" value="2025-06-30" onchange="handleOVFilterChange()">
+        <input type="date" id="ov-date-to" value="2026-06-30" onchange="handleOVFilterChange()">
       </div>
       <hr class="panel-sep">
 
@@ -1750,7 +1749,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         <span class="slicer-label">Life Cycle Stage</span>
         <div class="filter-check-group">
           <label class="filter-check-item">
-            <input type="checkbox" id="ov-lcs-npl" checked onchange="handleOVFilterChange()">
+            <input type="checkbox" id="ov-lcs-npl" onchange="handleOVFilterChange()">
             New Product Launch (NPL)
           </label>
           <label class="filter-check-item">
@@ -4025,7 +4024,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <thead>
             <tr>
               <th>#</th><th>Resource</th><th>SKU</th>
-              <th>Avg Overfill %</th><th>Overfill g/yr</th><th>Cost Impact $</th><th>Priority</th>
+              <th>Overfill %</th><th>Overfill g/yr</th><th>Cost Impact $</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -4081,8 +4080,8 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
 
       <!-- Distribution chart -->
       <div class="gs-card" style="margin-bottom:14px;">
-        <div class="card-title">GS Gap Distribution — Overfill % Above GS Benchmark</div>
-        <p style="font-size:10px;color:var(--c-muted);margin:0 0 8px;">Each bar = one SKU × Resource combination. Red = Bronze tier (highest gap). Dashed line = GS benchmark (P75).</p>
+        <div class="card-title">GS Gap Distribution — Overfill (g) Above Declared Content</div>
+        <p style="font-size:10px;color:var(--c-muted);margin:0 0 8px;">Each group = one SKU × Resource. Both bars expressed as grams above Declared Content — consistent baseline. Red = Actual overfill. Green = GS P75 benchmark. Baseline (0g) = Declared Content.</p>
         <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-gs-gap-dist"></canvas></div>
       </div>
 
@@ -4126,12 +4125,17 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <p style="font-size:11px;color:var(--c-muted);margin:0;">Same SKU across multiple plants/resources — identify best practices and underperformers.</p>
         </div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-          <span style="font-size:11px;font-weight:600;color:var(--c-muted);">View By:</span>
           <div class="ov-viewby-row">
-            <button class="ov-viewby-btn active" id="vb-tr-agg"   onclick="setOVViewBy('trend','agg')">Aggregate</button>
-            <button class="ov-viewby-btn"        id="vb-tr-res"   onclick="setOVViewBy('trend','res')">Resource</button>
-            <button class="ov-viewby-btn"        id="vb-tr-sku"   onclick="setOVViewBy('trend','sku')">SKU</button>
-            <button class="ov-viewby-btn"        id="vb-tr-plant" onclick="setOVViewBy('trend','plant')">Plant</button>
+            <button class="ov-viewby-btn active" id="vb-tr-agg"      onclick="setTrendMode('agg')">Aggregate</button>
+            <button class="ov-viewby-btn"        id="vb-tr-decompose" onclick="setTrendMode('decompose')">Decompose</button>
+          </div>
+          <div id="trend-decompose-by" style="display:none;align-items:center;gap:6px;">
+            <span style="font-size:11px;font-weight:600;color:var(--c-muted);">By:</span>
+            <div class="ov-viewby-row">
+              <button class="ov-viewby-btn active" id="vb-tr-by-res"   onclick="setTrendDecomposeBy('res')">Resource</button>
+              <button class="ov-viewby-btn"        id="vb-tr-by-sku"   onclick="setTrendDecomposeBy('sku')">SKU</button>
+              <button class="ov-viewby-btn"        id="vb-tr-by-plant" onclick="setTrendDecomposeBy('plant')">Plant</button>
+            </div>
           </div>
         </div>
       </div>
@@ -4144,11 +4148,11 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
               <button id="btn-ta-cost-res" class="ov-toggle-btn active" onclick="setTrendAnalysisView('cost','res')">By Resource</button>
               <button id="btn-ta-cost-sku" class="ov-toggle-btn"        onclick="setTrendAnalysisView('cost','sku')">By SKU</button>
             </div>
-            <div class="ov-toggle-row">
-              <button id="btn-trend-sku-prev" class="ov-toggle-btn" onclick="trendSKUNav(-1)">◀</button>
-              <span id="trend-sku-label" style="font-size:12px;font-weight:700;padding:0 8px;min-width:80px;text-align:center;"></span>
-              <button id="btn-trend-sku-next" class="ov-toggle-btn" onclick="trendSKUNav(1)">▶</button>
-            </div>
+            <select id="trend-sku-dropdown" class="slicer-select" style="font-size:11px;height:28px;min-width:110px;" onchange="trendSKUSelect(this.value)">
+              <option value="SKU-1042">SKU-1042</option>
+              <option value="SKU-1055">SKU-1055</option>
+              <option value="SKU-1098">SKU-1098</option>
+            </select>
             <select id="trend-yoy-select" class="slicer-select" style="font-size:11px;height:28px;" onchange="updateTrendCharts()">
               <option value="none">Current period only</option>
               <option value="yoy">Compare: Same period last year (YoY)</option>
@@ -4164,6 +4168,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <div class="chart-wrap" style="height:120px;"><canvas id="ch-ov-trend-cost-wow"></canvas></div>
         </div>
         <p id="trend-legend-tip" style="font-size:10px;color:var(--c-muted);margin:6px 0 0;text-align:center;display:none;">Click legend to highlight · Ctrl+Click to multi-select</p>
+        <p id="trend-truncate-note" style="font-size:10px;color:var(--c-muted);margin:4px 0 0;text-align:center;display:none;"></p>
       </div>
 
       <div class="gs-card" style="margin-bottom:12px;">
@@ -7157,60 +7162,49 @@ function renderOVKPIs() {
   row1.innerHTML = `
     <div class="ov-kpi-card">
       <span class="ov-kpi-label">Total Actual Cost of Overfill</span>
-      <span class="ov-kpi-value ov-val-red">${_fmt$M(OV_SUMMARY.totalActualCost)}</span>
+      <span class="ov-kpi-value">${_fmt$M(OV_SUMMARY.totalActualCost)}</span>
       <span class="ov-kpi-sub">▲ fill above target · recoverable</span>
-      <span class="ov-kpi-badge">Annual estimate</span>
     </div>
     <div class="ov-kpi-card">
       <span class="ov-kpi-label">Brand Required Overfill Cost</span>
-      <span class="ov-kpi-value" style="color:#FF9800;">${_fmt$M(OV_SUMMARY.brandRequiredCost)}</span>
-      <span class="ov-kpi-sub">LSL − Declared Content · necessary overfill</span>
-      <span class="ov-kpi-badge" style="background:#FF9800;">Aesthetic req.</span>
+      <span class="ov-kpi-value">${_fmt$M(OV_SUMMARY.brandRequiredCost)}</span>
+      <span class="ov-kpi-sub">LSL – Declared Content · necessary overfill</span>
     </div>
     <div class="ov-kpi-card">
-      <span class="ov-kpi-label">Standard Cost Variance <span title="Standard Cost Variance = Actual Overfill Cost − Standard Costed Overfill. Positive (+$430K) = spending MORE than originally budgeted (over budget). Negative = spending LESS (savings). ⚠ Uses current standard cost from SAP MM03 — historical cost changes not tracked." style="cursor:help;font-size:11px;margin-left:4px;color:var(--c-muted);">ℹ</span></span>
+      <span class="ov-kpi-label">Standard Cost Variance <span title="Standard Cost Variance = Actual Overfill Cost − Standard Costed Overfill. Positive = over budget (red). Negative = under budget (green). ⚠ Uses current standard cost from SAP MM03." style="cursor:help;font-size:11px;margin-left:4px;color:var(--c-muted);">ℹ</span></span>
       <span class="ov-kpi-value" style="color:${varColor};">${varPfx}${_fmt$M(Math.abs(OV_SUMMARY.stdCostVariance))}</span>
-      <span class="ov-kpi-sub">Actual - Standard Costed · SAP MM03 (current cost)</span>
-      <span class="ov-kpi-badge" style="background:${varColor};">${varSign ? '⚠ Over Budget' : '✓ Under Budget'}</span>
+      <span class="ov-kpi-sub">Actual — Standard Costed · from SAP</span>
     </div>
-    <div class="ov-kpi-card clickable" onclick="openTop10Modal()">
-      <span class="ov-kpi-label">Top Opportunities ▸</span>
+    <div class="ov-kpi-card">
+      <span class="ov-kpi-label">Top Opportunities</span>
       <span class="ov-kpi-value" style="font-size:16px;color:var(--c-text);">${OV_SUMMARY.topOpportunity}</span>
-      <span class="ov-kpi-sub">${OV_SUMMARY.topOpportunityPct.toFixed(2)}% avg overfill · ${_fmt$M(OV_SUMMARY.topOpportunityCost)}/w</span>
-      <span class="ov-kpi-badge" style="background:#1565C0;">Click — see top 10</span>
+      <span class="ov-kpi-sub">↑ ${OV_SUMMARY.topOpportunityPct.toFixed(2)}% overfill · $${Math.round(OV_SUMMARY.topOpportunityCost/1000)}k/wk</span>
     </div>
     <div class="ov-kpi-card gs-gap-card${gapAbove ? '' : ' ok'}">
       <span class="ov-kpi-label">Gap to Gold Standard</span>
       <span class="ov-kpi-value" style="color:${gapColor};">${gapArrow} ${gapPfx}${gap.toFixed(2)}%</span>
-      <span class="ov-kpi-sub">(Current: ${OV_SUMMARY.currentOverfillPct.toFixed(2)}% | GS: ${OV_GS_BASELINE.pct.toFixed(2)}%)</span>
-      <span class="ov-kpi-badge" style="background:#6C757D;font-style:italic;">Governed GS · ${OV_GS_BASELINE.fy}</span>
+      <span class="ov-kpi-sub">vs GS benchmark ${OV_GS_BASELINE.fy}</span>
     </div>`;
 
   // ── Row 2: 3 Quantity KPIs ───────────────────────────────
   if (!row2) return;
-  const avgPct      = OV_SUMMARY.avgOverfillPct;
-  const avgPctColor = avgPct > 0.50 ? '#DC3545' : avgPct > 0.25 ? '#FF9800' : '#28A745';
-  const avgPctBadge = avgPct > 0.50 ? 'Critical' : avgPct > 0.25 ? 'Monitor' : 'On Target';
-  const avgPctBadgeBg = avgPct > 0.50 ? '#DC3545' : avgPct > 0.25 ? '#FF9800' : '#28A745';
+  const avgPct = OV_SUMMARY.avgOverfillPct;
 
   row2.innerHTML = `
     <div class="ov-kpi-card">
       <span class="ov-kpi-label">Total Overfill Quantity</span>
-      <span class="ov-kpi-value" style="color:#4A6580;">${_fmtKg(OV_SUMMARY.totalOverfillKg)}</span>
-      <span class="ov-kpi-sub">${OV_SUMMARY.totalOverfillKg.toLocaleString()} kg given away annually</span>
-      <span class="ov-kpi-badge" style="background:#4A6580;">Total vol. above target</span>
+      <span class="ov-kpi-value">${_fmtKg(OV_SUMMARY.totalOverfillKg)}</span>
+      <span class="ov-kpi-sub">${OV_SUMMARY.totalOverfillKg.toLocaleString()} kg above target</span>
     </div>
     <div class="ov-kpi-card">
       <span class="ov-kpi-label">Brand Required Overfill Qty</span>
-      <span class="ov-kpi-value" style="color:#FF9800;">${_fmtKg(OV_SUMMARY.brandRequiredKg)}</span>
-      <span class="ov-kpi-sub">LSL − Declared Content · necessary overfill</span>
-      <span class="ov-kpi-badge" style="background:#FF9800;">${(OV_SUMMARY.brandRequiredKg/OV_SUMMARY.totalOverfillKg*100).toFixed(0)}% of total qty</span>
+      <span class="ov-kpi-value">${_fmtKg(OV_SUMMARY.brandRequiredKg)}</span>
+      <span class="ov-kpi-sub">LSL – Declared Content · necessary overfill</span>
     </div>
     <div class="ov-kpi-card avg-pct-card">
       <span class="ov-kpi-label">Avg Overfill %</span>
-      <span class="ov-kpi-value" style="color:${avgPctColor};">${avgPct.toFixed(2)}%</span>
-      <span class="ov-kpi-sub">Mean fill vs target across selection</span>
-      <span class="ov-kpi-badge" style="background:${avgPctBadgeBg};">${avgPctBadge}</span>
+      <span class="ov-kpi-value">${avgPct.toFixed(2)}%</span>
+      <span class="ov-kpi-sub">Mean fill (g) vs target across selection</span>
     </div>`;
 }
 
@@ -7625,15 +7619,13 @@ function hmViewInDrivers() {
 function renderOVTopContributors() {
   const tb = document.querySelector('#tb-ov-top tbody');
   if (!tb) return;
-  const pC = { 'Top Focus':'#DC3545', 'Monitor':'#FF9800', 'Within Target':'#28A745' };
   tb.innerHTML = OV_TOP_CONTRIBUTORS.map(r => `
     <tr>
       <td style="font-weight:700;">${r.rank}</td>
       <td>${r.resource}</td><td>${r.sku}</td>
-      <td style="font-weight:700;color:${pC[r.priority]||'#333'}">${r.pct.toFixed(1)}%</td>
+      <td style="font-weight:700;">${r.pct.toFixed(1)}%</td>
       <td>${r.gramsYr.toLocaleString()} g</td>
       <td style="font-weight:700;">$${r.cost.toLocaleString()}</td>
-      <td><span class="ov-kpi-badge" style="background:${pC[r.priority]||'#555'};">${r.priority}</span></td>
     </tr>`).join('');
 }
 
@@ -8038,7 +8030,9 @@ function closeTop10Modal(e) {
 
 /* ─── OVERFILL: TREND ANALYSIS ───────────────────────── */
 
-let OV_TREND_VIEW   = 'res';   // 'res' or 'sku' — for Trend Analysis charts
+let OV_TREND_VIEW         = 'res';       // legacy — kept for setTrendAnalysisView compat
+let OV_TREND_MODE         = 'agg';       // 'agg' | 'decompose'
+let OV_TREND_DECOMPOSE_BY = 'res';       // 'res' | 'sku' | 'plant'
 let OV_TREND_SEL    = [];      // selected legend keys (for Change 15)
 let OV_TREND_LEGEND_COST = []; // label strings for cost chart
 let OV_TREND_LEGEND_QTY  = [];
@@ -8061,16 +8055,66 @@ function _trendBySKUDatasets(field) {
   });
 }
 
-/* By-Resource datasets (same as before — all resources for chosen SKU) */
+/* Aggregate dataset — sum all sites into one "All Resources" line */
+function _trendAggDatasets(field, compareMode, sites) {
+  const sku = _trendSKU();
+  const allSites = sites.length ? sites : (OV_TREND_SITES[sku] || []);
+  const aggData  = OV_WEEKS.map((_, wi) => allSites.reduce((s, site) => s + site[field][wi], 0));
+  const ds = [{
+    label: 'All Resources',
+    data:  aggData,
+    borderColor: CC.actual,
+    backgroundColor: CC.actual + '18',
+    fill: false, tension:.3, pointRadius:3, borderWidth:2,
+  }];
+  if (compareMode === 'yoy' || compareMode === 'mom') {
+    const prevData = OV_WEEKS.map((_, wi) => allSites.reduce((s, site) => s + (site[field + 'Prev'] || site[field])[wi], 0));
+    ds.push({
+      label: 'All Resources (prev)',
+      data: prevData,
+      borderColor: CC.actual + '55',
+      backgroundColor: 'transparent',
+      fill: false, tension:.3, pointRadius:2, borderWidth:1.5, borderDash:[4,4],
+    });
+  }
+  return ds;
+}
+
+/* By-Resource datasets — smart display limit: top 3 + "Others" when > 5 sites */
 function _trendByResDatasets(field, compareMode, sites) {
+  const LIMIT = 5;
+  let displaySites = sites;
+  const noteEl = document.getElementById('trend-truncate-note');
+
+  if (sites.length > LIMIT) {
+    const sorted = [...sites].sort((a, b) => {
+      const sumA = a[field].reduce((s, v) => s + v, 0);
+      const sumB = b[field].reduce((s, v) => s + v, 0);
+      return sumB - sumA;
+    });
+    const top3    = sorted.slice(0, 3);
+    const rest    = sorted.slice(3);
+    const othersData = OV_WEEKS.map((_, wi) => rest.reduce((s, site) => s + site[field][wi], 0));
+    const othersObj  = { plant:'', resource:'Others', color:'#9E9E9E', isOthers:true, [field]: othersData };
+    if (compareMode === 'mom') othersObj[field] = _toMonthlyData(othersData);
+    displaySites = [...top3, othersObj];
+    if (noteEl) {
+      noteEl.textContent = `Showing top 3 of ${sites.length} resources + combined "Others" · ${sites.length - 3} resources aggregated`;
+      noteEl.style.display = '';
+    }
+  } else {
+    if (noteEl) noteEl.style.display = 'none';
+  }
+
   const ds = [];
-  sites.forEach(s => {
-    const lbl = s.plant + ' – ' + s.resource;
+  displaySites.forEach(s => {
+    const lbl = s.isOthers ? 'Others' : (s.plant + ' – ' + s.resource);
     ds.push({
       label: lbl,
       data:  compareMode === 'mom' ? _toMonthlyData(s[field]) : s[field],
       borderColor: s.color, backgroundColor: 'transparent',
       tension:.3, pointRadius:4, borderWidth:2,
+      ...(s.isOthers ? { borderDash:[4,4] } : {}),
     });
     if (compareMode === 'yoy' || compareMode === 'prev12') {
       ds.push({
@@ -8208,6 +8252,45 @@ function updateTrendCharts() {
   initOVTrendCharts();
 }
 
+function setTrendMode(mode) {
+  OV_TREND_MODE = mode;
+  ['agg','decompose'].forEach(m => {
+    const btn = document.getElementById('vb-tr-' + m);
+    if (btn) btn.classList.toggle('active', m === mode);
+  });
+  const byRow = document.getElementById('trend-decompose-by');
+  if (byRow) byRow.style.display = mode === 'decompose' ? '' : 'none';
+  OV_TREND_SEL = [];
+  _destroyTrendCharts();
+  OV_INITED['trend'] = true;
+  initOVTrendCharts();
+  renderTrendSummaryTable();
+}
+
+function setTrendDecomposeBy(by) {
+  OV_TREND_DECOMPOSE_BY = by;
+  ['res','sku','plant'].forEach(b => {
+    const btn = document.getElementById('vb-tr-by-' + b);
+    if (btn) btn.classList.toggle('active', b === by);
+  });
+  OV_TREND_SEL = [];
+  _destroyTrendCharts();
+  OV_INITED['trend'] = true;
+  initOVTrendCharts();
+  renderTrendSummaryTable();
+}
+
+function trendSKUSelect(sku) {
+  const idx = OV_TREND_SKUS.indexOf(sku);
+  if (idx === -1) return;
+  OV_TREND_SKU_IDX = idx;
+  OV_TREND_SEL = [];
+  _destroyTrendCharts();
+  OV_INITED['trend'] = true;
+  initOVTrendCharts();
+  renderTrendSummaryTable();
+}
+
 function _destroyTrendCharts() {
   OV_INITED['trend'] = false;
   ['ch-ov-trend-cost','ch-ov-trend-qty','ch-ov-trend-cost-wow','ch-ov-trend-qty-wow'].forEach(id => {
@@ -8218,8 +8301,9 @@ function _destroyTrendCharts() {
 function initOVTrendCharts() {
   const sku         = _trendSKU();
   const sites       = OV_TREND_SITES[sku] || [];
-  const lbl         = document.getElementById('trend-sku-label');
-  if (lbl) lbl.textContent = sku;
+  /* Sync SKU dropdown */
+  const dropEl = document.getElementById('trend-sku-dropdown');
+  if (dropEl) dropEl.value = sku;
 
   const yoyEl      = document.getElementById('trend-yoy-select');
   const compareMode = yoyEl ? yoyEl.value : 'none';
@@ -8237,17 +8321,20 @@ function initOVTrendCharts() {
   const tip = document.getElementById('trend-legend-tip');
   if (tip) tip.style.display = OV_TREND_SEL.length > 0 ? '' : 'none';
 
-  const isByRes = OV_TREND_VIEW === 'res';
-
-  /* Build cost datasets */
-  const costDs = isByRes
-    ? _trendByResDatasets('cost', compareMode, sites)
-    : _trendBySKUDatasets('cost');
-
-  /* Build qty datasets */
-  const qtyDs = isByRes
-    ? _trendByResDatasets('qty', compareMode, sites)
-    : _trendBySKUDatasets('qty');
+  /* Build datasets based on mode */
+  let costDs, qtyDs;
+  if (OV_TREND_MODE === 'agg') {
+    costDs = _trendAggDatasets('cost', compareMode, sites);
+    qtyDs  = _trendAggDatasets('qty',  compareMode, sites);
+  } else {
+    if (OV_TREND_DECOMPOSE_BY === 'sku') {
+      costDs = _trendBySKUDatasets('cost');
+      qtyDs  = _trendBySKUDatasets('qty');
+    } else {
+      costDs = _trendByResDatasets('cost', compareMode, sites);
+      qtyDs  = _trendByResDatasets('qty',  compareMode, sites);
+    }
+  }
 
   const legendCost = _makeClickableLegend('ch-ov-trend-cost', 'trend-legend-tip');
   const legendQty  = _makeClickableLegend('ch-ov-trend-qty',  null);
@@ -8919,6 +9006,10 @@ function setOVPreset(p) {
   const ymd = d => d.toISOString().split('T')[0];
   document.getElementById('ov-date-from').value = ymd(from);
   document.getElementById('ov-date-to').value   = ymd(to);
+  ['4w','3m','ytd','r12','fy26','fy27'].forEach(id => {
+    const btn = document.getElementById('ov-dp-' + id);
+    if (btn) btn.classList.toggle('active', id === p);
+  });
 }
 
 /* ─── OVERFILL: GOLD STANDARD GAP DATA ──────────────── */
@@ -8971,20 +9062,25 @@ function _renderOVGSGapChart() {
     data: {
       labels,
       datasets: [
-        { label:'Actual Overfill (g)', data: OV_GS_GAP.map(r => r.actualG), backgroundColor:'rgba(220,53,69,0.75)', borderColor:'#C62828', borderWidth:1 },
-        { label:'Gold Standard P75 (g)', data: OV_GS_GAP.map(r => r.gsG), backgroundColor:'rgba(0,105,92,0.7)', borderColor:'#004D40', borderWidth:1 }
+        { label:'Actual Overfill above DC (g)', data: OV_GS_GAP.map(r => r.actualG), backgroundColor:'rgba(220,53,69,0.75)', borderColor:'#C62828', borderWidth:1 },
+        { label:'GS P75 above DC (g)', data: OV_GS_GAP.map(r => r.gsG), backgroundColor:'rgba(0,105,92,0.7)', borderColor:'#004D40', borderWidth:1 },
+        { label:'Declared Content (0g)', type:'line', data: OV_GS_GAP.map(() => 0), borderColor:'rgba(0,0,0,0.4)', borderWidth:1.5, borderDash:[4,4], pointRadius:0, fill:false }
       ]
     },
     options: {
-      ...baseOpts('Overfill (g)'),
+      ...baseOpts('Grams above Declared Content'),
       plugins: {
         ...baseOpts('').plugins,
         legend: { display:true, position:'top', labels:{ font:{size:11}, color:'#4A6580' } },
-        tooltip: { callbacks: { label: c => c.dataset.label + ': ' + c.parsed.y.toFixed(3) + ' g' } }
+        tooltip: { callbacks: { label: c => c.dataset.label + ': ' + c.parsed.y.toFixed(3) + 'g above DC' } }
       },
       scales: {
         x: { ticks:{ font:{size:10}, maxRotation:45 }, grid:{ display:false } },
-        y: { beginAtZero:true, ticks:{ callback: v => v.toFixed(2) + 'g' }, grid:{ color:'rgba(0,0,0,0.06)' } }
+        y: {
+          beginAtZero:true,
+          title: { display:true, text:'Grams above Declared Content', font:{size:10}, color:'#4A6580' },
+          ticks:{ callback: v => v.toFixed(2) + 'g' }, grid:{ color:'rgba(0,0,0,0.06)' }
+        }
       }
     }
   });
