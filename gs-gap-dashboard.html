@@ -444,42 +444,6 @@ table.gs-tbl .total-row td.r { color: #A8D8FF; }
   padding: 1px 5px; border-radius: 3px; font-weight: 800; margin-left: 4px;
 }
 
-/* =====================================================
-   PORTFOLIO SEGMENTATION
-   ===================================================== */
-.seg-grid {
-  display: grid; grid-template-columns: repeat(4,1fr); gap: 8px;
-}
-.seg-panel {
-  border-radius: 7px; padding: 12px 10px;
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-  text-align: center; border: 1.5px solid transparent;
-}
-.seg-panel.gold   { background:#FFF8E1; border-color:#F9A825; color:#E65100; }
-.seg-panel.silver { background:#ECEFF1; border-color:#78909C; color:#37474F; }
-.seg-panel.bronze { background:#EFEBE9; border-color:#8D6E63; color:#4E342E; }
-.seg-panel.other  { background:#ECEFF1; border-color:#546E7A; color:#37474F; }
-.seg-icon { font-size: 20px; line-height: 1; }
-.seg-pct  { font-size: 24px; font-weight: 800; line-height: 1; }
-.seg-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-.seg-thresh { font-size: 10px; opacity: 0.75; }
-.seg-note  { font-size: 10.5px; color: var(--c-pos); font-weight: 600; }
-
-/* small inline segment badge (used in tables) */
-.seg-badge {
-  display: inline-block; padding: 2px 7px; border-radius: 3px;
-  font-size: 10px; font-weight: 700;
-}
-.seg-badge.gold   { background:#FFF8E1; color:#E65100; border:1px solid #F9A825; }
-.seg-badge.silver { background:#ECEFF1; color:#37474F; border:1px solid #78909C; }
-.seg-badge.bronze { background:#EFEBE9; color:#4E342E; border:1px solid #8D6E63; }
-.seg-badge.other  { background:#ECEFF1; color:#455A64; border:1px solid #90A4AE; }
-
-/* threshold config panel */
-.thresh-cfg {
-  border-top: 1px solid var(--c-border); padding-top: 10px; margin-top: 6px;
-}
-.thresh-cfg label { font-size: 11px; color: var(--c-muted); }
 .thresh-cfg input[type=number] {
   width: 55px; border: 1px solid var(--c-border); border-radius: 3px;
   padding: 3px 5px; font-size: 11px; color: var(--c-text); background: var(--c-card);
@@ -789,6 +753,7 @@ table.ov-heatmap tbody td.row-hdr {
   padding:3px 8px; border-radius:3px; font-size:10.5px; cursor:pointer; transition:all .12s;
 }
 .date-preset:hover { background:rgba(21,101,192,.08); color:var(--c-blue); border-color:var(--c-blue); }
+.date-preset.active { background:var(--c-blue); color:#fff; border-color:var(--c-blue); }
 .sidebar-helper { font-size:9px; color:#ADB5BD; font-style:italic; line-height:1.5; margin-top:8px; }
 
 /* =====================================================
@@ -1216,12 +1181,6 @@ table.top10-tbl tbody td { padding:8px 10px; vertical-align:middle; }
   flex-shrink: 0;
 }
 
-/* Portfolio Segmentation — visual separator from charts above */
-.portfolio-segmentation-wrap {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--c-border);
-}
 
 /* Issue 3: PO-Level Detail Tables — scrollable with sticky header */
 .tbl-wrap {
@@ -1595,6 +1554,25 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
   from { transform: translateY(8px); opacity: 0; }
   to   { transform: translateY(0);   opacity: 1; }
 }
+/* knc-total hover tooltip */
+.knc-total-tooltip {
+  position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%);
+  width:300px; background:#0A2540; color:#e8edf4; border-radius:10px; padding:14px 16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.3); z-index:9999; opacity:0; pointer-events:none;
+  transition:opacity .15s; font-size:11px; line-height:1.45; text-align:left;
+}
+.knc-total-tooltip::before {
+  content:''; position:absolute; top:-7px; left:50%; transform:translateX(-50%);
+  border:7px solid transparent; border-top:none; border-bottom-color:#0A2540;
+}
+#knc-total:hover .knc-total-tooltip { opacity:1; pointer-events:auto; }
+.knc-tt-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.knc-tt-row:last-child { margin-bottom:0; }
+.knc-tt-label { width:52px; font-weight:700; color:#aabdd4; font-size:10px; text-transform:uppercase; letter-spacing:.4px; }
+.knc-tt-val { width:64px; font-weight:700; color:#fff; font-size:11px; }
+.knc-tt-bar-bg { flex:1; height:5px; background:rgba(255,255,255,.12); border-radius:3px; overflow:hidden; }
+.knc-tt-bar { height:100%; border-radius:3px; }
+.knc-tt-pct { width:32px; text-align:right; font-size:10px; color:#aabdd4; }
 </style>
 </head>
 <body>
@@ -1631,25 +1609,35 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
     <!-- GS FILTERS -->
     <div id="gs-sidebar-content">
 
-      <!-- DATE RANGE (GS format) -->
-      <div>
-        <span class="slicer-label">Date Range</span>
-        <select id="slicer-time" class="slicer-select" onchange="handleSlicerChange()">
-          <option value="week">Week</option>
-          <option value="month" selected>Month</option>
-          <option value="fy">Fiscal Year</option>
-          <option value="r12">Rolling 12 Months</option>
-          <option value="r6">Rolling 6 Months</option>
-          <option value="custom">Custom Date Range</option>
-        </select>
+      <!-- TIME PERIOD -->
+      <div class="date-range-row">
+        <span class="slicer-label">Time Period</span>
+        <span class="date-reset" onclick="resetGSPeriod()">Reset</span>
       </div>
-      <div class="date-field">
-        <label>Date From</label>
-        <input type="date" id="gs-date-from" value="2024-07-01" onchange="handleSlicerChange()">
+      <div class="date-presets">
+        <button class="date-preset" id="gs-dp-tw"  onclick="setGSPeriod('tw')">This Week</button>
+        <button class="date-preset" id="gs-dp-lw"  onclick="setGSPeriod('lw')">Last Week</button>
+        <button class="date-preset active" id="gs-dp-tm" onclick="setGSPeriod('tm')">This Month</button>
+        <button class="date-preset" id="gs-dp-lm"  onclick="setGSPeriod('lm')">Last Month</button>
+        <button class="date-preset" id="gs-dp-tq"  onclick="setGSPeriod('tq')">This Quarter</button>
+        <button class="date-preset" id="gs-dp-lq"  onclick="setGSPeriod('lq')">Last Quarter</button>
+        <button class="date-preset" id="gs-dp-ty"  onclick="setGSPeriod('ty')">This Year</button>
+        <button class="date-preset" id="gs-dp-ly"  onclick="setGSPeriod('ly')">Last Year</button>
+        <button class="date-preset" id="gs-dp-cr"  onclick="setGSPeriod('cr')">Custom Range</button>
       </div>
-      <div class="date-field">
-        <label>Date To</label>
-        <input type="date" id="gs-date-to" value="2025-06-30" onchange="handleSlicerChange()">
+      <div id="gs-custom-range" style="display:none;">
+        <div class="date-field">
+          <label>From</label>
+          <input type="date" id="gs-date-from" value="2026-08-01" onchange="handleSlicerChange()">
+        </div>
+        <div class="date-field">
+          <label>To</label>
+          <input type="date" id="gs-date-to" value="2026-08-11" onchange="handleSlicerChange()">
+        </div>
+        <div style="display:flex;gap:6px;margin-top:6px;">
+          <button class="time-btn active" style="flex:1;" onclick="handleSlicerChange()">Apply</button>
+          <button class="time-btn" style="flex:1;" onclick="setGSPeriod('tm')">Cancel</button>
+        </div>
       </div>
 
       <hr class="panel-sep">
@@ -1992,25 +1980,44 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
   <!-- ====== GS MAIN CONTENT ====== -->
   <main id="gs-main" class="gs-content">
 
-    <!-- ─── Combined Impact Card ─────────────────────────── -->
-    <div id="gs-combined-impact" class="card" style="margin-bottom:10px;background:linear-gradient(135deg,#003D5C 0%,#1565C0 100%);color:#fff;border:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-        <div>
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;opacity:0.8;margin-bottom:4px;">Total Gold Standard Gap Impact</div>
-          <div style="font-size:36px;font-weight:800;letter-spacing:-1px;">$1.2M</div>
-          <div style="font-size:11px;opacity:0.75;margin-top:2px;">Combined opportunity across all KPIs</div>
-        </div>
-        <div class="kpi-breakdown" style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:10px;" title="Total GS Gap: $1,234,000 | Speed $612,000 (50%) | Labor $370,000 (30%) | OEE $185,000 (15%) | Scrap $67,000 (5%)">
-          <div style="opacity:0.9;"><span style="font-weight:700;">Speed</span> $612,000 <span style="opacity:0.65;">(50%)</span></div>
-          <div style="opacity:0.9;"><span style="font-weight:700;">Labor</span> $370,000 <span style="opacity:0.65;">(30%)</span></div>
-          <div style="opacity:0.9;"><span style="font-weight:700;">OEE</span> $185,000 <span style="opacity:0.65;">(15%)</span></div>
-          <div style="opacity:0.9;"><span style="font-weight:700;">Scrap</span> $67,000 <span style="opacity:0.65;">(5%)</span></div>
-        </div>
-      </div>
-    </div>
-
     <!-- ─── Level 2: KPI Category Cards ─────────────────── -->
     <div id="gs-kpi-nav" class="kpi-nav-row">
+      <!-- Total GS Gap Impact (first card, hover reveals breakdown) -->
+      <button class="kpi-nav-card" id="knc-total" style="position:relative;cursor:default;border-left:4px solid #1565C0;background:linear-gradient(135deg,rgba(0,61,92,.06) 0%,rgba(21,101,192,.08) 100%);">
+        <span class="knc-icon" style="color:#1565C0;">📊</span>
+        <div class="knc-body">
+          <div class="knc-kpi" style="font-size:9.5px;color:var(--c-muted);">TOTAL GS GAP IMPACT</div>
+          <div class="knc-val" style="font-size:26px;font-weight:800;color:#1565C0;">$1.2M</div>
+          <div class="knc-delta" style="color:var(--c-muted);">Combined opportunity</div>
+        </div>
+        <div class="knc-total-tooltip">
+          <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:8px;">Total GS Gap — $1,234,000</div>
+          <div class="knc-tt-row">
+            <span class="knc-tt-label">Speed</span>
+            <span class="knc-tt-val">$612K</span>
+            <div class="knc-tt-bar-bg"><div class="knc-tt-bar" style="width:50%;background:#1976D2;"></div></div>
+            <span class="knc-tt-pct">50%</span>
+          </div>
+          <div class="knc-tt-row">
+            <span class="knc-tt-label">Labor</span>
+            <span class="knc-tt-val">$370K</span>
+            <div class="knc-tt-bar-bg"><div class="knc-tt-bar" style="width:30%;background:#F59E0B;"></div></div>
+            <span class="knc-tt-pct">30%</span>
+          </div>
+          <div class="knc-tt-row">
+            <span class="knc-tt-label">OEE</span>
+            <span class="knc-tt-val">$185K</span>
+            <div class="knc-tt-bar-bg"><div class="knc-tt-bar" style="width:15%;background:#8B5CF6;"></div></div>
+            <span class="knc-tt-pct">15%</span>
+          </div>
+          <div class="knc-tt-row">
+            <span class="knc-tt-label">Scrap</span>
+            <span class="knc-tt-val">$67K</span>
+            <div class="knc-tt-bar-bg"><div class="knc-tt-bar" style="width:5%;background:#10B981;"></div></div>
+            <span class="knc-tt-pct">5%</span>
+          </div>
+        </div>
+      </button>
       <button class="kpi-nav-card" id="knc-speed" onclick="showKPI('speed')">
         <span class="knc-icon">🏃</span>
         <div class="knc-body">
@@ -2176,7 +2183,6 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
         <div class="card">
           <div class="flex-row">
             <span class="card-title">Speed: UPM (Units per minute)</span>
-            <span style="font-size:10px;color:var(--c-muted);font-weight:600;">PRODUCT SEGMENTATION — by unit size</span>
           </div>
           <div class="card-subtitle">Compare the cycle speed against nameplate speed to identify opportunities. Set CE KPI target vs reference speed that respects unit size (and viscosity).</div>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-speed-res"></canvas></div>
@@ -2195,58 +2201,6 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
 
       </div><!-- /charts-grid -->
 
-      <!-- Portfolio Segmentation -->
-      <div class="card portfolio-segmentation-wrap">
-        <div class="flex-row">
-          <span class="card-title">Portfolio Segmentation</span>
-          <button style="background:none;border:none;cursor:pointer;font-size:12px;color:var(--c-blue);font-weight:700;" onclick="openThreshConfig()">⚙ Configure Thresholds</button>
-        </div>
-        <div class="card-subtitle" style="margin-bottom:6px;">SKU/line performance classified by Actual Speed as % of Reference Speed (Rs). Gold = at or above 90% of Rs. Thresholds pending final sign-off from Stephanie.</div>
-        <div class="seg-grid">
-          <div class="seg-panel gold">
-            <div class="seg-icon">★</div>
-            <div class="seg-pct" id="seg-gold-pct">34%</div>
-            <div class="seg-label">Gold</div>
-            <div class="seg-thresh" id="seg-gold-thresh">≥ 90% of Rs</div>
-            <div class="seg-note">✨ Best demonstrated: 12 SKUs</div>
-          </div>
-          <div class="seg-panel silver">
-            <div class="seg-icon">◆</div>
-            <div class="seg-pct" id="seg-silver-pct">28%</div>
-            <div class="seg-label">Silver</div>
-            <div class="seg-thresh" id="seg-silver-thresh">75–89% of Rs</div>
-          </div>
-          <div class="seg-panel bronze">
-            <div class="seg-icon">▲</div>
-            <div class="seg-pct" id="seg-bronze-pct">22%</div>
-            <div class="seg-label">Bronze</div>
-            <div class="seg-thresh" id="seg-bronze-thresh">60–74% of Rs</div>
-          </div>
-          <div class="seg-panel other">
-            <div class="seg-icon">○</div>
-            <div class="seg-pct" id="seg-other-pct">16%</div>
-            <div class="seg-label">Other</div>
-            <div class="seg-thresh" id="seg-other-thresh">&lt; 60% of Rs</div>
-          </div>
-        </div>
-        <!-- Inline threshold config (hidden by default) -->
-        <div id="thresh-config" class="thresh-cfg" style="display:none;">
-          <div style="margin-bottom:6px;font-size:11px;color:var(--c-muted);">Tier thresholds as % of Reference Speed (Rs). Gold ≥ threshold means As/Rs ≥ that value.</div>
-          <div style="display:grid;grid-template-columns:repeat(3,auto);gap:10px 16px;align-items:center;">
-            <span style="font-size:11px;color:var(--c-muted);">Gold ≥</span>
-            <input type="number" id="thresh-gold" value="90" min="50" max="105" style="width:55px;" oninput="applyThresholds()">
-            <span style="font-size:11px;color:var(--c-muted);">% of Rs</span>
-            <span style="font-size:11px;color:var(--c-muted);">Silver ≥</span>
-            <input type="number" id="thresh-silver" value="75" min="30" max="100" style="width:55px;" oninput="applyThresholds()">
-            <span style="font-size:11px;color:var(--c-muted);">% of Rs</span>
-            <span style="font-size:11px;color:var(--c-muted);">Bronze ≥</span>
-            <input type="number" id="thresh-bronze" value="60" min="10" max="100" style="width:55px;" oninput="applyThresholds()">
-            <span style="font-size:11px;color:var(--c-muted);">% of Rs</span>
-          </div>
-          <div class="note-box" style="margin-top:8px;">⚠ Thresholds pending final sign-off: Stephanie (segmentation), Steven (labor cost). Do not use for operational decisions until approved.</div>
-        </div>
-      </div>
-
       <!-- Cross-Resource SKU Comparison -->
       <div class="card">
         <span class="card-title">Cross-Resource SKU Comparison</span>
@@ -2256,18 +2210,18 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
             <thead>
               <tr>
                 <th>SKU / Product Category</th>
-                <th>Line L67 — Segment</th>
-                <th>Line L68 — Segment</th>
-                <th>Line L72 — Segment</th>
+                <th class="r">Line L67 UPM</th>
+                <th class="r">Line L68 UPM</th>
+                <th class="r">Line L72 UPM</th>
                 <th class="r" style="text-align:right;">Best-Line Delta $</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>SKU-101 / Mascara - Multi-purpose</td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$8,400</td></tr>
-              <tr><td>SKU-202 / Foundation - Liquid</td><td><span class="seg-badge silver">◆ Silver</span></td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$5,200</td></tr>
-              <tr><td>SKU-303 / Serum - Anti-aging</td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$3,100</td></tr>
-              <tr><td>SKU-401 / Cleanser - Foaming</td><td><span class="seg-badge other">○ Other</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td><span class="seg-badge bronze">▲ Bronze</span></td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$6,700</td></tr>
-              <tr><td>SKU-502 / Moisturizer - SPF</td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge gold">★ Gold</span></td><td><span class="seg-badge silver">◆ Silver</span></td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$2,900</td></tr>
+              <tr><td>SKU-101 / Mascara - Multi-purpose</td><td class="r">97</td><td class="r">83</td><td class="r">71</td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$8,400</td></tr>
+              <tr><td>SKU-202 / Foundation - Liquid</td><td class="r">81</td><td class="r">94</td><td class="r">78</td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$5,200</td></tr>
+              <tr><td>SKU-303 / Serum - Anti-aging</td><td class="r">68</td><td class="r">65</td><td class="r">79</td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$3,100</td></tr>
+              <tr><td>SKU-401 / Cleanser - Foaming</td><td class="r">54</td><td class="r">62</td><td class="r">61</td><td style="text-align:right;color:var(--c-neg);font-weight:700;">−$6,700</td></tr>
+              <tr><td>SKU-502 / Moisturizer - SPF</td><td class="r">91</td><td class="r">93</td><td class="r">82</td><td style="text-align:right;color:var(--c-pos);font-weight:700;">+$2,900</td></tr>
             </tbody>
           </table>
         </div>
@@ -2285,7 +2239,6 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
         <div class="info-item"><strong>GS GAP (Engineering Gap):</strong> Gs − Rs. The gap between nameplate speed and the best-ever demonstrated speed. Closing this may require equipment upgrades, formula adjustments, or size optimization.</div>
         <div class="info-item"><strong>RS GAP (Operational Gap):</strong> Rs − As. The gap between best-ever demonstrated speed and current actual speed. Closing this requires operational improvements (scheduling, changeover, process stability, ...).</div>
         <div class="info-item"><strong>GS GAP Impact $:</strong> (Quantity ÷ GS GAP) × People × Labor Cost Per Hour. RS GAP Impact $: (Quantity ÷ RS GAP) × People × Labor Cost Per Hour. People and labor cost pending Steven Johnston sign-off.</div>
-        <div class="info-item"><strong>Tier Classification:</strong> Based on As/Rs %. Gold ≥90% of Rs · Silver 75–89% · Bronze 60–74% · Other &lt;60%. Thresholds pending Stephanie sign-off.</div>
       </div>
     </div><!-- /cnt-speed-results -->
 
@@ -2491,8 +2444,8 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
           <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2px dashed #1565C0;vertical-align:middle;"></span> Reference Speed (Rs) — MAX(As) historically</span>
         </div>
         <div style="margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;">
-          <span class="seg-badge" style="background:#e8f0fe;color:#1565C0;border:1px solid #1565C0;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">■ GS GAP (blue shading) = Nameplate − Rs · Engineering Gap</span>
-          <span class="seg-badge" style="background:#fde8e8;color:var(--c-neg);border:1px solid var(--c-neg);padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">■ RS GAP (red) = Rs − As · Operational improvement</span>
+          <span style="display:inline-block;background:#e8f0fe;color:#1565C0;border:1px solid #1565C0;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">■ GS GAP (blue shading) = Nameplate − Rs · Engineering Gap</span>
+          <span style="display:inline-block;background:#fde8e8;color:var(--c-neg);border:1px solid var(--c-neg);padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">■ RS GAP (red) = Rs − As · Operational improvement</span>
         </div>
       </div>
 
@@ -2511,7 +2464,7 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
         </div>
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:4px 0 8px;">
           <span style="font-size:11px; color:var(--c-muted);">Stakeholder sign-off:</span>
-          <span class="gov-chip approved">✅ Stephanie — Segmentation categories</span>
+          <span class="gov-chip approved">✅ Stephanie — KPI methodology</span>
           <span class="gov-chip pending">⏳ Steven — Scrap guardrail values (TBD)</span>
           <span class="gov-chip pending">⏳ Kris VD — Financial model integration</span>
           <span class="gov-chip deferred">↗ LIMS — Mass attributes (in progress)</span>
@@ -2546,7 +2499,6 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
             <thead>
               <tr>
                 <th>Region</th><th>Plant</th><th>Product Category</th><th>Line</th>
-                <th>Seg</th>
                 <th class="r">OEE Saving ($)</th>
                 <th class="r">Scrap Saving ($)</th>
                 <th class="r">Speed Saving ($)</th>
@@ -2590,7 +2542,6 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
             <thead>
               <tr>
                 <th>Region</th><th>Plant</th><th>Product Category</th><th>Line</th>
-                <th>Seg</th>
                 <th class="r" style="font-weight:800;">Total Saving ($)</th>
                 <th>Priority</th>
                 <th class="r">Impact ($)</th>
@@ -2621,7 +2572,6 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
                 <th class="r" style="color:var(--c-rs);">RS GAP ($)</th>
                 <th class="r" style="color:var(--c-blue);">GS GAP (UPM)</th>
                 <th class="r" style="color:var(--c-blue);">GS GAP ($)</th>
-                <th>Tier</th>
               </tr>
             </thead>
             <tbody id="tb-rsgap-body"></tbody>
@@ -2836,35 +2786,6 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
         <p style="font-size:10px;color:var(--c-muted);font-style:italic;margin:6px 4px 0;">↕ Click a row to filter all charts on this tab to that resource.</p>
       </div>
 
-      <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 4px;">
-        <span style="font-size:11px;font-weight:700;color:var(--c-text);">🏆 Performance Tier Distribution — Unified SKU Tier</span>
-        <span style="font-size:10px;color:var(--c-muted);font-style:italic;" title="⚠ Composite gap may include correlated OEE and Labor components — methodology pending final sign-off. Double-counting risk flagged (Ivan Kravchenko, Jul 22 session).">
-          Composite tier = dollarized total gap across Speed + OEE + Labor + Scrap · Gold = P75 confirmed · Silver/Bronze ⚠ pending Kris Van Deursen sign-off &nbsp; ℹ
-        </span>
-      </div>
-      <div class="kpi-row" style="gap:8px;">
-        <div class="gs-card" style="flex:1;cursor:pointer;border-left:4px solid #c9933a;background:#fdf6ec;" onclick="showLBTierModal('gold')">
-          <div class="card-title" style="color:#c9933a;margin-bottom:4px;">🥇 GOLD SKUs <small style="font-weight:400;font-size:10px;">(CLICK FOR DETAIL)</small></div>
-          <div style="font-size:28px;font-weight:800;color:#c9933a;line-height:1.1;">8 <small style="font-size:14px;">SKUs</small></div>
-          <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Total $ gap below P75 threshold</div>
-        </div>
-        <div class="gs-card" style="flex:1;cursor:pointer;border-left:4px solid #7a8fa6;background:#f2f4f7;" onclick="showLBTierModal('silver')">
-          <div class="card-title" style="color:#5a7a96;margin-bottom:4px;">🥈 SILVER SKUs <small style="font-weight:400;font-size:10px;">(CLICK FOR DETAIL)</small></div>
-          <div style="font-size:28px;font-weight:800;color:#5a7a96;line-height:1.1;">6 <small style="font-size:14px;">SKUs</small></div>
-          <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Moderate combined gap · improvement target</div>
-        </div>
-        <div class="gs-card" style="flex:1;cursor:pointer;border-left:4px solid #a0522d;background:#fdf0e8;" onclick="showLBTierModal('bronze')">
-          <div class="card-title" style="color:#a0522d;margin-bottom:4px;">🥉 BRONZE SKUs <small style="font-weight:400;font-size:10px;">(CLICK FOR DETAIL)</small></div>
-          <div style="font-size:28px;font-weight:800;color:#a0522d;line-height:1.1;">3 <small style="font-size:14px;">SKUs</small></div>
-          <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Highest combined gap · priority action</div>
-        </div>
-        <div class="gs-card" style="flex:1;border-left:4px dashed #a0522d;background:#fff;">
-          <div class="card-title" style="margin-bottom:4px;">TOTAL GS GAP $ — BRONZE SKUs</div>
-          <div style="font-size:28px;font-weight:800;color:#e05252;line-height:1.1;">$38,700</div>
-          <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Speed + OEE + Labor + Scrap combined</div>
-        </div>
-      </div>
-
       <div class="charts-grid" style="margin-top:8px;">
         <div class="card">
           <div class="flex-row" style="margin-bottom:4px;">
@@ -2915,7 +2836,6 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
               <th class="r" style="color:#6dd4bc;">GS (hrs/1000)</th>
               <th class="r" style="color:#ff8080;">GS GAP %</th>
               <th class="r" style="color:#ff8080;">GS GAP $</th>
-              <th>Tier</th>
             </tr></thead>
             <tbody id="tb-lb-po-rows"></tbody>
           </table>
@@ -5081,10 +5001,6 @@ function renderRSGapDeepDive(append) {
     const gsGapUPM = Math.max(0, r.gs - r.rs);
     const rsGapUSD = rsGapUPM > 0 ? Math.round((r.qty / rsGapUPM) * r.people * r.laborCost) : 0;
     const gsGapUSD = gsGapUPM > 0 ? Math.round((r.qty / gsGapUPM) * r.people * r.laborCost) : 0;
-    const rsPct = r.rs > 0 ? (r.as / r.rs) * 100 : 0;
-    const seg = getSegment(rsPct);
-    const tierMap = { gold:'★ Gold', silver:'◆ Silver', bronze:'▲ Bronze', other:'○ Other' };
-    const tierClr = { gold:'#F9A825', silver:'#607D8B', bronze:'#8D6E63', other:'#9E9E9E' };
     return `<tr style="cursor:pointer;" onclick="drillDV('${r.res}')">
       <td>${r.plant}</td><td><strong>${r.res}</strong></td><td>${r.family}</td>
       <td>${r.subcat}</td><td>${r.cat}</td>
@@ -5095,7 +5011,6 @@ function renderRSGapDeepDive(append) {
       <td class="r" style="color:var(--c-rs);">$${rsGapUSD.toLocaleString()}</td>
       <td class="r" style="color:var(--c-blue);">${gsGapUPM}</td>
       <td class="r" style="color:var(--c-blue);">$${gsGapUSD.toLocaleString()}</td>
-      <td><span style="color:${tierClr[seg]};font-weight:700;">${tierMap[seg]}</span></td>
     </tr>`;
   }).join('');
   if (append) {
@@ -5115,11 +5030,8 @@ function loadMoreRSGap() {
 
 function renderPlanAhead() {
   const rows = PLAN_AHEAD.map(r=>{
-    const gapPct = Math.round((r.total / (r.total + 50000)) * 100);
-    const seg = getSegment(gapPct);
     return `<tr>
       <td>${r.region}</td><td>${r.plant}</td><td>${r.prodCat}</td><td>${r.line}</td>
-      <td><span class="seg-badge ${seg}">${seg.charAt(0).toUpperCase()+seg.slice(1)}</span></td>
       <td class="r">${fmt(r.oee)}</td><td class="r">${fmt(r.scrap)}</td>
       <td class="r">${fmt(r.speed)}</td><td class="r">${fmt(r.labor)}</td>
       <td class="r bold">${fmt(r.total)}</td>
@@ -5127,7 +5039,7 @@ function renderPlanAhead() {
   }).join('');
   const tot = PLAN_AHEAD.reduce((a,r)=>({oee:a.oee+r.oee,scrap:a.scrap+r.scrap,speed:a.speed+r.speed,labor:a.labor+r.labor,total:a.total+r.total}),{oee:0,scrap:0,speed:0,labor:0,total:0});
   $$('tb-plan-ahead').innerHTML = rows + `<tr class="total-row">
-    <td colspan="5">TOTAL</td>
+    <td colspan="4">TOTAL</td>
     <td class="r">${fmt(tot.oee)}</td><td class="r">${fmt(tot.scrap)}</td>
     <td class="r">${fmt(tot.speed)}</td><td class="r">${fmt(tot.labor)}</td>
     <td class="r bold" style="color:#7FCDFF;">${fmt(tot.total)}</td>
@@ -5135,11 +5047,8 @@ function renderPlanAhead() {
 }
 function renderImpact() {
   $$('tb-impact').innerHTML = IMPACT.map(r=>{
-    const gapPct = r.priority <= 2 ? 3 : r.priority <= 3 ? 9 : 18;
-    const seg = getSegment(gapPct);
     return `<tr onclick="drillThrough('${r.plant}','${r.line}','${r.prodCat}','${r.area}')" style="cursor:pointer;" title="Click to drill through to Deep View — ${r.area}">
       <td>${r.region}</td><td>${r.plant}</td><td>${r.prodCat}</td><td>${r.line}</td>
-      <td><span class="seg-badge ${seg}">${seg.charAt(0).toUpperCase()+seg.slice(1)}</span></td>
       <td class="r bold">${fmt(r.total)}</td>
       <td style="text-align:center;"><span class="pri">${r.priority}</span></td>
       <td class="r">${fmt(r.impact)}</td>
@@ -5744,14 +5653,6 @@ let baselineMonths = 9;
 // Thresholds are % of Rs (As/Rs × 100). Gold ≥ gold, Silver ≥ silver, Bronze ≥ bronze, Other < bronze.
 const THRESHOLDS = { gold: 90, silver: 75, bronze: 60 };
 
-function getSegment(rsPct) {
-  // rsPct = (As / Rs) × 100
-  if (rsPct >= THRESHOLDS.gold)   return 'gold';
-  if (rsPct >= THRESHOLDS.silver) return 'silver';
-  if (rsPct >= THRESHOLDS.bronze) return 'bronze';
-  return 'other';
-}
-
 function handleGSTypeChange() {
   const sel = $$('slicer-gs-type');
   activeGSType = sel ? sel.value : 'governed';
@@ -5791,28 +5692,6 @@ function handleGSTypeChange() {
 
   const statusLbEl = $$('gs-status-label');
   if (statusLbEl) statusLbEl.textContent = statusText;
-}
-
-function openThreshConfig() {
-  const cfg = $$('thresh-config');
-  if (cfg) cfg.style.display = cfg.style.display === 'none' ? 'block' : 'none';
-}
-
-function applyThresholds() {
-  const g = parseFloat(($$('thresh-gold')  ||{value:'90'}).value) || 90;
-  const s = parseFloat(($$('thresh-silver')||{value:'75'}).value) || 75;
-  const b = parseFloat(($$('thresh-bronze')||{value:'60'}).value) || 60;
-  THRESHOLDS.gold   = g;
-  THRESHOLDS.silver = s;
-  THRESHOLDS.bronze = b;
-  // Update labels — thresholds are now % of Rs (As/Rs × 100)
-  [['seg-gold-thresh',  `≥ ${g}% of Rs`],
-   ['seg-silver-thresh',`${s}–${g-1}% of Rs`],
-   ['seg-bronze-thresh',`${b}–${s-1}% of Rs`],
-   ['seg-other-thresh', `< ${b}% of Rs`]
-  ].forEach(([id, txt]) => { const el=$$(id); if(el) el.textContent=txt; });
-  // Re-render tables if gap tab is active
-  if (activeHomeTab === 'gap') { renderPlanAhead(); renderImpact(); }
 }
 
 /* ─── 12-WEEK TREND DATA & CHARTS ───────────────────── */
@@ -6463,6 +6342,18 @@ function drillDV(res) {
 }
 
 function handleSlicerChange() { /* Slicers synced — would filter data in real Power BI */ }
+
+const GS_PERIOD_IDS = ['tw','lw','tm','lm','tq','lq','ty','ly','cr'];
+function setGSPeriod(p) {
+  GS_PERIOD_IDS.forEach(id => {
+    const btn = document.getElementById('gs-dp-' + id);
+    if (btn) btn.classList.toggle('active', id === p);
+  });
+  const cr = document.getElementById('gs-custom-range');
+  if (cr) cr.style.display = p === 'cr' ? 'block' : 'none';
+  if (p !== 'cr') handleSlicerChange();
+}
+function resetGSPeriod() { setGSPeriod('tm'); }
 
 function toggleMS(id) {
   const wrap = document.getElementById(id);
@@ -9676,36 +9567,6 @@ function loadMoreLBPO() {
   renderLBPOTable();
 }
 
-function showLBTierModal(tier) {
-  const modal  = document.getElementById('lb-tier-modal');
-  const title  = document.getElementById('lb-tier-modal-title');
-  const tbody  = document.getElementById('tb-lb-tier-modal');
-  if (!modal || !title || !tbody) return;
-  const labels = { gold:'🥇 Top 10 Contributors — Gold Tier', silver:'🥈 Top 10 Contributors — Silver Tier', bronze:'🥉 Top 10 Contributors — Bronze Tier' };
-  title.textContent = labels[tier] || 'Top 10 Contributors';
-  const tiers = { gold:'🥇', silver:'🥈', bronze:'🥉' };
-  tbody.innerHTML = LB_TOP10.map((r,i) => {
-    const bg = i%2===0 ? '#fff' : '#f8fafc';
-    const leColor = r.leGAP > 0 ? '#C62828' : '#2E7D32';
-    return `<tr style="background:${bg};">
-      <td style="font-weight:700;">${r.rank}</td>
-      <td>${r.sku}</td><td>${r.family}</td><td>${r.res}</td>
-      <td class="r" style="color:${leColor};font-weight:700;">$${r.leGAP.toLocaleString()}</td>
-      <td class="r">$${r.oeeGAP.toLocaleString()}</td>
-      <td class="r">$${r.speedGAP.toLocaleString()}</td>
-      <td class="r">$${r.scrapGAP.toLocaleString()}</td>
-      <td class="r" style="font-weight:700;color:#C62828;">$${r.total.toLocaleString()}</td>
-      <td style="font-size:16px;">${tiers[r.tier]}</td>
-    </tr>`;
-  }).join('');
-  modal.style.display = 'flex';
-}
-
-function closeLBTierModal() {
-  const modal = document.getElementById('lb-tier-modal');
-  if (modal) modal.style.display = 'none';
-}
-
 /* ── DEEP VIEW ───────────────────────────────────────────────── */
 
 function initLBDV() {
@@ -10360,26 +10221,5 @@ function _showWIToast(msg) {
   </div>
 </div>
 
-  <!-- Labor Tier Modal -->
-  <div id="lb-tier-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;" onclick="if(event.target===this)closeLBTierModal()">
-    <div style="background:#fff;border-radius:10px;padding:20px;max-width:950px;width:95%;max-height:80vh;overflow-y:auto;position:relative;">
-      <button onclick="closeLBTierModal()" style="position:absolute;top:10px;right:14px;font-size:18px;background:none;border:none;cursor:pointer;color:#666;">✕</button>
-      <div id="lb-tier-modal-title" style="font-size:15px;font-weight:700;margin-bottom:12px;"></div>
-      <div class="tbl-wrap">
-        <table class="gs-tbl" style="width:100%;">
-          <thead><tr>
-            <th>Rank</th><th>SKU</th><th>Family</th><th>Resource</th>
-            <th class="r" style="color:#6dd4bc;">LE GAP $</th>
-            <th class="r">OEE GAP $</th>
-            <th class="r">Speed GAP $</th>
-            <th class="r">Scrap GAP $</th>
-            <th class="r" style="color:#ff8080;">Total GAP $</th>
-            <th>Tier</th>
-          </tr></thead>
-          <tbody id="tb-lb-tier-modal"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
 </body>
 </html>
