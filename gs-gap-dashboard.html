@@ -1010,9 +1010,23 @@ table.ov-heatmap tbody td.row-hdr {
 /* =====================================================
    OVERFILL: SG SUMMARY STATS
    ===================================================== */
+.sg-stats-outer {
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:14px;
+}
+.sg-stats-outer.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.sg-stats-outer.cols-3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width:900px) {
+  .sg-stats-outer.cols-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width:600px) {
+  .sg-stats-outer.cols-2,
+  .sg-stats-outer.cols-3 { grid-template-columns: 1fr; }
+}
 .sg-stats-card {
   background:var(--c-card); border:1px solid var(--c-border); border-radius:8px;
-  padding:14px 18px; margin-bottom:14px;
+  padding:14px 18px;
 }
 .sg-stats-title { font-size:13px; font-weight:700; color:var(--c-text); margin-bottom:10px; }
 .sg-stats-grid  { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
@@ -3414,16 +3428,6 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
 
     <!-- ── OVERVIEW ── -->
     <div class="pane active" id="pane-ov-overview">
-      <!-- View By selector -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-        <div style="font-size:12px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.4px;">View By</div>
-        <div class="ov-viewby-row">
-          <button class="ov-viewby-btn active" id="vb-ov-agg"   onclick="setOVViewBy('overview','agg')">Aggregate</button>
-          <button class="ov-viewby-btn"        id="vb-ov-res"   onclick="setOVViewBy('overview','res')">Resource</button>
-          <button class="ov-viewby-btn"        id="vb-ov-sku"   onclick="setOVViewBy('overview','sku')">SKU</button>
-          <button class="ov-viewby-btn"        id="vb-ov-plant" onclick="setOVViewBy('overview','plant')">Plant</button>
-        </div>
-      </div>
       <!-- Row 1: 5 cost KPIs -->
       <div class="ov-kpi-row" id="ov-kpi-row"></div>
       <!-- Row 2: 3 quantity KPIs -->
@@ -3465,17 +3469,9 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-giveaway-bar"></canvas></div>
         </div>
         <div class="gs-card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-            <div>
-              <div class="card-title" style="margin:0;">Actual Overfill % vs Brand Required Overfill % by SKU</div>
-              <div style="font-size:10px;color:var(--c-muted);margin-top:2px;">Grouped by Family. Gap = Actual – Brand Required. Shows actual overfill vs minimum required aesthetic buffer (Declared Content – LSL).</div>
-            </div>
-            <div style="flex-shrink:0;margin-left:10px;">
-              <select id="sel-avb-view" class="slicer-select" style="font-size:11px;height:26px;" onchange="setAVBView(this.value)">
-                <option value="sku">By SKU</option>
-                <option value="res">By Resource</option>
-              </select>
-            </div>
+          <div style="margin-bottom:6px;">
+            <div class="card-title" style="margin:0;">Actual Overfill % vs Brand Required Overfill % by SKU</div>
+            <div style="font-size:10px;color:var(--c-muted);margin-top:2px;">Grouped by Family. Gap = Actual – Brand Required. Shows actual overfill vs minimum required aesthetic buffer (Declared Content – LSL).</div>
           </div>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-avb"></canvas></div>
           <div class="legend-row" style="margin-top:8px;">
@@ -3488,18 +3484,9 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
       <!-- Row 4: GAP Trend (50%) + Heatmap (50%) -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
         <div class="gs-card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-            <div>
-              <div class="card-title" style="margin:0;">Overfill GAP % Trend over Time</div>
-              <div style="font-size:10px;color:var(--c-muted);margin-top:2px;">GAP = Actual Overfill – Brand Required Overfill. Aggregated by summing raw grams. Dashed = GS Benchmark.</div>
-            </div>
-            <div style="flex-shrink:0;margin-left:10px;">
-              <select id="sel-gap-trend-view" class="slicer-select" style="font-size:11px;height:26px;" onchange="setGapTrendView(this.value)">
-                <option value="all">All SKUs (aggregate)</option>
-                <option value="multi">Multi-SKU (up to 4)</option>
-                <option value="single">Single SKU</option>
-              </select>
-            </div>
+          <div style="margin-bottom:6px;">
+            <div class="card-title" style="margin:0;">Overfill GAP % Trend over Time</div>
+            <div style="font-size:10px;color:var(--c-muted);margin-top:2px;">GAP = Actual Overfill – Brand Required Overfill. Aggregated by summing raw grams. Dashed = GS Benchmark.</div>
           </div>
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-gap-trend"></canvas></div>
           <div class="legend-row" style="margin-top:8px;">
@@ -3629,24 +3616,15 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Multi-Site Trend Comparison</h3>
           <p style="font-size:11px;color:var(--c-muted);margin:0;">Same SKU across multiple plants/resources — identify best practices and underperformers.</p>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-          <div class="ov-viewby-row">
-            <button class="ov-viewby-btn active" id="vb-tr-agg"      onclick="setTrendMode('agg')">Aggregate</button>
-            <button class="ov-viewby-btn"        id="vb-tr-decompose" onclick="setTrendMode('decompose')">Decompose</button>
-          </div>
-          <div id="trend-decompose-by" style="display:none;align-items:center;gap:6px;">
-            <span style="font-size:11px;font-weight:600;color:var(--c-muted);">By:</span>
-            <div class="ov-viewby-row">
-              <button class="ov-viewby-btn active" id="vb-tr-by-res"   onclick="setTrendDecomposeBy('res')">Resource</button>
-              <button class="ov-viewby-btn"        id="vb-tr-by-sku"   onclick="setTrendDecomposeBy('sku')">SKU</button>
-              <button class="ov-viewby-btn"        id="vb-tr-by-plant" onclick="setTrendDecomposeBy('plant')">Plant</button>
-            </div>
-          </div>
+        <div class="ov-toggle-row" id="trend-compare-btns" style="flex-shrink:0;align-self:center;">
+          <button id="tcmp-none"   class="ov-toggle-btn active" onclick="setTrendCompare('none',this)">Current Only</button>
+          <button id="tcmp-yoy"    class="ov-toggle-btn"        onclick="setTrendCompare('yoy',this)">vs Last Year</button>
+          <button id="tcmp-prev12" class="ov-toggle-btn"        onclick="setTrendCompare('prev12',this)">vs Prev 12W</button>
         </div>
       </div>
 
       <div class="gs-card" style="margin-bottom:12px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
           <div class="card-title" style="margin:0;">Giveaway Cost by Site — 12-Week Trend ($)</div>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
             <div class="ov-toggle-row">
@@ -3658,16 +3636,18 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
               <option value="SKU-1055">SKU-1055</option>
               <option value="SKU-1098">SKU-1098</option>
             </select>
-            <select id="trend-yoy-select" class="slicer-select" style="font-size:11px;height:28px;" onchange="updateTrendCharts()">
-              <option value="none">Current period only</option>
-              <option value="yoy">Compare: Same period last year (YoY)</option>
-              <option value="prev12">Compare: Previous 12 weeks</option>
-              <option value="wow">Week-over-Week (WoW)</option>
-              <option value="mom">Month-over-Month (MoM)</option>
-            </select>
           </div>
         </div>
-        <div class="chart-wrap" style="height:220px;"><canvas id="ch-ov-trend-cost"></canvas></div>
+        <!-- Primary chart -->
+        <div id="trend-cost-primary-section">
+          <div id="trend-cost-primary-label" style="display:none;font-size:11px;font-weight:700;color:var(--c-blue);margin-bottom:6px;padding:4px 8px;background:rgba(21,101,192,.06);border-radius:4px;"></div>
+          <div class="chart-wrap" id="trend-cost-chart-wrap" style="height:220px;transition:height 300ms ease;"><canvas id="ch-ov-trend-cost"></canvas></div>
+        </div>
+        <!-- Comparison chart (visible only in comparison mode) -->
+        <div id="trend-cost-compare-section" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--c-border);">
+          <div id="trend-cost-compare-label" style="font-size:11px;font-weight:700;color:var(--c-muted);margin-bottom:6px;padding:4px 8px;background:rgba(0,0,0,.03);border-radius:4px;"></div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-trend-cost-compare"></canvas></div>
+        </div>
         <div id="trend-wow-cost-wrap" style="display:none;margin-top:10px;">
           <div style="font-size:11px;font-weight:700;color:var(--c-muted);margin-bottom:6px;">Week-over-Week Change ($)</div>
           <div class="chart-wrap" style="height:120px;"><canvas id="ch-ov-trend-cost-wow"></canvas></div>
@@ -3677,14 +3657,23 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
       </div>
 
       <div class="gs-card" style="margin-bottom:12px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
           <div class="card-title" style="margin:0;">Giveaway Quantity by Site — 12-Week Trend (kg)</div>
           <div class="ov-toggle-row">
             <button id="btn-ta-qty-res" class="ov-toggle-btn active" onclick="setTrendAnalysisView('qty','res')">By Resource</button>
             <button id="btn-ta-qty-sku" class="ov-toggle-btn"        onclick="setTrendAnalysisView('qty','sku')">By SKU</button>
           </div>
         </div>
-        <div class="chart-wrap" style="height:220px;"><canvas id="ch-ov-trend-qty"></canvas></div>
+        <!-- Primary chart -->
+        <div id="trend-qty-primary-section">
+          <div id="trend-qty-primary-label" style="display:none;font-size:11px;font-weight:700;color:var(--c-blue);margin-bottom:6px;padding:4px 8px;background:rgba(21,101,192,.06);border-radius:4px;"></div>
+          <div class="chart-wrap" id="trend-qty-chart-wrap" style="height:220px;transition:height 300ms ease;"><canvas id="ch-ov-trend-qty"></canvas></div>
+        </div>
+        <!-- Comparison chart (visible only in comparison mode) -->
+        <div id="trend-qty-compare-section" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--c-border);">
+          <div id="trend-qty-compare-label" style="font-size:11px;font-weight:700;color:var(--c-muted);margin-bottom:6px;padding:4px 8px;background:rgba(0,0,0,.03);border-radius:4px;"></div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="ch-ov-trend-qty-compare"></canvas></div>
+        </div>
         <div id="trend-wow-qty-wrap" style="display:none;margin-top:10px;">
           <div style="font-size:11px;font-weight:700;color:var(--c-muted);margin-bottom:6px;">Week-over-Week Change (kg)</div>
           <div class="chart-wrap" style="height:120px;"><canvas id="ch-ov-trend-qty-wow"></canvas></div>
@@ -3736,15 +3725,9 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
 
     <!-- ── SPEC SCALE ── -->
     <div class="pane" id="pane-ov-specscale">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-        <div>
-          <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Fill Spec Scale</h3>
-          <p style="font-size:11px;color:var(--c-muted);margin:0;">Mean fill vs. nominal target with ±σ band and reject zones. Circle = measured mean. Dashed line = target.</p>
-        </div>
-        <div class="ov-toggle-row">
-          <button id="btn-ss-by-res" class="ov-toggle-btn active" onclick="setSSGroupBy('res')">By Resource</button>
-          <button id="btn-ss-by-sku" class="ov-toggle-btn"        onclick="setSSGroupBy('sku')">By SKU</button>
-        </div>
+      <div style="margin-bottom:14px;">
+        <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Fill Spec Scale</h3>
+        <p style="font-size:11px;color:var(--c-muted);margin:0;">Mean fill vs. nominal target with ±σ band and reject zones. Circle = measured mean. Dashed line = target.</p>
       </div>
       <div class="bullet-grid" id="bullet-grid"></div>
     </div><!-- /pane-ov-specscale -->
@@ -3761,15 +3744,8 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
 
       <!-- Bell curve chart -->
       <div class="gs-card" style="margin-bottom:14px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+        <div style="margin-bottom:8px;">
           <div class="card-title" style="margin:0;">Process Capability Distribution — Normal Curve</div>
-          <select id="cap-sku-sel" class="slicer-select" style="font-size:11px;height:28px;" onchange="renderCapabilityCharts()">
-            <option value="SKU-1042">SKU-1042 (30 ml)</option>
-            <option value="SKU-1055">SKU-1055 (30 ml)</option>
-            <option value="SKU-1098">SKU-1098 (50 ml)</option>
-            <option value="SKU-1113">SKU-1113 (100 ml)</option>
-            <option value="SKU-1127">SKU-1127 (150 ml)</option>
-          </select>
         </div>
         <p style="font-size:10px;color:var(--c-muted);margin:0 0 8px;">Normal distribution centred on Mean fill. Shaded regions show probability of filling within/outside spec. LSL, Target, and USL lines from Tolerance Parameters.</p>
         <div class="chart-wrap" style="height:220px;"><canvas id="ch-cap-bell"></canvas></div>
@@ -3820,16 +3796,8 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
       </div>
 
       <!-- SG Summary Stats cards -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+      <div style="margin-bottom:8px;">
         <span style="font-size:12px;font-weight:700;color:var(--c-text);">SG Summary Statistics</span>
-        <select id="sg-timeframe-sel" class="slicer-select" style="font-size:11px;height:28px;" onchange="renderSGStats()">
-          <option value="r3m">Last 3M</option>
-          <option value="r6m">Last 6M</option>
-          <option value="r12m" selected>R12M</option>
-          <option value="fy26">FY26</option>
-          <option value="fy27">FY27</option>
-          <option value="all">All Time</option>
-        </select>
       </div>
       <div id="sg-stats-container"></div>
 
@@ -3896,31 +3864,9 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
 
     <!-- ── DRIVERS ── -->
     <div class="pane" id="pane-ov-drivers">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
-        <div>
-          <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Overfill Driver Decomposition</h3>
-          <p style="font-size:11px;color:var(--c-muted);margin:0;">Quantified breakdown by controllable driver: Brand, Set Point, Sigma, SG. Top 20 by total cost.</p>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div class="ov-viewby-row">
-            <button class="ov-viewby-btn active" id="vb-dr-agg"   onclick="setOVViewBy('drivers','agg')">Aggregate</button>
-            <button class="ov-viewby-btn"        id="vb-dr-res"   onclick="setOVViewBy('drivers','res')">Resource</button>
-            <button class="ov-viewby-btn"        id="vb-dr-sku"   onclick="setOVViewBy('drivers','sku')">SKU</button>
-            <button class="ov-viewby-btn"        id="vb-dr-plant" onclick="setOVViewBy('drivers','plant')">Plant</button>
-          </div>
-          <div style="position:relative;display:inline-block;">
-            <button class="export-btn" style="font-size:11px;padding:5px 10px;display:flex;align-items:center;gap:4px;" onclick="document.getElementById('drv-export-menu').classList.toggle('open')">
-              📥 Export
-              <span style="font-size:9px;opacity:.7;">▼</span>
-              <span class="info-tooltip" title="Export visible rows, top 100, or full filtered dataset (up to 30,000 rows). All columns included: Date, Plant, Resource, SKU, PO, Lot Size, Declared Content (ml/g), SG, Target Fill, Actual Fill, Overfill, Brand/SetPoint/Sigma/SG drivers, Cost/g, Total Cost." style="margin-left:4px;cursor:help;font-size:10px;" onclick="event.stopPropagation()">ℹ</span>
-            </button>
-            <div id="drv-export-menu" class="export-dropdown-menu" style="display:none;position:absolute;right:0;top:100%;margin-top:2px;background:var(--c-card);border:1px solid var(--c-border);border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:50;min-width:200px;padding:4px 0;">
-              <div class="export-dd-item" onclick="exportDriversCSV('visible');document.getElementById('drv-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Export Visible Rows</div>
-              <div class="export-dd-item" onclick="exportDriversCSV('top100');document.getElementById('drv-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Export Top 100</div>
-              <div class="export-dd-item" onclick="exportDriversCSV('full');document.getElementById('drv-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Filtered Dataset (up to 30K rows)</div>
-            </div>
-          </div>
-        </div>
+      <div style="margin-bottom:14px;">
+        <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Overfill Driver Decomposition</h3>
+        <p style="font-size:11px;color:var(--c-muted);margin:0;">Quantified breakdown by controllable driver: Brand, Set Point, Sigma, SG.</p>
       </div>
 
       <div class="gs-card" style="margin-bottom:14px;overflow-x:auto;">
@@ -3948,9 +3894,6 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         <p style="font-size:10px;color:var(--c-muted);margin:6px 0 0;padding:0 4px;border-top:1px solid #E0E0E0;padding-top:6px;">
           ⚠ Standard Costed Overfill uses current standard cost from SAP MM03. Historical cost changes are not tracked, so variance calculations for older POs may not reflect original costing. Source tables: MARA, MBEW (Steve to provide exact field mappings by Monday per July 10 meeting).
         </p>
-        <div style="text-align:center;margin-top:10px;">
-          <button id="btn-load-more-drv" class="btn-secondary" onclick="loadMoreDrivers()" style="font-size:11px;padding:6px 20px;">Load Next 20 →</button>
-        </div>
       </div>
 
       <div class="scatter-grid">
@@ -4071,24 +4014,11 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
 
     <!-- ── DATA EXPORT ── -->
     <div class="pane" id="pane-ov-export">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
-        <div>
-          <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Data Export</h3>
-          <p style="font-size:11px;color:var(--c-muted);margin:0;">Full overfill transaction dataset including all driver decomposition columns, SG, spec limits, and cost. All active filters applied. Max 30,000 rows per export (Power BI Service limit).</p>
-          <p style="font-size:10px;color:var(--c-muted);margin:4px 0 0;font-style:italic;">⚠ FreeWeigh coverage note: ~12 filling lines at Oevel are not yet connected to FreeWeigh and are excluded from this dataset. Lipstick lines are also excluded. Affected resources will appear with no data in overfill columns.</p>
-        </div>
-        <div style="position:relative;display:inline-block;">
-          <button class="export-btn" style="display:flex;align-items:center;gap:5px;" onclick="document.getElementById('exp-export-menu').classList.toggle('open')">
-            📥 Export to CSV
-            <span style="font-size:9px;opacity:.7;">▼</span>
-            <span class="info-tooltip" style="font-size:11px;cursor:help;opacity:.7;margin-left:2px;" title="Columns: Date, Plant, Resource, SKU, PO, Lot Size, Declared Content (ml), Declared Content (g) [=ml×SG], Specific Gravity (SG), Target Fill (g), Actual Fill (g), Overfill (g), Overfill % [of Declared g], Brand-Driven (g), Brand-Driven %, Set Point-Driven (g), Set Point-Driven %, Sigma-Driven (g), Sigma-Driven %, SG-Driven (g), SG-Driven %, Cost/g ($), Giveaway Cost ($), Standard Costed OV ($), Std Cost Variance ($), Costing Lot Size (units), Scrap % (Costed), Brand, Category, Subcategory, Package Type, Process Type, Life Cycle Stage. All % columns use Declared Content (g) as denominator." onclick="event.stopPropagation()">ℹ</span>
-          </button>
-          <div id="exp-export-menu" class="export-dropdown-menu" style="display:none;position:absolute;right:0;top:100%;margin-top:2px;background:var(--c-card);border:1px solid var(--c-border);border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:50;min-width:210px;padding:4px 0;">
-            <div class="export-dd-item" onclick="exportToCSV('visible');document.getElementById('exp-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Export Visible Rows</div>
-            <div class="export-dd-item" onclick="exportToCSV('top100');document.getElementById('exp-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Export Top 100</div>
-            <div class="export-dd-item" onclick="exportToCSV('full');document.getElementById('exp-export-menu').classList.remove('open');" style="padding:8px 14px;cursor:pointer;font-size:12px;color:var(--c-text);">Filtered Dataset (up to 30K rows)</div>
-          </div>
-        </div>
+      <div style="margin-bottom:14px;">
+        <h3 style="font-size:15px;font-weight:700;margin:0 0 3px;color:var(--c-text);">Data Export</h3>
+        <p style="font-size:11px;color:var(--c-muted);margin:0;">Full overfill transaction dataset including all driver decomposition columns, SG, spec limits, and cost. All active filters applied. Max 30,000 rows per export (Power BI Service limit).</p>
+        <p style="font-size:10px;color:var(--c-muted);margin:4px 0 0;font-style:italic;">⚠ FreeWeigh coverage note: ~12 filling lines at Oevel are not yet connected to FreeWeigh and are excluded from this dataset. Lipstick lines are also excluded. Affected resources will appear with no data in overfill columns.</p>
+        <p style="font-size:10px;color:var(--c-muted);margin:6px 0 0;">To export data: right-click the table or use Power BI's native "Export data" option in the visual menu.</p>
       </div>
       <div class="gs-card">
         <div class="export-wrap">
@@ -4105,9 +4035,6 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
             </thead>
             <tbody id="tb-export-body"></tbody>
           </table>
-        </div>
-        <div style="margin-top:10px;text-align:center;">
-          <button id="btn-load-more-exp" class="btn-secondary" onclick="loadMoreExport()" style="font-size:11px;padding:6px 20px;">Load Next 50 rows →</button>
         </div>
       </div>
     </div><!-- /pane-ov-export -->
@@ -6961,13 +6888,11 @@ function renderOVKPIs() {
   row2.innerHTML = `
     <div class="ov-kpi-card">
       <span class="ov-kpi-label">Total Overfill Quantity</span>
-      <span class="ov-kpi-value">${_fmtKg(OV_SUMMARY.totalOverfillKg)}</span>
-      <span class="ov-kpi-sub">${OV_SUMMARY.totalOverfillKg.toLocaleString()} kg above target</span>
+      <span class="ov-kpi-value">${OV_SUMMARY.totalOverfillKg.toLocaleString()} kg</span>
     </div>
     <div class="ov-kpi-card">
       <span class="ov-kpi-label">Brand Required Overfill Qty</span>
-      <span class="ov-kpi-value">${_fmtKg(OV_SUMMARY.brandRequiredKg)}</span>
-      <span class="ov-kpi-sub">LSL – Declared Content · necessary overfill</span>
+      <span class="ov-kpi-value">${OV_SUMMARY.brandRequiredKg.toLocaleString()} kg</span>
     </div>
     <div class="ov-kpi-card avg-pct-card">
       <span class="ov-kpi-label">Avg Overfill %</span>
@@ -7801,6 +7726,7 @@ function closeTop10Modal(e) {
 let OV_TREND_VIEW         = 'res';       // legacy — kept for setTrendAnalysisView compat
 let OV_TREND_MODE         = 'agg';       // 'agg' | 'decompose'
 let OV_TREND_DECOMPOSE_BY = 'res';       // 'res' | 'sku' | 'plant'
+let _trendCompareMode     = 'none';      // 'none' | 'yoy' | 'prev12'
 let OV_TREND_SEL    = [];      // selected legend keys (for Change 15)
 let OV_TREND_LEGEND_COST = []; // label strings for cost chart
 let OV_TREND_LEGEND_QTY  = [];
@@ -8020,6 +7946,16 @@ function updateTrendCharts() {
   initOVTrendCharts();
 }
 
+function setTrendCompare(mode, btn) {
+  _trendCompareMode = mode;
+  document.querySelectorAll('#trend-compare-btns .ov-toggle-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  OV_TREND_SEL = [];
+  _destroyTrendCharts();
+  OV_INITED['trend'] = true;
+  initOVTrendCharts();
+}
+
 function setTrendMode(mode) {
   OV_TREND_MODE = mode;
   ['agg','decompose'].forEach(m => {
@@ -8061,7 +7997,8 @@ function trendSKUSelect(sku) {
 
 function _destroyTrendCharts() {
   OV_INITED['trend'] = false;
-  ['ch-ov-trend-cost','ch-ov-trend-qty','ch-ov-trend-cost-wow','ch-ov-trend-qty-wow'].forEach(id => {
+  ['ch-ov-trend-cost','ch-ov-trend-qty','ch-ov-trend-cost-wow','ch-ov-trend-qty-wow',
+   'ch-ov-trend-cost-compare','ch-ov-trend-qty-compare'].forEach(id => {
     if (REG[id]) { REG[id].destroy(); delete REG[id]; }
   });
 }
@@ -8073,77 +8010,120 @@ function initOVTrendCharts() {
   const dropEl = document.getElementById('trend-sku-dropdown');
   if (dropEl) dropEl.value = sku;
 
-  const yoyEl      = document.getElementById('trend-yoy-select');
-  const compareMode = yoyEl ? yoyEl.value : 'none';
-  const isMoM      = compareMode === 'mom';
-  const isWoW      = compareMode === 'wow';
-  const xLabels    = isMoM ? OV_TREND_MONTHS : OV_WEEKS;
+  const compareMode = _trendCompareMode;
+  const isComparing = compareMode !== 'none';
+  const xLabels     = OV_WEEKS;
 
-  /* Show/hide WoW panels */
-  const wowCostWrap = document.getElementById('trend-wow-cost-wrap');
-  const wowQtyWrap  = document.getElementById('trend-wow-qty-wrap');
-  if (wowCostWrap) wowCostWrap.style.display = isWoW ? '' : 'none';
-  if (wowQtyWrap)  wowQtyWrap.style.display  = isWoW ? '' : 'none';
+  /* Show/hide comparison chart sections (T2) and resize primary chart height (T4) */
+  const costCmpSection = document.getElementById('trend-cost-compare-section');
+  const qtyCmpSection  = document.getElementById('trend-qty-compare-section');
+  const costChartWrap  = document.getElementById('trend-cost-chart-wrap');
+  const qtyChartWrap   = document.getElementById('trend-qty-chart-wrap');
+  const costPrimaryLbl = document.getElementById('trend-cost-primary-label');
+  const qtyPrimaryLbl  = document.getElementById('trend-qty-primary-label');
+  const costCompareLbl = document.getElementById('trend-cost-compare-label');
+  const qtyCompareLbl  = document.getElementById('trend-qty-compare-label');
+
+  if (isComparing) {
+    if (costCmpSection) costCmpSection.style.display = '';
+    if (qtyCmpSection)  qtyCmpSection.style.display  = '';
+    /* Shrink primary charts slightly to give room for comparison pair */
+    if (costChartWrap) costChartWrap.style.height = '200px';
+    if (qtyChartWrap)  qtyChartWrap.style.height  = '200px';
+    const cmpLabel = compareMode === 'yoy' ? 'Same period last year (YoY)' : 'Previous 12 weeks';
+    if (costPrimaryLbl) { costPrimaryLbl.textContent = 'Current period'; costPrimaryLbl.style.display = ''; }
+    if (qtyPrimaryLbl)  { qtyPrimaryLbl.textContent  = 'Current period'; qtyPrimaryLbl.style.display  = ''; }
+    if (costCompareLbl) costCompareLbl.textContent = cmpLabel;
+    if (qtyCompareLbl)  qtyCompareLbl.textContent  = cmpLabel;
+  } else {
+    if (costCmpSection) costCmpSection.style.display = 'none';
+    if (qtyCmpSection)  qtyCmpSection.style.display  = 'none';
+    if (costChartWrap) costChartWrap.style.height = '220px';
+    if (qtyChartWrap)  qtyChartWrap.style.height  = '220px';
+    if (costPrimaryLbl) costPrimaryLbl.style.display = 'none';
+    if (qtyPrimaryLbl)  qtyPrimaryLbl.style.display  = 'none';
+  }
 
   /* Show legend click tip */
   const tip = document.getElementById('trend-legend-tip');
   if (tip) tip.style.display = OV_TREND_SEL.length > 0 ? '' : 'none';
 
-  /* Build datasets based on mode */
-  let costDs, qtyDs;
+  /* Build full datasets (includes comparison period as separate dataset entries) */
+  let allCostDs, allQtyDs;
   if (OV_TREND_MODE === 'agg') {
-    costDs = _trendAggDatasets('cost', compareMode, sites);
-    qtyDs  = _trendAggDatasets('qty',  compareMode, sites);
+    allCostDs = _trendAggDatasets('cost', compareMode, sites);
+    allQtyDs  = _trendAggDatasets('qty',  compareMode, sites);
   } else {
     if (OV_TREND_DECOMPOSE_BY === 'sku') {
-      costDs = _trendBySKUDatasets('cost');
-      qtyDs  = _trendBySKUDatasets('qty');
+      allCostDs = _trendBySKUDatasets('cost');
+      allQtyDs  = _trendBySKUDatasets('qty');
     } else {
-      costDs = _trendByResDatasets('cost', compareMode, sites);
-      qtyDs  = _trendByResDatasets('qty',  compareMode, sites);
+      allCostDs = _trendByResDatasets('cost', compareMode, sites);
+      allQtyDs  = _trendByResDatasets('qty',  compareMode, sites);
     }
   }
+
+  /* Split datasets into primary (current) and comparison (prev) for dual-chart mode */
+  const costPrimaryDs = isComparing ? allCostDs.filter(d => !d.label.includes('(prev)')) : allCostDs;
+  const costCompareDs = allCostDs.filter(d => d.label.includes('(prev)'));
+  const qtyPrimaryDs  = isComparing ? allQtyDs.filter(d => !d.label.includes('(prev)')) : allQtyDs;
+  const qtyCompareDs  = allQtyDs.filter(d => d.label.includes('(prev)'));
+
+  /* Strip "(prev)" suffix from comparison chart labels for cleaner display */
+  const cleanLabel = ds => ds.map(d => ({ ...d, label: d.label.replace(/\s*\(prev\)$/, '') }));
 
   const legendCost = _makeClickableLegend('ch-ov-trend-cost', 'trend-legend-tip');
   const legendQty  = _makeClickableLegend('ch-ov-trend-qty',  null);
 
   init('ch-ov-trend-cost', {
     type: 'line',
-    data: { labels: xLabels, datasets: costDs },
+    data: { labels: xLabels, datasets: costPrimaryDs },
     options: {
       ...baseOpts('Giveaway Cost ($)'),
       plugins: {
         legend: legendCost,
-        tooltip: { callbacks: _makeDecompTooltipCallbacks(costDs, 'cost', compareMode) }
+        tooltip: { callbacks: _makeDecompTooltipCallbacks(costPrimaryDs, 'cost', 'none') }
       }
     }
   });
 
   init('ch-ov-trend-qty', {
     type: 'line',
-    data: { labels: xLabels, datasets: qtyDs },
+    data: { labels: xLabels, datasets: qtyPrimaryDs },
     options: {
       ...baseOpts('Quantity (kg)'),
       plugins: {
         legend: legendQty,
-        tooltip: { callbacks: _makeDecompTooltipCallbacks(qtyDs, 'qty', compareMode) }
+        tooltip: { callbacks: _makeDecompTooltipCallbacks(qtyPrimaryDs, 'qty', 'none') }
       }
     }
   });
 
-  /* WoW bar charts */
-  if (isWoW) {
-    const wowCostDs = isByRes ? _buildWoWDatasets('cost', sites) : [];
-    const wowQtyDs  = isByRes ? _buildWoWDatasets('qty',  sites) : [];
-    init('ch-ov-trend-cost-wow', {
-      type: 'bar',
-      data: { labels: OV_WEEKS, datasets: wowCostDs },
-      options: { ...baseOpts('WoW Δ Cost ($)'), plugins:{ legend:{ display:true, labels:{color:CC.text,font:{size:10},boxWidth:10} } } }
+  /* Render comparison charts when mode is active (T2) */
+  if (isComparing && costCompareDs.length > 0) {
+    init('ch-ov-trend-cost-compare', {
+      type: 'line',
+      data: { labels: xLabels, datasets: cleanLabel(costCompareDs) },
+      options: {
+        ...baseOpts('Giveaway Cost ($)'),
+        plugins: {
+          legend: { display: true, labels: { color: CC.text, font: { size: 10 }, boxWidth: 10 } },
+          tooltip: { callbacks: _makeDecompTooltipCallbacks(costCompareDs, 'cost', 'none') }
+        }
+      }
     });
-    init('ch-ov-trend-qty-wow', {
-      type: 'bar',
-      data: { labels: OV_WEEKS, datasets: wowQtyDs },
-      options: { ...baseOpts('WoW Δ Qty (kg)'), plugins:{ legend:{ display:true, labels:{color:CC.text,font:{size:10},boxWidth:10} } } }
+  }
+  if (isComparing && qtyCompareDs.length > 0) {
+    init('ch-ov-trend-qty-compare', {
+      type: 'line',
+      data: { labels: xLabels, datasets: cleanLabel(qtyCompareDs) },
+      options: {
+        ...baseOpts('Quantity (kg)'),
+        plugins: {
+          legend: { display: true, labels: { color: CC.text, font: { size: 10 }, boxWidth: 10 } },
+          tooltip: { callbacks: _makeDecompTooltipCallbacks(qtyCompareDs, 'qty', 'none') }
+        }
+      }
     });
   }
 }
@@ -8561,7 +8541,11 @@ function renderSGStats() {
   const tf  = sel ? sel.value : 'r12m';
   const tfLabel = { r3m:'Last 3M', r6m:'Last 6M', r12m:'R12M', fy26:'FY26', fy27:'FY27', all:'All Time' }[tf] || tf;
 
-  container.innerHTML = Object.entries(OV_SG_STATS).map(([sku, s]) => {
+  const entries = Object.entries(OV_SG_STATS);
+  const n = entries.length;
+  const colsCls = n <= 2 ? '' : n <= 6 ? 'cols-2' : 'cols-3';
+
+  const cardsHtml = entries.map(([sku, s]) => {
     const specWidth  = s.specMax - s.specMin;
     const widthCls   = specWidth < 0.05 ? 'sg-spec-width-green' : specWidth < 0.10 ? 'sg-spec-width-yellow' : 'sg-spec-width-red';
     const isOutOfSpec = s.maxDemo > s.specMax;
@@ -8609,6 +8593,8 @@ function renderSGStats() {
         </div>
       </div>`;
   }).join('');
+
+  container.innerHTML = `<div class="sg-stats-outer ${colsCls}">${cardsHtml}</div>`;
 }
 
 function renderControlLimits() {
