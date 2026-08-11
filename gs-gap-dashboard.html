@@ -1424,6 +1424,177 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
 }
 .intel-toggle-btn:hover { background: var(--c-blue); color: #fff; border-color: var(--c-blue); }
 .intel-toggle-active { background: var(--c-blue) !important; color: #fff !important; border-color: var(--c-blue) !important; }
+
+/* ── Intel Scenario Toggle ── */
+.intel-scenario-btn {
+  padding: 9px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 2px solid var(--c-border);
+  border-radius: 22px;
+  background: var(--c-card);
+  color: var(--c-muted);
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s, box-shadow .2s;
+}
+.intel-scenario-btn:hover { border-color: var(--c-blue); color: var(--c-blue); }
+.intel-scenario-btn.active {
+  background: var(--c-blue);
+  color: #fff;
+  border-color: var(--c-blue);
+  box-shadow: 0 2px 8px rgba(37,99,235,.3);
+}
+
+/* ── What-If Slider Section ── */
+.wi-slider-section {
+  background: var(--c-card);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  padding: 24px 28px;
+}
+.wi-slider-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 190px;
+  gap: 20px;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--c-border);
+}
+.wi-slider-row:last-of-type { border-bottom: none; }
+.wi-slider-label { font-size: 14px; font-weight: 700; color: var(--c-text); }
+.wi-slider-wrap { position: relative; }
+input[type=range].wi-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--c-border);
+  outline: none;
+  cursor: pointer;
+  display: block;
+}
+input[type=range].wi-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+  cursor: pointer;
+}
+input[type=range].wi-slider.speed::-webkit-slider-thumb { background: #1976D2; }
+input[type=range].wi-slider.labor::-webkit-slider-thumb { background: #F59E0B; }
+input[type=range].wi-slider.oee::-webkit-slider-thumb   { background: #8B5CF6; }
+input[type=range].wi-slider.scrap::-webkit-slider-thumb { background: #10B981; }
+input[type=range].wi-slider::-moz-range-thumb {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+  cursor: pointer;
+}
+input[type=range].wi-slider.speed::-moz-range-thumb { background: #1976D2; }
+input[type=range].wi-slider.labor::-moz-range-thumb { background: #F59E0B; }
+input[type=range].wi-slider.oee::-moz-range-thumb   { background: #8B5CF6; }
+input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
+.wi-slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--c-muted);
+  margin-top: 6px;
+}
+.wi-snap-tip {
+  display: none;
+  position: absolute;
+  bottom: 32px;
+  background: var(--c-text);
+  color: var(--c-card);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+.wi-snap-tip.visible { display: block; }
+.wi-snap-tip::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--c-text);
+}
+.wi-stats { display: flex; flex-direction: column; gap: 4px; text-align: right; }
+.wi-stat-current { font-size: 11px; color: var(--c-muted); }
+.wi-stat-target  { font-size: 13px; font-weight: 700; color: var(--c-text); }
+.wi-stat-savings { font-size: 14px; font-weight: 800; color: #16a34a; }
+.wi-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
+.wi-btn {
+  padding: 8px 20px;
+  font-size: 12px; font-weight: 700;
+  border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--c-border);
+  background: var(--c-card); color: var(--c-text);
+  transition: background .15s;
+}
+.wi-btn:hover { background: var(--c-bg); }
+.wi-btn-primary { background: var(--c-blue); color: #fff; border-color: var(--c-blue); }
+.wi-btn-primary:hover { background: #1d4ed8; }
+.wi-btn-save { background: #16a34a; color: #fff; border-color: #16a34a; }
+.wi-btn-save:hover { background: #15803d; }
+
+/* ── Save Scenario Modal ── */
+.wi-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 1000; align-items: center; justify-content: center;
+}
+.wi-modal-overlay.open { display: flex; }
+.wi-modal {
+  background: var(--c-card); border-radius: 12px;
+  padding: 28px 32px; width: 420px; max-width: 90vw;
+  box-shadow: 0 8px 40px rgba(0,0,0,.25);
+}
+.wi-modal-title { font-size: 16px; font-weight: 800; color: var(--c-text); margin-bottom: 20px; }
+.wi-modal-field { margin-bottom: 14px; }
+.wi-modal-field label {
+  display: block; font-size: 11px; font-weight: 600;
+  color: var(--c-muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 5px;
+}
+.wi-modal-field input, .wi-modal-field textarea {
+  width: 100%; padding: 8px 10px;
+  border: 1px solid var(--c-border); border-radius: 6px;
+  background: var(--c-bg); color: var(--c-text);
+  font-size: 13px; box-sizing: border-box; font-family: inherit;
+}
+.wi-modal-field textarea { resize: vertical; min-height: 60px; }
+.wi-modal-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+/* ── Toast ── */
+.wi-toast {
+  display: none; position: fixed;
+  bottom: 24px; right: 24px;
+  background: #1e293b; color: #fff;
+  padding: 10px 18px; border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0,0,0,.25);
+  z-index: 2000;
+}
+.wi-toast.visible { display: block; animation: wiSlideIn .3s ease; }
+@keyframes wiFlash {
+  0%   { opacity: 1; }
+  30%  { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+@keyframes wiSlideIn {
+  from { transform: translateY(8px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
 </style>
 </head>
 <body>
@@ -1441,8 +1612,6 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
       <button id="btn-module-gs" class="module-btn active" onclick="showModule('gs')">Gold Standard Gap</button>
       <span class="module-sep">|</span>
       <button id="btn-module-overfill" class="module-btn" onclick="showModule('overfill')">Overfill Analysis</button>
-      <span class="module-sep">|</span>
-      <button id="btn-module-intelligence" class="module-btn" onclick="showModule('intelligence')">Intelligence</button>
     </div>
     <span style="color:rgba(255,255,255,0.2);font-size:15px;user-select:none;">|</span>
     <div id="gs-type-indicator" class="gs-type-badge governed">
@@ -1876,12 +2045,12 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <div class="knc-static-badge">reference only</div>
         </div>
       </div>
-      <button class="kpi-nav-card" id="knc-massattr" onclick="showKPI('massattr')">
-        <span class="knc-icon">🔬</span>
+      <button class="kpi-nav-card" id="knc-whatif" onclick="showWhatIf()">
+        <span class="knc-icon">💡</span>
         <div class="knc-body">
-          <div class="knc-kpi">Mass Attr.</div>
-          <div class="knc-val" style="font-size:12px;font-weight:700;">LIMS</div>
-          <div class="knc-delta neutral">View analysis →</div>
+          <div class="knc-kpi">What-If ($)</div>
+          <div class="knc-val" style="font-size:12px;font-weight:700;">$572K</div>
+          <div class="knc-delta" style="color:#16a34a;">▲ Model →</div>
         </div>
       </button>
     </div>
@@ -4048,13 +4217,12 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
     <div style="padding:20px 24px;">
 
       <!-- ── Page Header ── -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
         <div>
           <div style="font-size:18px;font-weight:700;color:var(--c-text);">Intelligence — Performance Improvement Recommendations</div>
-          <div style="font-size:12px;color:var(--c-muted);margin-top:2px;">What-If financial modelling across Speed, Labor, OEE, Scrap, and Mass Attributes</div>
+          <div style="font-size:12px;color:var(--c-muted);margin-top:2px;">What-If financial modelling across Speed, Labor, OEE, and Scrap</div>
         </div>
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-          <!-- Governed badge + date pickers -->
           <div class="gs-type-badge governed" style="font-size:11px;">🔒 Governed GS · FY25</div>
           <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--c-muted);">
             <span>From</span>
@@ -4062,7 +4230,6 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
             <span>To</span>
             <input type="text" id="intel-date-to" value="30.06.2025" style="width:88px;padding:4px 7px;border:1px solid var(--c-border);border-radius:5px;font-size:12px;background:var(--c-card);color:var(--c-text);text-align:center;">
           </div>
-          <!-- Time window buttons -->
           <div style="display:flex;gap:4px;">
             <button class="intel-tw-btn" onclick="setIntelWindow('1w',this)">1 Week</button>
             <button class="intel-tw-btn" onclick="setIntelWindow('3w',this)">3 Weeks</button>
@@ -4072,178 +4239,278 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         </div>
       </div>
 
-      <!-- ── 3 Summary Cards ── -->
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
-
-        <!-- Total Opportunity -->
-        <div style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:10px;padding:20px 22px;color:#fff;position:relative;overflow:hidden;">
-          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;opacity:.85;margin-bottom:8px;">Total Opportunity $</div>
-          <div style="font-size:48px;font-weight:800;line-height:1;margin-bottom:6px;">$612.1K</div>
-          <div style="font-size:11px;opacity:.75;">Combined Engineering + Operational gap</div>
-          <div style="position:absolute;right:-16px;top:-16px;font-size:80px;opacity:.08;line-height:1;">$</div>
-        </div>
-
-        <!-- Engineering Gap -->
-        <div style="background:var(--c-card);border:3px solid var(--c-blue);border-radius:10px;padding:20px 22px;position:relative;">
-          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">⚙️ Engineering Gap $</div>
-          <div style="font-size:48px;font-weight:800;line-height:1;color:var(--c-blue);margin-bottom:6px;">$248.4K</div>
-          <div style="font-size:11px;color:var(--c-muted);">GS − RS: may require equipment upgrades or formula adjustments</div>
-        </div>
-
-        <!-- Operational Gap -->
-        <div style="background:var(--c-card);border:3px solid #ef4444;border-radius:10px;padding:20px 22px;position:relative;">
-          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">📈 Operational Gap $</div>
-          <div style="font-size:48px;font-weight:800;line-height:1;color:#ef4444;margin-bottom:6px;">$363.7K</div>
-          <div style="font-size:11px;color:var(--c-muted);">RS − Actual: actionable by CE teams today</div>
-        </div>
-
+      <!-- ── Scenario Toggle ── -->
+      <div style="display:flex;justify-content:center;gap:16px;margin-bottom:20px;">
+        <button class="intel-scenario-btn active" data-mode="historical" onclick="setIntelScenario('historical')">📊 Historical Analysis</button>
+        <button class="intel-scenario-btn" data-mode="whatif" onclick="setIntelScenario('whatif')">💡 What-If Scenario</button>
       </div>
 
-      <!-- ── KPI Cards row ── -->
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;">
+      <!-- ════════════════════════════════════════════
+           HISTORICAL ANALYSIS SECTION
+           ════════════════════════════════════════════ -->
+      <div id="intel-historical">
 
-        <!-- Speed -->
-        <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('speed',this)">
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">⚡ Speed</div>
-          <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$184.2K</div>
-          <div style="font-size:10px;color:#16a34a;font-weight:600;">↑ 28 POs with gap</div>
-          <div style="margin-top:8px;display:flex;gap:4px;">
-            <div style="flex:3;height:4px;background:#3b82f6;border-radius:2px;" title="Engineering"></div>
-            <div style="flex:5;height:4px;background:#ef4444;border-radius:2px;" title="Operational"></div>
+        <!-- Summary Cards -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
+          <div style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:10px;padding:20px 22px;color:#fff;position:relative;overflow:hidden;">
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;opacity:.85;margin-bottom:8px;">Total Opportunity $</div>
+            <div style="font-size:48px;font-weight:800;line-height:1;margin-bottom:6px;">$612.1K</div>
+            <div style="font-size:11px;opacity:.75;">Combined Engineering + Operational gap</div>
+            <div style="position:absolute;right:-16px;top:-16px;font-size:80px;opacity:.08;line-height:1;">$</div>
           </div>
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
+          <div style="background:var(--c-card);border:3px solid var(--c-blue);border-radius:10px;padding:20px 22px;position:relative;">
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">⚙️ Engineering Gap $</div>
+            <div style="font-size:48px;font-weight:800;line-height:1;color:var(--c-blue);margin-bottom:6px;">$248.4K</div>
+            <div style="font-size:11px;color:var(--c-muted);">GS − RS: may require equipment upgrades or formula adjustments</div>
+          </div>
+          <div style="background:var(--c-card);border:3px solid #ef4444;border-radius:10px;padding:20px 22px;position:relative;">
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">📈 Operational Gap $</div>
+            <div style="font-size:48px;font-weight:800;line-height:1;color:#ef4444;margin-bottom:6px;">$363.7K</div>
+            <div style="font-size:11px;color:var(--c-muted);">RS − Actual: actionable by CE teams today</div>
+          </div>
         </div>
 
-        <!-- Labor -->
-        <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('labor',this)">
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">👥 Labor</div>
-          <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$98.6K</div>
-          <div style="font-size:10px;color:#16a34a;font-weight:600;">↑ 22 POs with gap</div>
-          <div style="margin-top:8px;display:flex;gap:4px;">
-            <div style="flex:2;height:4px;background:#3b82f6;border-radius:2px;"></div>
-            <div style="flex:6;height:4px;background:#ef4444;border-radius:2px;"></div>
+        <!-- KPI Cards (4 only — LIMS removed) -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+          <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('speed',this)">
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">⚡ Speed</div>
+            <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$184.2K</div>
+            <div style="font-size:10px;color:#16a34a;font-weight:600;">↑ 28 POs with gap</div>
+            <div style="margin-top:8px;display:flex;gap:4px;"><div style="flex:3;height:4px;background:#3b82f6;border-radius:2px;"></div><div style="flex:5;height:4px;background:#ef4444;border-radius:2px;"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
           </div>
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
+          <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('labor',this)">
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">👥 Labor</div>
+            <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$98.6K</div>
+            <div style="font-size:10px;color:#16a34a;font-weight:600;">↑ 22 POs with gap</div>
+            <div style="margin-top:8px;display:flex;gap:4px;"><div style="flex:2;height:4px;background:#3b82f6;border-radius:2px;"></div><div style="flex:6;height:4px;background:#ef4444;border-radius:2px;"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
+          </div>
+          <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('oee',this)">
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">⚙️ OEE</div>
+            <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$221.5K</div>
+            <div style="font-size:10px;color:#16a34a;font-weight:600;">↑ 31 POs with gap</div>
+            <div style="margin-top:8px;display:flex;gap:4px;"><div style="flex:4;height:4px;background:#3b82f6;border-radius:2px;"></div><div style="flex:4;height:4px;background:#ef4444;border-radius:2px;"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
+          </div>
+          <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('scrap',this)">
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">🗑️ Scrap</div>
+            <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$67.8K</div>
+            <div style="font-size:10px;color:var(--c-muted);font-weight:600;">→ See Steven's dashboard</div>
+            <div style="margin-top:8px;display:flex;gap:4px;"><div style="flex:2;height:4px;background:#3b82f6;border-radius:2px;"></div><div style="flex:3;height:4px;background:#ef4444;border-radius:2px;"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
+          </div>
         </div>
 
-        <!-- OEE -->
-        <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('oee',this)">
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">⚙️ OEE</div>
-          <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$221.5K</div>
-          <div style="font-size:10px;color:#16a34a;font-weight:600;">↑ 31 POs with gap</div>
-          <div style="margin-top:8px;display:flex;gap:4px;">
-            <div style="flex:4;height:4px;background:#3b82f6;border-radius:2px;"></div>
-            <div style="flex:4;height:4px;background:#ef4444;border-radius:2px;"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
-        </div>
-
-        <!-- Scrap -->
-        <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('scrap',this)">
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">🗑️ Scrap</div>
-          <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$67.8K</div>
-          <div style="font-size:10px;color:var(--c-muted);font-weight:600;">→ See Steven's dashboard</div>
-          <div style="margin-top:8px;display:flex;gap:4px;">
-            <div style="flex:2;height:4px;background:#3b82f6;border-radius:2px;"></div>
-            <div style="flex:3;height:4px;background:#ef4444;border-radius:2px;"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
-        </div>
-
-        <!-- Mass Attr LIMS -->
-        <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('massattr',this)">
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">🧪 Mass Attr. LIMS</div>
-          <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$40.0K</div>
-          <div style="font-size:10px;color:var(--c-muted);font-weight:600;">→ External LIMS system</div>
-          <div style="margin-top:8px;display:flex;gap:4px;">
-            <div style="flex:1;height:4px;background:#3b82f6;border-radius:2px;"></div>
-            <div style="flex:3;height:4px;background:#ef4444;border-radius:2px;"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
-        </div>
-
-      </div>
-
-      <!-- ── Stacked Bar Chart + Toggle ── -->
-      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:20px;">
-
-        <div class="card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-            <span class="card-title">Opportunity by KPI</span>
-            <div style="display:flex;gap:4px;">
-              <button class="intel-toggle-btn intel-toggle-active" id="intel-chart-upm" onclick="switchIntelChartView('upm',this)">UPM</button>
-              <button class="intel-toggle-btn" id="intel-chart-dollar" onclick="switchIntelChartView('dollar',this)">$</button>
+        <!-- Chart + Improvement Scenarios Table -->
+        <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:20px;">
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <span class="card-title">Opportunity by KPI</span>
+              <div style="display:flex;gap:4px;">
+                <button class="intel-toggle-btn intel-toggle-active" id="intel-chart-upm" onclick="switchIntelChartView('upm',this)">UPM</button>
+                <button class="intel-toggle-btn" id="intel-chart-dollar" onclick="switchIntelChartView('dollar',this)">$</button>
+              </div>
+            </div>
+            <div style="position:relative;height:220px;"><canvas id="ch-intel-bar"></canvas></div>
+            <div style="display:flex;gap:12px;margin-top:8px;justify-content:center;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--c-muted);"><div style="width:10px;height:10px;border-radius:2px;background:#3b82f6;"></div>Engineering Gap</div>
+              <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--c-muted);"><div style="width:10px;height:10px;border-radius:2px;background:#ef4444;"></div>Operational Gap</div>
             </div>
           </div>
-          <div style="position:relative;height:220px;">
-            <canvas id="ch-intel-bar"></canvas>
-          </div>
-          <div style="display:flex;gap:12px;margin-top:8px;justify-content:center;flex-wrap:wrap;">
-            <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--c-muted);"><div style="width:10px;height:10px;border-radius:2px;background:#3b82f6;"></div>Engineering Gap</div>
-            <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--c-muted);"><div style="width:10px;height:10px;border-radius:2px;background:#ef4444;"></div>Operational Gap</div>
+          <div class="card">
+            <span class="card-title">Improvement Scenarios</span>
+            <div class="card-subtitle" style="margin-bottom:10px;">Estimated $ savings by closing % of identified gap</div>
+            <table style="width:100%;border-collapse:collapse;font-size:12px;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--c-border);">
+                  <th style="text-align:left;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">KPI</th>
+                  <th style="text-align:right;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">25% Close</th>
+                  <th style="text-align:right;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">50% Close</th>
+                  <th style="text-align:right;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">Full Close</th>
+                </tr>
+              </thead>
+              <tbody id="intel-scenario-tbody">
+                <tr style="border-bottom:1px solid var(--c-border);"><td style="padding:6px;font-weight:600;">⚡ Speed</td><td style="padding:6px;text-align:right;">$46.1K</td><td style="padding:6px;text-align:right;">$92.1K</td><td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$184.2K</td></tr>
+                <tr style="border-bottom:1px solid var(--c-border);"><td style="padding:6px;font-weight:600;">👥 Labor</td><td style="padding:6px;text-align:right;">$24.7K</td><td style="padding:6px;text-align:right;">$49.3K</td><td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$98.6K</td></tr>
+                <tr style="border-bottom:1px solid var(--c-border);"><td style="padding:6px;font-weight:600;">⚙️ OEE</td><td style="padding:6px;text-align:right;">$55.4K</td><td style="padding:6px;text-align:right;">$110.8K</td><td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$221.5K</td></tr>
+                <tr style="border-bottom:1px solid var(--c-border);"><td style="padding:6px;font-weight:600;">🗑️ Scrap</td><td style="padding:6px;text-align:right;">$17.0K</td><td style="padding:6px;text-align:right;">$33.9K</td><td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$67.8K</td></tr>
+                <tr><td style="padding:6px;font-weight:800;color:var(--c-text);">Total</td><td style="padding:6px;text-align:right;font-weight:700;">$143.2K</td><td style="padding:6px;text-align:right;font-weight:700;">$286.1K</td><td style="padding:6px;text-align:right;font-weight:800;color:#16a34a;">$572.1K</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <!-- Improvement Scenarios Table -->
-        <div class="card">
-          <span class="card-title">Improvement Scenarios</span>
-          <div class="card-subtitle" style="margin-bottom:10px;">Estimated $ savings by closing % of identified gap</div>
-          <table style="width:100%;border-collapse:collapse;font-size:12px;">
-            <thead>
-              <tr style="border-bottom:2px solid var(--c-border);">
-                <th style="text-align:left;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">KPI</th>
-                <th style="text-align:right;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">25% Close</th>
-                <th style="text-align:right;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">50% Close</th>
-                <th style="text-align:right;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">Full Close</th>
-              </tr>
-            </thead>
-            <tbody id="intel-scenario-tbody">
-              <tr style="border-bottom:1px solid var(--c-border);">
-                <td style="padding:6px;font-weight:600;">⚡ Speed</td>
-                <td style="padding:6px;text-align:right;">$46.1K</td>
-                <td style="padding:6px;text-align:right;">$92.1K</td>
-                <td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$184.2K</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--c-border);">
-                <td style="padding:6px;font-weight:600;">👥 Labor</td>
-                <td style="padding:6px;text-align:right;">$24.7K</td>
-                <td style="padding:6px;text-align:right;">$49.3K</td>
-                <td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$98.6K</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--c-border);">
-                <td style="padding:6px;font-weight:600;">⚙️ OEE</td>
-                <td style="padding:6px;text-align:right;">$55.4K</td>
-                <td style="padding:6px;text-align:right;">$110.8K</td>
-                <td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$221.5K</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--c-border);">
-                <td style="padding:6px;font-weight:600;">🗑️ Scrap</td>
-                <td style="padding:6px;text-align:right;">$17.0K</td>
-                <td style="padding:6px;text-align:right;">$33.9K</td>
-                <td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$67.8K</td>
-              </tr>
-              <tr>
-                <td style="padding:6px;font-weight:800;color:var(--c-text);">Total</td>
-                <td style="padding:6px;text-align:right;font-weight:700;">$143.2K</td>
-                <td style="padding:6px;text-align:right;font-weight:700;">$286.1K</td>
-                <td style="padding:6px;text-align:right;font-weight:800;color:#16a34a;">$572.1K</td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- Footer -->
+        <div class="info-box" style="font-size:11px;padding:10px 14px;">
+          📌 <strong>Methodology:</strong> Kris Van Deursen's financial model. Engineering Gap = GS − RS (may require equipment upgrades, formula adjustments, or size optimization). Operational Gap = RS − Actual (actionable by CE teams). All figures are estimates based on planned SAP orders — for capital investment analysis only, not for operational targets. Z-variant and ZNFA orders excluded.
         </div>
 
-      </div>
+      </div><!-- /intel-historical -->
 
-      <!-- ── Footer note ── -->
-      <div class="info-box" style="font-size:11px;padding:10px 14px;">
-        📌 <strong>Methodology:</strong> Kris Van Deursen's financial model. Engineering Gap = GS − RS (may require equipment upgrades, formula adjustments, or size optimization). Operational Gap = RS − Actual (actionable by CE teams). All figures are estimates based on planned SAP orders — for capital investment analysis only, not for operational targets. Z-variant and ZNFA orders excluded.
-      </div>
+      <!-- ════════════════════════════════════════════
+           WHAT-IF SCENARIO SECTION
+           ════════════════════════════════════════════ -->
+      <div id="intel-whatif" style="display:none;">
+
+        <!-- Dynamic Summary Cards -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
+          <div style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:10px;padding:20px 22px;color:#fff;position:relative;overflow:hidden;">
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;opacity:.85;margin-bottom:8px;">Total Scenario Savings</div>
+            <div style="font-size:48px;font-weight:800;line-height:1;margin-bottom:6px;" id="wi-total-val">$0</div>
+            <div style="font-size:11px;opacity:.75;">Move sliders to model improvement</div>
+            <div style="position:absolute;right:-16px;top:-16px;font-size:80px;opacity:.08;line-height:1;">$</div>
+          </div>
+          <div style="background:var(--c-card);border:3px solid var(--c-blue);border-radius:10px;padding:20px 22px;">
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">🕐 Time Window</div>
+            <div style="font-size:28px;font-weight:800;line-height:1;color:var(--c-blue);margin-bottom:6px;" id="wi-window-label">1 Month</div>
+            <div style="font-size:11px;color:var(--c-muted);">Adjust time window above to scale projections</div>
+          </div>
+          <div style="background:var(--c-card);border:3px solid #8B5CF6;border-radius:10px;padding:20px 22px;">
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">⚙️ Sliders Adjusted</div>
+            <div style="font-size:28px;font-weight:800;line-height:1;color:#8B5CF6;margin-bottom:6px;" id="wi-adjusted-count">0 / 4</div>
+            <div style="font-size:11px;color:var(--c-muted);">KPIs with targets above actual baseline</div>
+          </div>
+        </div>
+
+        <!-- Sliders -->
+        <div class="wi-slider-section">
+          <div style="font-size:13px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Adjust Target Performance</div>
+          <div style="font-size:11px;color:var(--c-muted);margin-bottom:20px;">Drag sliders to model what-if improvement scenarios. Savings auto-calculate per time window.</div>
+
+          <!-- Speed -->
+          <div class="wi-slider-row">
+            <div>
+              <div class="wi-slider-label">⚡ Speed</div>
+              <div style="font-size:11px;color:var(--c-muted);margin-top:2px;">UPM</div>
+            </div>
+            <div class="wi-slider-wrap">
+              <div style="position:relative;padding-top:18px;">
+                <div id="wi-snap-speed" class="wi-snap-tip" style="left:56.5%;">⚡ Reference Speed!</div>
+                <input type="range" class="wi-slider speed" id="wi-slider-speed" min="82" max="105" step="1" value="82" oninput="_wiSliderChange('speed')" onchange="_wiSliderChange('speed')">
+                <div style="position:absolute;top:calc(50% + 2px);left:56.5%;width:2px;height:12px;background:rgba(25,118,210,0.4);border-radius:1px;pointer-events:none;transform:translateX(-50%);"></div>
+              </div>
+              <div class="wi-slider-ticks"><span>82 Actual</span><span>95 Reference</span><span>105 Nameplate</span></div>
+            </div>
+            <div class="wi-stats">
+              <div class="wi-stat-current">Actual: 82 UPM</div>
+              <div class="wi-stat-target" id="wi-target-speed">Target: 82 UPM</div>
+              <div class="wi-stat-savings" id="wi-savings-speed">+ $0</div>
+            </div>
+          </div>
+
+          <!-- Labor -->
+          <div class="wi-slider-row">
+            <div>
+              <div class="wi-slider-label">👥 Labor</div>
+              <div style="font-size:11px;color:var(--c-muted);margin-top:2px;">hrs / 1000u · ↓ better</div>
+            </div>
+            <div class="wi-slider-wrap">
+              <div style="position:relative;padding-top:18px;">
+                <div id="wi-snap-labor" class="wi-snap-tip" style="left:0%;">✅ GS Achieved!</div>
+                <input type="range" class="wi-slider labor" id="wi-slider-labor" min="7.0" max="9.0" step="0.1" value="9.0" oninput="_wiSliderChange('labor')" onchange="_wiSliderChange('labor')">
+                <div style="position:absolute;top:calc(50% + 2px);left:0%;width:2px;height:12px;background:rgba(245,158,11,0.4);border-radius:1px;pointer-events:none;transform:translateX(-50%);"></div>
+              </div>
+              <div class="wi-slider-ticks"><span>7.0 GS</span><span>← drag left</span><span>9.0 Actual</span></div>
+            </div>
+            <div class="wi-stats">
+              <div class="wi-stat-current">Actual: 9.0 hrs/ku</div>
+              <div class="wi-stat-target" id="wi-target-labor">Target: 9.0 hrs/ku</div>
+              <div class="wi-stat-savings" id="wi-savings-labor">+ $0</div>
+            </div>
+          </div>
+
+          <!-- OEE -->
+          <div class="wi-slider-row">
+            <div>
+              <div class="wi-slider-label">⚙️ OEE</div>
+              <div style="font-size:11px;color:var(--c-muted);margin-top:2px;">%</div>
+            </div>
+            <div class="wi-slider-wrap">
+              <div style="position:relative;padding-top:18px;">
+                <div id="wi-snap-oee" class="wi-snap-tip" style="left:50%;">⚙️ GS Target!</div>
+                <input type="range" class="wi-slider oee" id="wi-slider-oee" min="62" max="100" step="1" value="62" oninput="_wiSliderChange('oee')" onchange="_wiSliderChange('oee')">
+                <div style="position:absolute;top:calc(50% + 2px);left:50%;width:2px;height:12px;background:rgba(139,92,246,0.4);border-radius:1px;pointer-events:none;transform:translateX(-50%);"></div>
+              </div>
+              <div class="wi-slider-ticks"><span>62% Actual</span><span>81% GS</span><span>100% Max</span></div>
+            </div>
+            <div class="wi-stats">
+              <div class="wi-stat-current">Actual: 62%</div>
+              <div class="wi-stat-target" id="wi-target-oee">Target: 62%</div>
+              <div class="wi-stat-savings" id="wi-savings-oee">+ $0</div>
+            </div>
+          </div>
+
+          <!-- Scrap -->
+          <div class="wi-slider-row">
+            <div>
+              <div class="wi-slider-label">🗑️ Scrap</div>
+              <div style="font-size:11px;color:var(--c-muted);margin-top:2px;">% · ↓ better</div>
+            </div>
+            <div class="wi-slider-wrap">
+              <div style="position:relative;padding-top:18px;">
+                <div id="wi-snap-scrap" class="wi-snap-tip" style="left:50%;">✅ GS Scrap!</div>
+                <input type="range" class="wi-slider scrap" id="wi-slider-scrap" min="0" max="4.2" step="0.1" value="4.2" oninput="_wiSliderChange('scrap')" onchange="_wiSliderChange('scrap')">
+                <div style="position:absolute;top:calc(50% + 2px);left:50%;width:2px;height:12px;background:rgba(16,185,129,0.4);border-radius:1px;pointer-events:none;transform:translateX(-50%);"></div>
+              </div>
+              <div class="wi-slider-ticks"><span>0%</span><span>2.1% GS</span><span>4.2% Actual</span></div>
+            </div>
+            <div class="wi-stats">
+              <div class="wi-stat-current">Actual: 4.2%</div>
+              <div class="wi-stat-target" id="wi-target-scrap">Target: 4.2%</div>
+              <div class="wi-stat-savings" id="wi-savings-scrap">+ $0</div>
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="wi-actions">
+            <button class="wi-btn" onclick="_wiResetSliders()">↺ Reset to Actual</button>
+            <button class="wi-btn wi-btn-primary" onclick="_wiApplyScenario()">▶ Apply Scenario</button>
+            <button class="wi-btn wi-btn-save" onclick="_wiSaveScenario()">💾 Save Scenario As…</button>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="info-box" style="font-size:11px;padding:10px 14px;margin-top:16px;">
+          📌 <strong>Note:</strong> Savings projections are estimates based on Kris Van Deursen's financial model. China-spec orders and line trial orders (Z-variant, ZNFA) excluded from calculations. Snap points represent Gold Standard reference targets.
+        </div>
+
+      </div><!-- /intel-whatif -->
 
     </div>
   </main><!-- /page-intelligence -->
 
 </div><!-- /gs-layout -->
 
+<!-- ── Save Scenario Modal ── -->
+<div class="wi-modal-overlay" id="wi-save-modal" onclick="if(event.target===this)_wiCloseSaveModal()">
+  <div class="wi-modal" onclick="event.stopPropagation()">
+    <div class="wi-modal-title">💾 Save Scenario As…</div>
+    <div class="wi-modal-field">
+      <label>Scenario Name</label>
+      <input type="text" id="wi-save-name" placeholder="e.g. Q3 Speed Uplift">
+    </div>
+    <div class="wi-modal-field">
+      <label>Description</label>
+      <textarea id="wi-save-desc" placeholder="What is this scenario modelling?"></textarea>
+    </div>
+    <div class="wi-modal-field">
+      <label>Owner</label>
+      <input type="text" id="wi-save-owner" placeholder="e.g. Kris Van Deursen">
+    </div>
+    <div class="wi-modal-field">
+      <label>Target Date</label>
+      <input type="text" id="wi-save-date" placeholder="e.g. 31.12.2026">
+    </div>
+    <div class="wi-modal-btns">
+      <button class="wi-btn" onclick="_wiCloseSaveModal()">Cancel</button>
+      <button class="wi-btn wi-btn-save" onclick="_wiConfirmSave()">Save Scenario</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast ── -->
+<div class="wi-toast" id="wi-toast"></div>
 
 <!-- =====================================================
      JAVASCRIPT: DATA + CHARTS + NAV
@@ -9760,9 +10027,10 @@ function _renderIntelBarChart() {
   const ctx = document.getElementById('ch-intel-bar');
   if (!ctx) return;
   if (intelChartRef) { intelChartRef.destroy(); intelChartRef = null; }
-  const labels = Object.values(INTEL_KPI_DATA).map(d => d.label);
-  const engVals = Object.values(INTEL_KPI_DATA).map(d => intelChartMode === 'dollar' ? d.engK : d.eng);
-  const opsVals = Object.values(INTEL_KPI_DATA).map(d => intelChartMode === 'dollar' ? d.opsK : d.ops);
+  const entries = Object.values(INTEL_KPI_DATA).filter(d => d.label !== '🧪 Mass Attr');
+  const labels = entries.map(d => d.label);
+  const engVals = entries.map(d => intelChartMode === 'dollar' ? d.engK : d.eng);
+  const opsVals = entries.map(d => intelChartMode === 'dollar' ? d.opsK : d.ops);
   intelChartRef = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -9800,14 +10068,187 @@ function switchIntelChartView(mode, btn) {
 function setIntelWindow(w, btn) {
   document.querySelectorAll('.intel-tw-btn').forEach(b => b.classList.remove('intel-tw-active'));
   btn.classList.add('intel-tw-active');
+  _wiTimeWindow = w;
+  const labels = { '1w': '1 Week', '3w': '3 Weeks', '1m': '1 Month', '3m': '3 Months' };
+  const lbl = document.getElementById('wi-window-label');
+  if (lbl) lbl.textContent = labels[w] || w;
+  _updateWISummaryCards();
 }
 
 function selectIntelKPI(kpi, card) {
   activeIntelKPI = kpi;
-  document.querySelectorAll('#page-intelligence .card[onclick]').forEach(c => {
+  document.querySelectorAll('#intel-historical .card[onclick]').forEach(c => {
     c.style.borderColor = 'transparent';
   });
   card.style.borderColor = 'var(--c-blue)';
+}
+
+/* ── Intelligence Scenario Toggle ── */
+function setIntelScenario(mode) {
+  document.querySelectorAll('.intel-scenario-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === mode);
+  });
+  const hist  = document.getElementById('intel-historical');
+  const whatif = document.getElementById('intel-whatif');
+  if (hist)   hist.style.display   = mode === 'historical' ? '' : 'none';
+  if (whatif) whatif.style.display = mode === 'whatif'     ? '' : 'none';
+  if (mode === 'whatif') _updateWISummaryCards();
+}
+
+/* ── showWhatIf: called from knc-whatif card ── */
+function showWhatIf() {
+  const knc = document.getElementById('knc-whatif');
+  document.querySelectorAll('.kpi-nav-card').forEach(c => c.classList.remove('active'));
+  if (knc) knc.classList.add('active');
+  showModule('intelligence');
+  setIntelScenario('whatif');
+}
+
+/* ── What-If Slider State ── */
+let _wiTimeWindow = '1m';
+let _wiDebounceTimer = null;
+
+const WI_BASE  = { speed: 82,  labor: 9.0, oee: 62, scrap: 4.2 };
+const WI_SNAP  = { speed: 95,  labor: 7.0, oee: 81, scrap: 2.1 };
+const WI_RATES = { speed: 8100, labor: 42200, oee: 1690, scrap: 6930 };
+const WI_TW_MULT = { '1w': 1, '3w': 3, '1m': 4.33, '3m': 13 };
+
+function _wiSliderChange(kpi) {
+  clearTimeout(_wiDebounceTimer);
+  _wiDebounceTimer = setTimeout(() => {
+    _updateWIRow(kpi);
+    _updateWISummaryCards();
+    _checkWISnap(kpi);
+  }, 60);
+}
+
+function _updateWIRow(kpi) {
+  const slider = document.getElementById('wi-slider-' + kpi);
+  if (!slider) return;
+  const val  = parseFloat(slider.value);
+  const base = WI_BASE[kpi];
+  const mult = WI_TW_MULT[_wiTimeWindow] || 4.33;
+  let saving = 0;
+
+  if (kpi === 'speed') {
+    saving = Math.max(0, val - base) * WI_RATES.speed * mult;
+    const tgt = document.getElementById('wi-target-speed');
+    if (tgt) tgt.textContent = 'Target: ' + val + ' UPM';
+  } else if (kpi === 'labor') {
+    saving = Math.max(0, base - val) * WI_RATES.labor * mult;
+    const tgt = document.getElementById('wi-target-labor');
+    if (tgt) tgt.textContent = 'Target: ' + val.toFixed(1) + ' hrs/ku';
+  } else if (kpi === 'oee') {
+    saving = Math.max(0, val - base) * WI_RATES.oee * mult;
+    const tgt = document.getElementById('wi-target-oee');
+    if (tgt) tgt.textContent = 'Target: ' + val + '%';
+  } else if (kpi === 'scrap') {
+    saving = Math.max(0, base - val) * WI_RATES.scrap * mult;
+    const tgt = document.getElementById('wi-target-scrap');
+    if (tgt) tgt.textContent = 'Target: ' + parseFloat(val).toFixed(1) + '%';
+  }
+
+  const savEl = document.getElementById('wi-savings-' + kpi);
+  if (savEl) {
+    savEl.textContent = saving > 0 ? '+ ' + _fmtWI(saving) : '+ $0';
+    savEl.style.animation = 'none';
+    savEl.offsetHeight;
+    savEl.style.animation = 'wiFlash .4s ease';
+  }
+}
+
+function _fmtWI(val) {
+  if (val >= 1000000) return '$' + (val / 1000000).toFixed(2) + 'M';
+  if (val >= 1000)    return '$' + (val / 1000).toFixed(1) + 'K';
+  return '$' + Math.round(val);
+}
+
+function _calcWISaving(kpi) {
+  const slider = document.getElementById('wi-slider-' + kpi);
+  if (!slider) return 0;
+  const val  = parseFloat(slider.value);
+  const base = WI_BASE[kpi];
+  const mult = WI_TW_MULT[_wiTimeWindow] || 4.33;
+  let delta = 0;
+  if (kpi === 'speed') delta = Math.max(0, val - base);
+  else if (kpi === 'labor') delta = Math.max(0, base - val);
+  else if (kpi === 'oee')   delta = Math.max(0, val - base);
+  else if (kpi === 'scrap') delta = Math.max(0, base - val);
+  return delta * WI_RATES[kpi] * mult;
+}
+
+function _updateWISummaryCards() {
+  const kpis = ['speed', 'labor', 'oee', 'scrap'];
+  let total = 0;
+  let adjusted = 0;
+  kpis.forEach(k => {
+    const s = _calcWISaving(k);
+    total += s;
+    if (s > 0) adjusted++;
+    _updateWIRow(k);
+  });
+  const totalEl = document.getElementById('wi-total-val');
+  if (totalEl) {
+    totalEl.textContent = _fmtWI(total);
+    totalEl.style.animation = 'none';
+    totalEl.offsetHeight;
+    totalEl.style.animation = 'wiFlash .4s ease';
+  }
+  const adjEl = document.getElementById('wi-adjusted-count');
+  if (adjEl) adjEl.textContent = adjusted + ' / 4';
+}
+
+function _checkWISnap(kpi) {
+  const slider = document.getElementById('wi-slider-' + kpi);
+  const tip    = document.getElementById('wi-snap-' + kpi);
+  if (!slider || !tip) return;
+  const val  = parseFloat(slider.value);
+  const snap = WI_SNAP[kpi];
+  const range = parseFloat(slider.max) - parseFloat(slider.min);
+  const threshold = range * 0.03;
+  const near = Math.abs(val - snap) <= threshold;
+  tip.classList.toggle('visible', near);
+  if (near) setTimeout(() => tip.classList.remove('visible'), 1800);
+}
+
+function _wiResetSliders() {
+  const defaults = { speed: 82, labor: 9.0, oee: 62, scrap: 4.2 };
+  ['speed','labor','oee','scrap'].forEach(k => {
+    const s = document.getElementById('wi-slider-' + k);
+    if (s) s.value = defaults[k];
+  });
+  _updateWISummaryCards();
+  _showWIToast('Sliders reset to actual baseline.');
+}
+
+function _wiApplyScenario() {
+  _showWIToast('Scenario applied. Use Save to persist it.');
+}
+
+function _wiSaveScenario() {
+  const modal = document.getElementById('wi-save-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function _wiCloseSaveModal() {
+  const modal = document.getElementById('wi-save-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function _wiConfirmSave() {
+  const name = (document.getElementById('wi-save-name') || {}).value || '(Unnamed)';
+  _wiCloseSaveModal();
+  _showWIToast('Scenario "' + name + '" saved.');
+}
+
+let _wiToastTimer = null;
+function _showWIToast(msg) {
+  const t = document.getElementById('wi-toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('visible');
+  clearTimeout(_wiToastTimer);
+  _wiToastTimer = setTimeout(() => t.classList.remove('visible'), 3000);
 }
 </script>
 
