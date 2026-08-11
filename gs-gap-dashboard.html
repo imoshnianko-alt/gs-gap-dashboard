@@ -1382,6 +1382,34 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
 .po-filter-pending .slicer-select {
   cursor:not-allowed; border-style:dashed;
 }
+
+/* ── Intelligence page ── */
+.intel-tw-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid var(--c-border);
+  border-radius: 5px;
+  background: var(--c-card);
+  color: var(--c-muted);
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.intel-tw-btn:hover { background: var(--c-blue); color: #fff; border-color: var(--c-blue); }
+.intel-tw-active { background: var(--c-blue) !important; color: #fff !important; border-color: var(--c-blue) !important; }
+.intel-toggle-btn {
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid var(--c-border);
+  border-radius: 5px;
+  background: var(--c-card);
+  color: var(--c-muted);
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.intel-toggle-btn:hover { background: var(--c-blue); color: #fff; border-color: var(--c-blue); }
+.intel-toggle-active { background: var(--c-blue) !important; color: #fff !important; border-color: var(--c-blue) !important; }
 </style>
 </head>
 <body>
@@ -1399,6 +1427,8 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
       <button id="btn-module-gs" class="module-btn active" onclick="showModule('gs')">Gold Standard Gap</button>
       <span class="module-sep">|</span>
       <button id="btn-module-overfill" class="module-btn" onclick="showModule('overfill')">Overfill Analysis</button>
+      <span class="module-sep">|</span>
+      <button id="btn-module-intelligence" class="module-btn" onclick="showModule('intelligence')">Intelligence</button>
     </div>
     <span style="color:rgba(255,255,255,0.2);font-size:15px;user-select:none;">|</span>
     <div id="gs-type-indicator" class="gs-type-badge governed">
@@ -1848,7 +1878,6 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
       <button id="ksub-predictions" class="tab-btn"         onclick="showKPISub('predictions')">Predictions</button>
       <button id="ksub-gap"         class="tab-btn"         onclick="showKPISub('gap')">Gap Analysis ($)</button>
       <button id="ksub-dv"          class="tab-btn"         onclick="showKPISub('dv')">Deep View</button>
-      <button id="ksub-whatif"      class="tab-btn"         onclick="showKPISub('whatif')">💰 What-If ($)</button>
     </div>
 
     <!-- ─── GS OVERVIEW (landing state — before KPI selected) ─── -->
@@ -2031,7 +2060,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
             <input type="number" id="thresh-bronze" value="60" min="10" max="100" style="width:55px;" oninput="applyThresholds()">
             <span style="font-size:11px;color:var(--c-muted);">% of Rs</span>
           </div>
-          <div class="note-box" style="margin-top:8px;">⚠ Thresholds pending final sign-off: Stephanie (segmentation), Steven (labor cost). Do not use for compensation decisions until approved.</div>
+          <div class="note-box" style="margin-top:8px;">⚠ Thresholds pending final sign-off: Stephanie (segmentation), Steven (labor cost). Do not use for operational decisions until approved.</div>
         </div>
       </div>
 
@@ -2066,7 +2095,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         <div class="info-box-title">ℹ Definitions</div>
         <div class="info-item"><strong>Gold Standard (GS) — Governed:</strong> FY25 (Jul 2024–Jun 2025) locked baseline. Used for official reporting.</div>
         <div class="info-item"><strong>Gold Standard (GS) — Operating Baseline:</strong> Rolling 6/9/12-month window. For operational analysis only — not official metrics.</div>
-        <div class="info-item"><strong>Nameplate Speed (Gs):</strong> Equipment manufacturer specification — static per line, SKU-independent. Represents the design ceiling; closing this gap requires CAPEX investment.</div>
+        <div class="info-item"><strong>Nameplate Speed (Gs):</strong> Equipment manufacturer specification — static per line, SKU-independent. Represents the design ceiling; closing this gap may require equipment upgrades, formula adjustments, or size optimization.</div>
         <div class="info-item"><strong>Reference Speed (Rs):</strong> MAX(Actual Speed) across ALL historical production runs on that line. Floating — updates whenever a new maximum is achieved. Not adjusted for unit size or product mix.</div>
         <div class="info-item"><strong>Actual Speed (As):</strong> Units Produced ÷ (Run Time Hours × 60). Excludes runs with speed &lt;5 or &gt;150 UPM, PO qty &lt;10, line trials (7th digit = R or PO type ZNFA), China rec variants (7th digit = C), Z-variants, assembly-only scope, and Filling+Assembly on different resources.</div>
         <div class="info-item"><strong>Cycle Speed (CS):</strong> From SAP line trial data — reference only; NOT used in GS gap calculations.</div>
@@ -2230,7 +2259,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <div class="kpi-large" style="background:#e8f0fe;border:2px solid #4A90E2;text-align:center;padding:12px 10px;">
             <div class="kpi-large-label" style="font-size:11px;font-weight:700;color:#4A90E2;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">GS GAP (UPM)</div>
             <div class="kpi-large-value" style="font-size:28px;color:#4A90E2;line-height:1.1;" id="gap-gs-upm">10 <span style="font-size:14px;font-weight:400;color:var(--c-muted);">UPM</span></div>
-            <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Gs − Rs · CAPEX</div>
+            <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Gs − Rs · Engineering Gap</div>
           </div>
           <!-- GS GAP IMPACT $ — blue, row 1 col 5 -->
           <div class="kpi-large" style="background:#e8f0fe;border:2px solid #4A90E2;text-align:center;padding:12px 10px;">
@@ -2271,7 +2300,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
             <button id="btn-lo-usd" class="time-btn" onclick="setLOView('usd')">$ Impact</button>
           </div>
         </div>
-        <div class="card-subtitle" style="margin-bottom:8px;">Each bar = Actual Speed (As). Lines show Nameplate (Gs) and Reference (Rs) per resource. Gap to Rs = operational opportunity; gap Rs→Gs = engineering/CAPEX opportunity. Click bar to drill down.</div>
+        <div class="card-subtitle" style="margin-bottom:8px;">Each bar = Actual Speed (As). Lines show Nameplate (Gs) and Reference (Rs) per resource. Gap to Rs = operational opportunity; gap Rs→Gs = engineering gap (may require equipment upgrades or formula adjustments). Click bar to drill down.</div>
         <div class="chart-wrap" style="height:300px;"><canvas id="ch-line-overview"></canvas></div>
         <div class="legend-row" style="margin-top:6px;">
           <span class="legend-item"><span style="display:inline-block;width:18px;height:10px;background:#2E7D32aa;border-radius:2px;vertical-align:middle;"></span> Actual Speed (As)</span>
@@ -2279,7 +2308,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <span class="legend-item"><span style="display:inline-block;width:22px;border-top:2px dashed #1565C0;vertical-align:middle;"></span> Reference Speed (Rs) — MAX(As) historically</span>
         </div>
         <div style="margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;">
-          <span class="seg-badge" style="background:#e8f0fe;color:#1565C0;border:1px solid #1565C0;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">■ GS GAP (blue shading) = Nameplate − Rs · Requires CAPEX</span>
+          <span class="seg-badge" style="background:#e8f0fe;color:#1565C0;border:1px solid #1565C0;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">■ GS GAP (blue shading) = Nameplate − Rs · Engineering Gap</span>
           <span class="seg-badge" style="background:#fde8e8;color:var(--c-neg);border:1px solid var(--c-neg);padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;">■ RS GAP (red) = Rs − As · Operational improvement</span>
         </div>
       </div>
@@ -2424,205 +2453,6 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
     </div><!-- /cnt-speed-gap -->
 
 
-    <!-- ─── SPEED: WHAT-IF ($) ──────────────────────────────── -->
-    <!-- ─── SPEED: WHAT-IF ──────────────────────────────── -->
-    <div id="cnt-speed-whatif" class="kpi-cnt">
-
-      <!-- Hero -->
-      <div class="gap-hero">
-        <div>
-          <div class="gap-hero-title">💰 What-If Financial Impact Model</div>
-          <div style="font-size:11px; color:rgba(255,255,255,0.65); margin-top:3px;">Methodology: Kris Van Deursen · Inputs: SAP planned orders · For capital investment decision support</div>
-        </div>
-        <div id="whatif-gs-badge" class="gs-type-badge governed" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.4);color:#fff;">
-          🔒 Governed GS · FY25
-        </div>
-      </div>
-
-      <!-- Scenario selector -->
-      <div class="card">
-        <span class="card-title">Scenario Configuration</span>
-        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
-          <div>
-            <span class="slicer-label">Resource / Line</span>
-            <select class="slicer-select" style="width:160px;">
-              <option>— All Resources —</option>
-              <option>L67</option>
-              <option>L68</option>
-              <option>L72</option>
-            </select>
-          </div>
-          <div>
-            <span class="slicer-label">Analysis Time Frame</span>
-            <select class="slicer-select" style="width:160px;">
-              <option>Next 3 Months</option>
-              <option selected>Next 6 Months</option>
-              <option>Next 12 Months</option>
-              <option>Full FY26</option>
-            </select>
-          </div>
-          <div>
-            <span class="slicer-label">Order Source</span>
-            <select class="slicer-select" style="width:140px;">
-              <option selected>SAP Planned Orders</option>
-              <option>Actuals (YTD)</option>
-            </select>
-          </div>
-          <button style="background:var(--c-blue);color:#fff;border:none;padding:7px 18px;border-radius:4px;font-weight:700;font-size:12px;cursor:pointer;">▶ Calculate</button>
-        </div>
-      </div>
-
-      <!-- What-If Simulation Sliders -->
-      <div class="card" style="border:1px solid #c5d8f5;background:#f8fbff;">
-        <div class="flex-row" style="margin-bottom:8px;">
-          <span class="card-title" style="color:var(--c-blue);">⚡ Interactive Speed Simulation</span>
-          <button onclick="resetWhatIfSimulation()" style="font-size:11px;color:var(--c-muted);background:none;border:1px solid #d0d8e4;padding:3px 10px;border-radius:4px;cursor:pointer;">Reset</button>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:start;">
-          <!-- Target UPM Slider -->
-          <div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-              <span class="slicer-label">Target Speed (UPM)</span>
-              <strong id="wi-target-upm-val" style="font-size:13px;color:var(--c-blue);">88</strong>
-            </div>
-            <input type="range" id="wi-target-upm" min="60" max="105" value="88" step="1"
-              style="width:100%;accent-color:var(--c-blue);" oninput="updateWhatIfSimulation()">
-            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:2px;">
-              <span>60 UPM</span>
-              <span style="color:var(--c-rs);">Rs = 95</span>
-              <span style="color:var(--c-gs);">Gs = 105</span>
-            </div>
-          </div>
-          <!-- Number of People -->
-          <div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-              <span class="slicer-label">Headcount (people)</span>
-              <strong id="wi-people-val" style="font-size:13px;color:var(--c-blue);">7</strong>
-            </div>
-            <input type="range" id="wi-people" min="1" max="20" value="7" step="1"
-              style="width:100%;accent-color:var(--c-blue);" oninput="updateWhatIfSimulation()">
-            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:2px;">
-              <span>1</span><span>10</span><span>20</span>
-            </div>
-          </div>
-          <!-- Labor Cost Per Hour (auto-populated) -->
-          <div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-              <span class="slicer-label">Labor Cost / Hr ($)</span>
-              <strong id="wi-laborcost-val" style="font-size:13px;color:var(--c-blue);">45</strong>
-            </div>
-            <input type="range" id="wi-laborcost" min="20" max="120" value="45" step="1"
-              style="width:100%;accent-color:var(--c-blue);" oninput="updateWhatIfSimulation()">
-            <div style="font-size:9px;color:var(--c-muted);margin-top:2px;">Pending Steven Johnston sign-off. Default = $45/hr illustrative.</div>
-          </div>
-        </div>
-        <!-- Simulation Output Row -->
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid #d5e4f5;">
-          <div style="text-align:center;">
-            <div style="font-size:9px;color:var(--c-muted);text-transform:uppercase;font-weight:700;">Target → Rs GAP</div>
-            <div id="wi-out-rsgap" style="font-size:18px;font-weight:800;color:var(--c-rs);">7 UPM</div>
-          </div>
-          <div style="text-align:center;">
-            <div style="font-size:9px;color:var(--c-muted);text-transform:uppercase;font-weight:700;">Rs GAP Impact $</div>
-            <div id="wi-out-rsgap-usd" style="font-size:18px;font-weight:800;color:var(--c-rs);">$—</div>
-          </div>
-          <div style="text-align:center;">
-            <div style="font-size:9px;color:var(--c-muted);text-transform:uppercase;font-weight:700;">Run Time Reduction</div>
-            <div id="wi-out-runtime" style="font-size:18px;font-weight:800;color:var(--c-blue);">— hrs</div>
-          </div>
-          <div style="text-align:center;">
-            <div style="font-size:9px;color:var(--c-muted);text-transform:uppercase;font-weight:700;">Expected Finish</div>
-            <div id="wi-out-finish" style="font-size:16px;font-weight:800;color:var(--c-gs);">—</div>
-          </div>
-          <div style="text-align:center;">
-            <div style="font-size:9px;color:var(--c-muted);text-transform:uppercase;font-weight:700;">Tier at Target</div>
-            <div id="wi-out-tier" style="font-size:15px;font-weight:800;">—</div>
-          </div>
-        </div>
-        <div class="labor-disclaimer-box">
-          ⚠️ <strong>Labor cost model: methodology TBD with Steven Johnston.</strong>
-          All figures are estimates based on planned SAP orders — for <em>capital investment analysis only</em>, not for operational targets or compensation.
-          Labor cost = flat rate per plant per fiscal year (pending Steven Johnston sign-off). FX methodology aligns with Overfill dashboard (Kris Van Deursen).
-          Default rate shown: $45/hr illustrative. Formula: RS GAP Impact $ = (Quantity ÷ RS GAP) × People × Labor Cost/Hr.
-        </div>
-      </div>
-
-      <!-- Summary KPIs — split by gap type -->
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:4px;">
-        <span style="font-size:10px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.5px;">Opportunity Split:</span>
-        <span style="font-size:10px;color:var(--c-blue);font-weight:700;">● Engineering Gap (Nameplate − Reference)</span>
-        <span style="font-size:10px;color:var(--c-neg);font-weight:700;">● Operational Gap (Reference − Actual)</span>
-      </div>
-      <div class="kpi-row">
-        <div class="kpi-card">
-          <span class="kpi-label">Speed — Operational</span>
-          <span class="kpi-value" style="font-size:26px;">$45.2K</span>
-          <span class="kpi-delta pos">▲ Reference → Actual gap</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">Speed — Engineering</span>
-          <span class="kpi-value" style="font-size:22px;color:var(--c-blue);">$31.8K</span>
-          <span class="kpi-delta pos">▲ Nameplate → Reference gap</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">Labor Savings Potential</span>
-          <span class="kpi-value" style="font-size:26px;">$28.5K</span>
-          <span class="kpi-delta pos">▲ hrs/1000u reduction to RS</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">OEE Savings Potential</span>
-          <span class="kpi-value" style="font-size:26px;">$32.1K</span>
-          <span class="kpi-delta pos">▲ OEE gap to RS (75th pct)</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">Scrap Savings Potential</span>
-          <span class="kpi-value" style="font-size:26px;">$18.9K</span>
-          <span class="kpi-delta pos">▲ scrap reduction to RS</span>
-        </div>
-      </div>
-
-      <!-- Chart + table side-by-side -->
-      <div class="charts-grid">
-        <div class="card">
-          <span class="card-title">Savings by Resource</span>
-          <div class="card-subtitle">Potential $ savings if each line achieves GS performance on all KPIs</div>
-          <div class="chart-wrap" style="height:220px;"><canvas id="ch-whatif-bar"></canvas></div>
-        </div>
-        <div class="card">
-          <span class="card-title">Savings by KPI Category</span>
-          <div class="card-subtitle">Total opportunity split: Speed vs Labor vs OEE vs Scrap</div>
-          <div class="chart-wrap" style="height:220px;"><canvas id="ch-whatif-pie"></canvas></div>
-        </div>
-      </div>
-
-      <!-- Detailed What-If table -->
-      <div class="card">
-        <span class="card-title">Detailed Potential Savings — Operational Gap (Reference − Actual)</span>
-        <div class="card-subtitle" style="margin-bottom:4px;">Operational improvement target: gap between Reference Speed (RS, best-demonstrated) and Actual. Engineering gap (Nameplate − RS) shown separately in KPI tiles above.</div>
-        <div class="tbl-wrap">
-          <table class="gs-tbl" id="tb-whatif">
-            <thead>
-              <tr>
-                <th>Resource</th><th>SKU</th><th class="r">Plan Vol</th>
-                <th class="r">Nameplate (GS)</th><th class="r">RS (Ref)</th><th class="r">Actual Speed</th><th class="r">Oper. Gap $</th>
-                <th class="r">GS OEE%</th><th class="r">Act OEE%</th><th class="r">OEE $</th>
-                <th class="r">GS Hrs/1000u</th><th class="r">Act Hrs/1000u</th><th class="r">Labor $</th>
-                <th class="r">GS Scrap%</th><th class="r">Act Scrap%</th><th class="r">Scrap $</th>
-                <th class="r" style="font-weight:800;">Total Oper. $</th>
-              </tr>
-            </thead>
-            <tbody id="tb-whatif-body"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="note-box">
-        📌 <strong>Note:</strong> This model uses Kris Van Deursen's financial methodology. Figures split into two gap types: <strong>Operational Gap</strong> (Reference − Actual, actionable by CE teams) and <strong>Engineering Gap</strong> (Nameplate − Reference, requires capital/engineering investment).<br>
-        ⚠️ <strong>Labor cost model: methodology TBD with Steven Johnston.</strong> Labor cost = flat rate per plant per fiscal year (available in SAP). FX rate aligns with Overfill dashboard approach (Kris Van Deursen). All figures are estimates based on planned SAP orders — for <em>capital investment analysis only</em>, not for operational targets or compensation.
-      </div>
-
-    </div><!-- /cnt-speed-whatif -->
-
     <!-- ─── LABOR: RESULTS ─────────────────────────────────── -->
     <div id="cnt-labor-results" class="kpi-cnt">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
@@ -2672,7 +2502,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
             <thead><tr style="background:#1a3a4a;">
               <th style="font-weight:700;color:#ffffff;padding-top:10px;padding-bottom:10px;">Resource</th>
               <th class="r" style="font-weight:700;color:#ffffff;padding-top:10px;padding-bottom:10px;">Actual (hrs/1000)</th>
-              <th class="r" style="font-weight:700;color:#6dd4bc;padding-top:10px;padding-bottom:10px;">GS LE %</th>
+              <th class="r" style="font-weight:700;color:#6dd4bc;padding-top:10px;padding-bottom:10px;">GS (hrs/1000)</th>
               <th class="r" style="font-weight:700;color:#ff8080;padding-top:10px;padding-bottom:10px;">GAP (hrs/1000)</th>
               <th class="r" style="font-weight:700;color:#ff8080;padding-top:10px;padding-bottom:10px;">GAP $ Impact</th>
             </tr></thead>
@@ -2731,7 +2561,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         </div>
         <div class="chart-wrap" style="height:220px;"><canvas id="ch-lb-pred"></canvas></div>
         <div class="legend-row">
-          <span class="legend-item"><span class="leg-line actual" style="border-color:#2E7D32;"></span> Predicted LE%</span>
+          <span class="legend-item"><span class="leg-line actual" style="border-color:#2E7D32;"></span> Predicted (hrs/1000)</span>
           <span class="legend-item"><span class="leg-line gs"></span> GS (hrs/1000, P75)</span>
         </div>
       </div>
@@ -2749,7 +2579,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
             <thead><tr>
               <th>Month</th><th>SKU</th><th>Resource</th><th>Family</th>
               <th class="r">Pred. (hrs/1000)</th>
-              <th class="r" style="color:#6dd4bc;">GS LE %</th>
+              <th class="r" style="color:#6dd4bc;">GS (hrs/1000)</th>
               <th class="r" style="color:#ff8080;">GAP %</th>
               <th class="r" style="color:#ff8080;">Pred. GAP $</th>
               <th>Confidence</th>
@@ -2763,7 +2593,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         <strong>✅ Included:</strong> Non-NPL · Non-line-trial (7th digit ≠ R) · Non-China-rec (7th digit ≠ C) · ≥10 historical POs per SKU × Resource (low-freq: 3–5 minimum). &nbsp;
         <strong style="color:#D97706;">⚠ Data Quality Flags:</strong> If a line trial was run on a different Resource than the future PO's assigned line, a warning will appear in the UI. &nbsp;
         <strong style="color:#D97706;">⏳ Pending:</strong> ML / multivariate regression model (scope TBD with data science team). Labor cost uses SAP plant FY rate (plant-specific). Gold Standard time frame (FY vs rolling) pending client confirmation. &nbsp;
-        <strong>Formula:</strong> Predicted GAP $ = (GS LE% − Predicted LE%) × Labor Hrs/1000u × (Vol ÷ 1000) × Plant Rate.
+        <strong>Formula:</strong> Predicted GAP $ = (GS (hrs/1000) − Predicted (hrs/1000)) × Labor Hrs/1000u × (Vol ÷ 1000) × Plant Rate.
       </div>
     </div><!-- /cnt-labor-predictions -->
 
@@ -2781,7 +2611,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         </div>
       </div>
       <div class="gs-type-badge governed" style="align-self:flex-start;margin-bottom:8px;">
-        🔒 GS (hrs/1000) = P75 of ≥10 qualified POs per Family × Resource | FY25 locked baseline &nbsp;·&nbsp; ⚠ Silver/Bronze thresholds configurable — pending confirmation from Kris Van Deursen
+        🔒 GS (hrs/1000) = P75 of ≥10 qualified POs per Family × Resource | FY25 locked baseline | One gap only: Gold Standard Gap (GS − Actual)
       </div>
 
       <div id="lb-gap-cards-single" class="kpi-row">
@@ -2812,7 +2642,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <table class="gs-tbl" style="width:100%;">
             <thead><tr style="background:#1a3a4a;">
               <th style="font-weight:700;color:#ffffff;padding-top:10px;padding-bottom:10px;">Resource</th>
-              <th class="r" style="font-weight:700;color:#6dd4bc;padding-top:10px;padding-bottom:10px;">GS LE %</th>
+              <th class="r" style="font-weight:700;color:#6dd4bc;padding-top:10px;padding-bottom:10px;">GS (hrs/1000)</th>
               <th class="r" style="font-weight:700;color:#ffffff;padding-top:10px;padding-bottom:10px;">Actual (hrs/1000)</th>
               <th class="r" style="font-weight:700;color:#ff8080;padding-top:10px;padding-bottom:10px;">GS GAP %</th>
               <th class="r" style="font-weight:700;color:#ff8080;padding-top:10px;padding-bottom:10px;">GS GAP $ Impact</th>
@@ -2868,7 +2698,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
           <div class="chart-wrap" style="height:200px;"><canvas id="ch-lb-gap-bar"></canvas></div>
           <div class="legend-row">
             <span class="legend-item"><span style="display:inline-block;width:12px;height:12px;background:#1565C0;border-radius:2px;margin-right:4px;"></span>Actual (hrs/1000)</span>
-            <span class="legend-item"><span style="display:inline-block;width:12px;height:12px;background:#2E7D32;border-radius:2px;margin-right:4px;"></span>GS LE %</span>
+            <span class="legend-item"><span style="display:inline-block;width:12px;height:12px;background:#2E7D32;border-radius:2px;margin-right:4px;"></span>GS (hrs/1000)</span>
           </div>
         </div>
         <div class="card">
@@ -2899,7 +2729,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
             <thead><tr>
               <th>Resource</th><th>Family</th><th>Category / SKU</th><th>PO</th>
               <th class="r">hrs/1000</th>
-              <th class="r" style="color:#6dd4bc;">GS LE %</th>
+              <th class="r" style="color:#6dd4bc;">GS (hrs/1000)</th>
               <th class="r" style="color:#ff8080;">GS GAP %</th>
               <th class="r" style="color:#ff8080;">GS GAP $</th>
               <th>Tier</th>
@@ -2909,8 +2739,8 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         </div>
         <p style="font-size:10px;color:var(--c-muted);margin:8px 4px 0;padding-top:6px;border-top:1px solid #E0E0E0;line-height:1.6;">
           Formula: LE % = (Planned Hrs / Actual Hrs) × 100 where Planned Hrs = Raw Hours × (Qty Plan / Qty Produced), Actual Hrs = Run Hours + Setup Hours (0020+0030 + direct + service).
-          GS Formula: GS LE = P75 of ≥10 qualified POs per Family × Resource (never average LE%).
-          $ Formula: GS LE GAP $ = (GS LE% − Actual LE%) × Labor Hrs/1000u × (PO QTY ÷ 1000) × Plant Labor Rate.
+          GS Formula: GS (hrs/1000) = P75 of ≥10 qualified POs per Family × Resource (never average hrs/1000).
+          $ Formula: GS GAP $ = (GS (hrs/1000) − Actual (hrs/1000)) × Labor Hrs/1000u × (PO QTY ÷ 1000) × Plant Labor Rate.
           Excluded: NPLs · Line trials · China rec variants · Z-variants · Families with &lt;10 POs (low-frequency: 3–5 minimum).
           ⚠ Pending confirmation from Steven Johnston whether Actual Hours includes unplanned downtime beyond 0020/0030.
         </p>
@@ -3014,7 +2844,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
               <th>Resource</th>
               <th>PO Size Bucket</th>
               <th class="r">Actual (hrs/1000)</th>
-              <th class="r" style="color:#6dd4bc;">GS LE %</th>
+              <th class="r" style="color:#6dd4bc;">GS (hrs/1000)</th>
               <th class="r" style="color:#ff8080;">Gap $ (lost efficiency)</th>
             </tr></thead>
             <tbody id="tb-lb-dv"></tbody>
@@ -3023,133 +2853,6 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
       </div>
     </div><!-- /cnt-labor-dv -->
 
-    <!-- ─── LABOR: WHAT-IF ($) ──────────────────────────────── -->
-    <div id="cnt-labor-whatif" class="kpi-cnt">
-      <div class="sec-heading">👥 Labor — What-If Simulation ($)</div>
-
-      <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px;align-items:start;">
-        <div class="card">
-          <span class="card-title">⚙ Simulation Parameters</span>
-          <div class="card-subtitle" style="margin-bottom:10px;">Adjust inputs to simulate labor efficiency improvement savings. Uses hrs/1000u as efficiency proxy.</div>
-
-          <div style="margin-bottom:10px;">
-            <span class="slicer-label">Load baseline from:</span>
-            <select class="view-as-select" style="width:100%;margin-top:4px;" id="lb-wi-baseline" onchange="switchLBWIBaseline(this.value)">
-              <option value="manual">Manual entry</option>
-              <option value="historical">Historical PO</option>
-              <option value="best">Best GS PO</option>
-            </select>
-          </div>
-
-          <div id="lb-wi-po-slicer" style="display:none;margin-bottom:10px;">
-            <span class="slicer-label">Select Historical PO:</span>
-            <select class="view-as-select" style="width:100%;margin-top:4px;" onchange="loadLBWIPO(this.value)">
-              <option value="">— select PO —</option>
-              <option value="PO-7841">PO-7841 — SKU-101 / Mascara Multi — L67</option>
-              <option value="PO-7863">PO-7863 — SKU-101 / Mascara Multi — L67</option>
-              <option value="PO-7891">PO-7891 — SKU-112 / Mascara Volume — L67</option>
-              <option value="PO-7902">PO-7902 — SKU-202 / Foundation Liquid — L67</option>
-              <option value="PO-7924">PO-7924 — SKU-301 / Serum Anti-aging — L68</option>
-            </select>
-            <p style="font-size:10px;color:var(--c-muted);font-style:italic;margin:4px 0 0;">Simulation is PO-bound. Time period filter determines available PO list.</p>
-          </div>
-
-          <div style="margin-bottom:12px;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-              <span class="slicer-label">Target (hrs/1000)</span>
-              <strong id="lb-wi-le-val" style="font-size:13px;color:var(--c-blue);">95%</strong>
-            </div>
-            <input type="range" id="lb-wi-le" min="50" max="150" value="95" step="1"
-              oninput="$('lb-wi-le-val').textContent=this.value+'%';calcLBWI()"
-              style="width:100%;">
-            <p style="font-size:10px;color:var(--c-muted);margin:2px 0 0;">Lower values = better. Range extends below GS baseline.</p>
-          </div>
-
-          <div style="margin-bottom:12px;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-              <span class="slicer-label">Labor Hrs / 1,000 units</span>
-              <strong id="lb-wi-hrs-val" style="font-size:13px;color:var(--c-blue);">3.2</strong>
-            </div>
-            <input type="range" id="lb-wi-hrs" min="0.5" max="20" value="3.2" step="0.1"
-              oninput="$('lb-wi-hrs-val').textContent=parseFloat(this.value).toFixed(1);calcLBWI()"
-              style="width:100%;">
-            <p style="font-size:10px;color:var(--c-muted);margin:2px 0 0;">Total labor hours per 1000u produced (SAP 0020+0030 + direct + service)</p>
-          </div>
-
-          <div style="margin-bottom:12px;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-              <span class="slicer-label">Labor Cost / Hour ($)</span>
-              <strong id="lb-wi-rate-val" style="font-size:13px;color:var(--c-blue);">$35</strong>
-            </div>
-            <input type="range" id="lb-wi-rate" min="15" max="80" value="35" step="1"
-              oninput="$('lb-wi-rate-val').textContent='$'+this.value;calcLBWI()"
-              style="width:100%;">
-            <p style="font-size:10px;color:var(--c-muted);margin:2px 0 0;">Plant-specific FY rate from SAP cost table (⚠ pending Steven Johnston sign-off)</p>
-          </div>
-
-          <div style="margin-bottom:12px;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-              <span class="slicer-label">PO Quantity (units)</span>
-              <strong id="lb-wi-qty-val" style="font-size:13px;color:var(--c-blue);">48,000</strong>
-            </div>
-            <input type="range" id="lb-wi-qty" min="1000" max="200000" value="48000" step="1000"
-              oninput="$('lb-wi-qty-val').textContent=parseInt(this.value).toLocaleString();calcLBWI()"
-              style="width:100%;">
-          </div>
-
-          <div class="labor-disclaimer-box" style="margin-top:4px;padding:8px 10px;background:#FFF8E1;border:1px solid #F9A825;border-radius:5px;font-size:10px;color:#5D4037;line-height:1.6;">
-            ⚠ <strong>Headcount note:</strong> Number of people on the line is not reliably available from SAP. Use Labor Hrs/1000u as the primary efficiency proxy (includes all direct + service hours booked to the PO).
-          </div>
-        </div>
-
-        <div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-            <div class="kpi-card">
-              <span class="kpi-label">CURRENT (hrs/1000)</span>
-              <span class="kpi-value" id="lb-wi-out-current">87 <small>%</small></span>
-              <span class="kpi-delta">Historical PO</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-label">SIMULATED (hrs/1000)</span>
-              <span class="kpi-value" id="lb-wi-out-sim" style="color:var(--c-blue);">95 <small>%</small></span>
-              <span class="kpi-delta pos">▲ +8 pts vs current</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-label">GS (hrs/1000, P75)</span>
-              <span class="kpi-value" style="color:var(--c-gs);">94 <small>%</small></span>
-              <span class="kpi-delta">Benchmark — Mascara × L67</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-label">$ SAVINGS VS CURRENT LE</span>
-              <span class="kpi-value" id="lb-wi-out-savings" style="color:var(--c-gs);">$72</span>
-              <span class="kpi-delta">Operational Gap recovered</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-label">$ REMAINING GAP VS GS</span>
-              <span class="kpi-value" id="lb-wi-out-gs-gap">—</span>
-              <span class="kpi-delta">Engineering/structural gap</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-label">LABOR SAVINGS POTENTIAL ($)</span>
-              <span class="kpi-value" id="lb-wi-out-potential" style="color:#E65100;">$72</span>
-              <span class="kpi-delta">(Labor hrs/1000u × Δ LE% × rate)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:12px;">
-        <span class="card-title">📊 $ Savings at Incremental LE Improvement Steps</span>
-        <div class="card-subtitle">Cumulative $ savings vs current LE at +1%, +2%, +5%, +10% improvement steps. RS GAP terminology per team alignment.</div>
-        <div class="chart-wrap" style="height:200px;"><canvas id="ch-lb-wi"></canvas></div>
-      </div>
-
-      <div class="note-box" style="line-height:1.7;">
-        <strong>RS GAP terminology:</strong> Per team alignment (Kris Van Deursen), RS GAP = operational gap between Reference Standard and Actual. Engineering GAP = GS − RS. &nbsp;
-        <strong>Formula used:</strong> $ Savings = (Target LE% − Current LE%) ÷ 100 × Labor Hrs/1000u × (PO QTY ÷ 1000) × Labor Rate. &nbsp;
-        ⚠ Labor rate: SAP plant FY rate (plant-specific). Headcount excluded — use Labor Hrs/1000u as proxy.
-      </div>
-    </div><!-- /cnt-labor-whatif -->
 
     <!-- ─── OEE: RESULTS ─────────────────────────────────── -->
     <div id="cnt-oee-results" class="kpi-cnt">
@@ -3213,14 +2916,24 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         <div class="card-header-row">
           <span class="card-title">OEE — Monthly Trend</span>
         </div>
-        <div class="card-subtitle">OEE % vs. best demonstrated (GS) and reference (RS). Note: OEE varies by PO size; use PO size slicer for fair comparison.</div>
+        <div class="card-subtitle">OEE % vs. Gold Standard (GS). Note: OEE varies by PO size; use PO size slicer for fair comparison.</div>
         <div class="chart-wrap" style="height:220px;"><canvas id="ch-oee-res"></canvas></div>
         <div class="legend-row" id="oee-res-legend">
           <span class="legend-item"><span class="leg-line actual"></span> Actual OEE%</span>
           <span class="legend-item"><span class="leg-line gs"></span> GS (best demonstrated)</span>
-          <span class="legend-item"><span class="leg-line rs"></span> RS (reference)</span>
         </div>
       </div>
+
+      <!-- Family-level 12-month rolling OEE trend -->
+      <div class="card" style="margin-top:16px;">
+        <div class="card-header-row">
+          <span class="card-title">Family OEE Trend — 12-Month Rolling</span>
+        </div>
+        <div class="card-subtitle">OEE % by product family over last 12 months. Shows trajectory per family vs. GS benchmark.</div>
+        <div class="chart-wrap" style="height:260px;"><canvas id="ch-oee-family-trend"></canvas></div>
+        <div class="legend-row" id="oee-family-legend" style="flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
+      </div>
+
       <div class="note-box">📌 For PO-level detail and trend charts by line — click <strong>Deep View</strong> tab above.</div>
 
       <!-- OEE Heatmap -->
@@ -3332,7 +3045,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
     <div id="cnt-oee-gap" class="kpi-cnt">
       <div class="sec-heading">⚙️ OEE — Gap Analysis ($)</div>
       <div class="gs-type-badge governed" style="align-self:flex-start;margin-bottom:8px;">
-        🔒 GS OEE = P75 of qualified POs per Family × Resource (weekly ≥10 · monthly ≥6 · quarterly ≥4) | FY25 locked baseline &nbsp;·&nbsp; ⚠ Silver/Bronze thresholds configurable — pending confirmation from Kris Van Deursen
+        🔒 GS OEE = P75 of qualified POs per Family × Resource (weekly ≥10 · monthly ≥6 · quarterly ≥4) | FY25 locked baseline | One gap only: Gold Standard Gap (GS − Actual)
       </div>
 
       <!-- ── KPI Summary Cards (KPI 3 & 4) ── -->
@@ -3402,52 +3115,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         <div style="font-size:9.5px;color:var(--c-muted);margin-top:4px;">ℹ Click a row to filter all charts on this tab to that resource.</div>
       </div>
 
-      <!-- ── Tier Summary (KPI 5) — Unified SKU-level tier ── -->
-      <div style="display:flex;align-items:baseline;justify-content:space-between;margin:4px 0 10px;">
-        <span style="font-size:13px;font-weight:700;color:var(--c-text);">🏆 Performance Tier Distribution — Unified SKU Tier</span>
-        <span style="font-size:10px;color:var(--c-muted);">Composite tier = dollarized total gap across Speed + OEE + Labor + Scrap · Gold = P75 confirmed · Silver/Bronze thresholds ⚠ pending Kris Van Deursen sign-off</span>
-      </div>
-      <div class="kpi-row" style="align-items:stretch;">
-        <!-- Gold -->
-        <div class="kpi-card" style="border-left:4px solid #c9933a;background:rgba(201,147,58,.07);padding-left:14px;cursor:pointer;position:relative;" onclick="showTierPopup('Gold')" title="Click to see top contributors">
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
-            <span style="font-size:20px;line-height:1;">🥇</span>
-            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#c9933a;">Gold Tier</span>
-          </div>
-          <span class="kpi-value" style="color:#c9933a;font-size:22px;" id="oee-tier-gold-cnt">5 SKUs</span>
-          <span class="kpi-delta pos" style="margin-top:4px;">Total $ gap below P75 threshold</span>
-          <span style="font-size:9px;color:var(--c-muted);display:block;margin-top:3px;">Click for top contributors →</span>
-        </div>
-        <!-- Silver -->
-        <div class="kpi-card" style="border-left:4px solid #7a8fa6;background:rgba(122,143,166,.07);padding-left:14px;cursor:pointer;position:relative;" onclick="showTierPopup('Silver')" title="Click to see top contributors">
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
-            <span style="font-size:20px;line-height:1;">🥈</span>
-            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#7a8fa6;">Silver Tier</span>
-          </div>
-          <span class="kpi-value" style="color:#7a8fa6;font-size:22px;" id="oee-tier-silver-cnt">7 SKUs</span>
-          <span class="kpi-delta" style="color:#7a8fa6;margin-top:4px;">Moderate combined gap · improvement target</span>
-          <span style="font-size:9px;color:var(--c-muted);display:block;margin-top:3px;">Click for top contributors →</span>
-        </div>
-        <!-- Bronze -->
-        <div class="kpi-card" style="border-left:4px solid #a0522d;background:rgba(160,82,45,.07);padding-left:14px;cursor:pointer;position:relative;" onclick="showTierPopup('Bronze')" title="Click to see top contributors">
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;">
-            <span style="font-size:20px;line-height:1;">🥉</span>
-            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#a0522d;">Bronze Tier</span>
-          </div>
-          <span class="kpi-value" style="color:#a0522d;font-size:22px;" id="oee-tier-bronze-cnt">4 SKUs</span>
-          <span class="kpi-delta neg" style="margin-top:4px;">Highest combined gap · priority action</span>
-          <span style="font-size:9px;color:var(--c-muted);display:block;margin-top:3px;">Click for top contributors →</span>
-        </div>
-        <!-- Total GS GAP $ — white bg, dashed border -->
-        <div class="kpi-card" style="border:1.5px dashed var(--c-border);background:var(--c-card);padding-left:14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Total GS GAP $</div>
-          <div style="font-size:11px;color:var(--c-muted);margin-bottom:2px;">Bronze SKUs only</div>
-          <span class="kpi-value" style="color:var(--c-neg);font-size:22px;" id="oee-tier-bronze-usd">$48.3K</span>
-          <span class="kpi-delta neg" style="margin-top:4px;">Speed + OEE + Labor + Scrap combined</span>
-        </div>
-      </div>
-
-      <!-- ── Charts (KPI 3) ── -->
+      <!-- ── Charts ── -->
       <div class="charts-grid">
         <div class="card">
           <div class="card-header-row">
@@ -3490,7 +3158,7 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
         <div class="flex-row" style="margin-bottom:6px;">
           <div>
             <span class="card-title">📋 GS GAP Deep Dive — All POs</span>
-            <div class="card-subtitle">Sorted by GS GAP $ Impact desc. Columns: Resource · Family · Category · SKU · PO · OEE % · GS OEE % · GS GAP % · GS GAP $ · Tier</div>
+            <div class="card-subtitle">Sorted by GS GAP $ Impact desc. Columns: Resource · Family · Category · SKU · PO · OEE % · GS OEE % · GS GAP % · GS GAP $</div>
           </div>
           <button id="btn-oee-gap-more" onclick="loadMoreOEEGap()" style="font-size:11px;color:var(--c-blue);background:none;border:1px solid var(--c-blue);padding:4px 14px;border-radius:4px;cursor:pointer;white-space:nowrap;align-self:flex-start;">Load More</button>
         </div>
@@ -3503,7 +3171,6 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
                 <th class="r" style="color:#6dd4bc;font-weight:700;padding-top:8px;padding-bottom:8px;">GS OEE %</th>
                 <th class="r" style="color:#ff8080;font-weight:700;padding-top:8px;padding-bottom:8px;">GS GAP %</th>
                 <th class="r" style="color:#ff8080;font-weight:700;padding-top:8px;padding-bottom:8px;">GS GAP $</th>
-                <th style="font-weight:700;">Tier</th>
               </tr>
             </thead>
             <tbody id="tb-oee-gap"></tbody>
@@ -3612,7 +3279,8 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
                 <th>SKU</th><th>Resource</th><th>PO Size Bucket</th>
                 <th class="r">Actual OEE %</th>
                 <th class="r">GS OEE %</th>
-                <th class="r">Gap $ (lost throughput)</th>
+                <th class="r">Ideal Time (hrs)</th>
+                <th class="r">Actual Time (hrs)</th>
               </tr>
             </thead>
             <tbody id="tb-dv-oee"></tbody>
@@ -3621,138 +3289,6 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
       </div>
     </div><!-- /cnt-oee-dv -->
 
-    <!-- ─── OEE: WHAT-IF ─────────────────────────────────── -->
-    <div id="cnt-oee-whatif" class="kpi-cnt">
-      <div class="sec-heading">⚙️ OEE — What-If Simulation ($)</div>
-
-      <!-- Two-column: inputs left, outputs right -->
-      <div style="display:grid;grid-template-columns:340px 1fr;gap:12px;align-items:start;margin-bottom:12px;">
-
-        <!-- LEFT: simulation parameters -->
-        <div class="card" style="padding:16px;">
-          <div class="card-header-row" style="margin-bottom:6px;">
-            <span class="card-title">🎛 Simulation Parameters</span>
-            <div class="view-as-wrap">
-              <span class="view-as-label">Load baseline from:</span>
-              <select class="view-as-select" id="oeewi-baseline-src" onchange="switchWhatIfBaseline(this.value)">
-                <option value="current">Current average OEE</option>
-                <option value="historical">Historical PO</option>
-              </select>
-            </div>
-          </div>
-          <div class="card-subtitle" style="margin-bottom:12px;">Adjust inputs to simulate OEE improvement savings. Headcount is unreliable from SAP — use Labor Hrs/1000u as the primary efficiency proxy.</div>
-
-          <!-- Historical PO slicer — shown only when baseline = Historical PO -->
-          <div id="oeewi-hist-po-wrap" style="display:none;background:var(--c-panel);border:1px solid var(--c-border);border-radius:6px;padding:10px 12px;margin-bottom:10px;">
-            <div style="font-size:11px;font-weight:700;color:var(--c-text);margin-bottom:6px;">📋 Select Historical PO</div>
-            <select id="oeewi-hist-po-select" class="view-as-select" style="width:100%;padding:5px 8px;font-size:11px;"
-                    onchange="renderWhatIfHistPO(this.value)">
-              <option value="">— Select a PO —</option>
-            </select>
-            <div id="oeewi-hist-po-meta" style="font-size:10px;color:var(--c-muted);margin-top:6px;line-height:1.6;"></div>
-          </div>
-
-          <div style="display:flex;flex-direction:column;gap:12px;">
-            <div>
-              <label style="font-size:11px;font-weight:700;color:var(--c-text);display:flex;justify-content:space-between;">
-                Target OEE % <span id="oeewi-target-oee-val" style="color:var(--c-blue);font-weight:700;">80%</span>
-              </label>
-              <input type="range" id="oeewi-target-oee" min="50" max="100" step="1" value="80"
-                     style="width:100%;accent-color:var(--c-blue);margin-top:4px;"
-                     oninput="updateOEEWhatIf()">
-              <div style="display:flex;justify-content:space-between;font-size:9.5px;color:var(--c-muted);">
-                <span>50%</span><span id="oeewi-base-label" style="color:var(--c-actual);">Current: 62%</span><span>100%</span>
-              </div>
-            </div>
-
-            <div>
-              <label style="font-size:11px;font-weight:700;color:var(--c-text);">Labor Hrs / 1,000 units</label>
-              <div style="font-size:10px;color:var(--c-muted);margin:2px 0 4px;">Total labor hours absorbed per 1000u produced (SAP 0020+0030 + direct + service)</div>
-              <input type="number" id="oeewi-lh-1k" value="3.2" step="0.1" min="0.1" max="20"
-                     style="width:100%;padding:5px 8px;border:1px solid var(--c-border);border-radius:4px;font-size:12px;background:var(--c-bg);"
-                     oninput="updateOEEWhatIf()">
-            </div>
-
-            <div>
-              <label style="font-size:11px;font-weight:700;color:var(--c-text);">Labor Cost / Hour ($)</label>
-              <div style="font-size:10px;color:var(--c-muted);margin:2px 0 4px;">Plant-specific FY rate from SAP cost table (⚠ pending Steven Johnston sign-off)</div>
-              <input type="number" id="oeewi-rate" value="35" step="1" min="10" max="200"
-                     style="width:100%;padding:5px 8px;border:1px solid var(--c-border);border-radius:4px;font-size:12px;background:var(--c-bg);"
-                     oninput="updateOEEWhatIf()">
-            </div>
-
-            <div>
-              <label style="font-size:11px;font-weight:700;color:var(--c-text);">PO Quantity (units)</label>
-              <input type="number" id="oeewi-qty" value="48000" step="1000" min="1000"
-                     style="width:100%;padding:5px 8px;border:1px solid var(--c-border);border-radius:4px;font-size:12px;background:var(--c-bg);"
-                     oninput="updateOEEWhatIf()">
-            </div>
-
-            <div style="padding:8px;background:var(--c-panel);border-radius:6px;font-size:10.5px;color:var(--c-muted);">
-              <strong style="color:var(--c-text);">⚠ Headcount note:</strong> Number of people on the line is not reliably available from SAP. Use Labor Hrs/1000u as the primary efficiency proxy (includes all direct + service hours booked to the PO).
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: output cards -->
-        <div>
-          <div class="kpi-row" style="margin-bottom:10px;">
-            <div class="kpi-card" style="border-left:3px solid var(--c-actual);">
-              <span class="kpi-label">Current OEE %</span>
-              <span class="kpi-value">62 <small>%</small></span>
-              <span class="kpi-delta">Historical PO baseline</span>
-            </div>
-            <div class="kpi-card" style="border-left:3px solid var(--c-blue);">
-              <span class="kpi-label">Simulated OEE %</span>
-              <span class="kpi-value" id="oeewi-sim-oee" style="color:var(--c-blue);">80 <small>%</small></span>
-              <span class="kpi-delta pos">▲ +18 pts vs current</span>
-            </div>
-            <div class="kpi-card" style="border-left:3px solid var(--c-gs);">
-              <span class="kpi-label">GS OEE % (P75)</span>
-              <span class="kpi-value" style="color:var(--c-gs);">92.1 <small>%</small></span>
-              <span class="kpi-delta">Benchmark — Mascara × L67</span>
-            </div>
-          </div>
-
-          <!-- Savings cards -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-            <div class="kpi-card" style="border-left:3px solid var(--c-blue);">
-              <span class="kpi-label">$ Savings vs Current OEE</span>
-              <span class="kpi-value" id="oeewi-save-curr" style="color:var(--c-blue);">$17,740</span>
-              <span class="kpi-delta pos">Operational Gap recovered</span>
-            </div>
-            <div class="kpi-card" style="border-left:3px solid var(--c-gs);">
-              <span class="kpi-label">$ Remaining Gap vs GS</span>
-              <span class="kpi-value" id="oeewi-save-gs" style="color:var(--c-gs);">$11,860</span>
-              <span class="kpi-delta">Engineering / structural gap</span>
-            </div>
-            <div class="kpi-card" style="border-left:3px solid var(--c-rs);">
-              <span class="kpi-label">OEE Savings Potential ($)</span>
-              <span class="kpi-value" id="oeewi-save-total" style="color:var(--c-rs);">$29,600</span>
-              <span class="kpi-delta neg">Total gap to GS (before sim)</span>
-            </div>
-            <div class="kpi-card" style="border-left:3px solid var(--c-purple);">
-              <span class="kpi-label">Labor Savings Potential ($)</span>
-              <span class="kpi-value" id="oeewi-labor-save" style="color:var(--c-purple);">$17,740</span>
-              <span class="kpi-delta">(Labor hrs/1000u × Δ OEE × rate)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Progressive improvement chart -->
-      <div class="card">
-        <span class="card-title">📊 $ Savings at Incremental OEE Improvement Steps</span>
-        <div class="card-subtitle">Cumulative $ savings vs current OEE at +1%, +2%, +5%, +10% improvement steps. RS GAP terminology per team alignment.</div>
-        <div class="chart-wrap" style="height:200px;"><canvas id="ch-oee-whatif-steps"></canvas></div>
-      </div>
-
-      <div class="note-box" style="line-height:1.7;">
-        <strong>RS GAP terminology:</strong> Per team alignment (Kris Van Deursen), RS GAP = operational gap between Reference Standard and Actual. Engineering GAP = GS − RS. &nbsp;
-        <strong>Formula used:</strong> $ Savings = (Target OEE% − Current OEE%) ÷ 100 × Labor Hrs/1000u × (PO QTY ÷ 1000) × Labor Rate. &nbsp;
-        <strong>⚠ Labor rate:</strong> SAP plant FY rate (plant-specific). Headcount excluded — use Labor Hrs/1000u as proxy.
-      </div>
-    </div><!-- /cnt-oee-whatif -->
 
     <!-- ─── SPEED: DEEP VIEW ─────────────────────────────── -->
     <div id="cnt-speed-dv" class="kpi-cnt">
@@ -3805,12 +3341,15 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
                 <th class="r">Reference Rs (UPM)</th>
                 <th class="r">RS GAP ($)</th>
                 <th class="r">GS GAP ($)</th>
+                <th class="r">Setup Time (hrs)</th>
+                <th class="r">Run Time (hrs)</th>
+                <th class="r">Reported Hours</th>
               </tr>
             </thead>
             <tbody id="tb-dv-speed"></tbody>
           </table>
         </div>
-        <div class="note-box" style="margin-top:6px;">RS GAP = Rs − As (operational). GS GAP = Gs − Rs (engineering/CAPEX). People &amp; labor cost pending Steven Johnston sign-off. Exclusions applied: speed &lt;5/&gt;150 UPM, qty &lt;10, line trials, China rec variants, Z-variants, assembly-only.</div>
+        <div class="note-box" style="margin-top:6px;">RS GAP = Rs − As (operational). GS GAP = Gs − Rs (may require equipment upgrades, formula adjustments, or size optimization). People &amp; labor cost pending Steven Johnston sign-off. Exclusions applied: speed &lt;5/&gt;150 UPM, qty &lt;10, line trials, China rec variants, Z-variants, assembly-only.</div>
       </div>
     </div><!-- /cnt-speed-dv -->
 
@@ -3820,73 +3359,39 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
     <!-- ─── SCRAP ──────────────────────────────────────────── -->
     <div id="cnt-scrap" class="kpi-cnt">
       <div class="sec-heading">♻ Scrap</div>
-      <div class="card" style="text-align:center;padding:40px 24px;">
-        <div style="font-size:48px;margin-bottom:12px;">🚧</div>
-        <div style="font-size:16px;font-weight:700;color:var(--c-text);margin-bottom:8px;">To be built</div>
-        <div class="note-box" style="display:inline-block;text-align:left;max-width:480px;">
-          Scrap KPI design in progress. Will follow Speed / Labor / OEE structure once data model is finalized.
+      <div class="card" style="text-align:center;padding:48px 24px;">
+        <div style="font-size:48px;margin-bottom:14px;">📊</div>
+        <div style="font-size:18px;font-weight:700;color:var(--c-text);margin-bottom:10px;">Scrap Analytics</div>
+        <div style="font-size:13px;color:var(--c-muted);margin-bottom:20px;max-width:400px;margin-left:auto;margin-right:auto;">
+          Scrap data is tracked and maintained by Steven Johnston. View the dedicated Scrap dashboard for full analysis.
         </div>
+        <a href="#" onclick="return false;" style="display:inline-block;padding:10px 24px;background:var(--c-blue);color:#fff;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;" title="Contact Steven Johnston for Scrap dashboard access">
+          Open Scrap Dashboard (Steven Johnston) ↗
+        </a>
+        <div style="margin-top:14px;font-size:11px;color:var(--c-muted);">Contact Steven Johnston for access and data questions.</div>
       </div>
     </div><!-- /cnt-scrap -->
 
 
     <!-- ─── MASS ATTRIBUTES ──────────────────────────────── -->
     <div id="cnt-massattr" class="kpi-cnt">
+      <div class="sec-heading">🧪 Mass Attributes — LIMS Integration</div>
 
-      <!-- LIMS Status -->
-      <div class="info-box">
-        <div class="info-box-title">🔬 Mass Attributes &amp; LIMS Integration</div>
-        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:4px;">
+      <div class="card" style="text-align:center;padding:48px 24px;max-width:560px;margin:0 auto;">
+        <div style="font-size:52px;margin-bottom:14px;">🔬</div>
+        <div style="font-size:18px;font-weight:700;color:var(--c-text);margin-bottom:10px;">Mass Attributes data lives in LIMS</div>
+        <div style="font-size:13px;color:var(--c-muted);margin-bottom:8px;line-height:1.6;">
+          Mass Attribute analytics (viscosity, specific gravity, fill volume, and KPI correlations) are accessed directly through the LIMS system. This dashboard links out to LIMS rather than replicating the data in-page.
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;">
           <span class="gov-chip approved">✅ LIMS — Connected (in progress)</span>
           <span class="gov-chip deferred">↗ PDS — Future integration</span>
           <span class="gov-chip deferred">↗ Component supplier data — Stretch goal</span>
         </div>
-        <div class="info-item" style="margin-top:8px;"><strong>Statistical note:</strong> Correlation analysis requires ≥ 50 runs per Product Category–Resource pair. Product Categories with insufficient data are flagged below.</div>
-      </div>
-
-      <!-- Run Sequence Heatmap -->
-      <div class="card">
-        <div class="flex-row">
-          <span class="card-title">Run Sequence Heat Map</span>
-          <span style="font-size:10px;color:var(--c-muted);">Last 15 POs · Chronological order · Viscosity scale 1(Low)→5(High)</span>
-        </div>
-        <div class="card-subtitle" style="margin-bottom:6px;">Visualise demographic changes across runs to identify correlations between mass attributes and KPI performance.</div>
-        <div class="tbl-wrap">
-          <table class="hm-table" id="hm-runseq">
-            <thead>
-              <tr>
-                <th>PO #</th><th>SKU / Product Category</th><th>Resource</th>
-                <th style="text-align:center;">Viscosity</th>
-                <th class="r">Sp. Gravity</th>
-                <th class="r">Fill Vol (ml)</th>
-                <th class="r">Speed Gap %</th>
-                <th class="r">OEE Gap %</th>
-                <th class="r">Scrap %</th>
-              </tr>
-            </thead>
-            <tbody id="tb-hm-runseq"></tbody>
-          </table>
-        </div>
-        <div class="note-box" style="margin-top:8px;">⚠ Flagged: Cleanser - Foaming — only 7 runs available on L72. Percentile methodology TBD for n &lt; 12.</div>
-      </div>
-
-      <!-- Correlation Matrix -->
-      <div class="card">
-        <span class="card-title">KPI × Mass Attribute Correlation Matrix</span>
-        <div class="card-subtitle" style="margin-bottom:10px;">r² values: Strong (≥0.6, green) · Moderate (0.3–0.6, yellow) · Weak (&lt;0.3, grey) · Inverse (negative, orange)</div>
-        <div class="corr-grid" id="corr-matrix">
-          <!-- rendered by JS -->
-        </div>
-      </div>
-
-      <!-- Analysis options note -->
-      <div class="info-box">
-        <div class="info-box-title">📊 Analysis Roadmap</div>
-        <div class="info-item"><strong>Heat map (PO run sequence):</strong> Shows demographic changes (product category, fill size, viscosity) vs performance metrics. <span style="color:#259F4C;font-weight:700;">Available now.</span></div>
-        <div class="info-item"><strong>Matrix view (product category × viscosity × performance):</strong> Statistical attribution when ≥ 50 related runs per pair. Partial data available.</div>
-        <div class="info-item"><strong>Trend across similar runs:</strong> Compare runs with same product category but different parameters (e.g. supplier A vs B, viscosity 2 vs 3).</div>
-        <div class="info-item"><strong>Planned correlations (pending LIMS integration):</strong> Speed ↔ Viscosity/Sp.Gravity · OEE ↔ Fill volume/Aeration · Scrap ↔ Component supplier quality. <span style="color:#F5A534;font-weight:700;">⏳ Equipment-level data (temperature, mass) awaiting Ignition/EWR feed.</span></div>
-        <div class="info-item" style="margin-top:4px;padding-top:6px;border-top:1px solid rgba(34,151,246,0.15);"><strong>Known limitations:</strong> No operator-level tracking. Equipment-specific factors deferred pending Ignition/EWR data integration. Operator adjustments not captured in current data model.</div>
+        <a href="#" onclick="return false;" style="display:inline-block;padding:10px 24px;background:var(--c-blue);color:#fff;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;" title="Open LIMS system for Mass Attributes">
+          Open LIMS System ↗
+        </a>
+        <div style="margin-top:14px;font-size:11px;color:var(--c-muted);">Contact your LIMS administrator for access. Planned correlations: Speed ↔ Viscosity/Sp.Gravity · OEE ↔ Fill volume/Aeration · Scrap ↔ Component supplier quality.</div>
       </div>
 
     </div><!-- /cnt-massattr -->
@@ -4609,6 +4114,207 @@ table.ov-heatmap tbody td.hm-clickable:hover { outline:2px solid rgba(255,255,25
 
   </main><!-- /page-overfill -->
 
+  <!-- =====================================================
+       INTELLIGENCE: Performance Improvement Recommendations
+       ===================================================== -->
+  <main id="page-intelligence" class="gs-content" style="display:none;">
+    <div style="padding:20px 24px;">
+
+      <!-- ── Page Header ── -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div style="font-size:18px;font-weight:700;color:var(--c-text);">Intelligence — Performance Improvement Recommendations</div>
+          <div style="font-size:12px;color:var(--c-muted);margin-top:2px;">What-If financial modelling across Speed, Labor, OEE, Scrap, and Mass Attributes</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <!-- Governed badge + date pickers -->
+          <div class="gs-type-badge governed" style="font-size:11px;">🔒 Governed GS · FY25</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--c-muted);">
+            <span>From</span>
+            <input type="text" id="intel-date-from" value="01.07.2024" style="width:88px;padding:4px 7px;border:1px solid var(--c-border);border-radius:5px;font-size:12px;background:var(--c-card);color:var(--c-text);text-align:center;">
+            <span>To</span>
+            <input type="text" id="intel-date-to" value="30.06.2025" style="width:88px;padding:4px 7px;border:1px solid var(--c-border);border-radius:5px;font-size:12px;background:var(--c-card);color:var(--c-text);text-align:center;">
+          </div>
+          <!-- Time window buttons -->
+          <div style="display:flex;gap:4px;">
+            <button class="intel-tw-btn" onclick="setIntelWindow('1w',this)">1 Week</button>
+            <button class="intel-tw-btn" onclick="setIntelWindow('3w',this)">3 Weeks</button>
+            <button class="intel-tw-btn intel-tw-active" onclick="setIntelWindow('1m',this)">1 Month</button>
+            <button class="intel-tw-btn" onclick="setIntelWindow('3m',this)">3 Months</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 3 Summary Cards ── -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
+
+        <!-- Total Opportunity -->
+        <div style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:10px;padding:20px 22px;color:#fff;position:relative;overflow:hidden;">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;opacity:.85;margin-bottom:8px;">Total Opportunity $</div>
+          <div style="font-size:48px;font-weight:800;line-height:1;margin-bottom:6px;">$612.1K</div>
+          <div style="font-size:11px;opacity:.75;">Combined Engineering + Operational gap</div>
+          <div style="position:absolute;right:-16px;top:-16px;font-size:80px;opacity:.08;line-height:1;">$</div>
+        </div>
+
+        <!-- Engineering Gap -->
+        <div style="background:var(--c-card);border:3px solid var(--c-blue);border-radius:10px;padding:20px 22px;position:relative;">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">⚙️ Engineering Gap $</div>
+          <div style="font-size:48px;font-weight:800;line-height:1;color:var(--c-blue);margin-bottom:6px;">$248.4K</div>
+          <div style="font-size:11px;color:var(--c-muted);">GS − RS: may require equipment upgrades or formula adjustments</div>
+        </div>
+
+        <!-- Operational Gap -->
+        <div style="background:var(--c-card);border:3px solid #ef4444;border-radius:10px;padding:20px 22px;position:relative;">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">📈 Operational Gap $</div>
+          <div style="font-size:48px;font-weight:800;line-height:1;color:#ef4444;margin-bottom:6px;">$363.7K</div>
+          <div style="font-size:11px;color:var(--c-muted);">RS − Actual: actionable by CE teams today</div>
+        </div>
+
+      </div>
+
+      <!-- ── KPI Cards row ── -->
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;">
+
+        <!-- Speed -->
+        <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('speed',this)">
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">⚡ Speed</div>
+          <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$184.2K</div>
+          <div style="font-size:10px;color:#16a34a;font-weight:600;">↑ 28 POs with gap</div>
+          <div style="margin-top:8px;display:flex;gap:4px;">
+            <div style="flex:3;height:4px;background:#3b82f6;border-radius:2px;" title="Engineering"></div>
+            <div style="flex:5;height:4px;background:#ef4444;border-radius:2px;" title="Operational"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
+        </div>
+
+        <!-- Labor -->
+        <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('labor',this)">
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">👥 Labor</div>
+          <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$98.6K</div>
+          <div style="font-size:10px;color:#16a34a;font-weight:600;">↑ 22 POs with gap</div>
+          <div style="margin-top:8px;display:flex;gap:4px;">
+            <div style="flex:2;height:4px;background:#3b82f6;border-radius:2px;"></div>
+            <div style="flex:6;height:4px;background:#ef4444;border-radius:2px;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
+        </div>
+
+        <!-- OEE -->
+        <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('oee',this)">
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">⚙️ OEE</div>
+          <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$221.5K</div>
+          <div style="font-size:10px;color:#16a34a;font-weight:600;">↑ 31 POs with gap</div>
+          <div style="margin-top:8px;display:flex;gap:4px;">
+            <div style="flex:4;height:4px;background:#3b82f6;border-radius:2px;"></div>
+            <div style="flex:4;height:4px;background:#ef4444;border-radius:2px;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
+        </div>
+
+        <!-- Scrap -->
+        <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('scrap',this)">
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">🗑️ Scrap</div>
+          <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$67.8K</div>
+          <div style="font-size:10px;color:var(--c-muted);font-weight:600;">→ See Steven's dashboard</div>
+          <div style="margin-top:8px;display:flex;gap:4px;">
+            <div style="flex:2;height:4px;background:#3b82f6;border-radius:2px;"></div>
+            <div style="flex:3;height:4px;background:#ef4444;border-radius:2px;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
+        </div>
+
+        <!-- Mass Attr LIMS -->
+        <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('massattr',this)">
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">🧪 Mass Attr. LIMS</div>
+          <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$40.0K</div>
+          <div style="font-size:10px;color:var(--c-muted);font-weight:600;">→ External LIMS system</div>
+          <div style="margin-top:8px;display:flex;gap:4px;">
+            <div style="flex:1;height:4px;background:#3b82f6;border-radius:2px;"></div>
+            <div style="flex:3;height:4px;background:#ef4444;border-radius:2px;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
+        </div>
+
+      </div>
+
+      <!-- ── Stacked Bar Chart + Toggle ── -->
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:20px;">
+
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <span class="card-title">Opportunity by KPI</span>
+            <div style="display:flex;gap:4px;">
+              <button class="intel-toggle-btn intel-toggle-active" id="intel-chart-upm" onclick="switchIntelChartView('upm',this)">UPM</button>
+              <button class="intel-toggle-btn" id="intel-chart-dollar" onclick="switchIntelChartView('dollar',this)">$</button>
+            </div>
+          </div>
+          <div style="position:relative;height:220px;">
+            <canvas id="ch-intel-bar"></canvas>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:8px;justify-content:center;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--c-muted);"><div style="width:10px;height:10px;border-radius:2px;background:#3b82f6;"></div>Engineering Gap</div>
+            <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--c-muted);"><div style="width:10px;height:10px;border-radius:2px;background:#ef4444;"></div>Operational Gap</div>
+          </div>
+        </div>
+
+        <!-- Improvement Scenarios Table -->
+        <div class="card">
+          <span class="card-title">Improvement Scenarios</span>
+          <div class="card-subtitle" style="margin-bottom:10px;">Estimated $ savings by closing % of identified gap</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:2px solid var(--c-border);">
+                <th style="text-align:left;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">KPI</th>
+                <th style="text-align:right;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">25% Close</th>
+                <th style="text-align:right;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">50% Close</th>
+                <th style="text-align:right;padding:5px 6px;color:var(--c-muted);font-weight:600;font-size:10px;text-transform:uppercase;">Full Close</th>
+              </tr>
+            </thead>
+            <tbody id="intel-scenario-tbody">
+              <tr style="border-bottom:1px solid var(--c-border);">
+                <td style="padding:6px;font-weight:600;">⚡ Speed</td>
+                <td style="padding:6px;text-align:right;">$46.1K</td>
+                <td style="padding:6px;text-align:right;">$92.1K</td>
+                <td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$184.2K</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--c-border);">
+                <td style="padding:6px;font-weight:600;">👥 Labor</td>
+                <td style="padding:6px;text-align:right;">$24.7K</td>
+                <td style="padding:6px;text-align:right;">$49.3K</td>
+                <td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$98.6K</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--c-border);">
+                <td style="padding:6px;font-weight:600;">⚙️ OEE</td>
+                <td style="padding:6px;text-align:right;">$55.4K</td>
+                <td style="padding:6px;text-align:right;">$110.8K</td>
+                <td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$221.5K</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--c-border);">
+                <td style="padding:6px;font-weight:600;">🗑️ Scrap</td>
+                <td style="padding:6px;text-align:right;">$17.0K</td>
+                <td style="padding:6px;text-align:right;">$33.9K</td>
+                <td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$67.8K</td>
+              </tr>
+              <tr>
+                <td style="padding:6px;font-weight:800;color:var(--c-text);">Total</td>
+                <td style="padding:6px;text-align:right;font-weight:700;">$143.2K</td>
+                <td style="padding:6px;text-align:right;font-weight:700;">$286.1K</td>
+                <td style="padding:6px;text-align:right;font-weight:800;color:#16a34a;">$572.1K</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ── Footer note ── -->
+      <div class="info-box" style="font-size:11px;padding:10px 14px;">
+        📌 <strong>Methodology:</strong> Kris Van Deursen's financial model. Engineering Gap = GS − RS (may require equipment upgrades, formula adjustments, or size optimization). Operational Gap = RS − Actual (actionable by CE teams). All figures are estimates based on planned SAP orders — for capital investment analysis only, not for operational targets. Z-variant and ZNFA orders excluded.
+      </div>
+
+    </div>
+  </main><!-- /page-intelligence -->
+
 </div><!-- /gs-layout -->
 
 
@@ -4797,18 +4503,14 @@ function baseOpts(yLabel) {
 }
 
 function comboConfig(labels, bars, l1, l2, yLabel) {
-  return {
-    type:'bar',
-    data:{
-      labels,
-      datasets:[
-        {type:'bar',  label:'Actual',        data:bars, backgroundColor:CC.actual+'cc', borderRadius:3, order:2},
-        {type:'line', label:'GS (Nameplate)', data:l1,   borderColor:CC.gs,   borderDash:[6,3], borderWidth:2.5, pointRadius:3, fill:false, tension:0, order:1},
-        {type:'line', label:'RS (Reference)', data:l2,   borderColor:CC.rs,   borderDash:[2,4], borderWidth:2.5, pointRadius:3, fill:false, tension:0, order:1},
-      ]
-    },
-    options:baseOpts(yLabel)
-  };
+  const datasets = [
+    {type:'bar',  label:'Actual',        data:bars, backgroundColor:CC.actual+'cc', borderRadius:3, order:2},
+    {type:'line', label:'GS (Nameplate)', data:l1,   borderColor:CC.gs,   borderDash:[6,3], borderWidth:2.5, pointRadius:3, fill:false, tension:0, order:1},
+  ];
+  if (l2 != null) {
+    datasets.push({type:'line', label:'RS (Reference)', data:l2, borderColor:CC.rs, borderDash:[2,4], borderWidth:2.5, pointRadius:3, fill:false, tension:0, order:1});
+  }
+  return { type:'bar', data:{ labels, datasets }, options:baseOpts(yLabel) };
 }
 
 function speedSegConfig() {
@@ -4868,8 +4570,67 @@ function initLaborResultsCharts() {
   if (REG['ch-crew-res']) REG['ch-crew-res'].resize();
 }
 function initOEEResultsCharts() {
-  init('ch-oee-res', comboConfig(MONTHS, OEE.actual, OEE.gs, OEE.rs, 'OEE %'));
+  init('ch-oee-res', comboConfig(MONTHS, OEE.actual, OEE.gs, null, 'OEE %'));
   if (REG['ch-oee-res']) REG['ch-oee-res'].resize();
+  initOEEFamilyTrendChart();
+}
+
+const OEE_FAMILY_DATA = [
+  { family:'Mascara',          color:'#3b82f6', gs:75, data:[62,64,63,65,66,67,65,68,69,70,71,72] },
+  { family:'Foundation',       color:'#10b981', gs:74, data:[58,60,61,59,62,63,61,64,65,66,65,67] },
+  { family:'Serum',            color:'#f59e0b', gs:73, data:[55,57,56,58,59,60,58,61,62,63,63,64] },
+  { family:'Cleanser',         color:'#ef4444', gs:72, data:[51,53,54,52,55,56,54,57,58,59,60,61] },
+  { family:'Moisturizer',      color:'#8b5cf6', gs:76, data:[60,62,63,61,64,65,63,66,67,68,68,69] },
+];
+const OEE_FAM_MONTHS = ['Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
+
+function initOEEFamilyTrendChart() {
+  const ctx = document.getElementById('ch-oee-family-trend');
+  if (!ctx) return;
+  if (REG['ch-oee-family-trend']) { REG['ch-oee-family-trend'].destroy(); delete REG['ch-oee-family-trend']; }
+  const datasets = OEE_FAMILY_DATA.map(f => ({
+    label: f.family,
+    data: f.data,
+    borderColor: f.color,
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    pointRadius: 3,
+    tension: 0.3,
+  }));
+  // Add GS benchmark line (average across families)
+  const avgGS = Math.round(OEE_FAMILY_DATA.reduce((s,f)=>s+f.gs,0)/OEE_FAMILY_DATA.length);
+  datasets.push({
+    label: 'GS Benchmark',
+    data: Array(12).fill(avgGS),
+    borderColor: '#22c55e',
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderDash: [5,4],
+    pointRadius: 0,
+    tension: 0,
+  });
+  const legend = document.getElementById('oee-family-legend');
+  if (legend) {
+    legend.innerHTML = OEE_FAMILY_DATA.map(f =>
+      `<span class="legend-item"><span style="display:inline-block;width:16px;height:3px;background:${f.color};vertical-align:middle;margin-right:3px;border-radius:2px;"></span>${f.family}</span>`
+    ).join('') + `<span class="legend-item"><span style="display:inline-block;width:16px;border-top:2px dashed #22c55e;vertical-align:middle;margin-right:3px;"></span> GS Benchmark</span>`;
+  }
+  REG['ch-oee-family-trend'] = new Chart(ctx, {
+    type: 'line',
+    data: { labels: OEE_FAM_MONTHS, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: {
+        label: c => `${c.dataset.label}: ${c.parsed.y}%`
+      }}},
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: { min: 45, max: 85, grid: { color: 'rgba(0,0,0,.06)' }, ticks: {
+          font: { size: 10 }, callback: v => v + '%'
+        }}
+      }
+    }
+  });
 }
 
 function initPredictionsCharts() {
@@ -4957,7 +4718,7 @@ function initDVLaborCharts() {
   });
 }
 function initDVOEECharts() {
-  init('ch-dv-oee-trend', comboConfig(MONTHS, OEE.actual, OEE.gs, OEE.rs, 'OEE %'));
+  init('ch-dv-oee-trend', comboConfig(MONTHS, OEE.actual, OEE.gs, null, 'OEE %'));
   init('ch-dv-oee-po',{
     type:'bar',
     data:{labels:['Small','Medium','Large'], datasets:[
@@ -5199,6 +4960,9 @@ function renderDVSpeed() {
     <td class="r">${r.actual}</td><td class="r">${r.gs}</td><td class="r">${r.rs}</td>
     <td class="r ${r.gapRS>0?'c-neg':'c-pos'}">${fmt(r.gapRS)}</td>
     <td class="r">${fmt(r.gapGS)}</td>
+    <td class="r">${r.setupTime!=null?r.setupTime.toFixed(1):'—'}</td>
+    <td class="r">${r.runTime!=null?r.runTime.toFixed(1):'—'}</td>
+    <td class="r">${r.reportedHours!=null?r.reportedHours.toFixed(1)+'mh':'—'}</td>
   </tr>`).join('');
 }
 function renderDVLabor() {
@@ -5229,7 +4993,8 @@ function renderDVOEE() {
     <td class="r">${fmtN(getAvgSkuQty(r.sku))}</td>
     <td>${r.sku}</td><td>${r.res}</td><td>${r.poSz}</td>
     <td class="r">${r.actual}%</td><td class="r">${r.gs}%</td>
-    <td class="r c-neg">${fmt(r.gapUSD)}</td>
+    <td class="r">${r.idealTime!=null?r.idealTime.toFixed(2):'—'}</td>
+    <td class="r">${r.actualTime!=null?r.actualTime.toFixed(2):'—'}</td>
   </tr>`).join('');
 }
 function renderDVScrap() {
@@ -5279,7 +5044,7 @@ function switchOEEResView(val) {
     if (kpiRow)   kpiRow.style.display   = '';
     if (compWrap) compWrap.style.display = 'none';
     if (REG[id]) { REG[id].destroy(); delete REG[id]; }
-    init(id, comboConfig(MONTHS, OEE.actual, OEE.gs, OEE.rs, 'OEE %'));
+    init(id, comboConfig(MONTHS, OEE.actual, OEE.gs, null, 'OEE %'));
     const leg = $$('oee-res-legend');
     if (leg) { leg.style.display=''; leg.innerHTML=`
       <span class="legend-item"><span class="leg-line actual"></span> Actual OEE%</span>
@@ -5599,7 +5364,7 @@ function renderOEEGapTable(reset) {
     families.forEach(fam => {
       const rows = sorted.filter(r => r.family === fam);
       const famTotal = rows.reduce((s, r) => s + r.impact, 0);
-      html += `<tr class="family-group-hdr"><td colspan="10">${fam} &nbsp;<span style="font-weight:400;opacity:.7;">${rows.length} POs · Total GAP: ${fmt(famTotal)}</span></td></tr>`;
+      html += `<tr class="family-group-hdr"><td colspan="9">${fam} &nbsp;<span style="font-weight:400;opacity:.7;">${rows.length} POs · Total GAP: ${fmt(famTotal)}</span></td></tr>`;
       rows.forEach(r => {
         html += `<tr>
           <td>${r.res}</td>
@@ -5611,7 +5376,6 @@ function renderOEEGapTable(reset) {
           <td class="r" style="color:var(--c-gs)">${r.gsOee.toFixed(1)}%</td>
           <td class="r" style="color:${r.gap > 5 ? 'var(--c-neg)' : 'var(--c-text)'}">${r.gap.toFixed(1)}%</td>
           <td class="r c-neg">${r.impact > 0 ? fmt(r.impact) : '—'}</td>
-          <td>${oeeTierBadge(r.tier)}</td>
         </tr>`;
       });
     });
@@ -5624,7 +5388,6 @@ function renderOEEGapTable(reset) {
       <td class="r" style="color:var(--c-gs)">${r.gsOee.toFixed(1)}%</td>
       <td class="r" style="color:${r.gap > 5 ? 'var(--c-neg)' : 'var(--c-text)'}">${r.gap.toFixed(1)}%</td>
       <td class="r c-neg">${r.impact > 0 ? fmt(r.impact) : '—'}</td>
-      <td>${oeeTierBadge(r.tier)}</td>
     </tr>`).join('');
   }
   const btn = $$('btn-oee-gap-more');
@@ -6339,7 +6102,7 @@ function showKPI(kpi) {
 function showKPISub(sub) {
   if (!activeKPI) return; // guard: no KPI selected yet
   activeKPISub = sub;
-  ['results','predictions','gap','dv','whatif'].forEach(t => {
+  ['results','predictions','gap','dv'].forEach(t => {
     const btn = document.getElementById('ksub-' + t);
     if (btn) btn.classList.toggle('active', t === sub);
   });
@@ -6358,7 +6121,6 @@ function showKPIContent(kpi, sub) {
       if (sub === 'predictions') { predOppsOffset = 0; renderPred(); initPredictionsCharts(); renderPredictedOpportunities(); }
       if (sub === 'gap')         { renderPlanAhead(); renderImpact(); initGapCharts(); renderRSGapDeepDive(false); }
       if (sub === 'dv')          { initDVSpeedCharts(); renderDVSpeed(); }
-      if (sub === 'whatif')      { renderWhatIfTable(); initWhatIfCharts(); updateWhatIfSimulation(); }
     } else if (kpi === 'labor') {
       showLBContent(sub);
     } else if (kpi === 'oee') {
@@ -6366,9 +6128,8 @@ function showKPIContent(kpi, sub) {
       if (sub === 'dv')          { initDVOEECharts(); renderDVOEE(); }
       if (sub === 'gap')         { renderOEEGapTable(true); initOEEGapCharts(); }
       if (sub === 'predictions') { renderOEEPredTable(true); initOEEPredCharts(); }
-      if (sub === 'whatif')      { initOEEWhatIfChart(); }
     } else if (kpi === 'massattr') {
-      renderMassAttrHeatmap(); renderCorrelationMatrix();
+      // LIMS gateway only — no in-page render
     }
   }, 30);
 }
@@ -6387,7 +6148,7 @@ function showPage(page) {
 }
 
 function showHomeTab(tab) {
-  const m = { results:'results', predictions:'predictions', gap:'gap', whatif:'whatif' };
+  const m = { results:'results', predictions:'predictions', gap:'gap' };
   if (m[tab]) showKPISub(m[tab]);
 }
 
@@ -7070,38 +6831,45 @@ let THREEMO_GROUP_BY = 'res';
 /* ─── OVERFILL: MODULE SWITCH ────────────────────────── */
 
 function showModule(m) {
-  const gsMain = document.getElementById('gs-main');
-  const pageOV = document.getElementById('page-overfill');
-  const gsSide = document.getElementById('gs-sidebar-content');
-  const ovSide = document.getElementById('ov-sidebar-content');
-  const btnGS  = document.getElementById('btn-module-gs');
-  const btnOV  = document.getElementById('btn-module-overfill');
+  const gsMain  = document.getElementById('gs-main');
+  const pageOV  = document.getElementById('page-overfill');
+  const pageIN  = document.getElementById('page-intelligence');
+  const gsSide  = document.getElementById('gs-sidebar-content');
+  const ovSide  = document.getElementById('ov-sidebar-content');
+  const btnGS   = document.getElementById('btn-module-gs');
+  const btnOV   = document.getElementById('btn-module-overfill');
+  const btnIN   = document.getElementById('btn-module-intelligence');
+
+  // Hide all pages and deactivate all buttons
+  if (gsMain)  gsMain.style.display  = 'none';
+  if (pageOV)  pageOV.style.display  = 'none';
+  if (pageIN)  pageIN.style.display  = 'none';
+  if (gsSide)  gsSide.style.display  = 'none';
+  if (ovSide)  ovSide.style.display  = 'none';
+  [btnGS, btnOV, btnIN].forEach(b => { if (b) b.classList.remove('active'); });
 
   if (m === 'gs') {
-    pageOV.style.display = 'none';
     if (gsMain) gsMain.style.display = '';
-    gsSide.style.display = '';
-    ovSide.style.display = 'none';
-    btnGS.classList.add('active');
-    btnOV.classList.remove('active');
+    if (gsSide) gsSide.style.display = '';
+    if (btnGS)  btnGS.classList.add('active');
     if (activeKPI) {
       showKPI(activeKPI);
     } else {
       const o = document.getElementById('cnt-gs-overview');
       if (o) { document.querySelectorAll('.kpi-cnt').forEach(p => p.classList.remove('active')); o.classList.add('active'); }
     }
-  } else {
-    if (gsMain) gsMain.style.display = 'none';
-    pageOV.style.display = '';
-    gsSide.style.display = 'none';
-    ovSide.style.display = '';
-    btnGS.classList.remove('active');
-    btnOV.classList.add('active');
-    // persist Plant filter from GS → OV
+  } else if (m === 'overfill') {
+    if (pageOV) pageOV.style.display = '';
+    if (ovSide) ovSide.style.display = '';
+    if (btnOV)  btnOV.classList.add('active');
     const gsPlant = document.getElementById('gs-plant');
     const ovPlant = document.getElementById('ov-plant');
     if (gsPlant && ovPlant) ovPlant.value = gsPlant.value;
     showOVTab('overview');
+  } else if (m === 'intelligence') {
+    if (pageIN) pageIN.style.display = '';
+    if (btnIN)  btnIN.classList.add('active');
+    initIntelCharts();
   }
 }
 
@@ -9357,7 +9125,6 @@ function showLBContent(sub) {
   if (sub === 'predictions' && !LB_INITED.predictions) { initLBPred();        LB_INITED.predictions = true; }
   if (sub === 'gap'         && !LB_INITED.gap)         { initLBGap();         LB_INITED.gap         = true; }
   if (sub === 'dv'          && !LB_INITED.dv)          { initLBDV();          LB_INITED.dv          = true; }
-  if (sub === 'whatif'      && !LB_INITED.whatif)      { initLBWhatIf();      LB_INITED.whatif      = true; }
 }
 
 /* ── RESULTS ─────────────────────────────────────────────────── */
@@ -9378,7 +9145,7 @@ function _renderLBTrendChart(view) {
         labels: LB_TREND_MONTHS,
         datasets: [
           { label:'Actual (hrs/1000)', data:LB_TREND_ACTUAL, backgroundColor:'#2E7D32', borderRadius:3, order:3 },
-          { label:'GS LE %',     type:'line', data:LB_TREND_GS, borderColor:'#00695C', borderWidth:2.5,
+          { label:'GS (hrs/1000)',     type:'line', data:LB_TREND_GS, borderColor:'#00695C', borderWidth:2.5,
             borderDash:[6,4], pointRadius:4, pointBackgroundColor:'#00695C', fill:false, order:2 },
           { label:'RS LE %',     type:'line', data:LB_TREND_RS, borderColor:'#E65100', borderWidth:1.5,
             borderDash:[2,3], pointRadius:3, pointBackgroundColor:'#E65100', fill:false, order:1 },
@@ -9544,7 +9311,7 @@ function _renderLBGapBar() {
       labels: LB_AVB_SKUS.labels,
       datasets:[
         { label:'Actual (hrs/1000)', data:LB_AVB_SKUS.actual, backgroundColor:'#1565C0', borderRadius:3, barPercentage:0.4, categoryPercentage:0.7 },
-        { label:'GS LE %',     data:LB_AVB_SKUS.gs,     backgroundColor:'#2E7D32', borderRadius:3, barPercentage:0.4, categoryPercentage:0.7 },
+        { label:'GS (hrs/1000)',     data:LB_AVB_SKUS.gs,     backgroundColor:'#2E7D32', borderRadius:3, barPercentage:0.4, categoryPercentage:0.7 },
       ]
     },
     options:{
@@ -9695,7 +9462,7 @@ function initLBDV() {
       labels: LB_TREND_MONTHS,
       datasets:[
         { label:'Actual (hrs/1000)', data:LB_TREND_ACTUAL, backgroundColor:'#2E7D32', borderRadius:3, order:3 },
-        { label:'GS LE %', type:'line', data:LB_TREND_GS, borderColor:'#00695C', borderWidth:2,
+        { label:'GS (hrs/1000)', type:'line', data:LB_TREND_GS, borderColor:'#00695C', borderWidth:2,
           borderDash:[6,4], pointRadius:4, pointBackgroundColor:'#00695C', fill:false, order:2 },
         { label:'RS LE %', type:'line', data:LB_TREND_RS, borderColor:'#E65100', borderWidth:1.5,
           borderDash:[2,3], pointRadius:3, pointBackgroundColor:'#E65100', fill:false, order:1 },
@@ -9719,7 +9486,7 @@ function initLBDV() {
       labels:['Small','Medium','Large'],
       datasets:[
         { label:'Actual (hrs/1000)', data:[75, 85, 90], backgroundColor:['#1565C0','#1976D2','#42A5F5'], borderRadius:4 },
-        { label:'GS LE %', type:'line', data:[94,94,94], borderColor:'#00695C', borderDash:[6,4],
+        { label:'GS (hrs/1000)', type:'line', data:[94,94,94], borderColor:'#00695C', borderDash:[6,4],
           borderWidth:2, pointRadius:4, fill:false },
         { label:'RS LE %', type:'line', data:[98,98,98], borderColor:'#E65100', borderDash:[2,3],
           borderWidth:1.5, pointRadius:3, fill:false },
@@ -9980,6 +9747,82 @@ function loadLBWIPO(po) {
   document.addEventListener('DOMContentLoaded', buildHeatmap);
   window.rebuildOEEHeatmap = buildHeatmap;
 })();
+
+/* ─────────────────────────────────────────────────────────
+   INTELLIGENCE PAGE — What-If recommendations
+   ───────────────────────────────────────────────────────── */
+let intelChartInited = false;
+let intelChartRef = null;
+let intelChartMode = 'upm';
+let activeIntelKPI = null;
+
+const INTEL_KPI_DATA = {
+  speed:    { label: '⚡ Speed',    eng: 74.3,  ops: 109.9, engK: 74.3,   opsK: 109.9 },
+  labor:    { label: '👥 Labor',    eng: 29.6,  ops: 69.0,  engK: 29.6,   opsK: 69.0  },
+  oee:      { label: '⚙️ OEE',     eng: 110.8, ops: 110.7, engK: 110.8,  opsK: 110.7 },
+  scrap:    { label: '🗑️ Scrap',   eng: 20.3,  ops: 47.5,  engK: 20.3,   opsK: 47.5  },
+  massattr: { label: '🧪 Mass Attr',eng: 10.0,  ops: 30.0,  engK: 10.0,   opsK: 30.0  },
+};
+
+function initIntelCharts() {
+  if (intelChartInited) return;
+  intelChartInited = true;
+  _renderIntelBarChart();
+}
+
+function _renderIntelBarChart() {
+  const ctx = document.getElementById('ch-intel-bar');
+  if (!ctx) return;
+  if (intelChartRef) { intelChartRef.destroy(); intelChartRef = null; }
+  const labels = Object.values(INTEL_KPI_DATA).map(d => d.label);
+  const engVals = Object.values(INTEL_KPI_DATA).map(d => intelChartMode === 'dollar' ? d.engK : d.eng);
+  const opsVals = Object.values(INTEL_KPI_DATA).map(d => intelChartMode === 'dollar' ? d.opsK : d.ops);
+  intelChartRef = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Engineering Gap', data: engVals, backgroundColor: '#3b82f6', borderRadius: 4, borderSkipped: false },
+        { label: 'Operational Gap', data: opsVals, backgroundColor: '#ef4444', borderRadius: 4, borderSkipped: false },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        label: ctx => intelChartMode === 'dollar' ? `$${ctx.parsed.y.toFixed(1)}K` : `${ctx.parsed.y.toFixed(1)} UPM`
+      }}},
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: { stacked: true, grid: { color: 'rgba(0,0,0,.06)' }, ticks: {
+          font: { size: 10 },
+          callback: v => intelChartMode === 'dollar' ? '$' + v + 'K' : v + ' UPM'
+        }}
+      }
+    }
+  });
+}
+
+function switchIntelChartView(mode, btn) {
+  intelChartMode = mode;
+  document.getElementById('intel-chart-upm').classList.toggle('intel-toggle-active', mode === 'upm');
+  document.getElementById('intel-chart-dollar').classList.toggle('intel-toggle-active', mode === 'dollar');
+  intelChartInited = false;
+  _renderIntelBarChart();
+  intelChartInited = true;
+}
+
+function setIntelWindow(w, btn) {
+  document.querySelectorAll('.intel-tw-btn').forEach(b => b.classList.remove('intel-tw-active'));
+  btn.classList.add('intel-tw-active');
+}
+
+function selectIntelKPI(kpi, card) {
+  activeIntelKPI = kpi;
+  document.querySelectorAll('#page-intelligence .card[onclick]').forEach(c => {
+    c.style.borderColor = 'transparent';
+  });
+  card.style.borderColor = 'var(--c-blue)';
+}
 </script>
 
 <!-- =====================================================
