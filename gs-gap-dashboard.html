@@ -835,7 +835,7 @@ table.ov-heatmap tbody td.row-hdr {
 /* =====================================================
    OVERFILL: QUANTITY DECOMPOSITION (mirrors cost cards)
    ===================================================== */
-.qty-decomp-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px; }
+.qty-decomp-row { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:12px; }
 .qty-decomp-card { border-radius:9px; padding:18px 20px; display:flex; flex-direction:column; gap:5px; color:#fff; }
 .qty-decomp-card.brand    { background:linear-gradient(135deg,#B71C1C,#E57373); }
 .qty-decomp-card.setpoint { background:linear-gradient(135deg,#E65100,#FFB74D); }
@@ -897,7 +897,7 @@ table.ov-heatmap tbody td.row-hdr {
   font-size:12px; font-weight:700; color:var(--c-muted); text-transform:uppercase;
   letter-spacing:.5px; margin-bottom:10px; display:flex; align-items:center; gap:8px;
 }
-.decomp-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px; }
+.decomp-row { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:12px; }
 .decomp-card {
   border-radius:9px; padding:18px 20px;
   display:flex; flex-direction:column; gap:5px;
@@ -1993,26 +1993,21 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
           <div class="knc-delta" style="color:var(--c-muted);">Combined opportunity<br>across all KPIs</div>
         </div>
         <div class="knc-total-tooltip">
-          <div style="font-weight:700;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:8px;">Total Gold Standard Gap Breakdown</div>
+          <div style="font-weight:700;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:8px;">Total GS Gap — $1,167,000</div>
           <div class="knc-tt-row">
             <span class="knc-tt-label">Speed</span>
             <span class="knc-tt-val">$612,000</span>
-            <span class="knc-tt-pct">(50%)</span>
+            <span class="knc-tt-pct">(52%)</span>
           </div>
           <div class="knc-tt-row">
             <span class="knc-tt-label">Labor</span>
             <span class="knc-tt-val">$370,000</span>
-            <span class="knc-tt-pct">(30%)</span>
+            <span class="knc-tt-pct">(32%)</span>
           </div>
           <div class="knc-tt-row">
             <span class="knc-tt-label">OEE</span>
             <span class="knc-tt-val">$185,000</span>
-            <span class="knc-tt-pct">(15%)</span>
-          </div>
-          <div class="knc-tt-row">
-            <span class="knc-tt-label">Scrap</span>
-            <span class="knc-tt-val">$67,000</span>
-            <span class="knc-tt-pct">(5%)</span>
+            <span class="knc-tt-pct">(16%)</span>
           </div>
         </div>
       </button>
@@ -2041,15 +2036,13 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
           <div class="knc-delta">▼ −8% vs Rs</div>
         </div>
       </button>
-      <div class="kpi-nav-card static" id="knc-scrap" title="Scrap is a reference metric — no dedicated drill-down page">
+      <button class="kpi-nav-card" id="knc-scrap" onclick="showKPI('scrap')" title="Opens Pulse 1 Scrap Dashboard">
         <span class="knc-icon">♻️</span>
         <div class="knc-body">
           <div class="knc-kpi">Scrap</div>
-          <div class="knc-val">4.2 <span class="knc-unit">%</span></div>
-          <div class="knc-delta">▲ +1.4% vs GS</div>
-          <div class="knc-static-badge">reference only</div>
+          <div class="knc-delta" style="color:var(--c-blue);margin-top:4px;">Open Scrap Dashboard →</div>
         </div>
-      </div>
+      </button>
       <button class="kpi-nav-card" id="knc-whatif" onclick="showWhatIf()">
         <span class="knc-icon">💡</span>
         <div class="knc-body">
@@ -2095,18 +2088,16 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
             <div style="font-size:10px;color:var(--c-neg);">▼ −8% vs Rs</div>
             <div style="margin-top:8px;font-size:10px;color:var(--c-blue);font-weight:700;">View details →</div>
           </div>
-          <div style="background:#f8f9fb;border:1px solid #d0d8e4;border-radius:7px;padding:14px;text-align:center;opacity:0.82;" title="Scrap is a reference metric — no dedicated drill-down page">
+          <div onclick="showKPI('scrap')" style="background:#f8f9fb;border:1px solid #c5d8f5;border-radius:7px;padding:14px;cursor:pointer;text-align:center;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 2px 8px rgba(21,101,192,0.15)'" onmouseout="this.style.boxShadow=''">
             <div style="font-size:22px;margin-bottom:6px;">♻️</div>
             <div style="font-size:12px;font-weight:700;color:var(--c-text);">Scrap</div>
-            <div style="font-size:18px;font-weight:700;color:#6A1B9A;margin:4px 0;">4.2 <span style="font-size:10px;font-weight:400;color:var(--c-muted);">%</span></div>
-            <div style="font-size:10px;color:var(--c-neg);">▲ +1.4% vs GS</div>
-            <div style="margin-top:8px;font-size:9px;background:#edf0f4;border-radius:3px;padding:2px 6px;display:inline-block;color:var(--c-muted);">reference only</div>
+            <div style="margin-top:8px;font-size:10px;color:var(--c-blue);font-weight:700;">Open Scrap Dashboard →</div>
           </div>
         </div>
       </div>
       <div class="note-box" style="font-size:11px;">
         💡 <strong>Tip:</strong> Click any KPI card above (Speed, Labor, OEE) to drill into detailed results, predictions, gap analysis, and What-If simulation.
-        Scrap is a reference metric — visible in context on all pages.
+        Scrap analytics are in the dedicated Pulse 1 Scrap Dashboard — click the Scrap card to open it.
       </div>
     </div><!-- /cnt-gs-overview -->
 
@@ -4115,7 +4106,7 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
                 <th>Date</th><th>Plant</th><th>Resource</th><th>SKU</th><th>PO</th>
                 <th>Lot Size</th><th>Declared (ml)</th><th>Declared (g)</th><th>Specific Gravity (SG)</th>
                 <th>Target Fill (g)</th><th>Actual Fill (g)</th><th>Overfill (g)</th><th>Overfill %</th>
-                <th>Cost/g ($)</th><th>Giveaway Cost ($)</th><th>Std Costed OV ($)</th><th>Std Cost Var ($)</th><th>Costing Lot Size</th><th>Scrap % (Costed)</th><th>Brand</th>
+                <th>Cost/g ($)</th><th>Giveaway Cost ($)</th><th>Std Costed OV ($)</th><th>Std Cost Var ($)</th><th>Costing Lot Size</th><th>Brand</th>
                 <th>Category</th><th>Subcategory</th><th>Package Type</th>
                 <th>Process Type</th><th>Life Cycle Stage</th>
               </tr>
@@ -7806,13 +7797,10 @@ function _renderPredCostChart() {
     data: {
       labels: OV_PRED_WEEKS,
       datasets: [
-        { label:'Brand-Driven',     data:OV_PRED_FORECAST.brand,
+        { label:'Brand-Driven', data:OV_PRED_FORECAST.brand,
           borderColor:'#DC3545', backgroundColor:'transparent',
           fill:false, tension:.35, borderWidth:2, pointRadius:2 },
-        { label:'Set Point-Driven', data:OV_PRED_FORECAST.setpoint,
-          borderColor:'#FF9800', backgroundColor:'transparent',
-          fill:false, tension:.35, borderWidth:2, pointRadius:2 },
-        { label:'Sigma-Driven',     data:OV_PRED_FORECAST.sigma,
+        { label:'Sigma-Driven', data:OV_PRED_FORECAST.sigma,
           borderColor:'#FFC107', backgroundColor:'transparent',
           fill:false, tension:.35, borderWidth:2, pointRadius:2 },
       ]
@@ -7834,13 +7822,10 @@ function _renderPredQtyChart() {
     data: {
       labels: OV_PRED_WEEKS,
       datasets: [
-        { label:'Brand-Driven',     data:OV_PRED_QTY_FORECAST.brand.map(conv),
+        { label:'Brand-Driven', data:OV_PRED_QTY_FORECAST.brand.map(conv),
           borderColor:'#DC3545', backgroundColor:'transparent',
           fill:false, tension:.35, borderWidth:2, pointRadius:2 },
-        { label:'Set Point-Driven', data:OV_PRED_QTY_FORECAST.setpoint.map(conv),
-          borderColor:'#FF9800', backgroundColor:'transparent',
-          fill:false, tension:.35, borderWidth:2, pointRadius:2 },
-        { label:'Sigma-Driven',     data:OV_PRED_QTY_FORECAST.sigma.map(conv),
+        { label:'Sigma-Driven', data:OV_PRED_QTY_FORECAST.sigma.map(conv),
           borderColor:'#FFC107', backgroundColor:'transparent',
           fill:false, tension:.35, borderWidth:2, pointRadius:2 },
       ]
@@ -8424,26 +8409,14 @@ function renderPredCostKPIs() {
   const row = document.getElementById('pred-cost-kpi-row');
   if (!row) return;
   const d = OV_PRED_COST_KPI;
-  const total = d.brand.cost12w + d.setpoint.cost12w + d.sigma.cost12w;
-  const pct = v => (v/total*100).toFixed(0);
   row.innerHTML = `
     <div class="decomp-card brand">
       <div class="decomp-label">Brand-Driven</div>
       <div class="decomp-value">${_fmt$M(d.brand.cost12w)}</div>
-      <div class="decomp-sub">${d.brand.sub}</div>
-      <div class="decomp-pct">${pct(d.brand.cost12w)}% of 12w total</div>
-    </div>
-    <div class="decomp-card setpoint">
-      <div class="decomp-label">Set Point-Driven</div>
-      <div class="decomp-value">${_fmt$M(d.setpoint.cost12w)}</div>
-      <div class="decomp-sub">${d.setpoint.sub}</div>
-      <div class="decomp-pct">${pct(d.setpoint.cost12w)}% of 12w total</div>
     </div>
     <div class="decomp-card sigma">
       <div class="decomp-label">Sigma-Driven</div>
       <div class="decomp-value">${_fmt$M(d.sigma.cost12w)}</div>
-      <div class="decomp-sub">${d.sigma.sub}</div>
-      <div class="decomp-pct">${pct(d.sigma.cost12w)}% of 12w total</div>
     </div>`;
 }
 
@@ -8454,26 +8427,14 @@ function renderPredQtyKPIs() {
   const isMl = OV_PRED_QTY_UNIT === 'ml';
   const conv = v => isMl ? +(v / OV_MEAN_SG).toFixed(0) : v;
   const fmt  = v => isMl ? (v/1000).toFixed(1) + 'kL' : _fmtKg(v);
-  const totalKg = d.brand.qty12wKg + d.setpoint.qty12wKg + d.sigma.qty12wKg;
-  const pct = v => (v/totalKg*100).toFixed(0);
   row.innerHTML = `
     <div class="qty-decomp-card brand">
       <div class="qty-decomp-label">Brand-Driven</div>
       <div class="qty-decomp-value">${fmt(conv(d.brand.qty12wKg))}</div>
-      <div class="qty-decomp-sub">${d.brand.label}</div>
-      <div class="qty-decomp-pct">${pct(d.brand.qty12wKg)}% of 12w total</div>
-    </div>
-    <div class="qty-decomp-card setpoint">
-      <div class="qty-decomp-label">Set Point-Driven</div>
-      <div class="qty-decomp-value">${fmt(conv(d.setpoint.qty12wKg))}</div>
-      <div class="qty-decomp-sub">${d.setpoint.label}</div>
-      <div class="qty-decomp-pct">${pct(d.setpoint.qty12wKg)}% of 12w total</div>
     </div>
     <div class="qty-decomp-card sigma">
       <div class="qty-decomp-label">Sigma-Driven</div>
       <div class="qty-decomp-value">${fmt(conv(d.sigma.qty12wKg))}</div>
-      <div class="qty-decomp-sub">${d.sigma.label}</div>
-      <div class="qty-decomp-pct">${pct(d.sigma.qty12wKg)}% of 12w total</div>
     </div>`;
 }
 
@@ -8875,7 +8836,6 @@ function _appendExportRows(from, to) {
       <td>$${r.stdCostedOV}</td>
       <td style="color:${+r.stdCostVar>=0?'#C62828':'#2E7D32'};font-weight:700;">${+r.stdCostVar>=0?'+':''}$${Math.abs(+r.stdCostVar).toFixed(2)}</td>
       <td>${r.costingLotSize.toLocaleString()}</td>
-      <td>${r.scrapPct}%</td>
       <td>${r.brand}</td><td>${r.category||'—'}</td><td>${r.subcategory||'—'}</td>
       <td>${r.pkgType}</td><td>${r.visc.toLocaleString()}</td>
       <td>${r.processType||'—'}</td><td>${r.lifeCycleStage||'—'}</td>`;
@@ -8893,12 +8853,12 @@ function loadMoreExport() {
 function exportToCSV() {
   const headers = ['Date','Plant','Resource','SKU','PO','Lot Size','Declared Content (ml)','SG',
     'Target Fill (g)','Actual Fill (g)','Overfill (g)','Overfill %','Cost/g','Giveaway Cost ($)',
-    'Standard Costed OV ($)','Std Cost Variance ($)','Costing Lot Size','Scrap % (Costed)',
+    'Standard Costed OV ($)','Std Cost Variance ($)','Costing Lot Size',
     'Brand','Category','Subcategory','Package Type','Viscosity (cP)','Process Type','Life Cycle Stage'];
   const rows = OV_EXPORT_DATA.map(r => [
     r.date, r.plant, r.res, r.sku, r.po, r.lotSize, r.declaredMl, r.sg,
     r.targetFill, r.actualFill, r.overfillG, r.overfillPct, r.costPg, r.giveawayCost,
-    r.stdCostedOV, r.stdCostVar, r.costingLotSize, r.scrapPct,
+    r.stdCostedOV, r.stdCostVar, r.costingLotSize,
     r.brand, r.category||'', r.subcategory||'', r.pkgType, r.visc,
     r.processType||'', r.lifeCycleStage||''
   ]);
@@ -8918,10 +8878,10 @@ function exportDriversCSV(mode) {
     : OV_DRIVERS;
   const headers = ['#','Resource','SKU','PO','Lot Size','Viscosity (cP)','Actual Fill (g)',
     'Brand-Driven (g)','Set Point-Driven (g)','Sigma-Driven (g)','SG-Driven (g)','Total Overfill $',
-    'Costing Lot Size','Standard Costed OV ($)','Std Cost Variance ($)','Scrap % (Costed)'];
+    'Costing Lot Size','Standard Costed OV ($)','Std Cost Variance ($)'];
   const rows = src.map(r => [r.rank, r.res, r.sku, r.po, r.lotSize, r.visc,
     r.actualFill, r.brand, r.setpoint, r.sigDriven, r.sgDriven, r.totalCost,
-    r.costingLotSize, r.stdCostedOV, r.stdCostVar, r.scrapPct]);
+    r.costingLotSize, r.stdCostedOV, r.stdCostVar]);
   const csv = [headers, ...rows].map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
   const blob = new Blob([csv], {type:'text/csv'});
   const a = document.createElement('a');
