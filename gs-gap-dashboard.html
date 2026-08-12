@@ -7040,27 +7040,22 @@ function renderOVKPIs() {
     <div class="ov-kpi-card">
       <span class="ov-kpi-label">Total Actual Cost of Overfill</span>
       <span class="ov-kpi-value">${_fmt$M(OV_SUMMARY.totalActualCost)}</span>
-      <span class="ov-kpi-sub">▲ fill above target · recoverable</span>
     </div>
     <div class="ov-kpi-card">
       <span class="ov-kpi-label">Brand Required Overfill Cost</span>
       <span class="ov-kpi-value">${_fmt$M(OV_SUMMARY.brandRequiredCost)}</span>
-      <span class="ov-kpi-sub">LSL – Declared Content · necessary overfill</span>
     </div>
     <div class="ov-kpi-card">
       <span class="ov-kpi-label">Standard Cost Variance <span title="Standard Cost Variance = Actual Overfill Cost − Standard Costed Overfill. Positive = over budget (red). Negative = under budget (green). ⚠ Uses current standard cost from SAP MM03." style="cursor:help;font-size:11px;margin-left:4px;color:var(--c-muted);">ℹ</span></span>
       <span class="ov-kpi-value" style="color:${varColor};">${varPfx}${_fmt$M(Math.abs(OV_SUMMARY.stdCostVariance))}</span>
-      <span class="ov-kpi-sub">Actual — Standard Costed · from SAP</span>
     </div>
     <div class="ov-kpi-card">
       <span class="ov-kpi-label">Top Opportunities</span>
       <span class="ov-kpi-value" style="font-size:16px;color:var(--c-text);">${OV_SUMMARY.topOpportunity}</span>
-      <span class="ov-kpi-sub">↑ ${OV_SUMMARY.topOpportunityPct.toFixed(2)}% overfill · $${Math.round(OV_SUMMARY.topOpportunityCost/1000)}k/wk</span>
     </div>
     <div class="ov-kpi-card gs-gap-card${gapAbove ? '' : ' ok'}">
       <span class="ov-kpi-label">Gap to Gold Standard</span>
       <span class="ov-kpi-value" style="color:${gapColor};">${gapArrow} ${gapPfx}${gap.toFixed(2)}%</span>
-      <span class="ov-kpi-sub">vs GS benchmark ${OV_GS_BASELINE.fy}</span>
     </div>`;
 
   // ── Row 2: 3 Quantity KPIs ───────────────────────────────
@@ -7079,7 +7074,6 @@ function renderOVKPIs() {
     <div class="ov-kpi-card avg-pct-card">
       <span class="ov-kpi-label">Avg Overfill %</span>
       <span class="ov-kpi-value">${avgPct.toFixed(2)}%</span>
-      <span class="ov-kpi-sub">Mean fill (g) vs target across selection</span>
     </div>`;
 }
 
