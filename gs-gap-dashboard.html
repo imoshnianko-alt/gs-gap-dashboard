@@ -1562,6 +1562,162 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
   from { transform: translateY(8px); opacity: 0; }
   to   { transform: translateY(0);   opacity: 1; }
 }
+
+/* ── What-If v2 Redesign ────────────────────────────────── */
+.wi2-po-bar {
+  display:flex; align-items:center; gap:12px;
+  background:var(--c-card); border:1px solid var(--c-border);
+  border-radius:10px; padding:12px 16px; margin-bottom:14px;
+}
+.wi2-po-label { font-size:10px; font-weight:700; color:var(--c-muted); text-transform:uppercase; letter-spacing:.6px; white-space:nowrap; }
+.wi2-po-select {
+  flex:1; max-width:420px;
+  background:var(--c-bg); color:var(--c-text); border:1px solid var(--c-border);
+  border-radius:6px; padding:7px 12px; font-size:13px; font-weight:600; cursor:pointer;
+  outline:none; font-family:inherit;
+}
+.wi2-po-select option { background:var(--c-card); color:var(--c-text); }
+.wi2-summary-strip { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:12px; margin-bottom:14px; }
+.wi2-sum-card { background:var(--c-card); border:1px solid var(--c-border); border-radius:10px; padding:12px 16px; }
+.wi2-sum-card.wi2-sum-total { background:linear-gradient(135deg,#16a34a 0%,#15803d 100%); color:#fff; border:none; }
+.wi2-sum-card.wi2-sum-eng   { border-color:#3b82f6; }
+.wi2-sum-card.wi2-sum-ops   { border-color:#ef4444; }
+.wi2-sum-card.wi2-sum-tw    { border-color:var(--c-blue); min-width:176px; }
+.wi2-sum-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--c-muted); margin-bottom:5px; }
+.wi2-sum-total .wi2-sum-label { color:rgba(255,255,255,.8); }
+.wi2-sum-val { font-size:24px; font-weight:800; color:var(--c-text); line-height:1.1; }
+.wi2-sum-total .wi2-sum-val { color:#fff; font-size:30px; }
+.wi2-sum-eng .wi2-sum-val   { color:#3b82f6; }
+.wi2-sum-ops .wi2-sum-val   { color:#ef4444; }
+.wi2-tw-strip { display:flex; gap:4px; margin-top:8px; }
+.wi2-tw-btn {
+  padding:5px 11px; font-size:11px; font-weight:700; border-radius:5px;
+  border:1px solid var(--c-border); background:var(--c-bg); color:var(--c-muted);
+  cursor:pointer; transition:all .15s;
+}
+.wi2-tw-btn.active { background:var(--c-blue); color:#fff; border-color:var(--c-blue); }
+.wi2-tw-btn:hover:not(.active) { background:var(--c-border); }
+.wi2-layout { display:grid; grid-template-columns:50% 30%; gap:14px; align-items:start; }
+.wi2-bignum-card { background:var(--c-card); border:1px solid var(--c-border); border-radius:10px; padding:20px 16px; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100px; }
+.wi2-bignum-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--c-muted); margin-bottom:12px; }
+.wi2-bignum { font-size:48px; font-weight:800; line-height:1; }
+.wi2-bignum.oee   { color:#8B5CF6; }
+.wi2-bignum.labor { color:#F59E0B; }
+.wi2-bignum.speed { color:#10B981; }
+.wi2-bignum-unit { font-size:12px; font-weight:600; color:var(--c-muted); margin-top:6px; }
+.wi2-po-reference-card { background:#F9FAFB; border:1px solid var(--c-border); border-radius:10px; padding:14px 16px; margin-top:10px; }
+.wi2-ref-title { font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.7px; color:var(--c-muted); margin-bottom:10px; }
+.wi2-ref-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--c-border); font-size:12px; }
+.wi2-ref-row:last-child { border-bottom:none; }
+.wi2-ref-label { color:var(--c-muted); }
+.wi2-ref-value { font-weight:600; color:var(--c-text); }
+.wi2-left  { display:flex; flex-direction:column; gap:10px; }
+.wi2-right { display:flex; flex-direction:column; gap:10px; }
+.wi2-section { background:var(--c-card); border:1px solid var(--c-border); border-radius:10px; padding:14px 16px; }
+.wi2-section-head { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:var(--c-text); margin-bottom:12px; }
+.wi2-sec-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.wi2-sec-dot.oee   { background:#8B5CF6; }
+.wi2-sec-dot.labor { background:#F59E0B; }
+.wi2-sec-dot.speed { background:#1976D2; }
+.wi2-sec-unit { font-size:10px; font-weight:400; color:var(--c-muted); margin-left:auto; }
+.wi2-slider-block { position:relative; }
+.wi2-slider-sublabel { font-size:11px; font-weight:600; color:var(--c-muted); margin-bottom:6px; }
+.wi2-slider-sublabel-hint { font-weight:400; color:var(--c-muted); }
+.wi2-snap-wrap { position:relative; padding-top:18px; }
+.wi2-snap-tip {
+  display:none; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  background:#1e293b; color:#fff; font-size:9px; font-weight:700;
+  padding:2px 7px; border-radius:4px; white-space:nowrap; pointer-events:none; z-index:20;
+}
+.wi2-snap-tip.visible { display:block; animation:wiSlideIn .2s ease; }
+.wi2-snap-tip::after {
+  content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+  border:4px solid transparent; border-top-color:#1e293b;
+}
+input[type=range].wi2-range {
+  -webkit-appearance:none; appearance:none;
+  width:100%; height:6px; border-radius:3px;
+  outline:none; cursor:pointer; display:block;
+}
+input[type=range].wi2-range::-webkit-slider-thumb {
+  -webkit-appearance:none; appearance:none;
+  width:18px; height:18px; border-radius:50%;
+  border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.25); cursor:pointer;
+}
+input[type=range].wi2-range::-moz-range-thumb {
+  width:18px; height:18px; border-radius:50%;
+  border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.25); cursor:pointer;
+}
+input[type=range].wi2-range.oee::-webkit-slider-thumb         { background:#8B5CF6; }
+input[type=range].wi2-range.labor::-webkit-slider-thumb       { background:#F59E0B; }
+input[type=range].wi2-range.labor-setup::-webkit-slider-thumb { background:#F59E0B; }
+input[type=range].wi2-range.speed::-webkit-slider-thumb       { background:#1976D2; }
+input[type=range].wi2-range.oee::-moz-range-thumb             { background:#8B5CF6; }
+input[type=range].wi2-range.labor::-moz-range-thumb           { background:#F59E0B; }
+input[type=range].wi2-range.labor-setup::-moz-range-thumb     { background:#F59E0B; }
+input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976D2; }
+.wi2-slider-ticks { display:flex; justify-content:space-between; font-size:9px; color:var(--c-muted); margin-top:4px; }
+.wi2-val-display { font-size:18px; font-weight:800; color:var(--c-text); text-align:center; margin-top:4px; border-radius:3px; }
+.wi2-linked-badge {
+  font-size:9px; font-weight:700; padding:2px 6px; border-radius:10px;
+  background:rgba(25,118,210,.1); color:#1976D2; letter-spacing:.3px;
+}
+.wi2-child-vars { margin-top:10px; border-top:1px solid var(--c-border); padding-top:8px; display:flex; flex-direction:column; gap:4px; }
+.wi2-child-row  { display:flex; align-items:center; gap:6px; font-size:11px; }
+.wi2-child-label { flex:1; color:var(--c-muted); }
+.wi2-child-badge {
+  font-size:8px; font-weight:700; padding:1px 5px; border-radius:3px;
+  text-transform:uppercase; letter-spacing:.4px; flex-shrink:0;
+}
+.wi2-child-badge.fixed  { background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1; }
+.wi2-child-badge.auto   { background:#dcfce7; color:#16a34a; border:1px solid #bbf7d0; }
+.wi2-child-badge.linked { background:#dbeafe; color:#1d4ed8; border:1px solid #bfdbfe; }
+.wi2-child-val { font-size:12px; font-weight:700; color:var(--c-text); border-radius:3px; }
+.wi2-child-val.auto { color:#16a34a; }
+.wi2-table-section { background:var(--c-card); border:1px solid var(--c-border); border-radius:10px; padding:12px 14px; }
+.wi2-table-title {
+  font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
+  margin-bottom:8px; padding-bottom:7px; border-bottom:2px solid var(--c-border);
+}
+.wi2-table-title.oee   { color:#8B5CF6; border-color:#8B5CF6; }
+.wi2-table-title.labor { color:#F59E0B; border-color:#F59E0B; }
+.wi2-table-title.speed { color:#1976D2; border-color:#1976D2; }
+.wi2-table { width:100%; border-collapse:collapse; font-size:11px; }
+.wi2-table th {
+  text-align:right; font-size:9px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.4px; color:var(--c-muted); padding:3px 5px;
+  border-bottom:1px solid var(--c-border);
+}
+.wi2-table th:first-child { text-align:left; }
+.wi2-table td { padding:4px 5px; text-align:right; border-bottom:1px solid rgba(0,0,0,.04); }
+.wi2-table td:first-child { text-align:left; font-weight:600; color:var(--c-text); font-size:11px; }
+.wi2-table tr:last-child td { border-bottom:none; }
+.wi2-row-fixed td { background:rgba(100,116,139,.04); color:var(--c-muted); font-style:italic; }
+.wi2-row-auto td:nth-child(n+2):not(.wi2-td-gs) { color:#16a34a; font-weight:700; }
+.wi2-row-slider td:first-child { color:var(--c-blue); font-weight:700; }
+.wi2-row-linked td:first-child { color:#1976D2; font-weight:700; }
+.wi2-td-gs    { color:#16a34a !important; font-weight:700 !important; }
+.wi2-td-wi    { font-weight:700; }
+.wi2-td-delta { font-size:10px; color:var(--c-muted); }
+.wi2-linked-note { font-size:9px; color:#1976D2; font-style:italic; font-weight:400; }
+.wi2-formula-box {
+  margin-top:7px; padding:5px 9px;
+  background:#f8fafc; border:1px solid #e2e8f0; border-radius:4px;
+  font-size:10px; color:#64748b; font-family:monospace; line-height:1.5;
+}
+.wi2-formula-label { font-weight:700; color:#475569; margin-right:3px; }
+.wi2-savings-row { display:flex; align-items:center; gap:8px; margin-top:7px; font-size:11px; color:var(--c-muted); }
+.wi2-savings-val { font-size:15px; font-weight:800; color:#16a34a; min-width:60px; border-radius:3px; }
+.wi2-savings-note { font-size:10px; color:var(--c-muted); }
+.wi2-bottom-bar {
+  display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:12px;
+  padding:10px 14px; background:var(--c-card); border:1px solid var(--c-border); border-radius:10px;
+}
+.wi2-bottom-note { font-size:11px; color:var(--c-muted); flex:1; }
+@keyframes wi2FlashGreen {
+  0%   { background-color:rgba(22,163,74,.22); }
+  100% { background-color:transparent; }
+}
 /* knc-total hover tooltip */
 .knc-total-tooltip {
   position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%);
@@ -1774,10 +1930,21 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
         </select>
       </div>
 
+
+      <!-- GOLD STANDARD TYPE -->
+      <div>
+        <span class="slicer-label">Gold Standard Type <span class="info-tooltip" title="Governed GS · FY25: Official benchmark locked for the fiscal year (Jul 2024 – Jun 2025). Used for formal reporting and target-setting. Does NOT change mid-year.&#10;&#10;Operating Baseline: Dynamic benchmark that updates continuously as new maximum performance is achieved. Used for operational improvement tracking." style="cursor:help;font-style:normal;font-weight:400;color:var(--c-muted);font-size:11px;">ⓘ</span></span>
+        <select id="gs-type-select" class="slicer-select" onchange="setGSType(this.value)">
+          <option value="governed">🔒 Governed GS · FY25</option>
+          <option value="operating">📊 Operating Baseline</option>
+        </select>
+      </div>
+
     </div><!-- /gs-sidebar-content -->
 
     <!-- OVERFILL FILTERS -->
     <div id="ov-sidebar-content" style="display:none;">
+
       <!-- DATE RANGE -->
       <div class="date-range-row">
         <span class="slicer-label">Date Range <span class="info-tooltip" data-tip="Fiscal year runs July 1 – June 30. YTD = Fiscal year to date. R12M = Rolling 12 months from current date." style="cursor:help;font-style:normal;font-weight:400;color:var(--c-muted);font-size:11px;" title="Fiscal year runs July 1 – June 30. YTD = Fiscal year to date. R12M = Rolling 12 months from current date.">ℹ</span></span>
@@ -1974,8 +2141,180 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
       </div>
 
 
+      <!-- GOLD STANDARD TYPE -->
+      <div>
+        <span class="slicer-label">Gold Standard Type <span class="info-tooltip" title="Governed GS · FY25: Official benchmark locked for the fiscal year (Jul 2024 – Jun 2025). Used for formal reporting and target-setting. Does NOT change mid-year.&#10;&#10;Operating Baseline: Dynamic benchmark that updates continuously as new maximum performance is achieved. Used for operational improvement tracking." style="cursor:help;font-style:normal;font-weight:400;color:var(--c-muted);font-size:11px;">ⓘ</span></span>
+        <select id="ov-type-select" class="slicer-select" onchange="setGSType(this.value)">
+          <option value="governed">🔒 Governed GS · FY25</option>
+          <option value="operating">📊 Operating Baseline</option>
+        </select>
+      </div>
+
       <p class="sidebar-helper">Filters apply to all Overfill pages. Switch modules to return to GS filters.</p>
     </div><!-- /ov-sidebar-content -->
+
+    <!-- WHAT-IF FILTERS -->
+    <div id="wi2-sidebar-content" style="display:none;">
+
+      <!-- DATE RANGE -->
+      <div>
+        <span class="slicer-label">Date Range</span>
+        <select id="wi2-date-range" class="slicer-select">
+          <option value="week">Week</option>
+          <option value="month" selected>Month</option>
+          <option value="quarter">Quarter</option>
+          <option value="year">Year</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div>
+        <span class="slicer-label">Date From</span>
+        <div class="gs-date-wrap">
+          <input type="date" id="wi2-date-from" class="slicer-select gs-date-input" value="2026-08-01" disabled>
+          <span class="gs-cal-icon" onclick="document.getElementById('wi2-date-from').showPicker && document.getElementById('wi2-date-from').showPicker()">📅</span>
+        </div>
+      </div>
+      <div>
+        <span class="slicer-label">Date To</span>
+        <div class="gs-date-wrap" style="margin-bottom:0;">
+          <input type="date" id="wi2-date-to" class="slicer-select gs-date-input" value="2026-08-31" disabled>
+          <span class="gs-cal-icon" onclick="document.getElementById('wi2-date-to').showPicker && document.getElementById('wi2-date-to').showPicker()">📅</span>
+        </div>
+      </div>
+
+      <hr class="panel-sep">
+
+      <!-- PLANT -->
+      <div>
+        <span class="slicer-label">Plant</span>
+        <select id="wi2-plant" class="slicer-select">
+          <option value="">— All Plants —</option>
+          <option value="3020">3020 — Oevel</option>
+          <option value="3030">3030 — Zaventem</option>
+        </select>
+      </div>
+
+      <!-- RESOURCE -->
+      <div>
+        <span class="slicer-label">Resource</span>
+        <select id="wi2-resource" class="slicer-select">
+          <option value="">— All Resources —</option>
+          <option value="L67">L67</option>
+          <option value="L68">L68</option>
+          <option value="L72">L72</option>
+        </select>
+      </div>
+
+      <!-- CATEGORY -->
+      <div>
+        <span class="slicer-label">Category</span>
+        <div class="ms-wrap" id="ms-wi2-cat">
+          <button class="ms-trigger" id="ms-wi2-cat-trigger" data-all-label="All Categories" onclick="toggleMS('ms-wi2-cat')">All Categories</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-wi2-cat-all" onchange="toggleAllMS('ms-wi2-cat')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-cat-opt" onchange="updateMSTrigger('ms-wi2-cat')" value="Skincare" checked> Skincare</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-cat-opt" onchange="updateMSTrigger('ms-wi2-cat')" value="Fragrance" checked> Fragrance</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-cat-opt" onchange="updateMSTrigger('ms-wi2-cat')" value="Makeup" checked> Makeup</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-cat-opt" onchange="updateMSTrigger('ms-wi2-cat')" value="Hair Care" checked> Hair Care</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-cat-opt" onchange="updateMSTrigger('ms-wi2-cat')" value="Other" checked> Other</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBCATEGORY -->
+      <div>
+        <span class="slicer-label">Subcategory</span>
+        <div class="ms-wrap" id="ms-wi2-subcat">
+          <button class="ms-trigger" id="ms-wi2-subcat-trigger" data-all-label="All Subcategories" onclick="toggleMS('ms-wi2-subcat')">All Subcategories</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-wi2-subcat-all" onchange="toggleAllMS('ms-wi2-subcat')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item" style="color:#6C757D;font-size:10px;pointer-events:none;">— Skincare —</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-subcat-opt" onchange="updateMSTrigger('ms-wi2-subcat')" value="Serum" checked> Serum</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-subcat-opt" onchange="updateMSTrigger('ms-wi2-subcat')" value="Moisturizer – SPF" checked> Moisturizer – SPF</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-subcat-opt" onchange="updateMSTrigger('ms-wi2-subcat')" value="Cleanser – Foaming" checked> Cleanser – Foaming</label>
+            <label class="ms-item" style="color:#6C757D;font-size:10px;pointer-events:none;">— Makeup —</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-subcat-opt" onchange="updateMSTrigger('ms-wi2-subcat')" value="Foundation – Liquid" checked> Foundation – Liquid</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-subcat-opt" onchange="updateMSTrigger('ms-wi2-subcat')" value="Mascara" checked> Mascara</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- PACKAGE TYPE -->
+      <div>
+        <span class="slicer-label">Package Type</span>
+        <div class="ms-wrap" id="ms-wi2-pkgtype">
+          <button class="ms-trigger" id="ms-wi2-pkgtype-trigger" data-all-label="All Types" onclick="toggleMS('ms-wi2-pkgtype')">All Types</button>
+          <div class="ms-dropdown">
+            <label class="ms-item"><input type="checkbox" id="ms-wi2-pkgtype-all" onchange="toggleAllMS('ms-wi2-pkgtype')" checked> All</label>
+            <hr class="ms-sep">
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-pkgtype-opt" onchange="updateMSTrigger('ms-wi2-pkgtype')" value="Tube" checked> Tube</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-pkgtype-opt" onchange="updateMSTrigger('ms-wi2-pkgtype')" value="Bottle" checked> Bottle</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-pkgtype-opt" onchange="updateMSTrigger('ms-wi2-pkgtype')" value="Jar" checked> Jar</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-pkgtype-opt" onchange="updateMSTrigger('ms-wi2-pkgtype')" value="Mascara Vial" checked> Mascara Vial</label>
+            <label class="ms-item"><input type="checkbox" class="ms-wi2-pkgtype-opt" onchange="updateMSTrigger('ms-wi2-pkgtype')" value="Pump Bottle" checked> Pump Bottle</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT SIZE -->
+      <div>
+        <span class="slicer-label">Unit Size</span>
+        <select id="wi2-unit-size" class="slicer-select">
+          <option value="">— All Sizes —</option>
+          <option value="15">15 ml</option>
+          <option value="30">30 ml</option>
+          <option value="50">50 ml</option>
+          <option value="100">100 ml</option>
+        </select>
+      </div>
+
+      <!-- PROCESS / ASSEMBLY TYPE -->
+      <div>
+        <span class="slicer-label">Process / Assembly Type</span>
+        <select id="wi2-process-type" class="slicer-select">
+          <option value="">— All Types —</option>
+          <option value="end-to-end">End-to-end (Mass + FG)</option>
+          <option value="pack-off">Pack-off (WIP + FG)</option>
+          <option value="wip">Work-in-process (Mass → WIP)</option>
+        </select>
+      </div>
+
+      <!-- LOT SIZE -->
+      <div>
+        <span class="slicer-label">Lot Size</span>
+        <select id="wi2-lot-size" class="slicer-select">
+          <option value="">— All Lot Sizes —</option>
+          <option value="small">Small (&lt; 10,000)</option>
+          <option value="medium">Medium (10,000–50,000)</option>
+          <option value="large">Large (&gt; 50,000)</option>
+        </select>
+      </div>
+
+      <!-- LIFE CYCLE STAGE -->
+      <div>
+        <span class="slicer-label">Life Cycle Stage</span>
+        <select id="wi2-lifecycle" class="slicer-select">
+          <option value="">— All Stages —</option>
+          <option value="npl">New Product Launch (NPL)</option>
+          <option value="legacy">Legacy Product</option>
+          <option value="active">Active Production</option>
+          <option value="phaseout">Phase-out</option>
+        </select>
+      </div>
+
+
+      <!-- GOLD STANDARD TYPE -->
+      <div>
+        <span class="slicer-label">Gold Standard Type <span class="info-tooltip" title="Governed GS · FY25: Official benchmark locked for the fiscal year (Jul 2024 – Jun 2025). Used for formal reporting and target-setting. Does NOT change mid-year.&#10;&#10;Operating Baseline: Dynamic benchmark that updates continuously as new maximum performance is achieved. Used for operational improvement tracking." style="cursor:help;font-style:normal;font-weight:400;color:var(--c-muted);font-size:11px;">ⓘ</span></span>
+        <select id="wi2-type-select" class="slicer-select" onchange="setGSType(this.value)">
+          <option value="governed">🔒 Governed GS · FY25</option>
+          <option value="operating">📊 Operating Baseline</option>
+        </select>
+      </div>
+
+    </div><!-- /wi2-sidebar-content -->
 
   </aside>
 
@@ -2588,8 +2927,8 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
           </select>
         </div>
       </div>
-      <div class="gs-type-badge governed" style="align-self:flex-start;">
-        🔒 Governed Gold Standard active (FY25) — LOCKED for official reporting
+      <div class="gs-type-badge governed gs-badge-updatable" style="align-self:flex-start;">
+        <span class="gs-badge-icon">🔒</span> <span class="gs-badge-text">Governed Gold Standard active (FY25) — LOCKED for official reporting</span>
       </div>
       <div class="note-box" style="margin-top:6px;background:rgba(245,165,52,0.1);border-color:rgba(245,165,52,0.4);">
         ⚠ Labor formula approval pending from Steven Johnston. Calculation may be refined.
@@ -2732,7 +3071,7 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
           </select>
         </div>
       </div>
-      <div class="gs-type-badge governed" style="align-self:flex-start;margin-bottom:8px;">
+      <div class="gs-type-badge governed gs-badge-updatable" style="align-self:flex-start;margin-bottom:8px;">
         🔒 GS (hrs/1000) = P75 of ≥10 qualified POs per Family × Resource | FY25 locked baseline | One gap only: Gold Standard Gap (GS − Actual)
       </div>
 
@@ -2959,8 +3298,8 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
           </select>
         </div>
       </div>
-      <div class="gs-type-badge governed" style="align-self:flex-start;">
-        🔒 Governed Gold Standard active (FY25) — LOCKED for official reporting
+      <div class="gs-type-badge governed gs-badge-updatable" style="align-self:flex-start;">
+        <span class="gs-badge-icon">🔒</span> <span class="gs-badge-text">Governed Gold Standard active (FY25) — LOCKED for official reporting</span>
       </div>
       <div class="note-box" style="margin-top:6px;">
         OEE Reference Standard (RS) is not defined. Display shows gap to Gold Standard only. Contact Kris Van Deursen to discuss adding 'gap to 100%' view.
@@ -3136,7 +3475,7 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
     <!-- ─── OEE: GAP ANALYSIS ────────────────────────────── -->
     <div id="cnt-oee-gap" class="kpi-cnt">
       <div class="sec-heading">⚙️ OEE — Gap Analysis ($)</div>
-      <div class="gs-type-badge governed" style="align-self:flex-start;margin-bottom:8px;">
+      <div class="gs-type-badge governed gs-badge-updatable" style="align-self:flex-start;margin-bottom:8px;">
         🔒 GS OEE = P75 of qualified POs per Family × Resource (weekly ≥10 · monthly ≥6 · quarterly ≥4) | FY25 locked baseline | One gap only: Gold Standard Gap (GS − Actual)
       </div>
 
@@ -3768,13 +4107,12 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
         </table>
       </div>
 
-      <!-- Top 10 SKU Contributors — collapsible -->
+      <!-- Top 10 SKU Contributors by Week -->
       <div class="gs-card" style="margin-top:12px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleTop10SKUSection()">
-          <div class="card-title" style="margin:0;">Top 10 SKU Contributors by Week <span id="top10-sku-chevron" style="font-size:10px;margin-left:6px;transition:transform .2s;">▼</span></div>
-          <div style="font-size:10px;color:var(--c-muted);">Click to expand</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="card-title" style="margin:0;">Top 10 SKU Contributors by Week</div>
         </div>
-        <div id="top10-sku-body" style="display:none;margin-top:10px;">
+        <div id="top10-sku-body" style="display:block;margin-top:10px;">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
             <span style="font-size:11px;color:var(--c-muted);">Week:</span>
             <select id="top10-sku-week-sel" class="slicer-select" style="font-size:11px;height:28px;" onchange="renderTop10SKUTable()">
@@ -3787,7 +4125,6 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
               <option value="W6">W6</option>
               <option value="W5">W5</option>
             </select>
-            <button class="export-btn" style="font-size:11px;padding:5px 12px;" onclick="exportTop10SKUCSV()">📥 Export CSV</button>
           </div>
           <table class="dv-table" id="tb-top10-sku">
             <thead><tr>
@@ -4103,7 +4440,7 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
             <thead>
               <tr>
                 <th>Date</th><th>Plant</th><th>Resource</th><th>SKU</th><th>PO</th>
-                <th>Lot Size</th><th>Declared (ml)</th><th>Declared (g)</th><th>Specific Gravity (SG)</th>
+                <th>Lot Size</th><th>Declared (ml)</th><th>Specific Gravity Min</th><th>Specific Gravity Max</th>
                 <th>Target Fill (g)</th><th>Actual Fill (g)</th><th>Overfill (g)</th><th>Overfill %</th>
                 <th>Cost/g ($)</th><th>Giveaway Cost ($)</th><th>Std Costed OV ($)</th><th>Std Cost Var ($)</th><th>Costing Lot Size</th><th>Brand</th>
                 <th>Category</th><th>Subcategory</th><th>Package Type</th>
@@ -4125,26 +4462,9 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
     <div style="padding:20px 24px;">
 
       <!-- ── Page Header ── -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
-        <div>
-          <div style="font-size:18px;font-weight:700;color:var(--c-text);">Intelligence — Performance Improvement Recommendations</div>
-          <div style="font-size:12px;color:var(--c-muted);margin-top:2px;">What-If financial modelling across Speed, Labor, OEE, and Scrap</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-          <div class="gs-type-badge governed" style="font-size:11px;">🔒 Governed GS · FY25</div>
-          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--c-muted);">
-            <span>From</span>
-            <input type="text" id="intel-date-from" value="01.07.2024" style="width:88px;padding:4px 7px;border:1px solid var(--c-border);border-radius:5px;font-size:12px;background:var(--c-card);color:var(--c-text);text-align:center;">
-            <span>To</span>
-            <input type="text" id="intel-date-to" value="30.06.2025" style="width:88px;padding:4px 7px;border:1px solid var(--c-border);border-radius:5px;font-size:12px;background:var(--c-card);color:var(--c-text);text-align:center;">
-          </div>
-          <div style="display:flex;gap:4px;">
-            <button class="intel-tw-btn" onclick="setIntelWindow('1w',this)">1 Week</button>
-            <button class="intel-tw-btn" onclick="setIntelWindow('3w',this)">3 Weeks</button>
-            <button class="intel-tw-btn intel-tw-active" onclick="setIntelWindow('1m',this)">1 Month</button>
-            <button class="intel-tw-btn" onclick="setIntelWindow('3m',this)">3 Months</button>
-          </div>
-        </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:18px;font-weight:700;color:var(--c-text);">Intelligence — Performance Improvement Recommendations</div>
+        <div id="whatif-gs-badge" class="gs-type-badge governed" style="margin-top:6px;">🔒 <span id="wi2-gs-label">Governed GS · FY25 — LOCKED for official reporting</span></div>
       </div>
 
       <!-- ── Scenario Toggle ── -->
@@ -4261,127 +4581,141 @@ input[type=range].wi-slider.scrap::-moz-range-thumb { background: #10B981; }
            ════════════════════════════════════════════ -->
       <div id="intel-whatif" style="display:none;">
 
-        <!-- Dynamic Summary Cards -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
-          <div style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:10px;padding:20px 22px;color:#fff;position:relative;overflow:hidden;">
-            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;opacity:.85;margin-bottom:8px;">Total Scenario Savings</div>
-            <div style="font-size:48px;font-weight:800;line-height:1;margin-bottom:6px;" id="wi-total-val">$0</div>
-            <div style="font-size:11px;opacity:.75;">Move sliders to model improvement</div>
-            <div style="position:absolute;right:-16px;top:-16px;font-size:80px;opacity:.08;line-height:1;">$</div>
-          </div>
-          <div style="background:var(--c-card);border:3px solid var(--c-blue);border-radius:10px;padding:20px 22px;">
-            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">🕐 Time Window</div>
-            <div style="font-size:28px;font-weight:800;line-height:1;color:var(--c-blue);margin-bottom:6px;" id="wi-window-label">1 Month</div>
-            <div style="font-size:11px;color:var(--c-muted);">Adjust time window above to scale projections</div>
-          </div>
-          <div style="background:var(--c-card);border:3px solid #8B5CF6;border-radius:10px;padding:20px 22px;">
-            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">⚙️ Sliders Adjusted</div>
-            <div style="font-size:28px;font-weight:800;line-height:1;color:#8B5CF6;margin-bottom:6px;" id="wi-adjusted-count">0 / 4</div>
-            <div style="font-size:11px;color:var(--c-muted);">KPIs with targets above actual baseline</div>
-          </div>
+        <!-- PO Selector Bar -->
+        <div class="wi2-po-bar">
+          <span class="wi2-po-label">Planned Order</span>
+          <select class="wi2-po-select" id="wi2-po-select" onchange="_wi2ChangePO(this.value)">
+            <option value="PO-4521">PO-4521 — Brand X 250ml (25,000 units)</option>
+            <option value="PO-4522">PO-4522 — Brand Y 500ml (18,000 units)</option>
+            <option value="PO-4523">PO-4523 — Brand Z 1L (30,000 units)</option>
+          </select>
         </div>
 
-        <!-- Sliders -->
-        <div class="wi-slider-section">
-          <div style="font-size:13px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Adjust Target Performance</div>
-          <div style="font-size:11px;color:var(--c-muted);margin-bottom:20px;">Drag sliders to model what-if improvement scenarios. Savings auto-calculate per time window.</div>
 
-          <!-- Speed -->
-          <div class="wi-slider-row">
-            <div>
-              <div class="wi-slider-label">⚡ Speed</div>
-              <div style="font-size:11px;color:var(--c-muted);margin-top:2px;">UPM</div>
-            </div>
-            <div class="wi-slider-wrap">
-              <div style="position:relative;padding-top:18px;">
-                <div id="wi-snap-speed" class="wi-snap-tip" style="left:56.5%;">⚡ Reference Speed!</div>
-                <input type="range" class="wi-slider speed" id="wi-slider-speed" min="82" max="105" step="1" value="82" oninput="_wiSliderChange('speed')" onchange="_wiSliderChange('speed')">
-                <div style="position:absolute;top:calc(50% + 2px);left:56.5%;width:2px;height:12px;background:rgba(25,118,210,0.4);border-radius:1px;pointer-events:none;transform:translateX(-50%);"></div>
+        <!-- Two-Column Layout -->
+        <div class="wi2-layout">
+
+          <!-- LEFT: Sliders -->
+          <div class="wi2-left">
+
+            <!-- OEE Section -->
+            <div class="wi2-section">
+              <div class="wi2-section-head">
+                <span class="wi2-sec-dot oee"></span>
+                <span>⚙️ OEE</span>
+                <span class="wi2-sec-unit">%</span>
               </div>
-              <div class="wi-slider-ticks"><span>82 Actual</span><span>95 Reference</span><span>105 Nameplate</span></div>
-            </div>
-            <div class="wi-stats">
-              <div class="wi-stat-current">Actual: 82 UPM</div>
-              <div class="wi-stat-target" id="wi-target-speed">Target: 82 UPM</div>
-              <div class="wi-stat-savings" id="wi-savings-speed">+ $0</div>
-            </div>
-          </div>
-
-          <!-- Labor -->
-          <div class="wi-slider-row">
-            <div>
-              <div class="wi-slider-label">👥 Labor</div>
-              <div style="font-size:11px;color:var(--c-muted);margin-top:2px;">hrs / 1000u · ↓ better</div>
-            </div>
-            <div class="wi-slider-wrap">
-              <div style="position:relative;padding-top:18px;">
-                <div id="wi-snap-labor" class="wi-snap-tip" style="left:0%;">✅ GS Achieved!</div>
-                <input type="range" class="wi-slider labor" id="wi-slider-labor" min="7.0" max="9.0" step="0.1" value="9.0" oninput="_wiSliderChange('labor')" onchange="_wiSliderChange('labor')">
-                <div style="position:absolute;top:calc(50% + 2px);left:0%;width:2px;height:12px;background:rgba(245,158,11,0.4);border-radius:1px;pointer-events:none;transform:translateX(-50%);"></div>
+              <div class="wi2-slider-block">
+                <div class="wi2-snap-wrap">
+                  <div class="wi2-snap-tip" id="wi2-snap-oee">🎯 GS Target!</div>
+                  <input type="range" class="wi2-range oee" id="wi2-slider-oee"
+                    min="62" max="100" step="1" value="62"
+                    oninput="_wi2SliderInput('oee')" onchange="_wi2SliderInput('oee')">
+                </div>
+                <div class="wi2-slider-ticks"><span>62% Actual</span><span>81% GS</span><span>100%</span></div>
+                <div class="wi2-val-display" id="wi2-oee-display">62%</div>
               </div>
-              <div class="wi-slider-ticks"><span>7.0 GS</span><span>← drag left</span><span>9.0 Actual</span></div>
             </div>
-            <div class="wi-stats">
-              <div class="wi-stat-current">Actual: 9.0 hrs/ku</div>
-              <div class="wi-stat-target" id="wi-target-labor">Target: 9.0 hrs/ku</div>
-              <div class="wi-stat-savings" id="wi-savings-labor">+ $0</div>
-            </div>
-          </div>
 
-          <!-- OEE -->
-          <div class="wi-slider-row">
-            <div>
-              <div class="wi-slider-label">⚙️ OEE</div>
-              <div style="font-size:11px;color:var(--c-muted);margin-top:2px;">%</div>
-            </div>
-            <div class="wi-slider-wrap">
-              <div style="position:relative;padding-top:18px;">
-                <div id="wi-snap-oee" class="wi-snap-tip" style="left:50%;">⚙️ GS Target!</div>
-                <input type="range" class="wi-slider oee" id="wi-slider-oee" min="62" max="100" step="1" value="62" oninput="_wiSliderChange('oee')" onchange="_wiSliderChange('oee')">
-                <div style="position:absolute;top:calc(50% + 2px);left:50%;width:2px;height:12px;background:rgba(139,92,246,0.4);border-radius:1px;pointer-events:none;transform:translateX(-50%);"></div>
+            <!-- Labor Section -->
+            <div class="wi2-section">
+              <div class="wi2-section-head">
+                <span class="wi2-sec-dot labor"></span>
+                <span>👥 Labor</span>
+                <span class="wi2-sec-unit">Ratio ↓ better</span>
               </div>
-              <div class="wi-slider-ticks"><span>62% Actual</span><span>81% GS</span><span>100% Max</span></div>
-            </div>
-            <div class="wi-stats">
-              <div class="wi-stat-current">Actual: 62%</div>
-              <div class="wi-stat-target" id="wi-target-oee">Target: 62%</div>
-              <div class="wi-stat-savings" id="wi-savings-oee">+ $0</div>
-            </div>
-          </div>
-
-          <!-- Scrap -->
-          <div class="wi-slider-row">
-            <div>
-              <div class="wi-slider-label">🗑️ Scrap</div>
-              <div style="font-size:11px;color:var(--c-muted);margin-top:2px;">% · ↓ better</div>
-            </div>
-            <div class="wi-slider-wrap">
-              <div style="position:relative;padding-top:18px;">
-                <div id="wi-snap-scrap" class="wi-snap-tip" style="left:50%;">✅ GS Scrap!</div>
-                <input type="range" class="wi-slider scrap" id="wi-slider-scrap" min="0" max="4.2" step="0.1" value="4.2" oninput="_wiSliderChange('scrap')" onchange="_wiSliderChange('scrap')">
-                <div style="position:absolute;top:calc(50% + 2px);left:50%;width:2px;height:12px;background:rgba(16,185,129,0.4);border-radius:1px;pointer-events:none;transform:translateX(-50%);"></div>
+              <div class="wi2-slider-block">
+                <div class="wi2-slider-sublabel">Ratio Run</div>
+                <div class="wi2-snap-wrap">
+                  <div class="wi2-snap-tip" id="wi2-snap-lrun">✅ GS Achieved!</div>
+                  <input type="range" class="wi2-range labor" id="wi2-slider-lrun"
+                    min="6" max="10" step="0.1" value="8"
+                    oninput="_wi2SliderInput('lrun')" onchange="_wi2SliderInput('lrun')">
+                </div>
+                <div class="wi2-slider-ticks"><span>6.0 GS</span><span>8.0 Actual</span><span>10.0</span></div>
+                <div class="wi2-val-display" id="wi2-lrun-display">8.0</div>
               </div>
-              <div class="wi-slider-ticks"><span>0%</span><span>2.1% GS</span><span>4.2% Actual</span></div>
+              <div class="wi2-slider-block" style="margin-top:10px;">
+                <div class="wi2-slider-sublabel">Ratio Setup</div>
+                <div class="wi2-snap-wrap">
+                  <div class="wi2-snap-tip" id="wi2-snap-lsetup">✅ GS Achieved!</div>
+                  <input type="range" class="wi2-range labor-setup" id="wi2-slider-lsetup"
+                    min="2" max="5" step="0.1" value="3"
+                    oninput="_wi2SliderInput('lsetup')" onchange="_wi2SliderInput('lsetup')">
+                </div>
+                <div class="wi2-slider-ticks"><span>2.0 GS</span><span>3.0 Actual</span><span>5.0</span></div>
+                <div class="wi2-val-display" id="wi2-lsetup-display">3.0</div>
+              </div>
             </div>
-            <div class="wi-stats">
-              <div class="wi-stat-current">Actual: 4.2%</div>
-              <div class="wi-stat-target" id="wi-target-scrap">Target: 4.2%</div>
-              <div class="wi-stat-savings" id="wi-savings-scrap">+ $0</div>
+
+            <!-- Speed Section -->
+            <div class="wi2-section">
+              <div class="wi2-section-head">
+                <span class="wi2-sec-dot speed"></span>
+                <span>⚡ Speed</span>
+                <span class="wi2-sec-unit">UPM</span>
+              </div>
+              <div class="wi2-slider-block">
+                <div class="wi2-slider-sublabel">Target Speed <span class="wi2-linked-badge" id="wi2-speed-linked-badge">🔗 OEE Linked</span></div>
+                <div class="wi2-snap-wrap">
+                  <div class="wi2-snap-tip" id="wi2-snap-speed">⚡ Reference!</div>
+                  <input type="range" class="wi2-range speed" id="wi2-slider-speed"
+                    min="57" max="105" step="1" value="57"
+                    oninput="_wi2SliderInput('speed')" onchange="_wi2SliderInput('speed')">
+                </div>
+                <div class="wi2-slider-ticks"><span>57 Actual</span><span>85 Ref</span><span>105 GS</span></div>
+                <div class="wi2-val-display" id="wi2-speed-display">57 UPM</div>
+              </div>
             </div>
-          </div>
 
-          <!-- Action buttons -->
-          <div class="wi-actions">
-            <button class="wi-btn" onclick="_wiResetSliders()">↺ Reset to Actual</button>
-            <button class="wi-btn wi-btn-primary" onclick="_wiApplyScenario()">▶ Apply Scenario</button>
-            <button class="wi-btn wi-btn-save" onclick="_wiSaveScenario()">💾 Save Scenario As…</button>
-          </div>
-        </div>
+            <!-- Fixed PO Reference Data -->
+            <div class="wi2-po-reference-card">
+              <div class="wi2-ref-title">Fixed PO Reference Data</div>
+              <div class="wi2-ref-row">
+                <span class="wi2-ref-label">Actual Speed</span>
+                <span class="wi2-ref-value" id="wi2-ref-actual">57.08 UPM</span>
+              </div>
+              <div class="wi2-ref-row">
+                <span class="wi2-ref-label">Cycle Speed</span>
+                <span class="wi2-ref-value" id="wi2-ref-cycle">70 UPM</span>
+              </div>
+              <div class="wi2-ref-row">
+                <span class="wi2-ref-label">Reference Speed</span>
+                <span class="wi2-ref-value" id="wi2-ref-reference">85 UPM</span>
+              </div>
+              <div class="wi2-ref-row">
+                <span class="wi2-ref-label" id="wi2-ref-gs-label">Gold Standard</span>
+                <span class="wi2-ref-value" id="wi2-ref-gs">105 UPM</span>
+              </div>
+            </div>
 
-        <!-- Footer -->
-        <div class="info-box" style="font-size:11px;padding:10px 14px;margin-top:16px;">
-          📌 <strong>Note:</strong> Savings projections are estimates based on Kris Van Deursen's financial model. China-spec orders and line trial orders (Z-variant, ZNFA) excluded from calculations. Snap points represent Gold Standard reference targets.
-        </div>
+          </div><!-- /wi2-left -->
+
+          <!-- RIGHT: Calculation Results -->
+          <div class="wi2-right">
+
+            <!-- OEE Result -->
+            <div class="wi2-bignum-card">
+              <div class="wi2-bignum-title">⚙️ OEE</div>
+              <div class="wi2-bignum oee" id="wi2-oee-bignum">62%</div>
+            </div>
+
+            <!-- Labor Result -->
+            <div class="wi2-bignum-card">
+              <div class="wi2-bignum-title">👥 Labor</div>
+              <div class="wi2-bignum labor" id="wi2-labor-bignum">6.16</div>
+              <div class="wi2-bignum-unit">hrs / 1000u</div>
+            </div>
+
+            <!-- Speed Result -->
+            <div class="wi2-bignum-card">
+              <div class="wi2-bignum-title">⚡ Speed</div>
+              <div class="wi2-bignum speed" id="wi2-speed-bignum">57.7763</div>
+              <div class="wi2-bignum-unit">UPM</div>
+            </div>
+
+          </div><!-- /wi2-right -->
+        </div><!-- /wi2-layout -->
 
       </div><!-- /intel-whatif -->
 
@@ -5642,44 +5976,95 @@ let baselineMonths = 9;
 const THRESHOLDS = { gold: 90, silver: 75, bronze: 60 };
 
 function handleGSTypeChange() {
-  const sel = $$('slicer-gs-type');
-  activeGSType = sel ? sel.value : 'governed';
-
   const isGoverned = activeGSType === 'governed';
-  const is12m      = activeGSType === 'baseline-12m';
-  const is6m       = activeGSType === 'baseline-6m';
-
-  let label, statusText;
-  if (isGoverned) {
-    label      = 'Governed GS · FY25';
-    statusText = 'Governed Gold Standard active (FY25: Jul 2024 – Jun 2025) — LOCKED for official reporting';
-  } else if (is12m) {
-    label      = 'Operating Baseline · 12 Month';
-    statusText = 'Operating Baseline active (rolling 12 months) — DYNAMIC · For operational analysis only';
-  } else {
-    label      = 'Operating Baseline · 6 Month';
-    statusText = 'Operating Baseline active (rolling 6 months) — DYNAMIC · For operational analysis only';
-  }
-  const cls  = isGoverned ? 'governed' : 'baseline';
+  const label      = isGoverned ? 'Governed GS · FY25' : 'Operating Baseline';
+  const statusText = isGoverned
+    ? 'Governed Gold Standard active (FY25: Jul 2024 – Jun 2025) — LOCKED for official reporting'
+    : 'Operating Baseline — Rolling updates · For operational analysis only';
+  const cls = isGoverned ? 'governed' : 'baseline';
 
   ['gs-type-indicator','gs-status-bar','gap-gs-badge','whatif-gs-badge'].forEach(id => {
-    const el = $$(id);
+    const el = document.getElementById(id);
     if (!el) return;
     el.className = 'gs-type-badge ' + cls;
-    if (id !== 'gs-type-indicator') {
-      el.style.background   = isGoverned ? '' : 'rgba(255,255,255,0.15)';
-      el.style.borderColor  = isGoverned ? '' : 'rgba(255,255,255,0.4)';
-      el.style.color        = isGoverned ? '' : '#fff';
+    if (id === 'gap-gs-badge') {
+      el.style.background  = isGoverned ? '' : 'rgba(255,255,255,0.15)';
+      el.style.borderColor = isGoverned ? '' : 'rgba(255,255,255,0.4)';
+      el.style.color       = isGoverned ? '' : '#fff';
     }
   });
 
-  const lbEl = $$('gs-type-label');
-  if (lbEl) lbEl.textContent = label;
-  const gapLbEl = $$('gap-gs-label');
-  if (gapLbEl) gapLbEl.textContent = label;
+  document.querySelectorAll('.gs-badge-updatable').forEach(el => {
+    el.classList.remove('governed', 'baseline');
+    el.classList.add(cls);
+  });
 
-  const statusLbEl = $$('gs-status-label');
+  document.querySelectorAll('.gs-badge-text').forEach(el => {
+    el.textContent = statusText;
+  });
+
+  const lbEl = document.getElementById('gs-type-label');
+  if (lbEl) lbEl.textContent = label;
+  const gapLbEl = document.getElementById('gap-gs-label');
+  if (gapLbEl) gapLbEl.textContent = label;
+  const statusLbEl = document.getElementById('gs-status-label');
   if (statusLbEl) statusLbEl.textContent = statusText;
+  const wi2LbEl = document.getElementById('wi2-gs-label');
+  if (wi2LbEl) wi2LbEl.textContent = (isGoverned ? 'Governed GS · FY25 — LOCKED for official reporting' : 'Operating Baseline — Rolling updates · For operational analysis only');
+}
+
+function setGSType(type) {
+  activeGSType = type;
+
+  ['gs-type-select','ov-type-select','wi2-type-select'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = type;
+  });
+
+  try { sessionStorage.setItem('gsType', type); } catch(e) {}
+
+  handleGSTypeChange();
+  _wi2UpdateGSType(type);
+}
+
+function _wi2UpdateGSType(type) {
+  const isGoverned = type === 'governed';
+  const OB  = { oee: 83, lRun: 6.2, lSetup: 2.1, speed: 88 };
+  const GOV = { oee: 81, lRun: 6.0, lSetup: 2.0, speed: 105 };
+  const gsVals = isGoverned ? GOV : OB;
+  const gsLabel = isGoverned ? 'GS' : 'Baseline';
+
+  Object.values(WI2_PO).forEach(po => {
+    po.oee.gs    = gsVals.oee;
+    po.lRun.gs   = gsVals.lRun;
+    po.lSetup.gs = gsVals.lSetup;
+    po.speed.gs  = gsVals.speed;
+  });
+
+  const updateTick = (sliderId, tickIndex, text) => {
+    const slider = document.getElementById(sliderId);
+    if (!slider) return;
+    const block = slider.closest('.wi2-slider-block');
+    if (!block) return;
+    const ticks = block.querySelector('.wi2-slider-ticks');
+    if (!ticks) return;
+    const spans = ticks.querySelectorAll('span');
+    if (spans[tickIndex]) spans[tickIndex].textContent = text;
+  };
+  updateTick('wi2-slider-oee',    1, gsVals.oee + '% ' + gsLabel);
+  updateTick('wi2-slider-lrun',   0, gsVals.lRun.toFixed(1) + ' ' + gsLabel);
+  updateTick('wi2-slider-lsetup', 0, gsVals.lSetup.toFixed(1) + ' ' + gsLabel);
+  updateTick('wi2-slider-speed',  2, gsVals.speed + ' ' + gsLabel);
+
+  const refLbl = document.getElementById('wi2-ref-gs-label');
+  const refVal = document.getElementById('wi2-ref-gs');
+  if (refLbl) refLbl.textContent = isGoverned ? 'Gold Standard' : 'Operating Baseline';
+  if (refVal) refVal.textContent = gsVals.speed + ' UPM';
+
+  const refCard = document.querySelector('.wi2-po-reference-card');
+  if (refCard) { refCard.style.animation = 'none'; void refCard.offsetHeight; refCard.style.animation = 'wi2FlashGreen .8s ease'; }
+
+  if (_wi2Inited) { _wi2SpeedManual = false; _wi2Init(); }
 }
 
 /* ─── 12-WEEK TREND DATA & CHARTS ───────────────────── */
@@ -6594,6 +6979,8 @@ const OV_EXPORT_DATA = (function() {
       const plant = plants[si % plants.length];
       const declared = declaredMl[si];
       const sg = 1.020 + Math.random()*0.040;
+      const sgMin = +(sg - 0.004 - Math.random()*0.006).toFixed(3);
+      const sgMax = +(sg + 0.004 + Math.random()*0.006).toFixed(3);
       const target = declared * sg * 1.02;
       const actual = target + (Math.random()*0.8 - 0.1);
       const overfill = actual - declared * sg;
@@ -6605,7 +6992,7 @@ const OV_EXPORT_DATA = (function() {
         po: 'PO-' + (10200 + w*5 + si),
         lotSize: [8500,12000,5200,22000,32000][si],
         declaredMl: declared,
-        sg: sg.toFixed(3),
+        sgMin: String(sgMin), sgMax: String(sgMax),
         targetFill: target.toFixed(2),
         actualFill: actual.toFixed(2),
         overfillG: overfill.toFixed(2),
@@ -6944,6 +7331,7 @@ function showModule(m) {
   const pageIN  = document.getElementById('page-intelligence');
   const gsSide  = document.getElementById('gs-sidebar-content');
   const ovSide  = document.getElementById('ov-sidebar-content');
+  const wi2Side = document.getElementById('wi2-sidebar-content');
   const btnGS   = document.getElementById('btn-module-gs');
   const btnOV   = document.getElementById('btn-module-overfill');
   const btnIN   = document.getElementById('btn-module-intelligence');
@@ -6954,6 +7342,7 @@ function showModule(m) {
   if (pageIN)  pageIN.style.display  = 'none';
   if (gsSide)  gsSide.style.display  = 'none';
   if (ovSide)  ovSide.style.display  = 'none';
+  if (wi2Side) wi2Side.style.display = 'none';
   [btnGS, btnOV, btnIN].forEach(b => { if (b) b.classList.remove('active'); });
 
   if (m === 'gs') {
@@ -6977,6 +7366,8 @@ function showModule(m) {
   } else if (m === 'intelligence') {
     if (pageIN) pageIN.style.display = '';
     if (btnIN)  btnIN.classList.add('active');
+    const whatifEl = document.getElementById('intel-whatif');
+    if (whatifEl && whatifEl.style.display !== 'none' && wi2Side) wi2Side.style.display = '';
     initIntelCharts();
   }
 }
@@ -6997,7 +7388,7 @@ function showOVTab(tab) {
     OV_INITED[tab] = true;
     if      (tab === 'overview')    { renderOVKPIs(); initOVOverviewCharts(); renderOVHeatmap(); renderOVTopContributors(); }
     else if (tab === 'gs-gap')      { renderOVGSGapTab(); }
-    else if (tab === 'trend')       { initOVTrendCharts(); renderTrendSummaryTable(); }
+    else if (tab === 'trend')       { initOVTrendCharts(); renderTrendSummaryTable(); renderTop10SKUTable(); }
     else if (tab === 'specscale')   { renderOVSpecScale(); }
     else if (tab === 'capability')  { renderCapabilitySigmaKPIs(); renderCapabilityTable(); renderCapabilityCharts(); }
     else if (tab === 'sg')          { initOVSGCharts(); renderOVSGTable(); renderSGStats(); renderControlLimits(); renderToleranceTable(); }
@@ -8419,7 +8810,7 @@ function renderPredQtyKPIs() {
   const d = OV_PRED_QTY_KPI;
   const isMl = OV_PRED_QTY_UNIT === 'ml';
   const conv = v => isMl ? +(v / OV_MEAN_SG).toFixed(0) : v;
-  const fmt  = v => isMl ? (v/1000).toFixed(1) + 'kL' : _fmtKg(v);
+  const fmt  = v => isMl ? (v/1000).toFixed(1) + 'kL' : v.toLocaleString() + ' kg';
   row.innerHTML = `
     <div class="qty-decomp-card brand">
       <div class="qty-decomp-label">Brand-Driven</div>
@@ -8708,22 +9099,18 @@ function renderSGStats() {
           <div class="sg-stat-item">
             <span class="sg-stat-label">Max Demonstrated SG</span>
             <span class="sg-stat-value">${s.maxDemo.toFixed(3)}</span>
-            <span class="sg-stat-sub">From actual batches</span>
           </div>
           <div class="sg-stat-item">
             <span class="sg-stat-label">Mean SG</span>
             <span class="sg-stat-value">${s.mean.toFixed(3)}</span>
-            <span class="sg-stat-sub">Use for costing (not max)</span>
           </div>
           <div class="sg-stat-item">
             <span class="sg-stat-label">Median SG</span>
             <span class="sg-stat-value">${s.median.toFixed(3)}</span>
-            <span class="sg-stat-sub"></span>
           </div>
           <div class="sg-stat-item">
             <span class="sg-stat-label">SG Sigma (σ)</span>
             <span class="sg-stat-value">${s.sigma.toFixed(3)}</span>
-            <span class="sg-stat-sub">Process variation</span>
           </div>
           <div class="sg-stat-item">
             <span class="sg-stat-label">Spec Max SG (PDS)</span>
@@ -8804,14 +9191,10 @@ function renderToleranceTable() {
 /* ─── OVERFILL: DATA EXPORT ──────────────────────────── */
 
 function renderExportTable() {
-  OV_EXP_OFFSET = 0;
   const tbody = document.getElementById('tb-export-body');
   if (!tbody) return;
   tbody.innerHTML = '';
-  _appendExportRows(0, 50);
-  OV_EXP_OFFSET = 50;
-  const btn = document.getElementById('btn-load-more-exp');
-  if (btn) btn.style.display = OV_EXP_OFFSET >= OV_EXPORT_DATA.length ? 'none' : '';
+  _appendExportRows(0, OV_EXPORT_DATA.length);
 }
 
 function _appendExportRows(from, to) {
@@ -8822,7 +9205,7 @@ function _appendExportRows(from, to) {
     tr.innerHTML = `
       <td>${r.date}</td><td>${r.plant}</td><td>${r.res}</td><td>${r.sku}</td>
       <td>${r.po}</td><td>${r.lotSize.toLocaleString()}</td><td>${r.declaredMl}</td>
-      <td>${r.sg}</td><td>${r.targetFill}</td><td>${r.actualFill}</td>
+      <td>${r.sgMin}</td><td>${r.sgMax}</td><td>${r.targetFill}</td><td>${r.actualFill}</td>
       <td>${r.overfillG}</td>
       <td style="font-weight:700;color:${+r.overfillPct>4?'#DC3545':'#333'}">${r.overfillPct}%</td>
       <td>${r.costPg}</td><td>$${r.giveawayCost}</td>
@@ -8830,7 +9213,7 @@ function _appendExportRows(from, to) {
       <td style="color:${+r.stdCostVar>=0?'#C62828':'#2E7D32'};font-weight:700;">${+r.stdCostVar>=0?'+':''}$${Math.abs(+r.stdCostVar).toFixed(2)}</td>
       <td>${r.costingLotSize.toLocaleString()}</td>
       <td>${r.brand}</td><td>${r.category||'—'}</td><td>${r.subcategory||'—'}</td>
-      <td>${r.pkgType}</td><td>${r.visc.toLocaleString()}</td>
+      <td>${r.pkgType}</td>
       <td>${r.processType||'—'}</td><td>${r.lifeCycleStage||'—'}</td>`;
     tbody.appendChild(tr);
   });
@@ -8844,15 +9227,16 @@ function loadMoreExport() {
 }
 
 function exportToCSV() {
-  const headers = ['Date','Plant','Resource','SKU','PO','Lot Size','Declared Content (ml)','SG',
+  const headers = ['Date','Plant','Resource','SKU','PO','Lot Size','Declared Content (ml)',
+    'Specific Gravity Min','Specific Gravity Max',
     'Target Fill (g)','Actual Fill (g)','Overfill (g)','Overfill %','Cost/g','Giveaway Cost ($)',
     'Standard Costed OV ($)','Std Cost Variance ($)','Costing Lot Size',
-    'Brand','Category','Subcategory','Package Type','Viscosity (cP)','Process Type','Life Cycle Stage'];
+    'Brand','Category','Subcategory','Package Type','Process Type','Life Cycle Stage'];
   const rows = OV_EXPORT_DATA.map(r => [
-    r.date, r.plant, r.res, r.sku, r.po, r.lotSize, r.declaredMl, r.sg,
+    r.date, r.plant, r.res, r.sku, r.po, r.lotSize, r.declaredMl, r.sgMin, r.sgMax,
     r.targetFill, r.actualFill, r.overfillG, r.overfillPct, r.costPg, r.giveawayCost,
     r.stdCostedOV, r.stdCostVar, r.costingLotSize,
-    r.brand, r.category||'', r.subcategory||'', r.pkgType, r.visc,
+    r.brand, r.category||'', r.subcategory||'', r.pkgType,
     r.processType||'', r.lifeCycleStage||''
   ]);
   const csv = [headers, ...rows].map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
@@ -9935,10 +10319,12 @@ function setIntelScenario(mode) {
   document.querySelectorAll('.intel-scenario-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.mode === mode);
   });
-  const hist  = document.getElementById('intel-historical');
+  const hist   = document.getElementById('intel-historical');
   const whatif = document.getElementById('intel-whatif');
-  if (hist)   hist.style.display   = mode === 'historical' ? '' : 'none';
-  if (whatif) whatif.style.display = mode === 'whatif'     ? '' : 'none';
+  const wi2Side = document.getElementById('wi2-sidebar-content');
+  if (hist)    hist.style.display   = mode === 'historical' ? '' : 'none';
+  if (whatif)  whatif.style.display = mode === 'whatif'     ? '' : 'none';
+  if (wi2Side) wi2Side.style.display = mode === 'whatif'    ? '' : 'none';
   if (mode === 'whatif') _updateWISummaryCards();
 }
 
@@ -9951,126 +10337,339 @@ function showWhatIf() {
   setIntelScenario('whatif');
 }
 
-/* ── What-If Slider State ── */
-let _wiTimeWindow = '1m';
-let _wiDebounceTimer = null;
+/* ── What-If v2: Formula-Driven Engine ── */
+let _wiTimeWindow  = '1m';  // kept for legacy setIntelWindow compat
+let _wi2TimeWindow = '1m';
+let _wi2CurrentPO  = 'PO-4521';
+let _wi2Debounce   = null;
+let _wi2SpeedManual = false;
+let _wi2Inited     = false;
 
-const WI_BASE  = { speed: 82,  labor: 9.0, oee: 62, scrap: 4.2 };
-const WI_SNAP  = { speed: 95,  labor: 7.0, oee: 81, scrap: 2.1 };
-const WI_RATES = { speed: 8100, labor: 42200, oee: 1690, scrap: 6930 };
-const WI_TW_MULT = { '1w': 1, '3w': 3, '1m': 4.33, '3m': 13 };
+const WI2_TW_MULT = { '1w': 1, '3w': 3, '1m': 4.33, '3m': 13 };
+const WI2_MACHINE_RATE = 5000;  // $/hr recovered machine time
+const WI2_LABOR_RATE   = 125;   // $/hr burdened labor
+const WI2_SPEED_RATE   = 8100;  // $/UPM for manual speed improvement
 
-function _wiSliderChange(kpi) {
-  clearTimeout(_wiDebounceTimer);
-  _wiDebounceTimer = setTimeout(() => {
-    _updateWIRow(kpi);
-    _updateWISummaryCards();
-    _checkWISnap(kpi);
-  }, 60);
+const WI2_PO = {
+  'PO-4521': {
+    volume: 25000, idealTime: 4.5,
+    oee: { actual: 62, gs: 81 },
+    lRun: { actual: 8, gs: 6 }, lSetup: { actual: 3, gs: 2 },
+    runTime: 18.3, setupTime: 2.5,
+    speed: { actual: 57, reference: 85, gs: 105 }
+  },
+  'PO-4522': {
+    volume: 18000, idealTime: 3.2,
+    oee: { actual: 68, gs: 81 },
+    lRun: { actual: 7.5, gs: 6 }, lSetup: { actual: 2.8, gs: 2 },
+    runTime: 14.5, setupTime: 2.0,
+    speed: { actual: 62, reference: 85, gs: 105 }
+  },
+  'PO-4523': {
+    volume: 30000, idealTime: 5.8,
+    oee: { actual: 59, gs: 81 },
+    lRun: { actual: 9.2, gs: 6 }, lSetup: { actual: 3.5, gs: 2 },
+    runTime: 22.0, setupTime: 3.0,
+    speed: { actual: 53, reference: 85, gs: 105 }
+  }
+};
+
+/* ── Utilities ── */
+function _setTxt(id, txt) { const e = document.getElementById(id); if (e) e.textContent = txt; }
+
+function _wi2Flash(id) {
+  const e = document.getElementById(id);
+  if (!e) return;
+  e.style.animation = 'none';
+  e.offsetHeight;
+  e.style.animation = 'wi2FlashGreen .5s ease';
 }
 
-function _updateWIRow(kpi) {
-  const slider = document.getElementById('wi-slider-' + kpi);
-  if (!slider) return;
-  const val  = parseFloat(slider.value);
-  const base = WI_BASE[kpi];
-  const mult = WI_TW_MULT[_wiTimeWindow] || 4.33;
-  let saving = 0;
-
-  if (kpi === 'speed') {
-    saving = Math.max(0, val - base) * WI_RATES.speed * mult;
-    const tgt = document.getElementById('wi-target-speed');
-    if (tgt) tgt.textContent = 'Target: ' + val + ' UPM';
-  } else if (kpi === 'labor') {
-    saving = Math.max(0, base - val) * WI_RATES.labor * mult;
-    const tgt = document.getElementById('wi-target-labor');
-    if (tgt) tgt.textContent = 'Target: ' + val.toFixed(1) + ' hrs/ku';
-  } else if (kpi === 'oee') {
-    saving = Math.max(0, val - base) * WI_RATES.oee * mult;
-    const tgt = document.getElementById('wi-target-oee');
-    if (tgt) tgt.textContent = 'Target: ' + val + '%';
-  } else if (kpi === 'scrap') {
-    saving = Math.max(0, base - val) * WI_RATES.scrap * mult;
-    const tgt = document.getElementById('wi-target-scrap');
-    if (tgt) tgt.textContent = 'Target: ' + parseFloat(val).toFixed(1) + '%';
-  }
-
-  const savEl = document.getElementById('wi-savings-' + kpi);
-  if (savEl) {
-    savEl.textContent = saving > 0 ? '+ ' + _fmtWI(saving) : '+ $0';
-    savEl.style.animation = 'none';
-    savEl.offsetHeight;
-    savEl.style.animation = 'wiFlash .4s ease';
-  }
-}
-
-function _fmtWI(val) {
+function _wi2Fmt(val) {
   if (val >= 1000000) return '$' + (val / 1000000).toFixed(2) + 'M';
   if (val >= 1000)    return '$' + (val / 1000).toFixed(1) + 'K';
   return '$' + Math.round(val);
 }
 
-function _calcWISaving(kpi) {
-  const slider = document.getElementById('wi-slider-' + kpi);
-  if (!slider) return 0;
-  const val  = parseFloat(slider.value);
-  const base = WI_BASE[kpi];
-  const mult = WI_TW_MULT[_wiTimeWindow] || 4.33;
-  let delta = 0;
-  if (kpi === 'speed') delta = Math.max(0, val - base);
-  else if (kpi === 'labor') delta = Math.max(0, base - val);
-  else if (kpi === 'oee')   delta = Math.max(0, val - base);
-  else if (kpi === 'scrap') delta = Math.max(0, base - val);
-  return delta * WI_RATES[kpi] * mult;
+function _wi2UpdateFill(id, color) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const val = parseFloat(el.value), mn = parseFloat(el.min), mx = parseFloat(el.max);
+  const pct = ((val - mn) / (mx - mn)) * 100;
+  el.style.background = `linear-gradient(to right,${color} 0%,${color} ${pct}%,var(--c-border) ${pct}%,var(--c-border) 100%)`;
 }
 
-function _updateWISummaryCards() {
-  const kpis = ['speed', 'labor', 'oee', 'scrap'];
-  let total = 0;
-  let adjusted = 0;
-  kpis.forEach(k => {
-    const s = _calcWISaving(k);
-    total += s;
-    if (s > 0) adjusted++;
-    _updateWIRow(k);
-  });
-  const totalEl = document.getElementById('wi-total-val');
-  if (totalEl) {
-    totalEl.textContent = _fmtWI(total);
-    totalEl.style.animation = 'none';
-    totalEl.offsetHeight;
-    totalEl.style.animation = 'wiFlash .4s ease';
+/* ── Formulas ── */
+function _wi2OEETime(idealTime, oeePct) { return idealTime / (oeePct / 100); }
+function _wi2LaborTotal(lRun, runTime, lSetup, setupTime) { return (lRun * runTime) + (lSetup * setupTime); }
+function _wi2SpeedUPM(volume, hoursSpent) { return volume / (hoursSpent * 60); }
+
+/* ── OEE Update ── */
+function _wi2UpdateOEE() {
+  const po = WI2_PO[_wi2CurrentPO]; if (!po) return;
+  const slider = document.getElementById('wi2-slider-oee'); if (!slider) return;
+  const oeePct   = parseFloat(slider.value);
+  const baseTime = _wi2OEETime(po.idealTime, po.oee.actual);
+  const gsTime   = _wi2OEETime(po.idealTime, po.oee.gs);
+  const wiTime   = _wi2OEETime(po.idealTime, oeePct);
+
+  _wi2UpdateFill('wi2-slider-oee', '#8B5CF6');
+  _setTxt('wi2-oee-display', oeePct + '%');
+  _setTxt('wi2-oee-bignum', oeePct + '%'); _wi2Flash('wi2-oee-bignum');
+  _setTxt('wi2-oee-ideal', po.idealTime.toFixed(2) + ' hrs');
+  _setTxt('wi2-oee-actual', wiTime.toFixed(2) + ' hrs');
+  _wi2Flash('wi2-oee-actual');
+
+  _setTxt('wt-oee-a-pct', po.oee.actual + '%');
+  _setTxt('wt-oee-wi-pct', oeePct + '%');
+  const dPct = oeePct - po.oee.actual;
+  _setTxt('wt-oee-d-pct', dPct === 0 ? '—' : (dPct > 0 ? '+' : '') + dPct.toFixed(0) + 'pp');
+  _setTxt('wt-oee-a-ideal', po.idealTime.toFixed(2) + ' hrs');
+  _setTxt('wt-oee-wi-ideal', po.idealTime.toFixed(2) + ' hrs');
+  _setTxt('wt-oee-gs-time', gsTime.toFixed(2) + ' hrs');
+  _setTxt('wt-oee-a-time', baseTime.toFixed(2) + ' hrs');
+  _setTxt('wt-oee-wi-time', wiTime.toFixed(2) + ' hrs');
+  const dTime = wiTime - baseTime;
+  _setTxt('wt-oee-d-time', dTime === 0 ? '—' : (dTime > 0 ? '+' : '') + Math.abs(dTime).toFixed(2) + ' hrs');
+  _wi2Flash('wt-oee-wi-time');
+
+  const timeSaved = Math.max(0, baseTime - wiTime);
+  const mult = WI2_TW_MULT[_wi2TimeWindow] || 4.33;
+  const savings = timeSaved * WI2_MACHINE_RATE * mult;
+  _setTxt('wi2-oee-savings', _wi2Fmt(savings));
+  _wi2Flash('wi2-oee-savings');
+
+  if (!_wi2SpeedManual) _wi2CascadeToSpeed(wiTime, baseTime, gsTime);
+}
+
+/* ── Cross-KPI: OEE → Speed ── */
+function _wi2CascadeToSpeed(wiTime, baseTime, gsTime) {
+  const po = WI2_PO[_wi2CurrentPO]; if (!po) return;
+  const calcWI   = _wi2SpeedUPM(po.volume, wiTime);
+  const calcBase = _wi2SpeedUPM(po.volume, baseTime);
+  const calcGS   = _wi2SpeedUPM(po.volume, gsTime);
+  const mult = WI2_TW_MULT[_wi2TimeWindow] || 4.33;
+
+  _setTxt('wi2-speed-hrs', wiTime.toFixed(2) + ' hrs');
+  _wi2Flash('wi2-speed-hrs');
+  _setTxt('wi2-speed-calc', calcWI.toFixed(1) + ' UPM');
+  _wi2Flash('wi2-speed-calc');
+  _setTxt('wi2-speed-bignum', calcWI.toFixed(4)); _wi2Flash('wi2-speed-bignum');
+
+  const speedSlider = document.getElementById('wi2-slider-speed');
+  if (speedSlider) {
+    const clamped = Math.min(parseFloat(speedSlider.max), Math.max(parseFloat(speedSlider.min), Math.round(calcWI)));
+    speedSlider.value = clamped;
+    _setTxt('wi2-speed-display', clamped + ' UPM');
+    _wi2UpdateFill('wi2-slider-speed', '#1976D2');
+    _setTxt('wt-spd-wi-slider', clamped + ' UPM');
+    const dSlider = clamped - po.speed.actual;
+    _setTxt('wt-spd-d-slider', dSlider === 0 ? '—' : (dSlider > 0 ? '+' : '') + dSlider.toFixed(0) + ' UPM');
   }
-  const adjEl = document.getElementById('wi-adjusted-count');
-  if (adjEl) adjEl.textContent = adjusted + ' / 4';
+  const badge = document.getElementById('wi2-speed-linked-badge');
+  if (badge) { badge.textContent = '🔗 OEE Linked'; badge.style.color = ''; }
+
+  _setTxt('wt-spd-a-hrs', baseTime.toFixed(2) + ' hrs');
+  _setTxt('wt-spd-gs-hrs', gsTime.toFixed(2) + ' hrs');
+  _setTxt('wt-spd-wi-hrs', wiTime.toFixed(2) + ' hrs');
+  const dHrs = wiTime - baseTime;
+  _setTxt('wt-spd-d-hrs', dHrs === 0 ? '—' : (dHrs > 0 ? '+' : '') + Math.abs(dHrs).toFixed(2) + ' hrs');
+  _setTxt('wt-spd-a-calc', calcBase.toFixed(1) + ' UPM');
+  _setTxt('wt-spd-gs-calc', calcGS.toFixed(1) + ' UPM');
+  _setTxt('wt-spd-wi-calc', calcWI.toFixed(1) + ' UPM');
+  const dCalc = calcWI - calcBase;
+  _setTxt('wt-spd-d-calc', dCalc === 0 ? '—' : (dCalc > 0 ? '+' : '') + dCalc.toFixed(1) + ' UPM');
+  _wi2Flash('wt-spd-wi-calc');
+
+  const delta = Math.max(0, calcWI - calcBase);
+  const spSavings = delta * WI2_SPEED_RATE * mult;
+  _setTxt('wi2-speed-savings', _wi2Fmt(spSavings));
+  _wi2Flash('wi2-speed-savings');
 }
 
-function _checkWISnap(kpi) {
-  const slider = document.getElementById('wi-slider-' + kpi);
-  const tip    = document.getElementById('wi-snap-' + kpi);
-  if (!slider || !tip) return;
-  const val  = parseFloat(slider.value);
-  const snap = WI_SNAP[kpi];
-  const range = parseFloat(slider.max) - parseFloat(slider.min);
-  const threshold = range * 0.03;
-  const near = Math.abs(val - snap) <= threshold;
-  tip.classList.toggle('visible', near);
-  if (near) setTimeout(() => tip.classList.remove('visible'), 1800);
+/* ── Labor Update ── */
+function _wi2UpdateLabor() {
+  const po = WI2_PO[_wi2CurrentPO]; if (!po) return;
+  const lRun   = parseFloat(document.getElementById('wi2-slider-lrun')?.value   ?? po.lRun.actual);
+  const lSetup = parseFloat(document.getElementById('wi2-slider-lsetup')?.value ?? po.lSetup.actual);
+  _wi2UpdateFill('wi2-slider-lrun',   '#F59E0B');
+  _wi2UpdateFill('wi2-slider-lsetup', '#F59E0B');
+
+  const totalWI   = _wi2LaborTotal(lRun, po.runTime, lSetup, po.setupTime);
+  const totalBase = _wi2LaborTotal(po.lRun.actual, po.runTime, po.lSetup.actual, po.setupTime);
+  const totalGS   = _wi2LaborTotal(po.lRun.gs, po.runTime, po.lSetup.gs, po.setupTime);
+  const hpkuWI    = totalWI   / (po.volume / 1000);
+  const hpkuBase  = totalBase / (po.volume / 1000);
+  const hpkuGS    = totalGS   / (po.volume / 1000);
+
+  _setTxt('wi2-lrun-display', lRun.toFixed(1));
+  _setTxt('wi2-lsetup-display', lSetup.toFixed(1));
+  _setTxt('wi2-labor-runtime', po.runTime.toFixed(1) + ' hrs');
+  _setTxt('wi2-labor-setuptime', po.setupTime.toFixed(1) + ' hrs');
+  _setTxt('wi2-labor-total', totalWI.toFixed(1) + ' hrs'); _wi2Flash('wi2-labor-total');
+  _setTxt('wi2-labor-hpku', hpkuWI.toFixed(2)); _wi2Flash('wi2-labor-hpku');
+  _setTxt('wi2-labor-bignum', hpkuWI.toFixed(4)); _wi2Flash('wi2-labor-bignum');
+
+  _setTxt('wt-lab-a-run', po.lRun.actual.toFixed(1));
+  _setTxt('wt-lab-wi-run', lRun.toFixed(1));
+  const dRun = lRun - po.lRun.actual;
+  _setTxt('wt-lab-d-run', dRun === 0 ? '—' : (dRun > 0 ? '+' : '') + dRun.toFixed(1));
+  _setTxt('wt-lab-a-setup', po.lSetup.actual.toFixed(1));
+  _setTxt('wt-lab-wi-setup', lSetup.toFixed(1));
+  const dSetup = lSetup - po.lSetup.actual;
+  _setTxt('wt-lab-d-setup', dSetup === 0 ? '—' : (dSetup > 0 ? '+' : '') + dSetup.toFixed(1));
+  _setTxt('wt-lab-a-rtime', po.runTime.toFixed(1) + ' hrs');
+  _setTxt('wt-lab-a-stime', po.setupTime.toFixed(1) + ' hrs');
+  _setTxt('wt-lab-a-total', totalBase.toFixed(1) + ' hrs');
+  _setTxt('wt-lab-gs-total', totalGS.toFixed(1) + ' hrs');
+  _setTxt('wt-lab-wi-total', totalWI.toFixed(1) + ' hrs');
+  const dTotal = totalWI - totalBase;
+  _setTxt('wt-lab-d-total', dTotal === 0 ? '—' : (dTotal > 0 ? '+' : '') + Math.abs(dTotal).toFixed(1) + ' hrs');
+  _wi2Flash('wt-lab-wi-total');
+  _setTxt('wt-lab-a-hpku', hpkuBase.toFixed(2));
+  _setTxt('wt-lab-gs-hpku', hpkuGS.toFixed(2));
+  _setTxt('wt-lab-wi-hpku', hpkuWI.toFixed(2));
+  const dHpku = hpkuWI - hpkuBase;
+  _setTxt('wt-lab-d-hpku', dHpku === 0 ? '—' : (dHpku > 0 ? '+' : '') + Math.abs(dHpku).toFixed(2));
+  _wi2Flash('wt-lab-wi-hpku');
+
+  const hrsSaved = Math.max(0, totalBase - totalWI);
+  const mult = WI2_TW_MULT[_wi2TimeWindow] || 4.33;
+  _setTxt('wi2-labor-savings', _wi2Fmt(hrsSaved * WI2_LABOR_RATE * mult));
+  _wi2Flash('wi2-labor-savings');
 }
 
-function _wiResetSliders() {
-  const defaults = { speed: 82, labor: 9.0, oee: 62, scrap: 4.2 };
-  ['speed','labor','oee','scrap'].forEach(k => {
-    const s = document.getElementById('wi-slider-' + k);
-    if (s) s.value = defaults[k];
-  });
-  _updateWISummaryCards();
+/* ── Speed manual update ── */
+function _wi2UpdateSpeedManual() {
+  const po = WI2_PO[_wi2CurrentPO]; if (!po) return;
+  const speedSlider = document.getElementById('wi2-slider-speed'); if (!speedSlider) return;
+  const spd = parseFloat(speedSlider.value);
+  _wi2UpdateFill('wi2-slider-speed', '#1976D2');
+  _setTxt('wi2-speed-display', spd + ' UPM');
+  _setTxt('wi2-speed-bignum', spd.toFixed(4)); _wi2Flash('wi2-speed-bignum');
+  _setTxt('wt-spd-wi-slider', spd + ' UPM');
+  const dS = spd - po.speed.actual;
+  _setTxt('wt-spd-d-slider', dS === 0 ? '—' : (dS > 0 ? '+' : '') + dS.toFixed(0) + ' UPM');
+  const mult = WI2_TW_MULT[_wi2TimeWindow] || 4.33;
+  _setTxt('wi2-speed-savings', _wi2Fmt(Math.max(0, dS) * WI2_SPEED_RATE * mult));
+  _wi2Flash('wi2-speed-savings');
+}
+
+/* ── Total Summary ── */
+function _wi2UpdateSummary() {
+  function parseSav(id) {
+    const el = document.getElementById(id); if (!el) return 0;
+    const t = el.textContent;
+    const n = parseFloat(t.replace(/[$,KM]/g, ''));
+    if (isNaN(n)) return 0;
+    if (t.includes('M')) return n * 1e6;
+    if (t.includes('K')) return n * 1000;
+    return n;
+  }
+  const total = parseSav('wi2-oee-savings') + parseSav('wi2-labor-savings') + parseSav('wi2-speed-savings');
+  _setTxt('wi2-total-val', _wi2Fmt(total)); _wi2Flash('wi2-total-val');
+  _setTxt('wi2-eng-val', _wi2Fmt(total * 0.45));
+  _setTxt('wi2-ops-val', _wi2Fmt(total * 0.55));
+}
+
+/* ── Slider Input Handler ── */
+function _wi2SliderInput(kpi) {
+  clearTimeout(_wi2Debounce);
+  _wi2Debounce = setTimeout(() => {
+    if (kpi === 'oee') {
+      _wi2SpeedManual = false;
+      _wi2UpdateOEE();
+      _wi2CheckSnap('oee', WI2_PO[_wi2CurrentPO]?.oee.gs || 81);
+    } else if (kpi === 'lrun' || kpi === 'lsetup') {
+      _wi2UpdateLabor();
+      const gs = kpi === 'lrun' ? (WI2_PO[_wi2CurrentPO]?.lRun.gs || 6) : (WI2_PO[_wi2CurrentPO]?.lSetup.gs || 2);
+      _wi2CheckSnap(kpi, gs);
+    } else if (kpi === 'speed') {
+      _wi2SpeedManual = true;
+      const badge = document.getElementById('wi2-speed-linked-badge');
+      if (badge) { badge.textContent = '✋ Manual'; badge.style.color = '#F59E0B'; }
+      _wi2UpdateSpeedManual();
+      _wi2CheckSnap('speed', WI2_PO[_wi2CurrentPO]?.speed.reference || 85);
+    }
+    _wi2UpdateSummary();
+  }, 200);
+}
+
+function _wi2CheckSnap(kpi, snapVal) {
+  const ids = { oee:'wi2-snap-oee', lrun:'wi2-snap-lrun', lsetup:'wi2-snap-lsetup', speed:'wi2-snap-speed' };
+  const sIds= { oee:'wi2-slider-oee', lrun:'wi2-slider-lrun', lsetup:'wi2-slider-lsetup', speed:'wi2-slider-speed' };
+  const tip = document.getElementById(ids[kpi]);
+  const sl  = document.getElementById(sIds[kpi]);
+  if (!tip || !sl) return;
+  const range = parseFloat(sl.max) - parseFloat(sl.min);
+  if (Math.abs(parseFloat(sl.value) - snapVal) <= range * 0.035) {
+    tip.classList.add('visible');
+    setTimeout(() => tip.classList.remove('visible'), 2000);
+  }
+}
+
+/* ── Time Window ── */
+function _wi2SetTW(tw, btn) {
+  _wi2TimeWindow = tw;
+  _wiTimeWindow  = tw;
+  document.querySelectorAll('.wi2-tw-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  _wi2UpdateOEE(); _wi2UpdateLabor(); _wi2UpdateSummary();
+}
+
+/* ── PO Change ── */
+function _wi2ChangePO(poKey) {
+  _wi2CurrentPO = poKey;
+  _wi2SpeedManual = false;
+  _wi2Init();
+}
+
+/* ── Init / Reset ── */
+function _wi2Init() {
+  const po = WI2_PO[_wi2CurrentPO]; if (!po) return;
+
+  // Reconfigure slider ranges for this PO
+  const setRange = (id, min, max, val) => {
+    const el = document.getElementById(id); if (!el) return;
+    el.min = min; el.max = max; el.value = val;
+  };
+  setRange('wi2-slider-oee',    po.oee.actual, 100, po.oee.actual);
+  setRange('wi2-slider-lrun',   po.lRun.gs, po.lRun.actual + 2, po.lRun.actual);
+  setRange('wi2-slider-lsetup', po.lSetup.gs, po.lSetup.actual + 2, po.lSetup.actual);
+  setRange('wi2-slider-speed',  po.speed.actual, po.speed.gs, po.speed.actual);
+
+  // Update tick labels
+  const updateTicks = (wrapSel, labels) => {
+    const ticks = document.querySelector(wrapSel);
+    if (ticks) { const spans = ticks.querySelectorAll('span'); labels.forEach((l,i) => { if(spans[i]) spans[i].textContent = l; }); }
+  };
+  // (ticks are static HTML for PO-4521; for a real app these would update per PO)
+
+  // Update volume display in speed table
+  _setTxt('wt-spd-a-vol', po.volume.toLocaleString());
+  _setTxt('wt-spd-wi-vol', po.volume.toLocaleString());
+
+  _wi2UpdateOEE();
+  _wi2UpdateLabor();
+  _wi2UpdateSummary();
+}
+
+/* ── Legacy bridge: called by setIntelScenario ── */
+function _updateWISummaryCards() {
+  _wi2TimeWindow = _wiTimeWindow;
+  if (!_wi2Inited) { _wi2Inited = true; _wi2Init(); }
+  else { _wi2UpdateOEE(); _wi2UpdateLabor(); _wi2UpdateSummary(); }
+}
+
+function _wi2Reset() {
+  _wi2SpeedManual = false;
+  _wi2Inited = false;
+  _wi2Init();
+  _wi2Inited = true;
   _showWIToast('Sliders reset to actual baseline.');
 }
 
-function _wiApplyScenario() {
-  _showWIToast('Scenario applied. Use Save to persist it.');
-}
+function _wi2Apply() { _showWIToast('Scenario applied. Use Save to persist it.'); }
 
 function _wiSaveScenario() {
   const modal = document.getElementById('wi-save-modal');
@@ -10097,6 +10696,16 @@ function _showWIToast(msg) {
   clearTimeout(_wiToastTimer);
   _wiToastTimer = setTimeout(() => t.classList.remove('visible'), 3000);
 }
+
+/* ── Restore GS type from session storage on load ── */
+(function() {
+  try {
+    const saved = sessionStorage.getItem('gsType');
+    if (saved === 'operating') {
+      window.addEventListener('load', () => setGSType('operating'));
+    }
+  } catch(e) {}
+})();
 </script>
 
 <!-- =====================================================
