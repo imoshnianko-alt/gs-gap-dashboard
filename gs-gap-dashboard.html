@@ -2164,7 +2164,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         <div class="knc-body">
           <div class="knc-kpi">TOTAL GS GAP IMPACT</div>
           <div class="knc-val">$1.2M</div>
-          <div class="knc-delta" style="color:var(--c-muted);">Combined opportunity<br>across all KPIs</div>
         </div>
         <div class="knc-total-tooltip">
           <div style="font-weight:700;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:8px;">Total GS Gap — $1,167,000</div>
@@ -2190,7 +2189,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         <div class="knc-body">
           <div class="knc-kpi">Speed</div>
           <div class="knc-val">82 <span class="knc-unit">UPM</span></div>
-          <div class="knc-delta">▼ −13 vs Rs</div>
         </div>
       </button>
       <button class="kpi-nav-card" id="knc-labor" onclick="showKPI('labor')">
@@ -2198,8 +2196,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         <div class="knc-body">
           <div class="knc-kpi">Labor</div>
           <div class="knc-val">9 <span class="knc-unit">hrs/1000u</span></div>
-          <div class="knc-delta">▲ +2 vs GS</div>
-          <div class="knc-delta" style="margin-top:2px;">LE: 87%</div>
         </div>
       </button>
       <button class="kpi-nav-card" id="knc-oee" onclick="showKPI('oee')">
@@ -2207,14 +2203,12 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         <div class="knc-body">
           <div class="knc-kpi">OEE</div>
           <div class="knc-val">62 <span class="knc-unit">%</span></div>
-          <div class="knc-delta">▼ −8% vs Rs</div>
         </div>
       </button>
       <button class="kpi-nav-card" id="knc-scrap" onclick="showKPI('scrap')" title="Opens Pulse 1 Scrap Dashboard">
         <span class="knc-icon">♻️</span>
         <div class="knc-body">
           <div class="knc-kpi">Scrap</div>
-          <div class="knc-delta" style="color:var(--c-blue);margin-top:4px;">Open Scrap Dashboard →</div>
         </div>
       </button>
       <button class="kpi-nav-card" id="knc-whatif" onclick="showWhatIf()">
@@ -2222,7 +2216,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         <div class="knc-body">
           <div class="knc-kpi">What-If ($)</div>
           <div class="knc-val" style="font-size:12px;font-weight:700;">$572K</div>
-          <div class="knc-delta" style="color:#16a34a;">▲ Model →</div>
         </div>
       </button>
     </div>
@@ -2289,48 +2282,95 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
           <span style="font-size:11px;font-weight:700;color:#003D5C;text-transform:uppercase;letter-spacing:0.5px;">Speed Gap Analysis</span>
           <span style="font-size:9.5px;color:var(--c-muted);">GS GAP = Nameplate − Reference &nbsp;|&nbsp; RS GAP = Reference − Actual</span>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;grid-template-rows:auto auto;gap:8px 12px;">
-          <!-- NAMEPLATE (GS) — spans 2 rows -->
-          <div style="grid-row:span 2;background:#fff;border:1px solid #e0e8f0;border-radius:6px;padding:14px 10px;display:flex;flex-direction:column;justify-content:center;text-align:center;">
-            <div style="font-size:11px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">NAMEPLATE (GS)</div>
-            <div id="kpi-gs-upm" style="font-size:34px;font-weight:700;color:var(--c-text);line-height:1.1;">105 <span style="font-size:16px;font-weight:400;color:var(--c-muted);">UPM</span></div>
-            <div style="font-size:11px;color:var(--c-muted);margin-top:6px;">Equipment spec</div>
+        <div style="display:grid;grid-template-columns:3fr 2fr;gap:8px 12px;">
+          <!-- LEFT: Scrollable resource/SKU table -->
+          <div style="background:#fff;border:1px solid #e0e8f0;border-radius:6px;overflow:hidden;height:200px;display:flex;flex-direction:column;">
+            <div style="overflow-y:auto;flex:1;">
+              <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                <tr style="border-bottom:2px solid #e0e0e0;background:#f5f8ff;">
+                  <th style="padding:6px 10px;text-align:center;font-size:10px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.5px;">Nameplate (GS)</th>
+                  <th style="padding:6px 10px;text-align:center;font-size:10px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.5px;">Reference Spd (Rs)</th>
+                  <th style="padding:6px 10px;text-align:center;font-size:10px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.5px;">Actual Spd (As)</th>
+                </tr>
+                <!-- Resource L67 -->
+                <tr style="border-bottom:1px solid #e0e0e0;background:#eef4ff;">
+                  <td colspan="3" style="padding:6px 10px;font-weight:700;font-size:12px;color:var(--c-text);">L67 → Oevel</td>
+                </tr>
+                <tr style="border-bottom:1px solid #f0f0f0;">
+                  <td style="padding:6px 10px;text-align:center;"><div id="kpi-gs-upm" style="font-size:20px;font-weight:700;color:var(--c-text);">105</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:6px 10px;text-align:center;"><div id="kpi-rs-upm" style="font-size:20px;font-weight:700;color:var(--c-text);">95</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:6px 10px;text-align:center;"><div id="kpi-as-upm" style="font-size:20px;font-weight:700;color:var(--c-text);">82</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                </tr>
+                <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa;">
+                  <td colspan="3" style="padding:4px 10px;font-size:11px;font-weight:600;color:var(--c-muted);">SKU V3YUM001</td>
+                </tr>
+                <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa;">
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">105</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">92</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">80</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                </tr>
+                <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa;">
+                  <td colspan="3" style="padding:4px 10px;font-size:11px;font-weight:600;color:var(--c-muted);">SKU V4SKN003</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e0e0e0;background:#fafafa;">
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">105</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">97</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">84</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                </tr>
+                <!-- Resource L68 -->
+                <tr style="border-bottom:1px solid #e0e0e0;background:#eef4ff;">
+                  <td colspan="3" style="padding:6px 10px;font-weight:700;font-size:12px;color:var(--c-text);">L68 → Zaventem</td>
+                </tr>
+                <tr style="border-bottom:1px solid #f0f0f0;">
+                  <td style="padding:6px 10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--c-text);">100</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:6px 10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--c-text);">90</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:6px 10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--c-text);">78</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                </tr>
+                <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa;">
+                  <td colspan="3" style="padding:4px 10px;font-size:11px;font-weight:600;color:var(--c-muted);">SKU V5FRG007</td>
+                </tr>
+                <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa;">
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">100</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">88</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">75</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                </tr>
+                <tr style="background:#fafafa;">
+                  <td colspan="3" style="padding:4px 10px;font-size:11px;font-weight:600;color:var(--c-muted);">SKU V6MKP002</td>
+                </tr>
+                <tr style="background:#fafafa;">
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">100</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">92</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                  <td style="padding:4px 10px;text-align:center;"><div style="font-size:16px;font-weight:700;color:var(--c-text);">81</div><div style="font-size:10px;color:var(--c-muted);">UPM</div></td>
+                </tr>
+              </table>
+            </div>
           </div>
-          <!-- REFERENCE SPD (RS) — spans 2 rows -->
-          <div style="grid-row:span 2;background:#fff;border:1px solid #e0e8f0;border-radius:6px;padding:14px 10px;display:flex;flex-direction:column;justify-content:center;text-align:center;">
-            <div style="font-size:11px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">REFERENCE SPD (RS)</div>
-            <div id="kpi-rs-upm" style="font-size:34px;font-weight:700;color:var(--c-text);line-height:1.1;">95 <span style="font-size:16px;font-weight:400;color:var(--c-muted);">UPM</span></div>
-            <div style="font-size:11px;color:var(--c-muted);margin-top:6px;">MAX(As) on line</div>
-          </div>
-          <!-- ACTUAL SPD (AS) — spans 2 rows -->
-          <div style="grid-row:span 2;background:#fff;border:1px solid #e0e8f0;border-radius:6px;padding:14px 10px;display:flex;flex-direction:column;justify-content:center;text-align:center;">
-            <div style="font-size:11px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">ACTUAL SPD (AS)</div>
-            <div id="kpi-as-upm" style="font-size:34px;font-weight:700;color:var(--c-text);line-height:1.1;">82 <span style="font-size:16px;font-weight:400;color:var(--c-muted);">UPM</span></div>
-            <div style="font-size:11px;color:var(--c-muted);margin-top:6px;">Current period</div>
-          </div>
-          <!-- GS GAP (UPM) — blue, row 1 col 4 -->
-          <div style="background:#e8f0fe;border:2px solid #4A90E2;border-radius:6px;padding:12px 10px;text-align:center;">
-            <div style="font-size:11px;font-weight:700;color:#4A90E2;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">GS GAP (UPM)</div>
-            <div id="kpi-gsgap-upm" style="font-size:28px;font-weight:700;color:#4A90E2;line-height:1.1;">10 <span style="font-size:14px;font-weight:400;color:var(--c-muted);">UPM</span></div>
-            <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Gs − Rs</div>
-          </div>
-          <!-- GS GAP IMPACT $ — blue, row 1 col 5 -->
-          <div style="background:#e8f0fe;border:2px solid #4A90E2;border-radius:6px;padding:12px 10px;text-align:center;">
-            <div style="font-size:11px;font-weight:700;color:#4A90E2;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">GS GAP IMPACT $</div>
-            <div id="kpi-gsgap-usd" style="font-size:28px;font-weight:700;color:#4A90E2;line-height:1.1;">$248K</div>
-            <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Engineering opp.</div>
-          </div>
-          <!-- RS GAP (UPM) — red, row 2 col 4 -->
-          <div style="background:#fde8e8;border:2px solid #E74C3C;border-radius:6px;padding:12px 10px;text-align:center;">
-            <div style="font-size:11px;font-weight:700;color:#E74C3C;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">RS GAP (UPM)</div>
-            <div id="kpi-rsgap-upm" style="font-size:28px;font-weight:700;color:#E74C3C;line-height:1.1;">13 <span style="font-size:14px;font-weight:400;color:var(--c-muted);">UPM</span></div>
-            <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Rs − As · Ops</div>
-          </div>
-          <!-- RS GAP IMPACT $ — red, row 2 col 5 -->
-          <div style="background:#fde8e8;border:2px solid #E74C3C;border-radius:6px;padding:12px 10px;text-align:center;">
-            <div style="font-size:11px;font-weight:700;color:#E74C3C;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">RS GAP IMPACT $</div>
-            <div id="kpi-rsgap-usd" style="font-size:28px;font-weight:700;color:#E74C3C;line-height:1.1;">$364K</div>
-            <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Operational opp.</div>
+          <!-- RIGHT: 2×2 gap cards grid -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;height:200px;">
+            <!-- GS GAP (UPM) — blue, row 1 col 1 -->
+            <div style="background:#e8f0fe;border:2px solid #4A90E2;border-radius:6px;padding:12px 10px;text-align:center;display:flex;flex-direction:column;justify-content:center;">
+              <div style="font-size:11px;font-weight:700;color:#4A90E2;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">GS GAP (UPM)</div>
+              <div id="kpi-gsgap-upm" style="font-size:28px;font-weight:700;color:#4A90E2;line-height:1.1;">10 <span style="font-size:14px;font-weight:400;color:var(--c-muted);">UPM</span></div>
+              <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Gs − Rs</div>
+            </div>
+            <!-- GS GAP IMPACT $ — blue, row 1 col 2 -->
+            <div style="background:#e8f0fe;border:2px solid #4A90E2;border-radius:6px;padding:12px 10px;text-align:center;display:flex;flex-direction:column;justify-content:center;">
+              <div style="font-size:11px;font-weight:700;color:#4A90E2;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">GS GAP IMPACT $</div>
+              <div id="kpi-gsgap-usd" style="font-size:28px;font-weight:700;color:#4A90E2;line-height:1.1;">$248K</div>
+              <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Engineering opp.</div>
+            </div>
+            <!-- RS GAP (UPM) — red, row 2 col 1 -->
+            <div style="background:#fde8e8;border:2px solid #E74C3C;border-radius:6px;padding:12px 10px;text-align:center;display:flex;flex-direction:column;justify-content:center;">
+              <div style="font-size:11px;font-weight:700;color:#E74C3C;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">RS GAP (UPM)</div>
+              <div id="kpi-rsgap-upm" style="font-size:28px;font-weight:700;color:#E74C3C;line-height:1.1;">13 <span style="font-size:14px;font-weight:400;color:var(--c-muted);">UPM</span></div>
+              <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Rs − As · Ops</div>
+            </div>
+            <!-- RS GAP IMPACT $ — red, row 2 col 2 -->
+            <div style="background:#fde8e8;border:2px solid #E74C3C;border-radius:6px;padding:12px 10px;text-align:center;display:flex;flex-direction:column;justify-content:center;">
+              <div style="font-size:11px;font-weight:700;color:#E74C3C;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">RS GAP IMPACT $</div>
+              <div id="kpi-rsgap-usd" style="font-size:28px;font-weight:700;color:#E74C3C;line-height:1.1;">$364K</div>
+              <div style="font-size:10px;color:var(--c-muted);margin-top:4px;">Operational opp.</div>
+            </div>
           </div>
         </div>
         <div style="margin-top:7px;font-size:9px;color:var(--c-muted);display:flex;gap:14px;flex-wrap:wrap;">
@@ -3094,21 +3134,62 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
     <!-- ─── OEE: RESULTS ─────────────────────────────────── -->
     <div id="cnt-oee-results" class="kpi-cnt">
       <div class="sec-heading" style="margin-bottom:8px;">⚙️ OEE — Results</div>
-      <div class="kpi-row">
-        <div class="kpi-card">
-          <span class="kpi-label">Actual OEE</span>
-          <span class="kpi-value">62.00 <small>%</small></span>
-          <span class="kpi-delta neg">▼ −16.00% vs GS</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">GS OEE (75th Percentile MAX)</span>
-          <span class="kpi-value" style="color:var(--c-gs);">78.00 <small>%</small></span>
-          <span class="kpi-delta">FY25 locked baseline</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">OEE Gold Standard Gap</span>
-          <span class="kpi-value" style="color:var(--c-neg);">16.00 <small>%</small></span>
-          <span class="kpi-delta neg">Gap to Gold Standard</span>
+      <div class="card" style="margin-bottom:12px;">
+        <div style="background:#fff;border-radius:4px;overflow:hidden;height:200px;display:flex;flex-direction:column;">
+          <div style="overflow-y:auto;flex:1;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;">
+              <tr style="border-bottom:2px solid #e0e0e0;background:#f5f8ff;">
+                <th style="padding:6px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.5px;min-width:120px;">Resource / SKU</th>
+                <th style="padding:6px 10px;text-align:center;font-size:10px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.5px;">Actual OEE</th>
+                <th style="padding:6px 10px;text-align:center;font-size:10px;font-weight:700;color:var(--c-gs);text-transform:uppercase;letter-spacing:.5px;">GS OEE</th>
+                <th style="padding:6px 10px;text-align:center;font-size:10px;font-weight:700;color:var(--c-muted);text-transform:uppercase;letter-spacing:.5px;">GS Gap</th>
+              </tr>
+              <!-- Resource L67 -->
+              <tr style="border-bottom:1px solid #e0e0e0;background:#eef4ff;">
+                <td colspan="4" style="padding:6px 10px;font-weight:700;font-size:12px;color:var(--c-text);">L67 → Oevel</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f0f0f0;">
+                <td style="padding:6px 10px;color:var(--c-muted);font-size:11px;">All SKUs</td>
+                <td style="padding:6px 10px;text-align:center;"><span style="font-size:18px;font-weight:700;color:var(--c-text);">62%</span></td>
+                <td style="padding:6px 10px;text-align:center;"><span style="font-size:18px;font-weight:700;color:var(--c-gs);">78%</span></td>
+                <td style="padding:6px 10px;text-align:center;"><span style="font-size:18px;font-weight:700;color:var(--c-text);">16%</span></td>
+              </tr>
+              <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa;">
+                <td style="padding:4px 10px;font-size:11px;font-weight:600;color:var(--c-muted);">SKU V3YUM001</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-text);">60%</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-gs);">78%</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-text);">18%</td>
+              </tr>
+              <tr style="border-bottom:1px solid #e0e0e0;background:#fafafa;">
+                <td style="padding:4px 10px;font-size:11px;font-weight:600;color:var(--c-muted);">SKU V4SKN003</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-text);">64%</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-gs);">78%</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-text);">14%</td>
+              </tr>
+              <!-- Resource L68 -->
+              <tr style="border-bottom:1px solid #e0e0e0;background:#eef4ff;">
+                <td colspan="4" style="padding:6px 10px;font-weight:700;font-size:12px;color:var(--c-text);">L68 → Zaventem</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f0f0f0;">
+                <td style="padding:6px 10px;color:var(--c-muted);font-size:11px;">All SKUs</td>
+                <td style="padding:6px 10px;text-align:center;"><span style="font-size:18px;font-weight:700;color:var(--c-text);">58%</span></td>
+                <td style="padding:6px 10px;text-align:center;"><span style="font-size:18px;font-weight:700;color:var(--c-gs);">75%</span></td>
+                <td style="padding:6px 10px;text-align:center;"><span style="font-size:18px;font-weight:700;color:var(--c-text);">17%</span></td>
+              </tr>
+              <tr style="border-bottom:1px solid #f0f0f0;background:#fafafa;">
+                <td style="padding:4px 10px;font-size:11px;font-weight:600;color:var(--c-muted);">SKU V5FRG007</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-text);">56%</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-gs);">75%</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-text);">19%</td>
+              </tr>
+              <tr style="background:#fafafa;">
+                <td style="padding:4px 10px;font-size:11px;font-weight:600;color:var(--c-muted);">SKU V6MKP002</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-text);">61%</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-gs);">75%</td>
+                <td style="padding:4px 10px;text-align:center;font-size:14px;font-weight:700;color:var(--c-text);">14%</td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -3479,15 +3560,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
       <div class="card">
         <div class="card-header-row" style="margin-bottom:6px;">
           <span class="card-title">PO-Level OEE Detail</span>
-          <div class="view-as-wrap">
-            <span class="view-as-label">Filter PO by:</span>
-            <select class="view-as-select" onchange="filterDVOEETable(this.value)">
-              <option value="all">All POs</option>
-              <option value="Small">Small POs</option>
-              <option value="Medium">Medium POs</option>
-              <option value="Large">Large POs</option>
-            </select>
-          </div>
         </div>
         <div class="tbl-wrap">
           <table class="gs-tbl">
@@ -4248,7 +4320,7 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
        INTELLIGENCE: Performance Improvement Recommendations
        ===================================================== -->
   <main id="page-intelligence" class="gs-content" style="display:none;">
-    <div style="padding:20px 24px;">
+    <div>
 
       <!-- ── KPI Navigation Card Row ── -->
       <div class="kpi-nav-row" style="margin-bottom:16px;">
@@ -4257,7 +4329,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
           <div class="knc-body">
             <div class="knc-kpi">TOTAL GS GAP IMPACT</div>
             <div class="knc-val">$1.2M</div>
-            <div class="knc-delta" style="color:var(--c-muted);">Combined opportunity<br>across all KPIs</div>
           </div>
           <div class="knc-total-tooltip">
             <div style="font-weight:700;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:8px;">Total GS Gap — $1,167,000</div>
@@ -4271,7 +4342,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
           <div class="knc-body">
             <div class="knc-kpi">Speed</div>
             <div class="knc-val">82 <span class="knc-unit">UPM</span></div>
-            <div class="knc-delta">▼ −13 vs Rs</div>
           </div>
         </button>
         <button class="kpi-nav-card" onclick="showModule('gs');showKPI('labor')">
@@ -4279,8 +4349,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
           <div class="knc-body">
             <div class="knc-kpi">Labor</div>
             <div class="knc-val">9 <span class="knc-unit">hrs/1000u</span></div>
-            <div class="knc-delta">▲ +2 vs GS</div>
-            <div class="knc-delta" style="margin-top:2px;">LE: 87%</div>
           </div>
         </button>
         <button class="kpi-nav-card" onclick="showModule('gs');showKPI('oee')">
@@ -4288,14 +4356,12 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
           <div class="knc-body">
             <div class="knc-kpi">OEE</div>
             <div class="knc-val">62 <span class="knc-unit">%</span></div>
-            <div class="knc-delta">▼ −8% vs Rs</div>
           </div>
         </button>
         <button class="kpi-nav-card" onclick="showModule('gs');showKPI('scrap')" title="Opens Pulse 1 Scrap Dashboard">
           <span class="knc-icon">♻️</span>
           <div class="knc-body">
             <div class="knc-kpi">Scrap</div>
-            <div class="knc-delta" style="color:var(--c-blue);margin-top:4px;">Open Scrap Dashboard →</div>
           </div>
         </button>
         <button class="kpi-nav-card" onclick="void(0)" style="cursor:default;">
@@ -4303,7 +4369,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
           <div class="knc-body">
             <div class="knc-kpi">What-If ($)</div>
             <div class="knc-val" style="font-size:12px;font-weight:700;">$572K</div>
-            <div class="knc-delta" style="color:#16a34a;">▲ Model →</div>
           </div>
         </button>
       </div>
@@ -4315,37 +4380,27 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
 
       <!-- ── Scenario Tabs ── -->
       <div class="tab-nav" id="intel-tab-nav" style="margin-bottom:16px;">
-        <button class="tab-btn active" data-mode="historical" onclick="setIntelScenario('historical')">📊 Historical Analysis</button>
-        <button class="tab-btn" data-mode="whatif" onclick="setIntelScenario('whatif')">💡 What-If Scenario</button>
+        <button class="tab-btn active" data-mode="whatif" onclick="setIntelScenario('whatif')">💡 What-If Scenario</button>
+        <button class="tab-btn" data-mode="historical" onclick="setIntelScenario('historical')">📊 Historical Analysis</button>
       </div>
 
       <!-- ════════════════════════════════════════════
            HISTORICAL ANALYSIS SECTION
            ════════════════════════════════════════════ -->
-      <div id="intel-historical">
+      <div id="intel-historical" style="display:none;">
 
         <!-- Summary Cards -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:20px;">
           <div style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:10px;padding:20px 22px;color:#fff;position:relative;overflow:hidden;">
             <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;opacity:.85;margin-bottom:8px;">Total Opportunity $</div>
-            <div style="font-size:48px;font-weight:800;line-height:1;margin-bottom:6px;">$612.1K</div>
-            <div style="font-size:11px;opacity:.75;">Combined Engineering + Operational gap</div>
+            <div style="font-size:48px;font-weight:800;line-height:1;margin-bottom:6px;">$504.3K</div>
+            <div style="font-size:11px;opacity:.75;">Combined Speed, Labor + OEE gap</div>
             <div style="position:absolute;right:-16px;top:-16px;font-size:80px;opacity:.08;line-height:1;">$</div>
-          </div>
-          <div style="background:var(--c-card);border:3px solid var(--c-blue);border-radius:10px;padding:20px 22px;position:relative;">
-            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">⚙️ Engineering Gap $</div>
-            <div style="font-size:48px;font-weight:800;line-height:1;color:var(--c-blue);margin-bottom:6px;">$248.4K</div>
-            <div style="font-size:11px;color:var(--c-muted);">GS − RS: may require equipment upgrades or formula adjustments</div>
-          </div>
-          <div style="background:var(--c-card);border:3px solid #ef4444;border-radius:10px;padding:20px 22px;position:relative;">
-            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--c-muted);margin-bottom:8px;">📈 Operational Gap $</div>
-            <div style="font-size:48px;font-weight:800;line-height:1;color:#ef4444;margin-bottom:6px;">$363.7K</div>
-            <div style="font-size:11px;color:var(--c-muted);">RS − Actual: actionable by CE teams today</div>
           </div>
         </div>
 
-        <!-- KPI Cards (4 only — LIMS removed) -->
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+        <!-- KPI Cards -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
           <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('speed',this)">
             <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">⚡ Speed</div>
             <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$184.2K</div>
@@ -4365,13 +4420,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
             <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$221.5K</div>
             <div style="font-size:10px;color:#16a34a;font-weight:600;">↑ 31 POs with gap</div>
             <div style="margin-top:8px;display:flex;gap:4px;"><div style="flex:4;height:4px;background:#3b82f6;border-radius:2px;"></div><div style="flex:4;height:4px;background:#ef4444;border-radius:2px;"></div></div>
-            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
-          </div>
-          <div class="card" style="cursor:pointer;border:2px solid transparent;transition:border-color .2s;" onclick="selectIntelKPI('scrap',this)">
-            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">🗑️ Scrap</div>
-            <div style="font-size:22px;font-weight:800;color:var(--c-text);line-height:1;margin-bottom:2px;">$67.8K</div>
-            <div style="font-size:10px;color:var(--c-muted);font-weight:600;">→ See Steven's dashboard</div>
-            <div style="margin-top:8px;display:flex;gap:4px;"><div style="flex:2;height:4px;background:#3b82f6;border-radius:2px;"></div><div style="flex:3;height:4px;background:#ef4444;border-radius:2px;"></div></div>
             <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--c-muted);margin-top:3px;"><span>Eng</span><span>Ops</span></div>
           </div>
         </div>
@@ -4408,8 +4456,7 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
                 <tr style="border-bottom:1px solid var(--c-border);"><td style="padding:6px;font-weight:600;">⚡ Speed</td><td style="padding:6px;text-align:right;">$46.1K</td><td style="padding:6px;text-align:right;">$92.1K</td><td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$184.2K</td></tr>
                 <tr style="border-bottom:1px solid var(--c-border);"><td style="padding:6px;font-weight:600;">👥 Labor</td><td style="padding:6px;text-align:right;">$24.7K</td><td style="padding:6px;text-align:right;">$49.3K</td><td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$98.6K</td></tr>
                 <tr style="border-bottom:1px solid var(--c-border);"><td style="padding:6px;font-weight:600;">⚙️ OEE</td><td style="padding:6px;text-align:right;">$55.4K</td><td style="padding:6px;text-align:right;">$110.8K</td><td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$221.5K</td></tr>
-                <tr style="border-bottom:1px solid var(--c-border);"><td style="padding:6px;font-weight:600;">🗑️ Scrap</td><td style="padding:6px;text-align:right;">$17.0K</td><td style="padding:6px;text-align:right;">$33.9K</td><td style="padding:6px;text-align:right;color:#16a34a;font-weight:700;">$67.8K</td></tr>
-                <tr><td style="padding:6px;font-weight:800;color:var(--c-text);">Total</td><td style="padding:6px;text-align:right;font-weight:700;">$143.2K</td><td style="padding:6px;text-align:right;font-weight:700;">$286.1K</td><td style="padding:6px;text-align:right;font-weight:800;color:#16a34a;">$572.1K</td></tr>
+                <tr><td style="padding:6px;font-weight:800;color:var(--c-text);">Total</td><td style="padding:6px;text-align:right;font-weight:700;">$126.2K</td><td style="padding:6px;text-align:right;font-weight:700;">$252.3K</td><td style="padding:6px;text-align:right;font-weight:800;color:#16a34a;">$504.3K</td></tr>
               </tbody>
             </table>
           </div>
@@ -4425,10 +4472,10 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
       <!-- ════════════════════════════════════════════
            WHAT-IF SCENARIO SECTION
            ════════════════════════════════════════════ -->
-      <div id="intel-whatif" style="display:none;">
+      <div id="intel-whatif">
 
         <!-- ROW 1: Planned Order Selector -->
-        <div class="wi2-po-bar">
+        <div class="wi2-po-bar" style="margin-bottom:8px;">
           <span class="wi2-po-label">Planned Order</span>
           <select class="wi2-po-select" id="wi2-po-select" onchange="_wi2ChangePO(this.value)">
             <option value="PO-4521">PO-4521 — Brand X 250ml (25,000 units)</option>
@@ -4438,7 +4485,7 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         </div>
 
         <!-- ROW 2: OEE -->
-        <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;margin-bottom:12px;align-items:start;">
+        <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;margin-bottom:8px;align-items:start;">
           <!-- Info card -->
           <div class="wi2-section" style="text-align:center;">
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:10px;">⚙️ OEE</div>
@@ -4471,7 +4518,7 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         </div>
 
         <!-- ROW 3: Labor -->
-        <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;margin-bottom:12px;align-items:start;">
+        <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;margin-bottom:8px;align-items:start;">
           <!-- Info card -->
           <div class="wi2-section" style="text-align:center;">
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:10px;">👥 LABOR</div>
@@ -4518,7 +4565,7 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         </div>
 
         <!-- ROW 4: Speed -->
-        <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;margin-bottom:12px;align-items:start;">
+        <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;margin-bottom:8px;align-items:start;">
           <!-- Reference table -->
           <div class="wi2-po-reference-card">
             <div class="wi2-ref-title">FOR REFERENCE ONLY</div>
@@ -4567,7 +4614,7 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         </div>
 
         <!-- ROW 5: Processing Cost -->
-        <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;margin-bottom:12px;align-items:stretch;">
+        <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;margin-bottom:0;align-items:stretch;">
           <!-- Current cost -->
           <div class="wi2-section">
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--c-muted);margin-bottom:6px;">Processing cost</div>
@@ -10026,25 +10073,9 @@ function loadLBWIPO(po) {
 
   function oeeColor(v) {
     if (v === null) return { bg:'#F3F4F6', fg:'transparent' };
-    if (v >= 85) {
-      const t = Math.min((v - 85) / 15, 1);
-      const r = Math.round(74  + (34  - 74)  * t);
-      const g = Math.round(222 + (197 - 222) * t);
-      const b = Math.round(128 + (94  - 128) * t);
-      return { bg:`rgb(${r},${g},${b})`, fg:'#fff' };
-    }
-    if (v >= 70) {
-      const t = (v - 70) / 15;
-      const r = Math.round(248 + (251 - 248) * (1-t));
-      const g = Math.round(113 + (191 - 113) * (1-t));
-      const b = Math.round(113 + (36  - 113) * (1-t));
-      return { bg:`rgb(${r},${g},${b})`, fg:'#fff' };
-    }
-    const t = Math.min((70 - v) / 70, 1);
-    const r = Math.round(239 + (185 - 239) * t);
-    const g = Math.round(68  + (28  - 68)  * t);
-    const b = Math.round(68  + (28  - 68)  * t);
-    return { bg:`rgb(${r},${g},${b})`, fg:'#fff' };
+    if (v >= 80) return { bg:'#22C55E', fg:'#fff' };
+    if (v >= 65) return { bg:'#F59E0B', fg:'#fff' };
+    return { bg:'#EF4444', fg:'#fff' };
   }
 
   function statusLabel(v) {
@@ -10141,7 +10172,6 @@ const INTEL_KPI_DATA = {
   speed:    { label: '⚡ Speed',    eng: 74.3,  ops: 109.9, engK: 74.3,   opsK: 109.9 },
   labor:    { label: '👥 Labor',    eng: 29.6,  ops: 69.0,  engK: 29.6,   opsK: 69.0  },
   oee:      { label: '⚙️ OEE',     eng: 110.8, ops: 110.7, engK: 110.8,  opsK: 110.7 },
-  scrap:    { label: '🗑️ Scrap',   eng: 20.3,  ops: 47.5,  engK: 20.3,   opsK: 47.5  },
   massattr: { label: '🧪 Mass Attr',eng: 10.0,  ops: 30.0,  engK: 10.0,   opsK: 30.0  },
 };
 
