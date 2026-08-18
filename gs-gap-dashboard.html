@@ -2839,6 +2839,35 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         <div id="lb-multires-note" style="display:none;font-size:10px;color:var(--c-muted);margin-top:6px;font-style:italic;">RS reference lines hidden in multi-resource view for clarity.</div>
       </div>
       <div class="note-box">📌 For PO-level detail and trend charts by line — click <strong>Deep View</strong> tab above.</div>
+
+      <!-- Family Labor Trend -->
+      <div class="card" style="margin-top:16px;">
+        <div class="card-header-row" style="align-items:center;justify-content:space-between;">
+          <span class="card-title">Family Labor Trend</span>
+          <div id="lb-fam-view-btns" style="display:flex;gap:4px;">
+            <button class="tab-btn" data-view="category" style="padding:4px 10px;font-size:11px;" onclick="switchLBFamilyView('category')">Category</button>
+            <button class="tab-btn" data-view="subcategory" style="padding:4px 10px;font-size:11px;" onclick="switchLBFamilyView('subcategory')">Subcategory</button>
+            <button class="tab-btn active" data-view="family" style="padding:4px 10px;font-size:11px;" onclick="switchLBFamilyView('family')">Family</button>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:260px;"><canvas id="ch-lb-family-trend"></canvas></div>
+        <div class="legend-row" id="lb-family-legend" style="flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
+      </div>
+
+      <!-- Resource Performance Heatmap — Labor -->
+      <div class="card" style="margin-top:16px;padding:0;overflow:hidden;">
+        <div style="padding:14px 16px 10px;">
+          <div class="card-title" style="margin-bottom:2px;">Resource Performance Heatmap</div>
+          <div style="font-size:10.5px;color:var(--c-muted);">Labor Heatmap — SKU × Resource · % Labor Efficiency</div>
+        </div>
+        <div style="overflow-x:auto;position:relative;">
+          <table id="labor-heatmap-tbl" style="border-collapse:collapse;min-width:100%;font-size:11px;">
+            <thead id="labor-hm-head"></thead>
+            <tbody id="labor-heatmap-body"></tbody>
+          </table>
+        </div>
+        <div id="labor-hm-tooltip" style="display:none;position:absolute;background:#1F2937;color:#fff;padding:6px 10px;border-radius:4px;font-size:11px;pointer-events:none;z-index:100;"></div>
+      </div>
     </div><!-- /cnt-labor-results -->
 
     <!-- ─── LABOR: PREDICTIONS ──────────────────────────────── -->
@@ -2885,11 +2914,11 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
           <table class="gs-tbl">
             <thead><tr>
               <th>Month</th><th>SKU</th><th>Resource</th><th>Family</th>
-              <th class="r">Pred. (hrs/1000)</th>
-              <th class="r" style="color:#6dd4bc;">GS (hrs/1000)</th>
-              <th class="r" style="color:#ff8080;">GAP %</th>
-              <th class="r" style="color:#ff8080;">Pred. GAP $</th>
-              <th>Confidence</th>
+              <th>Package Type</th><th>Category</th>
+              <th class="r">Labor Efficiency</th>
+              <th class="r" style="color:#6dd4bc;">GS Labor Efficiency</th>
+              <th class="r" style="color:#ff8080;">Gap</th>
+              <th class="r" style="color:#ff8080;">Gap Impact</th>
             </tr></thead>
             <tbody id="tb-lb-pred"></tbody>
           </table>
@@ -3023,58 +3052,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         </p>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
-        <div class="gs-card" style="opacity:0.7;background:#f5f5f5;">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
-            <div>
-              <div class="card-title" style="color:var(--c-muted);">Setup Time Variance — Planned vs Actual</div>
-              <div class="card-subtitle">min, max, median, mean per SKU-Line, 3 time frames</div>
-            </div>
-            <span title="Granular setup time breakdown not available in SAP for this phase. Only aggregate downtime (0020 + 0030) exists. Future phase: manual sheets, RME tickets, or partial data approximation." style="cursor:help;font-size:11px;color:var(--c-muted);">ℹ</span>
-          </div>
-          <span style="background:#FFEBEE;color:#C62828;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;">🔴 Data Not Available</span>
-        </div>
-        <div class="gs-card" style="opacity:0.7;background:#f5f5f5;">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
-            <div>
-              <div class="card-title" style="color:var(--c-muted);">Time on Task vs UPH</div>
-              <div class="card-subtitle">Sub-process level statistical control chart</div>
-            </div>
-            <span title="Sub-process level measurement not available. Future: Cognex scanners or LIDAR-based time-on-task per conveyor station." style="cursor:help;font-size:11px;color:var(--c-muted);">ℹ</span>
-          </div>
-          <span style="background:#FFEBEE;color:#C62828;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;">🔴 Data Not Available</span>
-        </div>
-        <div class="gs-card" style="opacity:0.7;background:#f5f5f5;">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
-            <div>
-              <div class="card-title" style="color:var(--c-muted);">Planning Accuracy — Overbias vs Underbias</div>
-              <div class="card-subtitle">Systematic variance in planned hours per SKU</div>
-            </div>
-            <span title="Planned hours may be systematically over- or under-estimated per SKU. Future phase: identify bias direction and tighten process controls. Data source TBD." style="cursor:help;font-size:11px;color:var(--c-muted);">ℹ</span>
-          </div>
-          <span style="background:#FFF8E1;color:#E65100;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;">🟡 Criteria Pending</span>
-        </div>
-        <div class="gs-card" style="opacity:0.7;background:#f5f5f5;">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
-            <div>
-              <div class="card-title" style="color:var(--c-muted);">Process Path Measurement &amp; Deviations</div>
-              <div class="card-subtitle">Actual hours by sub-process step</div>
-            </div>
-            <span title="Sub-process step measurement (e.g. hopping, cartoning per 1,000 units) not available. No standardised process card exists. Future phases may use industry-standard time studies." style="cursor:help;font-size:11px;color:var(--c-muted);">ℹ</span>
-          </div>
-          <span style="background:#FFEBEE;color:#C62828;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;">🔴 Data Not Available</span>
-        </div>
-        <div class="gs-card" style="opacity:0.7;background:#f5f5f5;grid-column:span 2;">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;">
-            <div>
-              <div class="card-title" style="color:var(--c-muted);">Recommendations</div>
-              <div class="card-subtitle">Downtime, SKU complexity, labor shortage, speed improvement — prioritised by $ impact</div>
-            </div>
-            <span title="BRD requirements: (a) Prioritise by $ impact across Speed, OEE, Labor, Scrap. (b) Short-term: speed adjustment, operator training, setup parameter review, changeover sequencing. Criteria and formula TBD pending client sign-off." style="cursor:help;font-size:11px;color:var(--c-muted);">ℹ</span>
-          </div>
-          <span style="background:#FFF8E1;color:#E65100;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:700;">🟡 Criteria Pending</span>
-        </div>
-      </div>
     </div><!-- /cnt-labor-gap -->
 
     <!-- ─── LABOR: DEEP VIEW ────────────────────────────────── -->
@@ -3118,6 +3095,10 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
               <th class="r">Actual (hrs/1000)</th>
               <th class="r" style="color:#6dd4bc;">GS (hrs/1000)</th>
               <th class="r" style="color:#ff8080;">Gap $ (lost efficiency)</th>
+              <th class="r">Setup Ratio</th>
+              <th class="r">Run Ratio</th>
+              <th class="r">Total Hours</th>
+              <th class="r">Crew Size</th>
             </tr></thead>
             <tbody id="tb-lb-dv"></tbody>
           </table>
@@ -4866,6 +4847,7 @@ function initResultsCharts() {
 function initLaborResultsCharts() {
   init('ch-crew-res', comboConfig(MONTHS, CREW.actual, CREW.gs, CREW.rs, 'Hrs/1000u'));
   if (REG['ch-crew-res']) REG['ch-crew-res'].resize();
+  initLBFamilyTrendChart();
 }
 function initOEEResultsCharts() {
   init('ch-oee-res', comboConfig(MONTHS, OEE.actual, OEE.gs, null, 'OEE %'));
@@ -4930,6 +4912,70 @@ function initOEEFamilyTrendChart() {
       scales: {
         x: { grid: { display: false }, ticks: { font: { size: 11 } } },
         y: { min: 45, max: 85, grid: { color: 'rgba(0,0,0,.06)' }, ticks: {
+          font: { size: 10 }, callback: v => v + '%'
+        }}
+      }
+    }
+  });
+}
+
+const LB_FAMILY_DATA = [
+  { family:'1042', color:'#3b82f6', gs:91, data:[79,81,80,82,83,84,82,85,86,87,88,89] },
+  { family:'1055', color:'#10b981', gs:90, data:[74,76,77,75,78,79,77,80,81,82,81,83] },
+  { family:'1098', color:'#f59e0b', gs:89, data:[71,73,72,74,75,76,74,77,78,79,79,80] },
+  { family:'1113', color:'#ef4444', gs:88, data:[67,69,70,68,71,72,70,73,74,75,76,77] },
+];
+const LB_FAM_MONTHS = ['Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
+
+function switchLBFamilyView(mode) {
+  document.querySelectorAll('#lb-fam-view-btns .tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.view === mode);
+  });
+  initLBFamilyTrendChart();
+}
+
+function initLBFamilyTrendChart() {
+  const ctx = document.getElementById('ch-lb-family-trend');
+  if (!ctx) return;
+  if (REG['ch-lb-family-trend']) { REG['ch-lb-family-trend'].destroy(); delete REG['ch-lb-family-trend']; }
+  const datasets = LB_FAMILY_DATA.map(f => ({
+    type: 'bar',
+    label: f.family,
+    data: f.data,
+    backgroundColor: f.color + 'bb',
+    borderColor: f.color,
+    borderWidth: 1,
+    borderRadius: 2,
+  }));
+  const avgGS = Math.round(LB_FAMILY_DATA.reduce((s,f)=>s+f.gs,0)/LB_FAMILY_DATA.length);
+  datasets.push({
+    type: 'line',
+    label: 'GS Benchmark',
+    data: Array(12).fill(avgGS),
+    borderColor: '#22c55e',
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderDash: [5,4],
+    pointRadius: 0,
+    tension: 0,
+  });
+  const legend = document.getElementById('lb-family-legend');
+  if (legend) {
+    legend.innerHTML = LB_FAMILY_DATA.map(f =>
+      `<span class="legend-item"><span style="display:inline-block;width:14px;height:10px;background:${f.color}bb;border:1px solid ${f.color};vertical-align:middle;margin-right:3px;border-radius:2px;"></span>${f.family}</span>`
+    ).join('') + `<span class="legend-item"><span style="display:inline-block;width:16px;border-top:2px dashed #22c55e;vertical-align:middle;margin-right:3px;"></span> GS Benchmark</span>`;
+  }
+  REG['ch-lb-family-trend'] = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: LB_FAM_MONTHS, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: {
+        label: c => `${c.dataset.label}: ${c.parsed.y}%`
+      }}},
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: { min: 55, max: 100, grid: { color: 'rgba(0,0,0,.06)' }, ticks: {
           font: { size: 10 }, callback: v => v + '%'
         }}
       }
@@ -6957,12 +7003,12 @@ const LB_PRED_ACTUAL = [88.4, 85.1, 86.3, 83.7, 81.2, 92.4];
 const LB_PRED_GS     = [94.0, 94.0, 91.2, 89.4, 88.8, 96.1];
 
 const LB_PRED_POS = [
-  { month:'Aug 26', sku:'SKU-101 / Mascara Multi',     res:'L67', family:'Mascara',    predLE:88.4, gsLE:94.0, gapPct:5.6, gapUSD:5800, conf:'High',   confColor:'#2E7D32' },
-  { month:'Sep 26', sku:'SKU-112 / Mascara Volume',    res:'L67', family:'Mascara',    predLE:85.1, gsLE:94.0, gapPct:8.9, gapUSD:7200, conf:'High',   confColor:'#2E7D32' },
-  { month:'Oct 26', sku:'SKU-202 / Foundation Liquid', res:'L67', family:'Foundation', predLE:86.3, gsLE:91.2, gapPct:4.9, gapUSD:4100, conf:'High',   confColor:'#2E7D32' },
-  { month:'Nov 26', sku:'SKU-301 / Serum Anti-aging',  res:'L68', family:'Serum',      predLE:83.7, gsLE:89.4, gapPct:5.7, gapUSD:4600, conf:'Medium', confColor:'#E65100' },
-  { month:'Dec 26', sku:'SKU-401 / Cleanser Foaming',  res:'L68', family:'Cleanser',   predLE:81.2, gsLE:88.8, gapPct:7.6, gapUSD:3300, conf:'Medium', confColor:'#E65100' },
-  { month:'Jan 27', sku:'SKU-501 / Moisturizer SPF',   res:'L72', family:'Moisturizer',predLE:92.4, gsLE:96.1, gapPct:3.7, gapUSD:2600, conf:'High',   confColor:'#2E7D32' },
+  { month:'Aug 26', sku:'SKU-101 / Mascara Multi',     res:'L67', family:'Mascara',     pkgType:'Tube',    category:'Eye',      predLE:88.4, gsLE:94.0, gapPct:5.6, gapUSD:5800, conf:'High',   confColor:'#2E7D32' },
+  { month:'Sep 26', sku:'SKU-112 / Mascara Volume',    res:'L67', family:'Mascara',     pkgType:'Tube',    category:'Eye',      predLE:85.1, gsLE:94.0, gapPct:8.9, gapUSD:7200, conf:'High',   confColor:'#2E7D32' },
+  { month:'Oct 26', sku:'SKU-202 / Foundation Liquid', res:'L67', family:'Foundation',  pkgType:'Bottle',  category:'Face',     predLE:86.3, gsLE:91.2, gapPct:4.9, gapUSD:4100, conf:'High',   confColor:'#2E7D32' },
+  { month:'Nov 26', sku:'SKU-301 / Serum Anti-aging',  res:'L68', family:'Serum',       pkgType:'Dropper', category:'Skincare', predLE:83.7, gsLE:89.4, gapPct:5.7, gapUSD:4600, conf:'Medium', confColor:'#E65100' },
+  { month:'Dec 26', sku:'SKU-401 / Cleanser Foaming',  res:'L68', family:'Cleanser',    pkgType:'Bottle',  category:'Cleanser', predLE:81.2, gsLE:88.8, gapPct:7.6, gapUSD:3300, conf:'Medium', confColor:'#E65100' },
+  { month:'Jan 27', sku:'SKU-501 / Moisturizer SPF',   res:'L72', family:'Moisturizer', pkgType:'Jar',     category:'Skincare', predLE:92.4, gsLE:96.1, gapPct:3.7, gapUSD:2600, conf:'High',   confColor:'#2E7D32' },
 ];
 let LB_PRED_OFFSET = 0;
 
@@ -6978,11 +7024,11 @@ const LB_PO_ROWS = [
 let LB_PO_OFFSET = 0;
 
 const LB_DV_POS = [
-  { po:'PO-2026-005', qty:38000, avgQty:43500, sku:'SKU-401 / Cleanser–Foaming',   res:'L72', bucket:'Small',  actualLE:71, gsLE:91, gapUSD:14800 },
-  { po:'PO-2026-002', qty:44000, avgQty:43500, sku:'SKU-102 / Mascara–Multi',       res:'L67', bucket:'Small',  actualLE:79, gsLE:94, gapUSD:11200 },
-  { po:'PO-2026-004', qty:51000, avgQty:43500, sku:'SKU-301 / Serum–Anti-aging',    res:'L68', bucket:'Medium', actualLE:84, gsLE:91, gapUSD:7600  },
-  { po:'PO-2026-001', qty:48000, avgQty:43500, sku:'SKU-101 / Mascara–Multi',       res:'L67', bucket:'Medium', actualLE:87, gsLE:94, gapUSD:5800  },
-  { po:'PO-2026-003', qty:55000, avgQty:43500, sku:'SKU-201 / Foundation–Liquid',   res:'L67', bucket:'Large',  actualLE:91, gsLE:94, gapUSD:2400  },
+  { po:'PO-2026-005', qty:38000, avgQty:43500, sku:'SKU-401 / Cleanser–Foaming',   res:'L72', bucket:'Small',  actualLE:71, gsLE:91, gapUSD:14800, setupRatio:0.12, runRatio:0.82, totalHours:53.7,  crewSize:6 },
+  { po:'PO-2026-002', qty:44000, avgQty:43500, sku:'SKU-102 / Mascara–Multi',       res:'L67', bucket:'Small',  actualLE:79, gsLE:94, gapUSD:11200, setupRatio:0.09, runRatio:0.86, totalHours:61.4,  crewSize:5 },
+  { po:'PO-2026-004', qty:51000, avgQty:43500, sku:'SKU-301 / Serum–Anti-aging',    res:'L68', bucket:'Medium', actualLE:84, gsLE:91, gapUSD:7600,  setupRatio:0.08, runRatio:0.88, totalHours:72.8,  crewSize:5 },
+  { po:'PO-2026-001', qty:48000, avgQty:43500, sku:'SKU-101 / Mascara–Multi',       res:'L67', bucket:'Medium', actualLE:87, gsLE:94, gapUSD:5800,  setupRatio:0.07, runRatio:0.91, totalHours:66.2,  crewSize:4 },
+  { po:'PO-2026-003', qty:55000, avgQty:43500, sku:'SKU-201 / Foundation–Liquid',   res:'L67', bucket:'Large',  actualLE:91, gsLE:94, gapUSD:2400,  setupRatio:0.06, runRatio:0.93, totalHours:80.5,  crewSize:4 },
 ];
 
 const LB_TOP10 = [
@@ -9686,11 +9732,11 @@ function renderLBPredTable() {
     const confDot = { 'High':'🟢', 'Medium':'🟡', 'Low':'🔴' }[r.conf] || '⚪';
     return `<tr style="background:${bg};">
       <td>${r.month}</td><td style="font-size:11px;">${r.sku}</td><td>${r.res}</td><td>${r.family}</td>
+      <td>${r.pkgType||'—'}</td><td>${r.category||'—'}</td>
       <td class="r">${r.predLE}%</td>
       <td class="r" style="color:#6dd4bc;">${r.gsLE}%</td>
       <td class="r" style="color:${gapColor};font-weight:700;">${r.gapPct > 0 ? '+' : ''}${r.gapPct}%</td>
       <td class="r" style="color:${gapColor};font-weight:700;">$${r.gapUSD.toLocaleString()}</td>
-      <td><span style="color:${r.confColor};font-weight:700;">${confDot} ${r.conf}</span></td>
     </tr>`;
   }).join('');
 }
@@ -9902,6 +9948,10 @@ function renderLBDVTable() {
       <td class="r" style="color:${leColor};font-weight:700;">${r.actualLE}%</td>
       <td class="r" style="color:#6dd4bc;">${r.gsLE}%</td>
       <td class="r" style="color:${gapColor};font-weight:700;">$${r.gapUSD.toLocaleString()}</td>
+      <td class="r">${(r.setupRatio*100).toFixed(0)}%</td>
+      <td class="r">${(r.runRatio*100).toFixed(0)}%</td>
+      <td class="r">${r.totalHours.toFixed(1)}</td>
+      <td class="r">${r.crewSize}</td>
     </tr>`;
   }).join('');
 }
@@ -10186,9 +10236,125 @@ function loadLBWIPO(po) {
     });
   }
 
-  document.addEventListener('DOMContentLoaded', () => { buildHeatmap(); buildHeatmapDV(); });
+  /* ── LABOR HEATMAP data ────────────────────────────────── */
+  const LB_RES = ['L65','L67','L68','L70','L71','L72','L73','L74','L75','L76'];
+
+  const LB_HM_DATA = [
+    { cat:'MASCARA', rows:[
+      { sku:'SKU-101', declared:'4 ml',   vals:{L65:82.4,L67:91.6,L68:78.3,L70:85.9,L71:73.2,L72:94.1,L73:null,L74:88.5,L75:76.7,L76:null} },
+      { sku:'SKU-102', declared:'6 ml',   vals:{L65:75.8,L67:88.2,L68:81.4,L70:79.3,L71:68.9,L72:null,L73:92.4,L74:84.1,L75:null,L76:71.3} },
+      { sku:'SKU-112', declared:'5 ml',   vals:{L65:null,L67:86.7,L68:79.1,L70:null,L71:83.8,L72:92.2,L73:68.5,L74:null,L75:87.3,L76:80.2} },
+    ]},
+    { cat:'FOUNDATION', rows:[
+      { sku:'SKU-201', declared:'30 ml',  vals:{L65:87.9,L67:79.1,L68:93.3,L70:null,L71:84.0,L72:96.6,L73:null,L74:91.4,L75:76.8,L76:83.5} },
+      { sku:'SKU-202', declared:'25 ml',  vals:{L65:null,L67:73.3,L68:80.5,L70:88.1,L71:66.4,L72:null,L73:84.7,L74:null,L75:89.2,L76:72.9} },
+    ]},
+    { cat:'SERUM / SKINCARE', rows:[
+      { sku:'SKU-301', declared:'30 ml',  vals:{L65:79.6,L67:90.4,L68:null,L70:76.2,L71:null,L72:88.9,L73:77.1,L74:83.8,L75:null,L76:86.3} },
+      { sku:'SKU-501', declared:'50 ml',  vals:{L65:84.5,L67:93.8,L68:87.4,L70:null,L71:91.3,L72:97.6,L73:null,L74:89.9,L75:84.1,L76:null} },
+    ]},
+    { cat:'CLEANSER', rows:[
+      { sku:'SKU-401', declared:'200 ml', vals:{L65:66.5,L67:77.8,L68:63.9,L70:72.3,L71:null,L72:84.4,L73:59.2,L74:null,L75:75.6,L76:68.8} },
+    ]},
+  ];
+
+  function leColor(v) {
+    if (v === null) return { bg:'#F3F4F6', fg:'transparent' };
+    if (v >= 88) return { bg:'#22C55E', fg:'#fff' };
+    if (v >= 75) return { bg:'#F59E0B', fg:'#fff' };
+    return { bg:'#EF4444', fg:'#fff' };
+  }
+
+  function leStatusLabel(v) {
+    if (v === null) return 'No data';
+    if (v >= 88)   return 'Good — above target';
+    if (v >= 75)   return 'Warning — near target';
+    return 'Critical — below target';
+  }
+
+  function buildLaborHeatmap() {
+    const head  = document.getElementById('labor-hm-head');
+    const tbody = document.getElementById('labor-heatmap-body');
+    if (!head || !tbody) return;
+
+    let headHtml = `<tr style="background:#1F2937;color:#fff;">`;
+    headHtml += `<th style="padding:8px 12px;text-align:left;min-width:100px;position:sticky;left:0;background:#1F2937;z-index:2;border-right:1px solid #374151;white-space:nowrap;">SKU</th>`;
+    headHtml += `<th style="padding:8px 12px;text-align:center;min-width:70px;border-right:1px solid #374151;white-space:nowrap;">Format</th>`;
+    LB_RES.forEach((r, i) => {
+      const border = i < LB_RES.length - 1 ? 'border-right:1px solid #374151;' : '';
+      headHtml += `<th style="padding:8px 12px;text-align:center;min-width:60px;${border}">${r}</th>`;
+    });
+    headHtml += `</tr>`;
+    head.innerHTML = headHtml;
+
+    tbody.innerHTML = '';
+    LB_HM_DATA.forEach(group => {
+      const catRow = document.createElement('tr');
+      catRow.dataset.cat = group.cat + '_lb';
+      catRow.style.cssText = 'background:#374151;cursor:pointer;user-select:none;';
+      catRow.innerHTML = `<td colspan="${LB_RES.length + 2}" style="padding:8px 12px;color:#fff;font-weight:700;font-size:11px;letter-spacing:0.8px;"><span class="hm-arrow" style="margin-right:6px;display:inline-block;transition:transform .2s;">▼</span>${group.cat}</td>`;
+      catRow.addEventListener('click', () => toggleLaborHMGroup(group.cat));
+      tbody.appendChild(catRow);
+
+      group.rows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.dataset.catGroup = group.cat + '_lb';
+        tr.style.cssText = 'border-bottom:1px solid #D1D5DB;';
+        let html = `<td style="padding:8px 12px;position:sticky;left:0;background:#fff;z-index:1;font-weight:600;white-space:nowrap;border-right:1px solid #D1D5DB;font-size:11px;">${row.sku}</td>`;
+        html += `<td style="padding:8px 12px;text-align:center;background:#F9FAFB;border-right:1px solid #D1D5DB;white-space:nowrap;color:var(--c-muted);font-size:11px;">${row.declared}</td>`;
+        LB_RES.forEach((res, i) => {
+          const v = row.vals[res] !== undefined ? row.vals[res] : null;
+          const c = leColor(v);
+          const border = i < LB_RES.length - 1 ? 'border-right:1px solid rgba(255,255,255,.2);' : '';
+          const txt = v !== null ? v.toFixed(1) + '%' : '';
+          html += `<td data-sku="${row.sku}" data-declared="${row.declared}" data-res="${res}" data-val="${v}" style="padding:8px 12px;text-align:center;background:${c.bg};color:${c.fg};${border}font-weight:500;">${txt}</td>`;
+        });
+        tr.innerHTML = html;
+        tbody.appendChild(tr);
+      });
+    });
+
+    attachLaborHMTooltips();
+  }
+
+  function toggleLaborHMGroup(cat) {
+    const tbody = document.getElementById('labor-heatmap-body');
+    if (!tbody) return;
+    const rows = tbody.querySelectorAll(`tr[data-cat-group="${cat}_lb"]`);
+    const catRow = tbody.querySelector(`tr[data-cat="${cat}_lb"]`);
+    const arrow = catRow && catRow.querySelector('.hm-arrow');
+    let collapsed = catRow && catRow.dataset.collapsed === '1';
+    collapsed = !collapsed;
+    if (catRow) catRow.dataset.collapsed = collapsed ? '1' : '0';
+    if (arrow) arrow.style.transform = collapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+    rows.forEach(r => { r.style.display = collapsed ? 'none' : ''; });
+  }
+
+  function attachLaborHMTooltips() {
+    const tip = document.getElementById('labor-hm-tooltip');
+    if (!tip) return;
+    const tbody = document.getElementById('labor-heatmap-body');
+    if (!tbody) return;
+    tbody.querySelectorAll('td[data-res]').forEach(cell => {
+      cell.style.cursor = 'default';
+      cell.addEventListener('mouseenter', e => {
+        const v = e.target.dataset.val;
+        const val = v === 'null' || v === '' ? null : parseFloat(v);
+        tip.innerHTML = `<strong>SKU:</strong> ${e.target.dataset.sku} (${e.target.dataset.declared})<br><strong>Resource:</strong> ${e.target.dataset.res}<br><strong>Labor Eff.:</strong> ${val !== null ? val.toFixed(1) + '%' : 'No data'}<br><strong>Status:</strong> ${leStatusLabel(val)}`;
+        tip.style.display = 'block';
+      });
+      cell.addEventListener('mousemove', e => {
+        tip.style.left = (e.clientX + 14) + 'px';
+        tip.style.top  = (e.clientY - 10) + 'px';
+      });
+      cell.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => { buildHeatmap(); buildHeatmapDV(); buildLaborHeatmap(); });
   window.rebuildOEEHeatmap = buildHeatmap;
   window.buildHeatmapDV = buildHeatmapDV;
+  window.buildLaborHeatmap = buildLaborHeatmap;
 })();
 
 function setHMTab(mode) {
