@@ -2856,11 +2856,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
           <span class="kpi-value" style="color:var(--c-blue);">89.2 <small>%</small></span>
           <span class="kpi-delta">Weighted by PO volume</span>
         </div>
-        <div class="kpi-card">
-          <span class="kpi-label">High-Confidence Predictions</span>
-          <span class="kpi-value" style="color:var(--c-gs);">5 / 9 <small>POs</small></span>
-          <span class="kpi-delta">≥10 historical POs per SKU-Line</span>
-        </div>
       </div>
 
       <div class="card">
@@ -3242,6 +3237,10 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         <div style="padding:14px 16px 10px;">
           <div class="card-title" style="margin-bottom:2px;">Resource Performance Heatmap</div>
           <div style="font-size:10.5px;color:var(--c-muted);">OEE Heatmap — SKU × Resource &nbsp;·&nbsp; % OEE &nbsp;·&nbsp; <span style="color:#22C55E;font-weight:600;">■ green = high</span> &nbsp;·&nbsp; <span style="color:#EF4444;font-weight:600;">■ red = low</span></div>
+          <div class="tab-nav" id="hm-tab-nav" style="margin-top:8px;">
+            <button class="tab-btn active" data-mode="whatif" onclick="setHMTab('whatif')">💡 What-If Scenario</button>
+            <button class="tab-btn" data-mode="historical" onclick="setHMTab('historical')">📊 Historical</button>
+          </div>
         </div>
         <div style="overflow-x:auto;position:relative;">
           <table id="oee-heatmap-tbl" style="border-collapse:collapse;width:100%;min-width:700px;font-size:12px;">
@@ -3284,11 +3283,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
           <span class="kpi-value" id="oee-pred-avg-oee" style="color:var(--c-blue);">—</span>
           <span class="kpi-delta">Weighted by PO volume</span>
         </div>
-        <div class="kpi-card">
-          <span class="kpi-label">High-Confidence Predictions</span>
-          <span class="kpi-value" id="oee-pred-conf-pct" style="color:var(--c-gs);">—</span>
-          <span class="kpi-delta pos">Min PO threshold: weekly ≥10 · monthly ≥6 · quarterly ≥4</span>
-        </div>
       </div>
 
       <!-- Predicted OEE Trend Chart -->
@@ -3321,11 +3315,10 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
             <thead>
               <tr>
                 <th>Month</th><th>SKU</th><th>Resource</th><th>Family</th>
-                <th class="r">Pred. OEE %</th>
-                <th class="r" style="color:var(--c-gs);">GS OEE %</th>
-                <th class="r" style="color:var(--c-neg);">GAP %</th>
-                <th class="r" style="color:var(--c-neg);">Pred. GAP $</th>
-                <th>Confidence</th>
+                <th class="r">OEE Efficiency</th>
+                <th class="r" style="color:var(--c-gs);">GS OEE Efficiency</th>
+                <th class="r" style="color:var(--c-neg);">Gap</th>
+                <th class="r" style="color:var(--c-neg);">Gap Impact</th>
               </tr>
             </thead>
             <tbody id="tb-oee-pred"></tbody>
@@ -3485,61 +3478,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         </div>
       </div>
 
-      <!-- ── Placeholder KPI Cards (Change 8) ── -->
-      <div style="display:flex;align-items:baseline;justify-content:space-between;margin:14px 0 6px;">
-        <span style="font-size:12px;font-weight:700;color:var(--c-text);">🔜 Additional KPI Modules — Coming Next</span>
-        <span style="font-size:10px;color:var(--c-muted);">Scope pending confirmation · Not included in current GAP calculation</span>
-      </div>
-      <div class="kpi-row" style="align-items:stretch;">
-        <div class="placeholder-card">
-          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;">
-            <span style="font-size:12px;font-weight:700;">🔧 Line Mechanical Downtime</span>
-            <span class="placeholder-badge unavailable">Data Unavailable</span>
-          </div>
-          <div style="font-size:10.5px;color:var(--c-muted);margin-bottom:8px;">Unplanned mechanical stoppages per line · minutes lost per PO · trend vs GS benchmark</div>
-          <div class="placeholder-filters">
-            <span>Line</span><span>Date Range</span><span>Downtime Type</span>
-          </div>
-          <div class="placeholder-timeframes">
-            <span>Rolling 13 weeks</span><span>FY-to-date</span>
-          </div>
-          <div class="placeholder-content-area">
-            <span style="font-size:10px;color:var(--c-muted);">SAP PM data feed not yet connected · Power BI binding TBD with Alena Shmeleva</span>
-          </div>
-        </div>
-        <div class="placeholder-card">
-          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;">
-            <span style="font-size:12px;font-weight:700;">⏱ Setup &amp; Changeover Time</span>
-            <span class="placeholder-badge pending">Pending Decision</span>
-          </div>
-          <div style="font-size:10.5px;color:var(--c-muted);margin-bottom:8px;">Avg setup time per SKU × Line · actual vs GS setup standard · reduction opportunity $</div>
-          <div class="placeholder-filters">
-            <span>Line</span><span>SKU Family</span><span>PO Size Bucket</span>
-          </div>
-          <div class="placeholder-timeframes">
-            <span>Rolling 13 weeks</span><span>FY-to-date</span>
-          </div>
-          <div class="placeholder-content-area">
-            <span style="font-size:10px;color:var(--c-muted);">GS setup standard definition pending client workshop (Kris Van Deursen) · metric scope TBD</span>
-          </div>
-        </div>
-        <div class="placeholder-card">
-          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;">
-            <span style="font-size:12px;font-weight:700;">💡 Recommendations Engine</span>
-            <span class="placeholder-badge pending">In Design</span>
-          </div>
-          <div style="font-size:10.5px;color:var(--c-muted);margin-bottom:8px;">Auto-generated improvement actions ranked by ROI · linked to specific PO gaps · owner assignment</div>
-          <div class="placeholder-filters">
-            <span>Priority Tier</span><span>Owner</span><span>Status</span>
-          </div>
-          <div class="placeholder-timeframes">
-            <span>Open actions</span><span>Completed (30d)</span>
-          </div>
-          <div class="placeholder-content-area">
-            <span style="font-size:10px;color:var(--c-muted);">Rules engine design pending · ML model dependency TBD with data science team</span>
-          </div>
-        </div>
-      </div>
     </div><!-- /cnt-oee-gap -->
 
     <!-- ─── OEE: DEEP VIEW ───────────────────────────────── (moved from page-dv) -->
@@ -3569,6 +3507,7 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
                 <th class="r">PO Qty</th>
                 <th class="r">Avg SKU PO Qty</th>
                 <th>SKU</th><th>Resource</th><th>PO Size Bucket</th>
+                <th>Family</th><th>Package Type</th><th>Category</th>
                 <th class="r">Actual OEE %</th>
                 <th class="r">GS OEE %</th>
                 <th class="r">Ideal Time (hrs)</th>
@@ -3578,6 +3517,25 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
             <tbody id="tb-dv-oee"></tbody>
           </table>
         </div>
+      </div>
+
+      <!-- Deep View Resource Performance Heatmap -->
+      <div class="card" style="margin-top:16px;padding:0;overflow:hidden;">
+        <div style="padding:14px 16px 10px;">
+          <div class="card-title" style="margin-bottom:2px;">Resource Performance Heatmap</div>
+          <div style="font-size:10.5px;color:var(--c-muted);">OEE Heatmap — SKU × Resource &nbsp;·&nbsp; % OEE &nbsp;·&nbsp; <span style="color:#22C55E;font-weight:600;">■ green = high</span> &nbsp;·&nbsp; <span style="color:#EF4444;font-weight:600;">■ red = low</span></div>
+          <div class="tab-nav" id="dv-hm-tab-nav" style="margin-top:8px;">
+            <button class="tab-btn active" data-mode="whatif" onclick="setDVHMTab('whatif')">💡 What-If Scenario</button>
+            <button class="tab-btn" data-mode="historical" onclick="setDVHMTab('historical')">📊 Historical</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto;position:relative;">
+          <table id="oee-dv-heatmap-tbl" style="border-collapse:collapse;width:100%;min-width:700px;font-size:12px;">
+            <thead id="oee-dv-hm-head"></thead>
+            <tbody id="oee-dv-heatmap-body"></tbody>
+          </table>
+        </div>
+        <div id="oee-dv-hm-tooltip" style="display:none;position:fixed;background:#1F2937;color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;z-index:9999;pointer-events:none;line-height:1.7;box-shadow:0 4px 12px rgba(0,0,0,.35);"></div>
       </div>
     </div><!-- /cnt-oee-dv -->
 
@@ -4802,11 +4760,11 @@ const PO_LABOR = [
   {po:'PO-2026-005',sku:'SKU-401 / Cleanser - Foaming',      res:'L72',actual:8, gs:7,rs:8,gapUSD:3100},
 ];
 const PO_OEE = [
-  {po:'PO-2026-005',sku:'SKU-401 / Cleanser - Foaming',      res:'L72',poSz:'Small', poQty:18000, actual:49,gs:80,gapUSD:22300},
-  {po:'PO-2026-002',sku:'SKU-102 / Mascara - Multi-purpose', res:'L67',poSz:'Small', poQty:22000, actual:54,gs:80,gapUSD:18600},
-  {po:'PO-2026-004',sku:'SKU-301 / Serum - Anti-aging',      res:'L68',poSz:'Medium',poQty:48000, actual:58,gs:80,gapUSD:14200},
-  {po:'PO-2026-001',sku:'SKU-101 / Mascara - Multi-purpose', res:'L67',poSz:'Medium',poQty:55000, actual:62,gs:80,gapUSD:12400},
-  {po:'PO-2026-003',sku:'SKU-201 / Foundation - Liquid',     res:'L67',poSz:'Large', poQty:120000,actual:71,gs:80,gapUSD:6800},
+  {po:'PO-2026-005',sku:'SKU-401 / Cleanser - Foaming',      res:'L72',poSz:'Small', poQty:18000, actual:49,gs:80,gapUSD:22300,family:'1042',pkgType:'Bottle',    category:'Cleanser'},
+  {po:'PO-2026-002',sku:'SKU-102 / Mascara - Multi-purpose', res:'L67',poSz:'Small', poQty:22000, actual:54,gs:80,gapUSD:18600,family:'1055',pkgType:'Tube',       category:'Eye'},
+  {po:'PO-2026-004',sku:'SKU-301 / Serum - Anti-aging',      res:'L68',poSz:'Medium',poQty:48000, actual:58,gs:80,gapUSD:14200,family:'1098',pkgType:'Dropper',    category:'Skincare'},
+  {po:'PO-2026-001',sku:'SKU-101 / Mascara - Multi-purpose', res:'L67',poSz:'Medium',poQty:55000, actual:62,gs:80,gapUSD:12400,family:'1055',pkgType:'Tube',       category:'Eye'},
+  {po:'PO-2026-003',sku:'SKU-201 / Foundation - Liquid',     res:'L67',poSz:'Large', poQty:120000,actual:71,gs:80,gapUSD:6800, family:'1113',pkgType:'Bottle',     category:'Face'},
 ];
 const PO_SCRAP = [
   {po:'PO-2026-002',sku:'SKU-102 / Mascara - Multi-purpose', res:'L67',actual:5.0,gs:2.5,fixed:1.8,variable:3.2,totalUSD:5200},
@@ -5335,6 +5293,7 @@ function renderDVOEE() {
     <td class="r">${fmtN(r.poQty)}</td>
     <td class="r">${fmtN(getAvgSkuQty(r.sku))}</td>
     <td>${r.sku}</td><td>${r.res}</td><td>${r.poSz}</td>
+    <td>${r.family||'—'}</td><td>${r.pkgType||'—'}</td><td>${r.category||'—'}</td>
     <td class="r">${r.actual}%</td><td class="r">${r.gs}%</td>
     <td class="r">${r.idealTime!=null?r.idealTime.toFixed(2):'—'}</td>
     <td class="r">${r.actualTime!=null?r.actualTime.toFixed(2):'—'}</td>
@@ -5796,7 +5755,6 @@ function renderOEEPredTable(reset) {
     <td class="r" style="color:var(--c-gs)">${r.gsOee.toFixed(1)}%</td>
     <td class="r" style="color:var(--c-neg)">${r.gapPct.toFixed(1)}%</td>
     <td class="r c-neg">${fmt(r.predImpact)}</td>
-    <td>${confBadgeOee(r.conf)}</td>
   </tr>`).join('');
   const btn = $$('btn-oee-pred-more');
   if (btn) btn.style.display = (oeePredOffset + OEE_PRED_PAGE) < OEE_PRED_DATA.length ? '' : 'none';
@@ -10156,9 +10114,99 @@ function loadLBWIPO(po) {
     });
   }
 
-  document.addEventListener('DOMContentLoaded', buildHeatmap);
+  function buildHeatmapDV() {
+    const head  = document.getElementById('oee-dv-hm-head');
+    const tbody = document.getElementById('oee-dv-heatmap-body');
+    if (!head || !tbody) return;
+
+    // Build header row
+    let headHtml = `<tr style="background:#1F2937;color:#fff;">`;
+    headHtml += `<th style="padding:8px 12px;text-align:left;min-width:100px;position:sticky;left:0;background:#1F2937;z-index:2;border-right:1px solid #374151;white-space:nowrap;">SKU</th>`;
+    headHtml += `<th style="padding:8px 12px;text-align:center;min-width:70px;border-right:1px solid #374151;white-space:nowrap;">Declared</th>`;
+    RES.forEach((r, i) => {
+      const border = i < RES.length - 1 ? 'border-right:1px solid #374151;' : '';
+      headHtml += `<th style="padding:8px 12px;text-align:center;min-width:60px;${border}">${r}</th>`;
+    });
+    headHtml += `</tr>`;
+    head.innerHTML = headHtml;
+
+    tbody.innerHTML = '';
+    HM_DATA.forEach(group => {
+      const catRow = document.createElement('tr');
+      catRow.dataset.cat = group.cat + '_dv';
+      catRow.style.cssText = 'background:#374151;cursor:pointer;user-select:none;';
+      catRow.innerHTML = `<td colspan="${RES.length + 2}" style="padding:8px 12px;color:#fff;font-weight:700;font-size:11px;letter-spacing:0.8px;"><span class="hm-arrow" style="margin-right:6px;display:inline-block;transition:transform .2s;">▼</span>${group.cat}</td>`;
+      catRow.addEventListener('click', () => toggleDVHMGroup(group.cat));
+      tbody.appendChild(catRow);
+
+      group.rows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.dataset.catGroup = group.cat + '_dv';
+        tr.style.cssText = 'border-bottom:1px solid #D1D5DB;';
+        let html = `<td style="padding:8px 12px;position:sticky;left:0;background:#fff;z-index:1;font-weight:600;white-space:nowrap;border-right:1px solid #D1D5DB;font-size:11px;">${row.sku}</td>`;
+        html += `<td style="padding:8px 12px;text-align:center;background:#F9FAFB;border-right:1px solid #D1D5DB;white-space:nowrap;color:var(--c-muted);font-size:11px;">${row.declared}</td>`;
+        RES.forEach((res, i) => {
+          const v = row.vals[res] !== undefined ? row.vals[res] : null;
+          const c = oeeColor(v);
+          const border = i < RES.length - 1 ? 'border-right:1px solid rgba(255,255,255,.2);' : '';
+          const txt = v !== null ? v.toFixed(1) + '%' : '';
+          html += `<td data-sku="${row.sku}" data-declared="${row.declared}" data-res="${res}" data-val="${v}" style="padding:8px 12px;text-align:center;background:${c.bg};color:${c.fg};${border}font-weight:500;">${txt}</td>`;
+        });
+        tr.innerHTML = html;
+        tbody.appendChild(tr);
+      });
+    });
+
+    attachDVHMTooltips();
+  }
+
+  function toggleDVHMGroup(cat) {
+    const tbody = document.getElementById('oee-dv-heatmap-body');
+    if (!tbody) return;
+    const rows = tbody.querySelectorAll(`tr[data-cat-group="${cat}_dv"]`);
+    const catRow = tbody.querySelector(`tr[data-cat="${cat}_dv"]`);
+    const arrow = catRow && catRow.querySelector('.hm-arrow');
+    let collapsed = catRow && catRow.dataset.collapsed === '1';
+    collapsed = !collapsed;
+    if (catRow) catRow.dataset.collapsed = collapsed ? '1' : '0';
+    if (arrow) arrow.style.transform = collapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+    rows.forEach(r => { r.style.display = collapsed ? 'none' : ''; });
+  }
+
+  function attachDVHMTooltips() {
+    const tip = document.getElementById('oee-dv-hm-tooltip');
+    if (!tip) return;
+    const tbody = document.getElementById('oee-dv-heatmap-body');
+    if (!tbody) return;
+    tbody.querySelectorAll('td[data-res]').forEach(cell => {
+      cell.style.cursor = 'default';
+      cell.addEventListener('mouseenter', e => {
+        const v = e.target.dataset.val;
+        const val = v === 'null' || v === '' ? null : parseFloat(v);
+        tip.innerHTML = `<strong>SKU:</strong> ${e.target.dataset.sku} (${e.target.dataset.declared})<br><strong>Resource:</strong> ${e.target.dataset.res}<br><strong>OEE:</strong> ${val !== null ? val.toFixed(1) + '%' : 'No data'}<br><strong>Status:</strong> ${statusLabel(val)}`;
+        tip.style.display = 'block';
+      });
+      cell.addEventListener('mousemove', e => {
+        tip.style.left = (e.clientX + 14) + 'px';
+        tip.style.top  = (e.clientY - 10) + 'px';
+      });
+      cell.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => { buildHeatmap(); buildHeatmapDV(); });
   window.rebuildOEEHeatmap = buildHeatmap;
+  window.buildHeatmapDV = buildHeatmapDV;
 })();
+
+function setHMTab(mode) {
+  document.querySelectorAll('#hm-tab-nav .tab-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.mode === mode));
+}
+function setDVHMTab(mode) {
+  document.querySelectorAll('#dv-hm-tab-nav .tab-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.mode === mode));
+}
 
 /* ─────────────────────────────────────────────────────────
    INTELLIGENCE PAGE — What-If recommendations
