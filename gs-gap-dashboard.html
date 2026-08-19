@@ -2843,7 +2843,10 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
       <!-- Family Labor Trend -->
       <div class="card" style="margin-top:16px;">
         <div class="card-header-row" style="align-items:center;justify-content:space-between;">
-          <span class="card-title">Family Labor Trend</span>
+          <div>
+            <span class="card-title">Family Labor Trend</span>
+            <div class="card-subtitle" style="margin-top:2px;">12-Month Rolling (R12M) · Sep 25 – Aug 26</div>
+          </div>
           <div id="lb-fam-view-btns" style="display:flex;gap:4px;">
             <button class="tab-btn" data-view="category" style="padding:4px 10px;font-size:11px;" onclick="switchLBFamilyView('category')">Category</button>
             <button class="tab-btn" data-view="subcategory" style="padding:4px 10px;font-size:11px;" onclick="switchLBFamilyView('subcategory')">Subcategory</button>
@@ -2881,7 +2884,7 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
           <span class="kpi-delta neg">Non-NPL POs · fiscal year remainder</span>
         </div>
         <div class="kpi-card">
-          <span class="kpi-label">Avg Predicted (hrs/1000)</span>
+          <span class="kpi-label">Average Predicted Labor Efficiency</span>
           <span class="kpi-value" style="color:var(--c-blue);">89.2 <small>%</small></span>
           <span class="kpi-delta">Weighted by PO volume</span>
         </div>
@@ -3091,9 +3094,13 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
               <th class="r">Avg SKU PO Qty</th>
               <th>SKU</th>
               <th>Resource</th>
+              <th>Family</th>
+              <th>Package Type</th>
+              <th>Category</th>
               <th>PO Size Bucket</th>
               <th class="r">Actual (hrs/1000)</th>
               <th class="r" style="color:#6dd4bc;">GS (hrs/1000)</th>
+              <th class="r" style="color:#ff8080;">Gap (hrs/1000)</th>
               <th class="r" style="color:#ff8080;">Gap $ (lost efficiency)</th>
               <th class="r">Setup Ratio</th>
               <th class="r">Run Ratio</th>
@@ -7003,18 +7010,18 @@ const LB_PRED_ACTUAL = [88.4, 85.1, 86.3, 83.7, 81.2, 92.4];
 const LB_PRED_GS     = [94.0, 94.0, 91.2, 89.4, 88.8, 96.1];
 
 const LB_PRED_POS = [
-  { month:'Aug 26', sku:'SKU-1042', res:'L67', family:'1042', pkgType:'30ml Bottle',      category:'Fragrance', predLE:7.2, gsLE:5.8, gapPct:1.4, gapUSD:420 },
-  { month:'Aug 26', sku:'SKU-1055', res:'L68', family:'1055', pkgType:'15ml Tube',        category:'Fragrance', predLE:8.4, gsLE:6.2, gapPct:2.2, gapUSD:660 },
-  { month:'Sep 26', sku:'SKU-1061', res:'L70', family:'1061', pkgType:'50ml Jar',         category:'Skincare',  predLE:6.8, gsLE:5.1, gapPct:1.7, gapUSD:510 },
-  { month:'Sep 26', sku:'SKU-1098', res:'L72', family:'1098', pkgType:'100ml Pump Bottle',category:'Skincare',  predLE:9.2, gsLE:6.8, gapPct:2.4, gapUSD:720 },
-  { month:'Oct 26', sku:'SKU-1113', res:'L73', family:'1113', pkgType:'150ml Bottle',     category:'Hair Care', predLE:7.8, gsLE:5.5, gapPct:2.3, gapUSD:690 },
-  { month:'Oct 26', sku:'SKU-1127', res:'L75', family:'1127', pkgType:'30ml Bottle',      category:'Skincare',  predLE:6.2, gsLE:4.8, gapPct:1.4, gapUSD:420 },
-  { month:'Nov 26', sku:'V3YUM001', res:'L65', family:'1042', pkgType:'15ml Tube',        category:'Fragrance', predLE:8.8, gsLE:6.4, gapPct:2.4, gapUSD:720 },
-  { month:'Nov 26', sku:'SKU-1061', res:'L71', family:'1061', pkgType:'50ml Jar',         category:'Skincare',  predLE:7.4, gsLE:5.4, gapPct:2.0, gapUSD:600 },
-  { month:'Dec 26', sku:'SKU-1098', res:'L74', family:'1098', pkgType:'100ml Pump Bottle',category:'Makeup',    predLE:9.6, gsLE:7.0, gapPct:2.6, gapUSD:750 },
-  { month:'Dec 26', sku:'SKU-1113', res:'L76', family:'1113', pkgType:'150ml Bottle',     category:'Hair Care', predLE:6.6, gsLE:5.0, gapPct:1.6, gapUSD:480 },
-  { month:'Jan 27', sku:'V3YUM002', res:'L68', family:'1055', pkgType:'30ml Bottle',      category:'Fragrance', predLE:7.9, gsLE:6.3, gapPct:1.6, gapUSD:480 },
-  { month:'Jan 27', sku:'SKU-1127', res:'L70', family:'1127', pkgType:'50ml Jar',         category:'Skincare',  predLE:5.9, gsLE:4.2, gapPct:1.7, gapUSD:510 },
+  { month:'Aug 26', sku:'SKU-1042', res:'L67', family:'1042', pkgType:'30ml Bottle',      category:'Fragrance', predLE:7.2, gsLE:5.8, gapPct:1.4, gapUSD:1260 },
+  { month:'Aug 26', sku:'SKU-1055', res:'L68', family:'1055', pkgType:'15ml Tube',        category:'Fragrance', predLE:8.4, gsLE:6.2, gapPct:2.2, gapUSD:2640 },
+  { month:'Sep 26', sku:'SKU-1061', res:'L72', family:'1061', pkgType:'50ml Jar',         category:'Skincare',  predLE:6.8, gsLE:5.1, gapPct:1.7, gapUSD:1530 },
+  { month:'Sep 26', sku:'SKU-1098', res:'L67', family:'1098', pkgType:'100ml Pump Bottle',category:'Skincare',  predLE:9.2, gsLE:6.8, gapPct:2.4, gapUSD:2880 },
+  { month:'Oct 26', sku:'SKU-1113', res:'L68', family:'1113', pkgType:'150ml Bottle',     category:'Hair Care', predLE:7.8, gsLE:5.5, gapPct:2.3, gapUSD:2070 },
+  { month:'Oct 26', sku:'SKU-1042', res:'L72', family:'1042', pkgType:'30ml Bottle',      category:'Fragrance', predLE:6.4, gsLE:5.0, gapPct:1.4, gapUSD:1260 },
+  { month:'Nov 26', sku:'SKU-1055', res:'L67', family:'1055', pkgType:'15ml Tube',        category:'Fragrance', predLE:8.8, gsLE:6.4, gapPct:2.4, gapUSD:2160 },
+  { month:'Nov 26', sku:'SKU-1061', res:'L68', family:'1061', pkgType:'50ml Jar',         category:'Skincare',  predLE:7.4, gsLE:5.4, gapPct:2.0, gapUSD:1800 },
+  { month:'Dec 26', sku:'SKU-1098', res:'L72', family:'1098', pkgType:'100ml Pump Bottle',category:'Makeup',    predLE:9.6, gsLE:7.0, gapPct:2.6, gapUSD:3120 },
+  { month:'Dec 26', sku:'SKU-1113', res:'L67', family:'1113', pkgType:'150ml Bottle',     category:'Hair Care', predLE:6.6, gsLE:5.0, gapPct:1.6, gapUSD:1440 },
+  { month:'Jan 27', sku:'SKU-1042', res:'L68', family:'1042', pkgType:'30ml Bottle',      category:'Fragrance', predLE:7.9, gsLE:6.3, gapPct:1.6, gapUSD:1440 },
+  { month:'Jan 27', sku:'SKU-1061', res:'L72', family:'1061', pkgType:'50ml Jar',         category:'Skincare',  predLE:5.9, gsLE:4.5, gapPct:1.4, gapUSD:1260 },
 ];
 let LB_PRED_OFFSET = 0;
 
@@ -7036,21 +7043,21 @@ const LB_PO_ROWS = [
 let LB_PO_OFFSET = 0;
 
 const LB_DV_POS = [
-  { po:'PO-4521', qty:25000, avgQty:28000, sku:'SKU-1042', res:'L67', bucket:'Small',  actualLE:7.2, gsLE:5.8, gapUSD:360,  setupRatio:0.22, runRatio:0.78, totalHours:180.0, crewSize:8  },
-  { po:'PO-4622', qty:30000, avgQty:28000, sku:'SKU-1055', res:'L68', bucket:'Medium', actualLE:8.4, gsLE:6.2, gapUSD:520,  setupRatio:0.28, runRatio:0.72, totalHours:252.0, crewSize:10 },
-  { po:'PO-4783', qty:35000, avgQty:38000, sku:'SKU-1061', res:'L70', bucket:'Medium', actualLE:6.8, gsLE:5.1, gapUSD:280,  setupRatio:0.20, runRatio:0.80, totalHours:238.0, crewSize:8  },
-  { po:'PO-4892', qty:45000, avgQty:40000, sku:'SKU-1098', res:'L72', bucket:'Large',  actualLE:9.2, gsLE:6.8, gapUSD:620,  setupRatio:0.32, runRatio:0.68, totalHours:414.0, crewSize:12 },
-  { po:'PO-5012', qty:30000, avgQty:28000, sku:'SKU-1042', res:'L71', bucket:'Medium', actualLE:7.8, gsLE:5.8, gapUSD:450,  setupRatio:0.25, runRatio:0.75, totalHours:234.0, crewSize:9  },
-  { po:'PO-5134', qty:30000, avgQty:33000, sku:'SKU-1113', res:'L73', bucket:'Small',  actualLE:8.8, gsLE:6.4, gapUSD:580,  setupRatio:0.30, runRatio:0.70, totalHours:264.0, crewSize:11 },
-  { po:'PO-5245', qty:50000, avgQty:45000, sku:'V3YUM001', res:'L74', bucket:'Large',  actualLE:6.2, gsLE:4.8, gapUSD:210,  setupRatio:0.18, runRatio:0.82, totalHours:310.0, crewSize:7  },
-  { po:'PO-5361', qty:30000, avgQty:32000, sku:'SKU-1127', res:'L65', bucket:'Small',  actualLE:9.6, gsLE:7.0, gapUSD:680,  setupRatio:0.35, runRatio:0.65, totalHours:288.0, crewSize:13 },
-  { po:'PO-5472', qty:35000, avgQty:38000, sku:'SKU-1061', res:'L75', bucket:'Medium', actualLE:7.4, gsLE:5.4, gapUSD:390,  setupRatio:0.23, runRatio:0.77, totalHours:259.0, crewSize:9  },
-  { po:'PO-5583', qty:20000, avgQty:25000, sku:'SKU-1098', res:'L76', bucket:'Small',  actualLE:9.8, gsLE:7.0, gapUSD:740,  setupRatio:0.32, runRatio:0.68, totalHours:196.0, crewSize:10 },
-  { po:'PO-5694', qty:50000, avgQty:45000, sku:'SKU-1113', res:'L68', bucket:'Large',  actualLE:7.0, gsLE:5.2, gapUSD:380,  setupRatio:0.22, runRatio:0.78, totalHours:350.0, crewSize:8  },
-  { po:'PO-5805', qty:20000, avgQty:22000, sku:'V3YUM002', res:'L70', bucket:'Small',  actualLE:8.2, gsLE:6.0, gapUSD:460,  setupRatio:0.28, runRatio:0.72, totalHours:164.0, crewSize:9  },
-  { po:'PO-5916', qty:40000, avgQty:38000, sku:'SKU-1042', res:'L71', bucket:'Medium', actualLE:5.8, gsLE:4.4, gapUSD:220,  setupRatio:0.18, runRatio:0.82, totalHours:232.0, crewSize:6  },
-  { po:'PO-6027', qty:20000, avgQty:22000, sku:'SKU-1127', res:'L72', bucket:'Small',  actualLE:8.6, gsLE:6.4, gapUSD:540,  setupRatio:0.30, runRatio:0.70, totalHours:172.0, crewSize:10 },
-  { po:'PO-6138', qty:45000, avgQty:42000, sku:'SKU-1061', res:'L74', bucket:'Large',  actualLE:6.4, gsLE:4.8, gapUSD:290,  setupRatio:0.20, runRatio:0.80, totalHours:288.0, crewSize:7  },
+  { po:'PO-4521', qty:25000, avgQty:28000, sku:'SKU-1042', res:'L67', family:'1042', pkgType:'30ml Bottle',      category:'Fragrance', bucket:'Small',  actualLE:7.2, gsLE:5.8, gapUSD:1260, setupRatio:0.22, runRatio:0.78, totalHours:180, crewSize:8  },
+  { po:'PO-4622', qty:30000, avgQty:28000, sku:'SKU-1055', res:'L68', family:'1055', pkgType:'15ml Tube',        category:'Fragrance', bucket:'Medium', actualLE:8.4, gsLE:6.2, gapUSD:2640, setupRatio:0.28, runRatio:0.72, totalHours:252, crewSize:10 },
+  { po:'PO-4783', qty:35000, avgQty:38000, sku:'SKU-1061', res:'L72', family:'1061', pkgType:'50ml Jar',         category:'Skincare',  bucket:'Medium', actualLE:6.8, gsLE:5.1, gapUSD:2140, setupRatio:0.20, runRatio:0.80, totalHours:238, crewSize:8  },
+  { po:'PO-4892', qty:45000, avgQty:40000, sku:'SKU-1098', res:'L67', family:'1098', pkgType:'100ml Pump Bottle',category:'Skincare',  bucket:'Large',  actualLE:9.2, gsLE:6.8, gapUSD:3890, setupRatio:0.32, runRatio:0.68, totalHours:414, crewSize:12 },
+  { po:'PO-5012', qty:30000, avgQty:28000, sku:'SKU-1042', res:'L68', family:'1042', pkgType:'30ml Bottle',      category:'Fragrance', bucket:'Medium', actualLE:7.8, gsLE:5.8, gapUSD:2160, setupRatio:0.25, runRatio:0.75, totalHours:234, crewSize:9  },
+  { po:'PO-5134', qty:30000, avgQty:33000, sku:'SKU-1113', res:'L72', family:'1113', pkgType:'150ml Bottle',     category:'Hair Care', bucket:'Small',  actualLE:8.8, gsLE:6.4, gapUSD:2590, setupRatio:0.30, runRatio:0.70, totalHours:264, crewSize:11 },
+  { po:'PO-5245', qty:50000, avgQty:45000, sku:'SKU-1055', res:'L67', family:'1055', pkgType:'15ml Tube',        category:'Fragrance', bucket:'Large',  actualLE:6.2, gsLE:4.8, gapUSD:2100, setupRatio:0.18, runRatio:0.82, totalHours:310, crewSize:7  },
+  { po:'PO-5361', qty:30000, avgQty:32000, sku:'SKU-1098', res:'L68', family:'1098', pkgType:'100ml Pump Bottle',category:'Makeup',    bucket:'Small',  actualLE:9.6, gsLE:7.0, gapUSD:2810, setupRatio:0.35, runRatio:0.65, totalHours:288, crewSize:12 },
+  { po:'PO-5472', qty:35000, avgQty:38000, sku:'SKU-1061', res:'L72', family:'1061', pkgType:'50ml Jar',         category:'Skincare',  bucket:'Medium', actualLE:7.4, gsLE:5.4, gapUSD:2520, setupRatio:0.23, runRatio:0.77, totalHours:259, crewSize:9  },
+  { po:'PO-5583', qty:20000, avgQty:25000, sku:'SKU-1098', res:'L67', family:'1098', pkgType:'100ml Pump Bottle',category:'Skincare',  bucket:'Small',  actualLE:9.8, gsLE:7.0, gapUSD:2020, setupRatio:0.32, runRatio:0.68, totalHours:196, crewSize:10 },
+  { po:'PO-5694', qty:50000, avgQty:45000, sku:'SKU-1113', res:'L68', family:'1113', pkgType:'150ml Bottle',     category:'Hair Care', bucket:'Large',  actualLE:7.0, gsLE:5.2, gapUSD:3240, setupRatio:0.22, runRatio:0.78, totalHours:350, crewSize:8  },
+  { po:'PO-5805', qty:20000, avgQty:22000, sku:'SKU-1042', res:'L72', family:'1042', pkgType:'30ml Bottle',      category:'Fragrance', bucket:'Small',  actualLE:8.2, gsLE:6.0, gapUSD:1580, setupRatio:0.28, runRatio:0.72, totalHours:164, crewSize:9  },
+  { po:'PO-5916', qty:40000, avgQty:38000, sku:'SKU-1055', res:'L67', family:'1055', pkgType:'15ml Tube',        category:'Fragrance', bucket:'Medium', actualLE:5.8, gsLE:4.4, gapUSD:2020, setupRatio:0.18, runRatio:0.82, totalHours:232, crewSize:6  },
+  { po:'PO-6027', qty:20000, avgQty:22000, sku:'SKU-1061', res:'L68', family:'1061', pkgType:'50ml Jar',         category:'Skincare',  bucket:'Small',  actualLE:8.6, gsLE:6.4, gapUSD:1580, setupRatio:0.30, runRatio:0.70, totalHours:172, crewSize:10 },
+  { po:'PO-6138', qty:45000, avgQty:42000, sku:'SKU-1113', res:'L72', family:'1113', pkgType:'150ml Bottle',     category:'Hair Care', bucket:'Large',  actualLE:6.4, gsLE:4.8, gapUSD:2590, setupRatio:0.20, runRatio:0.80, totalHours:288, crewSize:7  },
 ];
 
 const LB_TOP10 = [
@@ -9959,15 +9966,20 @@ function renderLBDVTable() {
     const bg = i%2===0 ? '#fff' : '#f8fafc';
     const leColor = r.actualLE <= r.gsLE ? '#2E7D32' : '#C62828';
     const gapColor = r.gapUSD > 0 ? '#C62828' : '#2E7D32';
+    const gapLE = (r.actualLE - r.gsLE).toFixed(1);
     return `<tr style="background:${bg};">
       <td style="font-weight:700;">${r.po}</td>
       <td class="r">${r.qty.toLocaleString()}</td>
       <td class="r" style="color:var(--c-muted);">${r.avgQty.toLocaleString()}</td>
       <td style="font-size:11px;">${r.sku}</td>
       <td>${r.res}</td>
+      <td>${r.family||'—'}</td>
+      <td style="font-size:11px;">${r.pkgType||'—'}</td>
+      <td>${r.category||'—'}</td>
       <td><span style="background:#EDF2F7;padding:2px 8px;border-radius:10px;font-size:10px;">${r.bucket}</span></td>
       <td class="r" style="color:${leColor};font-weight:700;">${r.actualLE.toFixed(1)}</td>
       <td class="r" style="color:#6dd4bc;">${r.gsLE.toFixed(1)}</td>
+      <td class="r" style="color:${gapColor};font-weight:700;">+${gapLE}</td>
       <td class="r" style="color:${gapColor};font-weight:700;">$${r.gapUSD.toLocaleString()}</td>
       <td class="r">${(r.setupRatio*100).toFixed(0)}%</td>
       <td class="r">${(r.runRatio*100).toFixed(0)}%</td>
