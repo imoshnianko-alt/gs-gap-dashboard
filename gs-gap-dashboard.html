@@ -7003,12 +7003,18 @@ const LB_PRED_ACTUAL = [88.4, 85.1, 86.3, 83.7, 81.2, 92.4];
 const LB_PRED_GS     = [94.0, 94.0, 91.2, 89.4, 88.8, 96.1];
 
 const LB_PRED_POS = [
-  { month:'Aug 26', sku:'SKU-101 / Mascara Multi',     res:'L67', family:'Mascara',     pkgType:'Tube',    category:'Eye',      predLE:88.4, gsLE:94.0, gapPct:5.6, gapUSD:5800, conf:'High',   confColor:'#2E7D32' },
-  { month:'Sep 26', sku:'SKU-112 / Mascara Volume',    res:'L67', family:'Mascara',     pkgType:'Tube',    category:'Eye',      predLE:85.1, gsLE:94.0, gapPct:8.9, gapUSD:7200, conf:'High',   confColor:'#2E7D32' },
-  { month:'Oct 26', sku:'SKU-202 / Foundation Liquid', res:'L67', family:'Foundation',  pkgType:'Bottle',  category:'Face',     predLE:86.3, gsLE:91.2, gapPct:4.9, gapUSD:4100, conf:'High',   confColor:'#2E7D32' },
-  { month:'Nov 26', sku:'SKU-301 / Serum Anti-aging',  res:'L68', family:'Serum',       pkgType:'Dropper', category:'Skincare', predLE:83.7, gsLE:89.4, gapPct:5.7, gapUSD:4600, conf:'Medium', confColor:'#E65100' },
-  { month:'Dec 26', sku:'SKU-401 / Cleanser Foaming',  res:'L68', family:'Cleanser',    pkgType:'Bottle',  category:'Cleanser', predLE:81.2, gsLE:88.8, gapPct:7.6, gapUSD:3300, conf:'Medium', confColor:'#E65100' },
-  { month:'Jan 27', sku:'SKU-501 / Moisturizer SPF',   res:'L72', family:'Moisturizer', pkgType:'Jar',     category:'Skincare', predLE:92.4, gsLE:96.1, gapPct:3.7, gapUSD:2600, conf:'High',   confColor:'#2E7D32' },
+  { month:'Aug 26', sku:'SKU-1042 / Fragrance 15ml',  res:'L67', family:'1042', pkgType:'15 ml',  category:'Fragrance', predLE:8.4, gsLE:7.2, gapPct:1.2, gapUSD:5800 },
+  { month:'Aug 26', sku:'SKU-1055 / Fragrance 30ml',  res:'L68', family:'1055', pkgType:'30 ml',  category:'Fragrance', predLE:9.1, gsLE:7.4, gapPct:1.7, gapUSD:8200 },
+  { month:'Sep 26', sku:'SKU-1042 / Fragrance 15ml',  res:'L72', family:'1042', pkgType:'15 ml',  category:'Fragrance', predLE:7.8, gsLE:7.2, gapPct:0.6, gapUSD:2900 },
+  { month:'Sep 26', sku:'SKU-1061 / Skincare 50ml',   res:'L68', family:'1061', pkgType:'50 ml',  category:'Skincare',  predLE:8.2, gsLE:6.8, gapPct:1.4, gapUSD:6100 },
+  { month:'Oct 26', sku:'SKU-1055 / Fragrance 30ml',  res:'L67', family:'1055', pkgType:'30 ml',  category:'Fragrance', predLE:9.5, gsLE:7.4, gapPct:2.1, gapUSD:9800 },
+  { month:'Oct 26', sku:'SKU-1098 / Skincare 100ml',  res:'L67', family:'1098', pkgType:'100 ml', category:'Skincare',  predLE:9.2, gsLE:7.6, gapPct:1.6, gapUSD:6600 },
+  { month:'Nov 26', sku:'SKU-1061 / Skincare 50ml',   res:'L67', family:'1061', pkgType:'50 ml',  category:'Skincare',  predLE:8.7, gsLE:6.8, gapPct:1.9, gapUSD:7400 },
+  { month:'Nov 26', sku:'SKU-1042 / Fragrance 15ml',  res:'L68', family:'1042', pkgType:'15 ml',  category:'Fragrance', predLE:9.6, gsLE:7.2, gapPct:2.4, gapUSD:11200 },
+  { month:'Dec 26', sku:'SKU-1098 / Skincare 100ml',  res:'L72', family:'1098', pkgType:'100 ml', category:'Skincare',  predLE:8.1, gsLE:7.6, gapPct:0.5, gapUSD:1900 },
+  { month:'Dec 26', sku:'SKU-1055 / Fragrance 30ml',  res:'L72', family:'1055', pkgType:'30 ml',  category:'Fragrance', predLE:8.8, gsLE:7.4, gapPct:1.4, gapUSD:6400 },
+  { month:'Jan 27', sku:'SKU-1061 / Skincare 50ml',   res:'L72', family:'1061', pkgType:'50 ml',  category:'Skincare',  predLE:7.6, gsLE:6.8, gapPct:0.8, gapUSD:2600 },
+  { month:'Jan 27', sku:'SKU-1098 / Skincare 100ml',  res:'L68', family:'1098', pkgType:'100 ml', category:'Skincare',  predLE:9.7, gsLE:7.6, gapPct:2.1, gapUSD:9100 },
 ];
 let LB_PRED_OFFSET = 0;
 
@@ -7016,19 +7022,30 @@ const LB_GAP_TREND_MONTHS = ['Nov 24','Dec 24','Jan 25','Feb 25','Mar 25','Apr 2
 const LB_GAP_TREND_DATA   = [4.1, 6.8, 9.2, 11.4, 8.7, 5.3, 7.0, 6.7];
 
 const LB_PO_ROWS = [
-  { family:'Mascara',    sku:'SKU-101 / Mascara Multi',      res:'L67', po:'PO-7841', actualLE:90.2, gsLE:94.0, gsGapPct:3.8,  gsGapUSD:420,   tier:'gold'   },
-  { family:'Mascara',    sku:'SKU-101 / Mascara Multi',      res:'L67', po:'PO-7863', actualLE:83.1, gsLE:94.0, gsGapPct:10.9, gsGapUSD:2100,  tier:'silver' },
-  { family:'Mascara',    sku:'SKU-112 / Mascara Volume',     res:'L67', po:'PO-7891', actualLE:71.4, gsLE:94.0, gsGapPct:22.6, gsGapUSD:6200,  tier:'bronze' },
-  { family:'Foundation', sku:'SKU-202 / Foundation Liquid',  res:'L67', po:'PO-8012', actualLE:85.2, gsLE:91.2, gsGapPct:6.0,  gsGapUSD:980,   tier:'silver' },
+  { family:'1042', sku:'SKU-1042 / Fragrance 15ml',  res:'L67', po:'PO-7841', actualLE:8.4, gsLE:7.2, gsGapPct:16.7, gsGapUSD:4200, tier:'silver' },
+  { family:'1042', sku:'SKU-1042 / Fragrance 15ml',  res:'L67', po:'PO-7863', actualLE:9.3, gsLE:7.2, gsGapPct:29.2, gsGapUSD:8600, tier:'bronze' },
+  { family:'1042', sku:'SKU-1042 / Fragrance 15ml',  res:'L72', po:'PO-7882', actualLE:7.8, gsLE:7.2, gsGapPct:8.3,  gsGapUSD:2100, tier:'silver' },
+  { family:'1055', sku:'SKU-1055 / Fragrance 30ml',  res:'L67', po:'PO-7891', actualLE:9.5, gsLE:7.4, gsGapPct:28.4, gsGapUSD:9800, tier:'bronze' },
+  { family:'1055', sku:'SKU-1055 / Fragrance 30ml',  res:'L68', po:'PO-7912', actualLE:8.2, gsLE:7.4, gsGapPct:10.8, gsGapUSD:3400, tier:'silver' },
+  { family:'1061', sku:'SKU-1061 / Skincare 50ml',   res:'L68', po:'PO-8012', actualLE:8.7, gsLE:6.8, gsGapPct:27.9, gsGapUSD:7400, tier:'bronze' },
+  { family:'1098', sku:'SKU-1098 / Skincare 100ml',  res:'L67', po:'PO-8024', actualLE:9.4, gsLE:7.6, gsGapPct:23.7, gsGapUSD:6600, tier:'bronze' },
+  { family:'1098', sku:'SKU-1098 / Skincare 100ml',  res:'L72', po:'PO-8031', actualLE:7.9, gsLE:7.6, gsGapPct:3.9,  gsGapUSD:980,  tier:'gold'   },
 ];
 let LB_PO_OFFSET = 0;
 
 const LB_DV_POS = [
-  { po:'PO-2026-005', qty:38000, avgQty:43500, sku:'SKU-401 / Cleanser–Foaming',   res:'L72', bucket:'Small',  actualLE:71, gsLE:91, gapUSD:14800, setupRatio:0.12, runRatio:0.82, totalHours:53.7,  crewSize:6 },
-  { po:'PO-2026-002', qty:44000, avgQty:43500, sku:'SKU-102 / Mascara–Multi',       res:'L67', bucket:'Small',  actualLE:79, gsLE:94, gapUSD:11200, setupRatio:0.09, runRatio:0.86, totalHours:61.4,  crewSize:5 },
-  { po:'PO-2026-004', qty:51000, avgQty:43500, sku:'SKU-301 / Serum–Anti-aging',    res:'L68', bucket:'Medium', actualLE:84, gsLE:91, gapUSD:7600,  setupRatio:0.08, runRatio:0.88, totalHours:72.8,  crewSize:5 },
-  { po:'PO-2026-001', qty:48000, avgQty:43500, sku:'SKU-101 / Mascara–Multi',       res:'L67', bucket:'Medium', actualLE:87, gsLE:94, gapUSD:5800,  setupRatio:0.07, runRatio:0.91, totalHours:66.2,  crewSize:4 },
-  { po:'PO-2026-003', qty:55000, avgQty:43500, sku:'SKU-201 / Foundation–Liquid',   res:'L67', bucket:'Large',  actualLE:91, gsLE:94, gapUSD:2400,  setupRatio:0.06, runRatio:0.93, totalHours:80.5,  crewSize:4 },
+  { po:'PO-2026-001', qty:48000, avgQty:52000, sku:'SKU-1042 / Fragrance 15ml',  res:'L67', bucket:'Medium', actualLE:9.2, gsLE:7.2, gapUSD:14800, setupRatio:0.22, runRatio:0.74, totalHours:441.6, crewSize:8  },
+  { po:'PO-2026-002', qty:35000, avgQty:52000, sku:'SKU-1042 / Fragrance 15ml',  res:'L67', bucket:'Small',  actualLE:9.8, gsLE:7.2, gapUSD:16200, setupRatio:0.31, runRatio:0.65, totalHours:343.0, crewSize:10 },
+  { po:'PO-2026-003', qty:62000, avgQty:52000, sku:'SKU-1042 / Fragrance 15ml',  res:'L72', bucket:'Large',  actualLE:7.8, gsLE:7.2, gapUSD:4100,  setupRatio:0.18, runRatio:0.79, totalHours:483.6, crewSize:7  },
+  { po:'PO-2026-004', qty:44000, avgQty:48000, sku:'SKU-1055 / Fragrance 30ml',  res:'L67', bucket:'Small',  actualLE:9.5, gsLE:7.4, gapUSD:13200, setupRatio:0.28, runRatio:0.68, totalHours:418.0, crewSize:9  },
+  { po:'PO-2026-005', qty:55000, avgQty:48000, sku:'SKU-1055 / Fragrance 30ml',  res:'L68', bucket:'Large',  actualLE:8.3, gsLE:7.4, gapUSD:7600,  setupRatio:0.21, runRatio:0.75, totalHours:456.5, crewSize:7  },
+  { po:'PO-2026-006', qty:30000, avgQty:48000, sku:'SKU-1055 / Fragrance 30ml',  res:'L72', bucket:'Small',  actualLE:9.1, gsLE:7.4, gapUSD:9800,  setupRatio:0.33, runRatio:0.63, totalHours:273.0, crewSize:11 },
+  { po:'PO-2026-007', qty:52000, avgQty:58000, sku:'SKU-1061 / Skincare 50ml',   res:'L68', bucket:'Medium', actualLE:8.8, gsLE:6.8, gapUSD:11400, setupRatio:0.24, runRatio:0.72, totalHours:457.6, crewSize:8  },
+  { po:'PO-2026-008', qty:40000, avgQty:58000, sku:'SKU-1061 / Skincare 50ml',   res:'L68', bucket:'Small',  actualLE:9.4, gsLE:6.8, gapUSD:14600, setupRatio:0.29, runRatio:0.67, totalHours:376.0, crewSize:9  },
+  { po:'PO-2026-009', qty:70000, avgQty:58000, sku:'SKU-1061 / Skincare 50ml',   res:'L67', bucket:'Large',  actualLE:7.4, gsLE:6.8, gapUSD:4200,  setupRatio:0.19, runRatio:0.77, totalHours:518.0, crewSize:6  },
+  { po:'PO-2026-010', qty:38000, avgQty:44000, sku:'SKU-1098 / Skincare 100ml',  res:'L67', bucket:'Small',  actualLE:9.6, gsLE:7.6, gapUSD:12800, setupRatio:0.32, runRatio:0.64, totalHours:364.8, crewSize:11 },
+  { po:'PO-2026-011', qty:58000, avgQty:44000, sku:'SKU-1098 / Skincare 100ml',  res:'L72', bucket:'Large',  actualLE:8.2, gsLE:7.6, gapUSD:5100,  setupRatio:0.20, runRatio:0.77, totalHours:475.6, crewSize:7  },
+  { po:'PO-2026-012', qty:46000, avgQty:44000, sku:'SKU-1098 / Skincare 100ml',  res:'L68', bucket:'Medium', actualLE:7.9, gsLE:7.6, gapUSD:2200,  setupRatio:0.23, runRatio:0.74, totalHours:363.4, crewSize:6  },
 ];
 
 const LB_TOP10 = [
@@ -9725,17 +9742,16 @@ function initLBPred() {
 function renderLBPredTable() {
   const tbody = $('tb-lb-pred');
   if (!tbody) return;
-  const rows = LB_PRED_POS.slice(0, LB_PRED_OFFSET + 6);
+  const rows = LB_PRED_POS.slice(0, LB_PRED_OFFSET + 10);
   tbody.innerHTML = rows.map((r,i) => {
     const bg = i%2===0 ? '#fff' : '#f8fafc';
     const gapColor = r.gapPct > 0 ? '#C62828' : '#2E7D32';
-    const confDot = { 'High':'🟢', 'Medium':'🟡', 'Low':'🔴' }[r.conf] || '⚪';
     return `<tr style="background:${bg};">
       <td>${r.month}</td><td style="font-size:11px;">${r.sku}</td><td>${r.res}</td><td>${r.family}</td>
       <td>${r.pkgType||'—'}</td><td>${r.category||'—'}</td>
-      <td class="r">${r.predLE}%</td>
-      <td class="r" style="color:#6dd4bc;">${r.gsLE}%</td>
-      <td class="r" style="color:${gapColor};font-weight:700;">${r.gapPct > 0 ? '+' : ''}${r.gapPct}%</td>
+      <td class="r">${r.predLE.toFixed(1)}</td>
+      <td class="r" style="color:#6dd4bc;">${r.gsLE.toFixed(1)}</td>
+      <td class="r" style="color:${gapColor};font-weight:700;">${r.gapPct > 0 ? '+' : ''}${r.gapPct.toFixed(1)}</td>
       <td class="r" style="color:${gapColor};font-weight:700;">$${r.gapUSD.toLocaleString()}</td>
     </tr>`;
   }).join('');
@@ -9855,15 +9871,15 @@ function renderLBPOTable() {
       html += `<tr style="background:#F5F5F0;"><td colspan="9" style="font-weight:700;color:#5C4033;padding:8px 10px;font-size:11px;">${r.family}</td></tr>`;
     }
     const bg = i%2===0 ? '#fff' : '#f8fafc';
-    const leColor = r.actualLE >= r.gsLE ? '#2E7D32' : '#C62828';
+    const leColor = r.actualLE <= r.gsLE ? '#2E7D32' : '#C62828';
     const gapColor = r.gsGapPct > 0 ? '#C62828' : '#2E7D32';
     html += `<tr style="background:${bg};">
       <td>${r.res}</td>
       <td>${r.family}</td>
       <td style="font-size:11px;">${r.sku}</td>
       <td>${r.po}</td>
-      <td class="r" style="color:${leColor};font-weight:700;">${r.actualLE}%</td>
-      <td class="r" style="color:#6dd4bc;">${r.gsLE}%</td>
+      <td class="r" style="color:${leColor};font-weight:700;">${r.actualLE.toFixed(1)}</td>
+      <td class="r" style="color:#6dd4bc;">${r.gsLE.toFixed(1)}</td>
       <td class="r" style="color:${gapColor};font-weight:700;">${r.gsGapPct > 0 ? '+' : ''}${r.gsGapPct}%</td>
       <td class="r" style="color:${gapColor};font-weight:700;">$${r.gsGapUSD.toLocaleString()}</td>
       <td><span style="background:${tierBg[r.tier]};padding:2px 6px;border-radius:3px;font-size:11px;">${tiers[r.tier]} ${r.tier.charAt(0).toUpperCase()+r.tier.slice(1)}</span></td>
@@ -9936,7 +9952,7 @@ function renderLBDVTable() {
   if (!tbody) return;
   tbody.innerHTML = LB_DV_POS.map((r,i) => {
     const bg = i%2===0 ? '#fff' : '#f8fafc';
-    const leColor = r.actualLE >= r.gsLE ? '#2E7D32' : '#C62828';
+    const leColor = r.actualLE <= r.gsLE ? '#2E7D32' : '#C62828';
     const gapColor = r.gapUSD > 0 ? '#C62828' : '#2E7D32';
     return `<tr style="background:${bg};">
       <td style="font-weight:700;">${r.po}</td>
@@ -9945,8 +9961,8 @@ function renderLBDVTable() {
       <td style="font-size:11px;">${r.sku}</td>
       <td>${r.res}</td>
       <td><span style="background:#EDF2F7;padding:2px 8px;border-radius:10px;font-size:10px;">${r.bucket}</span></td>
-      <td class="r" style="color:${leColor};font-weight:700;">${r.actualLE}%</td>
-      <td class="r" style="color:#6dd4bc;">${r.gsLE}%</td>
+      <td class="r" style="color:${leColor};font-weight:700;">${r.actualLE.toFixed(1)}</td>
+      <td class="r" style="color:#6dd4bc;">${r.gsLE.toFixed(1)}</td>
       <td class="r" style="color:${gapColor};font-weight:700;">$${r.gapUSD.toLocaleString()}</td>
       <td class="r">${(r.setupRatio*100).toFixed(0)}%</td>
       <td class="r">${(r.runRatio*100).toFixed(0)}%</td>
