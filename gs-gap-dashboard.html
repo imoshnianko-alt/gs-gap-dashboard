@@ -9676,7 +9676,7 @@ function _renderLBTrendChart(view) {
 }
 
 function renderLBResComp() {
-  const tbody = $('tb-lb-res-comp');
+  const tbody = $$('tb-lb-res-comp');
   if (!tbody) return;
   tbody.innerHTML = LB_RES_COMP.map((r,i) => {
     const bg = i%2===0 ? '#ffffff' : '#f8fafc';
@@ -9749,7 +9749,7 @@ function initLBPred() {
 }
 
 function renderLBPredTable() {
-  const tbody = $('tb-lb-pred');
+  const tbody = $$('tb-lb-pred');
   if (!tbody) return;
   const rows = LB_PRED_POS.slice(0, LB_PRED_OFFSET + 10);
   tbody.innerHTML = rows.map((r,i) => {
@@ -9834,7 +9834,7 @@ function _renderLBGapTrend() {
 }
 
 function renderLBGapComp() {
-  const tbody = $('tb-lb-gap-comp');
+  const tbody = $$('tb-lb-gap-comp');
   if (!tbody) return;
   tbody.innerHTML = LB_RES_COMP.map((r,i) => {
     const bg = i%2===0 ? '#fff' : '#f8fafc';
@@ -9868,7 +9868,7 @@ function switchLBGapBarView(v) { _renderLBGapBar(); }
 function switchLBGapTrendView(v) { _renderLBGapTrend(); }
 
 function renderLBPOTable() {
-  const tbody = $('tb-lb-po-rows');
+  const tbody = $$('tb-lb-po-rows');
   if (!tbody) return;
   let html = '';
   let lastFamily = null;
@@ -9954,7 +9954,7 @@ function initLBDV() {
 }
 
 function renderLBDVTable() {
-  const tbody = $('tb-lb-dv');
+  const tbody = $$('tb-lb-dv');
   if (!tbody) return;
   tbody.innerHTML = LB_DV_POS.map((r,i) => {
     const bg = i%2===0 ? '#fff' : '#f8fafc';
