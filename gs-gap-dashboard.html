@@ -3081,6 +3081,7 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
               <th class="r">Run Ratio</th>
               <th class="r">Total Hours</th>
               <th class="r">Crew Size</th>
+              <th style="min-width:200px;">Suggestions</th>
             </tr></thead>
             <tbody id="tb-lb-dv"></tbody>
           </table>
@@ -9953,6 +9954,29 @@ function initLBDV() {
   renderLBDVTable();
 }
 
+function getLBDVSuggestion(r) {
+  const gapLE = r.actualLE - r.gsLE;
+  if (r.gapUSD > 4000)
+    return { text: 'High dollar impact. Priority target for labor efficiency improvement initiatives.', color: '#C62828' };
+  if (gapLE > 2.0 && r.setupRatio > 0.30)
+    return { text: 'Labor gap driven by high setup overhead. Reduce changeover time to close efficiency gap.', color: '#E65100' };
+  if (gapLE > 2.0 && r.runRatio < 0.70)
+    return { text: 'Labor efficiency below GS with low active run time. Investigate mid-run stoppages.', color: '#E65100' };
+  if (gapLE > 2.0)
+    return { text: 'Labor efficiency significantly below GS. Consider crew size optimization or setup time reduction.', color: '#E65100' };
+  if (r.setupRatio > 0.30 && r.runRatio < 0.70)
+    return { text: 'High setup ratio and low run ratio. Review changeover procedures and investigate production flow.', color: '#795548' };
+  if (r.setupRatio > 0.30)
+    return { text: 'High setup ratio detected. Review changeover procedures to reduce non-productive time.', color: '#795548' };
+  if (r.runRatio < 0.70)
+    return { text: 'Low run ratio. Investigate potential downtime or speed constraints during production.', color: '#795548' };
+  if (r.crewSize > 10)
+    return { text: 'Large crew size. Evaluate automation opportunities or consider resource reallocation.', color: '#1565C0' };
+  if (r.bucket === 'Small' && gapLE > 1.5)
+    return { text: 'Small batch with elevated labor gap. Evaluate batch size consolidation to improve efficiency.', color: '#E65100' };
+  return { text: 'Labor efficiency within acceptable range. Monitor for consistency.', color: '#2E7D32' };
+}
+
 function renderLBDVTable() {
   const tbody = $$('tb-lb-dv');
   if (!tbody) return;
@@ -9961,6 +9985,7 @@ function renderLBDVTable() {
     const leColor = r.actualLE <= r.gsLE ? '#2E7D32' : '#C62828';
     const gapColor = r.gapUSD > 0 ? '#C62828' : '#2E7D32';
     const gapLE = (r.actualLE - r.gsLE).toFixed(1);
+    const sugg = getLBDVSuggestion(r);
     return `<tr style="background:${bg};">
       <td style="font-weight:700;">${r.po}</td>
       <td class="r">${r.qty.toLocaleString()}</td>
@@ -9979,6 +10004,7 @@ function renderLBDVTable() {
       <td class="r">${(r.runRatio*100).toFixed(0)}%</td>
       <td class="r">${r.totalHours.toFixed(1)}</td>
       <td class="r">${r.crewSize}</td>
+      <td style="font-size:10.5px;color:${sugg.color};line-height:1.45;min-width:200px;">${sugg.text}</td>
     </tr>`;
   }).join('');
 }
