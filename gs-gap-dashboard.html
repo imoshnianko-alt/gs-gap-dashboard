@@ -2917,9 +2917,10 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
               <th>Month</th><th>SKU</th><th>Resource</th><th>Family</th>
               <th>Package Type</th><th>Category</th>
               <th class="r">Labor Efficiency</th>
-              <th class="r" style="color:#6dd4bc;">GS Labor Efficiency</th>
-              <th class="r" style="color:#ff8080;">Gap</th>
-              <th class="r" style="color:#ff8080;">Gap Impact</th>
+              <th class="r">GS Labor Efficiency</th>
+              <th class="r">Gap</th>
+              <th class="r">Gap Impact</th>
+              <th>Suggestions</th>
             </tr></thead>
             <tbody id="tb-lb-pred"></tbody>
           </table>
@@ -3074,9 +3075,9 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
               <th>Category</th>
               <th>PO Size Bucket</th>
               <th class="r">Actual (hrs/1000)</th>
-              <th class="r" style="color:#6dd4bc;">GS (hrs/1000)</th>
-              <th class="r" style="color:#ff8080;">Gap (hrs/1000)</th>
-              <th class="r" style="color:#ff8080;">Gap $ (lost efficiency)</th>
+              <th class="r">GS (hrs/1000)</th>
+              <th class="r">Gap (hrs/1000)</th>
+              <th class="r">Gap $ (lost efficiency)</th>
               <th class="r">Setup Ratio</th>
               <th class="r">Run Ratio</th>
               <th class="r">Total Hours</th>
@@ -3993,6 +3994,31 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
       <div class="gs-card" style="margin-bottom:12px;">
         <div class="card-title">SG over Time — by SKU (12 Weeks)</div>
         <div class="chart-wrap" style="height:210px;"><canvas id="ch-ov-sg-time"></canvas></div>
+      </div>
+      <div class="gs-card" style="margin-bottom:12px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
+          <div>
+            <div class="card-title">SG Distribution — Normal Curve Overlay</div>
+            <div class="card-subtitle" style="font-size:10.5px;color:var(--c-muted);margin-top:2px;">Histogram of observed SG readings with fitted normal distribution curve. Width of distribution indicates process consistency.</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:12px;">
+            <label style="font-size:11px;color:var(--c-muted);">SKU:</label>
+            <select id="sg-dist-sku-select" style="font-size:11px;padding:3px 6px;border:1px solid #ddd;border-radius:4px;" onchange="buildSGDistChart(this.value)">
+              <option value="SKU-1042">SKU-1042</option>
+              <option value="SKU-1055">SKU-1055</option>
+              <option value="SKU-1061">SKU-1061</option>
+            </select>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:240px;"><canvas id="ch-sg-dist"></canvas></div>
+        <div style="display:flex;gap:16px;margin-top:8px;font-size:10.5px;color:var(--c-muted);">
+          <span style="display:flex;align-items:center;gap:4px;">
+            <span style="display:inline-block;width:20px;height:2px;background:#E74C3C;vertical-align:middle;"></span> Normal Curve
+          </span>
+          <span style="display:flex;align-items:center;gap:4px;">
+            <span style="display:inline-block;width:12px;height:12px;background:#7DA9D8;vertical-align:middle;border-radius:2px;"></span> Observed Count
+          </span>
+        </div>
       </div>
       <div class="gs-card" style="margin-bottom:12px;">
         <div class="card-title">SG-Adjusted Overfill Assessment</div>
@@ -8030,6 +8056,95 @@ function initOVSGCharts() {
       }
     }
   });
+  buildSGDistChart('SKU-1042');
+}
+
+const SG_DIST_DATA = {
+  'SKU-1042': {
+    mean: 1.0353, sigma: 0.0058,
+    bins: [1.0169,1.0210,1.0250,1.0291,1.0332,1.0373,1.0414,1.0455,1.0495,1.0536],
+    counts: [1, 1, 2, 2, 3, 3, 2, 2, 1, 1]
+  },
+  'SKU-1055': {
+    mean: 1.0420, sigma: 0.0065,
+    bins: [1.0225,1.0270,1.0315,1.0360,1.0405,1.0450,1.0495,1.0540,1.0585,1.0630],
+    counts: [1, 1, 2, 3, 3, 2, 2, 1, 1, 1]
+  },
+  'SKU-1061': {
+    mean: 1.0298, sigma: 0.0052,
+    bins: [1.0142,1.0178,1.0214,1.0250,1.0286,1.0322,1.0358,1.0394,1.0430,1.0466],
+    counts: [1, 1, 2, 2, 3, 2, 2, 1, 1, 1]
+  }
+};
+
+function buildSGDistChart(skuKey) {
+  const d = SG_DIST_DATA[skuKey || 'SKU-1042'];
+  if (!d) return;
+  const ctx = document.getElementById('ch-sg-dist');
+  if (!ctx) return;
+  if (REG['ch-sg-dist']) { REG['ch-sg-dist'].destroy(); delete REG['ch-sg-dist']; }
+  const N = d.counts.reduce((a,b) => a+b, 0);
+  const binWidth = d.bins[1] - d.bins[0];
+  const normalCurve = d.bins.map(x => {
+    const z = (x - d.mean) / d.sigma;
+    return (1 / (d.sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * z * z) * binWidth * N;
+  });
+  const labels = d.bins.map(v => v.toFixed(4));
+  REG['ch-sg-dist'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Observed Count',
+          data: d.counts,
+          backgroundColor: '#7DA9D8',
+          borderColor: '#5a8ec0',
+          borderWidth: 1,
+          barPercentage: 0.95,
+          categoryPercentage: 1.0,
+          order: 2
+        },
+        {
+          label: 'Normal Curve',
+          type: 'line',
+          data: normalCurve,
+          borderColor: '#E74C3C',
+          borderWidth: 2.5,
+          pointRadius: 0,
+          fill: false,
+          tension: 0.4,
+          order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(0,0,0,.06)' },
+          ticks: { font: { size: 10 }, maxRotation: 45 },
+          title: {
+            display: true,
+            text: `Specific Gravity — Mean:${d.mean.toFixed(4)}, σ:${d.sigma.toFixed(4)}`,
+            font: { size: 10 },
+            color: '#666'
+          }
+        },
+        y: {
+          grid: { color: 'rgba(0,0,0,.06)' },
+          ticks: { font: { size: 10 }, stepSize: 0.5 },
+          title: { display: true, text: 'Count', font: { size: 10 }, color: '#666' },
+          beginAtZero: true
+        }
+      }
+    }
+  });
 }
 
 function renderOVSGTable() {
@@ -9681,14 +9796,12 @@ function renderLBResComp() {
   if (!tbody) return;
   tbody.innerHTML = LB_RES_COMP.map((r,i) => {
     const bg = i%2===0 ? '#ffffff' : '#f8fafc';
-    const gapColor = r.gsGap > 0 ? '#C62828' : '#2E7D32';
-    const usdColor = r.gsGapUSD > 0 ? '#C62828' : '#2E7D32';
     return `<tr style="background:${bg};cursor:pointer;" onclick="">
       <td style="font-weight:700;">${r.res}</td>
       <td class="r">${r.actual}%</td>
-      <td class="r" style="color:#6dd4bc;font-weight:700;">${r.gs}%</td>
-      <td class="r" style="color:${gapColor};font-weight:700;">${r.leGap > 0 ? '+' : ''}${r.leGap}%</td>
-      <td class="r" style="color:${usdColor};font-weight:700;">$${r.gsGapUSD.toLocaleString()}</td>
+      <td class="r" style="font-weight:700;">${r.gs}%</td>
+      <td class="r" style="font-weight:700;">${r.leGap > 0 ? '+' : ''}${r.leGap}%</td>
+      <td class="r" style="font-weight:700;">$${r.gsGapUSD.toLocaleString()}</td>
     </tr>`;
   }).join('');
 }
@@ -9749,20 +9862,37 @@ function initLBPred() {
   renderLBPredTable();
 }
 
+function getLBPredSuggestion(r) {
+  if (r.gapUSD > 4000)
+    return 'High dollar impact. Priority target for labor efficiency improvement initiatives.';
+  if (r.gapPct > 2.0)
+    return 'Labor efficiency significantly below GS. Consider crew size optimization or setup time reduction.';
+  if (r.predLE > 10.0)
+    return 'Labor efficiency opportunity detected. Review production planning and resource allocation.';
+  const mo = r.month || '';
+  if (r.gapPct > 1.5 && (mo.includes('Sep') || mo.includes('Oct')))
+    return 'Near-term PO with labor gap. Urgent review recommended before production start.';
+  if (r.gapPct > 1.3 && ((r.pkgType||'').includes('15ml') || (r.pkgType||'').includes('30ml')))
+    return 'Small package with labor gap. Consider batch size optimization or line speed adjustment.';
+  if (r.gapPct < 1.0)
+    return 'Labor efficiency within acceptable range. Monitor for consistency.';
+  return 'Labor efficiency approaching GS. Continue monitoring production performance.';
+}
+
 function renderLBPredTable() {
   const tbody = $$('tb-lb-pred');
   if (!tbody) return;
   const rows = LB_PRED_POS.slice(0, LB_PRED_OFFSET + 10);
   tbody.innerHTML = rows.map((r,i) => {
     const bg = i%2===0 ? '#fff' : '#f8fafc';
-    const gapColor = r.gapPct > 0 ? '#C62828' : '#2E7D32';
     return `<tr style="background:${bg};">
       <td>${r.month}</td><td style="font-size:11px;">${r.sku}</td><td>${r.res}</td><td>${r.family}</td>
       <td>${r.pkgType||'—'}</td><td>${r.category||'—'}</td>
       <td class="r">${r.predLE.toFixed(1)}</td>
-      <td class="r" style="color:#6dd4bc;">${r.gsLE.toFixed(1)}</td>
-      <td class="r" style="color:${gapColor};font-weight:700;">${r.gapPct > 0 ? '+' : ''}${r.gapPct.toFixed(1)}</td>
-      <td class="r" style="color:${gapColor};font-weight:700;">$${r.gapUSD.toLocaleString()}</td>
+      <td class="r">${r.gsLE.toFixed(1)}</td>
+      <td class="r" style="font-weight:700;">${r.gapPct > 0 ? '+' : ''}${r.gapPct.toFixed(1)}</td>
+      <td class="r" style="font-weight:700;">$${r.gapUSD.toLocaleString()}</td>
+      <td style="font-size:10.5px;color:#1a1a2e;line-height:1.45;min-width:200px;">${getLBPredSuggestion(r)}</td>
     </tr>`;
   }).join('');
 }
@@ -9839,14 +9969,12 @@ function renderLBGapComp() {
   if (!tbody) return;
   tbody.innerHTML = LB_RES_COMP.map((r,i) => {
     const bg = i%2===0 ? '#fff' : '#f8fafc';
-    const gapColor = r.gsGap > 0 ? '#C62828' : '#2E7D32';
-    const usdColor = r.gsGapUSD > 0 ? '#C62828' : '#2E7D32';
     return `<tr style="background:${bg};cursor:pointer;" onclick="">
       <td style="font-weight:700;">${r.res}</td>
-      <td class="r" style="color:#6dd4bc;font-weight:700;">${r.gs}%</td>
+      <td class="r" style="font-weight:700;">${r.gs}%</td>
       <td class="r">${r.actual}%</td>
-      <td class="r" style="color:${gapColor};font-weight:700;">${r.gsGap > 0 ? '+' : ''}${r.gsGap}%</td>
-      <td class="r" style="color:${usdColor};font-weight:700;">$${r.gsGapUSD.toLocaleString()}</td>
+      <td class="r" style="font-weight:700;">${r.gsGap > 0 ? '+' : ''}${r.gsGap}%</td>
+      <td class="r" style="font-weight:700;">$${r.gsGapUSD.toLocaleString()}</td>
     </tr>`;
   }).join('');
 }
@@ -9879,17 +10007,15 @@ function renderLBPOTable() {
       html += `<tr style="background:#F5F5F0;"><td colspan="8" style="font-weight:700;color:#5C4033;padding:8px 10px;font-size:11px;">${r.family}</td></tr>`;
     }
     const bg = i%2===0 ? '#fff' : '#f8fafc';
-    const leColor = r.actualLE <= r.gsLE ? '#2E7D32' : '#C62828';
-    const gapColor = r.gsGapPct > 0 ? '#C62828' : '#2E7D32';
     html += `<tr style="background:${bg};">
       <td>${r.res}</td>
       <td>${r.family}</td>
       <td style="font-size:11px;">${r.cat} / ${r.sku}</td>
       <td>${r.po}</td>
-      <td class="r" style="color:${leColor};font-weight:700;">${r.actualLE.toFixed(1)}</td>
-      <td class="r" style="color:#6dd4bc;">${r.gsLE.toFixed(1)}</td>
-      <td class="r" style="color:${gapColor};font-weight:700;">${r.gsGapPct > 0 ? '+' : ''}${r.gsGapPct}%</td>
-      <td class="r" style="color:${gapColor};font-weight:700;">$${r.gsGapUSD.toLocaleString()}</td>
+      <td class="r" style="font-weight:700;">${r.actualLE.toFixed(1)}</td>
+      <td class="r">${r.gsLE.toFixed(1)}</td>
+      <td class="r" style="font-weight:700;">${r.gsGapPct > 0 ? '+' : ''}${r.gsGapPct}%</td>
+      <td class="r" style="font-weight:700;">$${r.gsGapUSD.toLocaleString()}</td>
     </tr>`;
   });
   tbody.innerHTML = html;
@@ -9956,25 +10082,21 @@ function initLBDV() {
 
 function getLBDVSuggestion(r) {
   const gapLE = r.actualLE - r.gsLE;
-  if (r.gapUSD > 4000)
-    return { text: 'High dollar impact. Priority target for labor efficiency improvement initiatives.', color: '#C62828' };
-  if (gapLE > 2.0 && r.setupRatio > 0.30)
-    return { text: 'Labor gap driven by high setup overhead. Reduce changeover time to close efficiency gap.', color: '#E65100' };
-  if (gapLE > 2.0 && r.runRatio < 0.70)
-    return { text: 'Labor efficiency below GS with low active run time. Investigate mid-run stoppages.', color: '#E65100' };
-  if (gapLE > 2.0)
-    return { text: 'Labor efficiency significantly below GS. Consider crew size optimization or setup time reduction.', color: '#E65100' };
-  if (r.setupRatio > 0.30 && r.runRatio < 0.70)
-    return { text: 'High setup ratio and low run ratio. Review changeover procedures and investigate production flow.', color: '#795548' };
-  if (r.setupRatio > 0.30)
-    return { text: 'High setup ratio detected. Review changeover procedures to reduce non-productive time.', color: '#795548' };
-  if (r.runRatio < 0.70)
-    return { text: 'Low run ratio. Investigate potential downtime or speed constraints during production.', color: '#795548' };
+  if (r.gapUSD > 4500)
+    return 'High dollar impact. Priority target for labor efficiency improvement initiatives.';
+  if (gapLE > 2.5)
+    return 'Labor efficiency significantly below GS. Consider crew size optimization or setup time reduction.';
+  if (r.setupRatio > 0.32)
+    return 'High setup ratio detected. Review changeover procedures to reduce setup time.';
+  if (r.runRatio < 0.68)
+    return 'Low run ratio. Investigate potential downtime or speed constraints during production.';
   if (r.crewSize > 10)
-    return { text: 'Large crew size. Evaluate automation opportunities or consider resource reallocation.', color: '#1565C0' };
+    return 'Large crew size may indicate manual line. Consider automation or resource reallocation.';
   if (r.bucket === 'Small' && gapLE > 1.5)
-    return { text: 'Small batch with elevated labor gap. Evaluate batch size consolidation to improve efficiency.', color: '#E65100' };
-  return { text: 'Labor efficiency within acceptable range. Monitor for consistency.', color: '#2E7D32' };
+    return 'Small batch with high labor gap. Evaluate batch size optimization.';
+  if (gapLE < 1.0)
+    return 'Labor efficiency within acceptable range. Monitor for consistency.';
+  return 'Labor efficiency approaching GS. Continue monitoring production performance.';
 }
 
 function renderLBDVTable() {
@@ -9982,10 +10104,7 @@ function renderLBDVTable() {
   if (!tbody) return;
   tbody.innerHTML = LB_DV_POS.map((r,i) => {
     const bg = i%2===0 ? '#fff' : '#f8fafc';
-    const leColor = r.actualLE <= r.gsLE ? '#2E7D32' : '#C62828';
-    const gapColor = r.gapUSD > 0 ? '#C62828' : '#2E7D32';
     const gapLE = (r.actualLE - r.gsLE).toFixed(1);
-    const sugg = getLBDVSuggestion(r);
     return `<tr style="background:${bg};">
       <td style="font-weight:700;">${r.po}</td>
       <td class="r">${r.qty.toLocaleString()}</td>
@@ -9996,15 +10115,15 @@ function renderLBDVTable() {
       <td style="font-size:11px;">${r.pkgType||'—'}</td>
       <td>${r.category||'—'}</td>
       <td><span style="background:#EDF2F7;padding:2px 8px;border-radius:10px;font-size:10px;">${r.bucket}</span></td>
-      <td class="r" style="color:${leColor};font-weight:700;">${r.actualLE.toFixed(1)}</td>
-      <td class="r" style="color:#6dd4bc;">${r.gsLE.toFixed(1)}</td>
-      <td class="r" style="color:${gapColor};font-weight:700;">+${gapLE}</td>
-      <td class="r" style="color:${gapColor};font-weight:700;">$${r.gapUSD.toLocaleString()}</td>
+      <td class="r" style="font-weight:700;">${r.actualLE.toFixed(1)}</td>
+      <td class="r">${r.gsLE.toFixed(1)}</td>
+      <td class="r" style="font-weight:700;">+${gapLE}</td>
+      <td class="r" style="font-weight:700;">$${r.gapUSD.toLocaleString()}</td>
       <td class="r">${(r.setupRatio*100).toFixed(0)}%</td>
       <td class="r">${(r.runRatio*100).toFixed(0)}%</td>
       <td class="r">${r.totalHours.toFixed(1)}</td>
       <td class="r">${r.crewSize}</td>
-      <td style="font-size:10.5px;color:${sugg.color};line-height:1.45;min-width:200px;">${sugg.text}</td>
+      <td style="font-size:10.5px;color:#1a1a2e;line-height:1.45;min-width:200px;">${getLBDVSuggestion(r)}</td>
     </tr>`;
   }).join('');
 }
