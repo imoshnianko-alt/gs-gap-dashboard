@@ -1728,19 +1728,20 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
   100% { background-color:transparent; }
 }
 /* Combined Gap Analysis page styles */
-.cg-summary-cards {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px;
+.cg-kpi-row {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:16px 0 0;
 }
-.cg-sum-card {
-  background:#fff; border:1px solid #E0E0E0; border-radius:6px; padding:12px 16px;
+.cg-kpi-card {
+  background:#fff; border:1px solid #E0E0E0; border-radius:8px;
+  padding:14px 12px; text-align:center;
   box-shadow:0 1px 3px rgba(0,0,0,0.07);
 }
-.cg-sum-label {
-  font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
-  color:#4A6580; margin-bottom:4px;
+.cg-kpi-icon  { font-size:20px; margin-bottom:5px; }
+.cg-kpi-label {
+  font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
+  color:#4A6580; margin-bottom:5px;
 }
-.cg-sum-value { font-size:22px; font-weight:700; color:#1A2B3C; line-height:1.1; }
-.cg-sum-sub   { font-size:10px; color:#6b6b6b; margin-top:2px; }
+.cg-kpi-val   { font-size:26px; font-weight:700; line-height:1.1; }
 .cg-table-wrapper { overflow-x:auto; border:1px solid #E0E0E0; border-radius:6px; }
 .cg-table { width:100%; border-collapse:collapse; font-size:11px; }
 .cg-table thead th {
@@ -2289,7 +2290,30 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
       <!-- Page title -->
       <div>
         <div style="font-size:17px;font-weight:700;color:#1A2B3C;line-height:1.2;">Combined Gap Analysis — All KPIs</div>
-        <div style="font-size:11px;color:#4A6580;margin-top:3px;">Top opportunities sorted by total gap $ across Speed, Labor, OEE, and Scrap</div>
+      </div>
+
+      <!-- KPI gap cards row -->
+      <div class="cg-kpi-row">
+        <div class="cg-kpi-card" style="border-top:3px solid #1565C0;">
+          <div class="cg-kpi-icon">🏃</div>
+          <div class="cg-kpi-label">Speed Gap $</div>
+          <div class="cg-kpi-val" id="cg-kpi-speed" style="color:#1565C0;">—</div>
+        </div>
+        <div class="cg-kpi-card" style="border-top:3px solid #E65100;">
+          <div class="cg-kpi-icon">👥</div>
+          <div class="cg-kpi-label">Labor Gap $</div>
+          <div class="cg-kpi-val" id="cg-kpi-labor" style="color:#E65100;">—</div>
+        </div>
+        <div class="cg-kpi-card" style="border-top:3px solid #6A1B9A;">
+          <div class="cg-kpi-icon">⚙️</div>
+          <div class="cg-kpi-label">OEE Gap $</div>
+          <div class="cg-kpi-val" id="cg-kpi-oee" style="color:#6A1B9A;">—</div>
+        </div>
+        <div class="cg-kpi-card" style="border-top:3px solid #2E7D32;">
+          <div class="cg-kpi-icon">♻️</div>
+          <div class="cg-kpi-label">Scrap Gap $</div>
+          <div class="cg-kpi-val" id="cg-kpi-scrap" style="color:#2E7D32;">—</div>
+        </div>
       </div>
 
       <!-- Main card -->
@@ -2298,26 +2322,6 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         <!-- Card header -->
         <div style="margin-bottom:14px;">
           <div class="card-title" style="font-size:14px;">Top Opportunities by Product Family</div>
-          <div class="card-subtitle">Sorted by combined gap impact. Use sidebar filters to narrow scope.</div>
-        </div>
-
-        <!-- Summary cards row -->
-        <div class="cg-summary-cards">
-          <div class="cg-sum-card">
-            <div class="cg-sum-label">Families Analyzed</div>
-            <div class="cg-sum-value" id="cg-stat-families">—</div>
-            <div class="cg-sum-sub">product families</div>
-          </div>
-          <div class="cg-sum-card">
-            <div class="cg-sum-label">Total Combined Gap</div>
-            <div class="cg-sum-value" id="cg-stat-total">—</div>
-            <div class="cg-sum-sub">across all KPIs</div>
-          </div>
-          <div class="cg-sum-card">
-            <div class="cg-sum-label">Top 10 Represent</div>
-            <div class="cg-sum-value" id="cg-stat-top10pct">—</div>
-            <div class="cg-sum-sub">of total gap</div>
-          </div>
         </div>
 
         <!-- Sortable table -->
@@ -11520,12 +11524,17 @@ function renderCombinedGapTable() {
   });
 
   const totalGap  = data.reduce((s, f) => s + f.total, 0);
-  const top10sum  = data.slice(0, 10).reduce((s, f) => s + f.total, 0);
 
+  const fmtKPI = v => {
+    if (v >= 1000000) return '$' + (v / 1000000).toFixed(1) + 'M';
+    if (v >= 1000)    return '$' + Math.round(v / 1000) + 'K';
+    return '$' + Math.round(v);
+  };
   const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  setTxt('cg-stat-families', data.length);
-  setTxt('cg-stat-total',    '$' + Math.round(totalGap).toLocaleString());
-  setTxt('cg-stat-top10pct', totalGap > 0 ? Math.round(top10sum / totalGap * 100) + '%' : '—');
+  setTxt('cg-kpi-speed', fmtKPI(data.reduce((s, f) => s + f.speed, 0)));
+  setTxt('cg-kpi-labor', fmtKPI(data.reduce((s, f) => s + f.labor, 0)));
+  setTxt('cg-kpi-oee',   fmtKPI(data.reduce((s, f) => s + f.oee,   0)));
+  setTxt('cg-kpi-scrap', fmtKPI(data.reduce((s, f) => s + f.scrap, 0)));
 
   const totalPages = Math.max(1, Math.ceil(data.length / CG_PAGE_SIZE));
   if (cgPage >= totalPages) cgPage = totalPages - 1;
