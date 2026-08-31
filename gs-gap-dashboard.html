@@ -1727,23 +1727,54 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
   0%   { background-color:rgba(22,163,74,.22); }
   100% { background-color:transparent; }
 }
-/* knc-total hover tooltip */
-.knc-total-tooltip {
-  position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%);
-  width:280px; background:rgba(31,41,55,.97); color:#fff; border-radius:8px; padding:16px;
-  box-shadow:0 8px 24px rgba(0,0,0,.2); z-index:9999; opacity:0; pointer-events:none;
-  transition:opacity .2s ease-in; font-size:13px; line-height:1.5; text-align:left;
+/* Combined Gap Analysis page styles */
+.cg-summary-cards {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px;
 }
-.knc-total-tooltip::before {
-  content:''; position:absolute; top:-7px; left:50%; transform:translateX(-50%);
-  border:7px solid transparent; border-top:none; border-bottom-color:rgba(31,41,55,.97);
+.cg-sum-card {
+  background:#fff; border:1px solid #E0E0E0; border-radius:6px; padding:12px 16px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.07);
 }
-#knc-total:hover .knc-total-tooltip { opacity:1; pointer-events:auto; }
-.knc-tt-row { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px; }
-.knc-tt-row:last-child { margin-bottom:0; }
-.knc-tt-label { font-weight:400; color:#fff; font-size:13px; flex:1; }
-.knc-tt-val { font-weight:700; color:#fff; font-size:13px; }
-.knc-tt-pct { color:#fff; font-size:13px; width:42px; text-align:right; }
+.cg-sum-label {
+  font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
+  color:#4A6580; margin-bottom:4px;
+}
+.cg-sum-value { font-size:22px; font-weight:700; color:#1A2B3C; line-height:1.1; }
+.cg-sum-sub   { font-size:10px; color:#6b6b6b; margin-top:2px; }
+.cg-table-wrapper { overflow-x:auto; border:1px solid #E0E0E0; border-radius:6px; }
+.cg-table { width:100%; border-collapse:collapse; font-size:11px; }
+.cg-table thead th {
+  background:#1a3a52; color:#fff; font-weight:700; padding:9px 11px;
+  white-space:nowrap; cursor:pointer; user-select:none;
+  border-right:1px solid rgba(255,255,255,.1);
+}
+.cg-table thead th:last-child { border-right:none; }
+.cg-table thead th.right { text-align:right; }
+.cg-table thead th:hover { background:#1e4468; }
+.cg-table tbody tr:nth-child(even) td { background:#f9f9f9; }
+.cg-table tbody tr:nth-child(odd) td { background:#fff; }
+.cg-table tbody tr:hover td { background:#e8f0fe !important; }
+.cg-table tbody td {
+  padding:7px 11px; border-bottom:1px solid #efefef;
+  vertical-align:middle;
+}
+.cg-table tbody tr:last-child td { border-bottom:none; }
+.cg-table tbody td.right { text-align:right; font-variant-numeric:tabular-nums; }
+.cg-table tbody td.rank-col { font-weight:700; color:#1a3a52; width:36px; }
+.cg-sort-arrow { margin-left:3px; font-size:9px; }
+.cg-back-link {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:12px; font-weight:600; color:#1565C0;
+  background:none; border:none; cursor:pointer; padding:0;
+  transition:color .15s;
+}
+.cg-back-link:hover { color:#003D8F; text-decoration:underline; }
+.cg-page-controls {
+  display:flex; align-items:center; justify-content:space-between;
+  padding-top:10px; border-top:1px solid #efefef; margin-top:2px;
+}
+.cg-page-info { font-size:11px; color:#6B7280; }
+.cg-page-btns { display:flex; gap:6px; }
 </style>
 </head>
 <body>
@@ -2159,30 +2190,13 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
 
     <!-- ─── Level 2: KPI Category Cards ─────────────────── -->
     <div id="gs-kpi-nav" class="kpi-nav-row">
-      <!-- Total GS Gap Impact (first card, hover reveals breakdown) -->
-      <button class="kpi-nav-card" id="knc-total" style="position:relative;cursor:default;" onclick="void(0)">
+      <!-- Total GS Gap Impact — clickable, opens Combined Gap Analysis page -->
+      <button class="kpi-nav-card" id="knc-total" style="position:relative;" onclick="showCombinedGap()">
         <span class="knc-icon">📊</span>
         <div class="knc-body">
           <div class="knc-kpi">TOTAL GS GAP IMPACT</div>
           <div class="knc-val">$1.2M</div>
-        </div>
-        <div class="knc-total-tooltip">
-          <div style="font-weight:700;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:8px;">Total GS Gap — $1,167,000</div>
-          <div class="knc-tt-row">
-            <span class="knc-tt-label">Speed</span>
-            <span class="knc-tt-val">$612,000</span>
-            <span class="knc-tt-pct">(52%)</span>
-          </div>
-          <div class="knc-tt-row">
-            <span class="knc-tt-label">Labor</span>
-            <span class="knc-tt-val">$370,000</span>
-            <span class="knc-tt-pct">(32%)</span>
-          </div>
-          <div class="knc-tt-row">
-            <span class="knc-tt-label">OEE</span>
-            <span class="knc-tt-val">$185,000</span>
-            <span class="knc-tt-pct">(16%)</span>
-          </div>
+          <div class="knc-delta neutral">All KPIs combined →</div>
         </div>
       </button>
       <button class="kpi-nav-card" id="knc-speed" onclick="showKPI('speed')">
@@ -2268,6 +2282,88 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
         Scrap analytics are in the dedicated Pulse 1 Scrap Dashboard — click the Scrap card to open it.
       </div>
     </div><!-- /cnt-gs-overview -->
+
+    <!-- ─── COMBINED GAP ANALYSIS ──────────────────────────── -->
+    <div id="cnt-combined-gap" class="kpi-cnt">
+
+      <!-- Back navigation -->
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button class="cg-back-link" onclick="showOverview()">← Back to Overview</button>
+        <span style="color:#ccc;font-size:12px;">/</span>
+        <span style="font-size:12px;color:#4A6580;">Combined Gap Analysis</span>
+      </div>
+
+      <!-- Page title -->
+      <div>
+        <div style="font-size:17px;font-weight:700;color:#1A2B3C;line-height:1.2;">Combined Gap Analysis — All KPIs</div>
+        <div style="font-size:11px;color:#4A6580;margin-top:3px;">Top opportunities sorted by total gap $ across Speed, Labor, OEE, and Scrap</div>
+      </div>
+
+      <!-- Main card -->
+      <div class="gs-card" style="margin-bottom:0;padding:16px;">
+
+        <!-- Card header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div>
+            <div class="card-title" style="font-size:14px;">Top Opportunities by Product Family</div>
+            <div class="card-subtitle">Sorted by combined gap impact. Use sidebar filters to narrow scope.</div>
+          </div>
+          <button onclick="exportCombinedGapCSV()" class="btn-secondary" style="display:flex;align-items:center;gap:5px;white-space:nowrap;font-size:11px;padding:5px 12px;">
+            ⬇ Export CSV
+          </button>
+        </div>
+
+        <!-- Summary cards row -->
+        <div class="cg-summary-cards">
+          <div class="cg-sum-card">
+            <div class="cg-sum-label">Families Analyzed</div>
+            <div class="cg-sum-value" id="cg-stat-families">—</div>
+            <div class="cg-sum-sub">product families</div>
+          </div>
+          <div class="cg-sum-card">
+            <div class="cg-sum-label">Total Combined Gap</div>
+            <div class="cg-sum-value" id="cg-stat-total">—</div>
+            <div class="cg-sum-sub">across all KPIs</div>
+          </div>
+          <div class="cg-sum-card">
+            <div class="cg-sum-label">Top 10 Represent</div>
+            <div class="cg-sum-value" id="cg-stat-top10pct">—</div>
+            <div class="cg-sum-sub">of total gap</div>
+          </div>
+        </div>
+
+        <!-- Sortable table -->
+        <div class="cg-table-wrapper">
+          <table class="cg-table" id="cg-table">
+            <thead>
+              <tr>
+                <th style="width:36px;cursor:default;">#</th>
+                <th onclick="cgSort('family')">Family<span class="cg-sort-arrow" id="cg-sort-family"></span></th>
+                <th onclick="cgSort('name')">Family Name<span class="cg-sort-arrow" id="cg-sort-name"></span></th>
+                <th onclick="cgSort('plant')">Plant<span class="cg-sort-arrow" id="cg-sort-plant"></span></th>
+                <th class="right" onclick="cgSort('total')">Total GS Gap $<span class="cg-sort-arrow" id="cg-sort-total"></span></th>
+                <th class="right" onclick="cgSort('speed')">Speed $<span class="cg-sort-arrow" id="cg-sort-speed"></span></th>
+                <th class="right" onclick="cgSort('labor')">Labor $<span class="cg-sort-arrow" id="cg-sort-labor"></span></th>
+                <th class="right" onclick="cgSort('oee')">OEE $<span class="cg-sort-arrow" id="cg-sort-oee"></span></th>
+                <th class="right" onclick="cgSort('scrap')">Scrap $<span class="cg-sort-arrow" id="cg-sort-scrap"></span></th>
+                <th class="right" onclick="cgSort('pct')">% of Total<span class="cg-sort-arrow" id="cg-sort-pct"></span></th>
+              </tr>
+            </thead>
+            <tbody id="cg-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- Pagination controls -->
+        <div class="cg-page-controls">
+          <div class="cg-page-info" id="cg-page-info">—</div>
+          <div class="cg-page-btns">
+            <button id="cg-prev-btn" onclick="cgChangePage(-1)" class="btn-secondary" style="padding:4px 12px;font-size:11px;">← Prev</button>
+            <button id="cg-next-btn" onclick="cgChangePage(1)"  class="btn-secondary" style="padding:4px 12px;font-size:11px;">Next →</button>
+          </div>
+        </div>
+
+      </div><!-- /gs-card -->
+    </div><!-- /cnt-combined-gap -->
 
     <!-- ─── SPEED: RESULTS ──────────────────────────────── -->
     <div id="cnt-speed-results" class="kpi-cnt">
@@ -4193,17 +4289,12 @@ input[type=range].wi2-range.speed::-moz-range-thumb           { background:#1976
 
       <!-- ── KPI Navigation Card Row ── -->
       <div class="kpi-nav-row" style="margin-bottom:16px;">
-        <button class="kpi-nav-card" style="position:relative;cursor:default;" onclick="void(0)">
+        <button class="kpi-nav-card" style="position:relative;" onclick="showModule('gs');showCombinedGap()">
           <span class="knc-icon">📊</span>
           <div class="knc-body">
             <div class="knc-kpi">TOTAL GS GAP IMPACT</div>
             <div class="knc-val">$1.2M</div>
-          </div>
-          <div class="knc-total-tooltip">
-            <div style="font-weight:700;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:8px;">Total GS Gap — $1,167,000</div>
-            <div class="knc-tt-row"><span class="knc-tt-label">Speed</span><span class="knc-tt-val">$612,000</span><span class="knc-tt-pct">(52%)</span></div>
-            <div class="knc-tt-row"><span class="knc-tt-label">Labor</span><span class="knc-tt-val">$370,000</span><span class="knc-tt-pct">(32%)</span></div>
-            <div class="knc-tt-row"><span class="knc-tt-label">OEE</span><span class="knc-tt-val">$185,000</span><span class="knc-tt-pct">(16%)</span></div>
+            <div class="knc-delta neutral">All KPIs combined →</div>
           </div>
         </button>
         <button class="kpi-nav-card" onclick="showModule('gs');showKPI('speed')">
@@ -6498,6 +6589,9 @@ function showKPI(kpi) {
     const el = document.getElementById('knc-' + k);
     if (el) el.classList.toggle('active', k === kpi);
   });
+  // Clear total card active state (it was set by showCombinedGap)
+  const kncTotal = document.getElementById('knc-total');
+  if (kncTotal) kncTotal.classList.remove('active');
   // Hide overview landing panel
   const overview = document.getElementById('cnt-gs-overview');
   if (overview) overview.classList.remove('active');
@@ -6682,6 +6776,7 @@ function drillDV(res) {
 
 function handleSlicerChange() {
   initLBFamilyTrendChart();
+  renderCombinedGapTable();
 }
 
 function handleGSDateRange(val) {
@@ -11306,6 +11401,222 @@ function _showWIToast(msg) {
     </div>
   </div>
 </div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   COMBINED GAP ANALYSIS
+   ═══════════════════════════════════════════════════════ */
+
+const CG_FAMILIES = [
+  // Makeup — Zaventem
+  { code:'1055', name:'Lipstick',              plant:'Zaventem', cat:'Makeup',    speed:42400, labor:25100, oee:12300, scrap:2800 },
+  { code:'1042', name:'Mascara',               plant:'Zaventem', cat:'Makeup',    speed:38200, labor:22400, oee:10800, scrap:2500 },
+  { code:'1043', name:'Liquid Foundation',     plant:'Zaventem', cat:'Makeup',    speed:35100, labor:20800, oee:10100, scrap:2200 },
+  { code:'1044', name:'Lip Gloss',             plant:'Zaventem', cat:'Makeup',    speed:31800, labor:19600, oee: 9400, scrap:2000 },
+  { code:'1045', name:'Eyeliner Pencil',       plant:'Zaventem', cat:'Makeup',    speed:28900, labor:17900, oee: 8200, scrap:1800 },
+  { code:'1046', name:'Blush Compact',         plant:'Zaventem', cat:'Makeup',    speed:25700, labor:15800, oee: 7300, scrap:1500 },
+  { code:'1047', name:'Eyeshadow Palette',     plant:'Zaventem', cat:'Makeup',    speed:22900, labor:13700, oee: 6100, scrap:1500 },
+  { code:'1048', name:'Brow Pencil',           plant:'Zaventem', cat:'Makeup',    speed:19800, labor:11700, oee: 5200, scrap:1100 },
+  { code:'1049', name:'Setting Powder',        plant:'Zaventem', cat:'Makeup',    speed:16800, labor:10000, oee: 4400, scrap:1000 },
+  { code:'1050', name:'Concealer Stick',       plant:'Zaventem', cat:'Makeup',    speed:14900, labor: 8900, oee: 3800, scrap: 800 },
+  { code:'1056', name:'Lip Liner',             plant:'Zaventem', cat:'Makeup',    speed:11800, labor: 7100, oee: 3000, scrap: 500 },
+  { code:'1057', name:'Glitter Eyeshadow',     plant:'Zaventem', cat:'Makeup',    speed: 5900, labor: 3700, oee: 1600, scrap: 200 },
+  { code:'1058', name:'Metallic Lipstick',     plant:'Zaventem', cat:'Makeup',    speed: 4700, labor: 2900, oee: 1200, scrap: 150 },
+  { code:'1059', name:'Highlighter Palette',   plant:'Zaventem', cat:'Makeup',    speed: 3700, labor: 2300, oee:  900, scrap: 100 },
+  { code:'1060', name:'Bronzer Compact',       plant:'Zaventem', cat:'Makeup',    speed: 2900, labor: 1800, oee:  700, scrap:  80 },
+  // Skincare — Oevel
+  { code:'1001', name:'Vitamin C Serum',       plant:'Oevel',    cat:'Skincare',  speed:27800, labor:17300, oee: 8500, scrap:1900 },
+  { code:'1002', name:'SPF 50 Moisturizer',    plant:'Oevel',    cat:'Skincare',  speed:23900, labor:14700, oee: 7100, scrap:1500 },
+  { code:'1003', name:'Retinol Night Cream',   plant:'Oevel',    cat:'Skincare',  speed:21800, labor:13500, oee: 6200, scrap:1300 },
+  { code:'1004', name:'Eye Contour Serum',     plant:'Oevel',    cat:'Skincare',  speed:18900, labor:11800, oee: 5400, scrap:1100 },
+  { code:'1005', name:'Hyaluronic Toner',      plant:'Oevel',    cat:'Skincare',  speed:16700, labor:10400, oee: 4700, scrap:1000 },
+  { code:'1006', name:'Brightening Cleanser',  plant:'Oevel',    cat:'Skincare',  speed:14900, labor: 9300, oee: 4100, scrap: 800 },
+  { code:'1007', name:'Glycolic Peel',         plant:'Oevel',    cat:'Skincare',  speed:13800, labor: 8600, oee: 3700, scrap: 700 },
+  { code:'1008', name:'AHA Face Wash',         plant:'Oevel',    cat:'Skincare',  speed:11900, labor: 7400, oee: 3200, scrap: 600 },
+  { code:'1009', name:'Micellar Water',        plant:'Oevel',    cat:'Skincare',  speed:10000, labor: 6300, oee: 2700, scrap: 500 },
+  { code:'1010', name:'BB Cream SPF30',        plant:'Zaventem', cat:'Skincare',  speed: 8900, labor: 5600, oee: 2400, scrap: 400 },
+  { code:'1011', name:'Face Mist SPF15',       plant:'Oevel',    cat:'Skincare',  speed: 7800, labor: 4800, oee: 2000, scrap: 300 },
+  { code:'1012', name:'Exfoliating Scrub',     plant:'Oevel',    cat:'Skincare',  speed: 6900, labor: 4300, oee: 1800, scrap: 300 },
+  { code:'1013', name:'Makeup Remover',        plant:'Zaventem', cat:'Skincare',  speed: 6100, labor: 3800, oee: 1600, scrap: 200 },
+  { code:'1014', name:'Tinted Moisturizer',    plant:'Zaventem', cat:'Skincare',  speed: 5400, labor: 3400, oee: 1400, scrap: 200 },
+  { code:'1015', name:'Sunscreen SPF30',       plant:'Oevel',    cat:'Skincare',  speed: 4900, labor: 3100, oee: 1300, scrap: 150 },
+  { code:'1016', name:'Skin Primer',           plant:'Zaventem', cat:'Skincare',  speed: 4400, labor: 2800, oee: 1100, scrap: 100 },
+  { code:'1017', name:'Aloe Vera Gel',         plant:'Oevel',    cat:'Skincare',  speed: 3400, labor: 2100, oee:  800, scrap: 100 },
+  { code:'1018', name:'Body Lotion 200ml',     plant:'Oevel',    cat:'Skincare',  speed: 2600, labor: 1600, oee:  600, scrap:  60 },
+  { code:'1019', name:'Face Oil 30ml',         plant:'Oevel',    cat:'Skincare',  speed: 2300, labor: 1400, oee:  500, scrap:  60 },
+  // Fragrance — Multiple plants
+  { code:'1061', name:'Eau de Parfum 50ml',    plant:'Multiple', cat:'Fragrance', speed:29800, labor:17600, oee: 8100, scrap:1900 },
+  { code:'1062', name:'EDT Spray 100ml',       plant:'Multiple', cat:'Fragrance', speed:26700, labor:15800, oee: 7200, scrap:1700 },
+  { code:'1063', name:'Body Mist 200ml',       plant:'Oevel',    cat:'Fragrance', speed:17900, labor:10800, oee: 4900, scrap:1000 },
+  { code:'1064', name:'Fragrance Roll-On',     plant:'Zaventem', cat:'Fragrance', speed:10900, labor: 6700, oee: 2900, scrap: 600 },
+  { code:'1065', name:'Perfume Rollerball',    plant:'Zaventem', cat:'Fragrance', speed: 7200, labor: 4500, oee: 1900, scrap: 300 },
+  { code:'1066', name:'Cologne 75ml',          plant:'Multiple', cat:'Fragrance', speed: 5700, labor: 3600, oee: 1500, scrap: 200 },
+  { code:'1067', name:'Gift Set Fragrance',    plant:'Multiple', cat:'Fragrance', speed: 4200, labor: 2600, oee: 1100, scrap: 100 },
+  // Hair Care — Oevel
+  { code:'1071', name:'Shampoo 250ml',         plant:'Oevel',    cat:'Hair Care', speed:15900, labor: 9900, oee: 4300, scrap: 900 },
+  { code:'1072', name:'Conditioner 250ml',     plant:'Oevel',    cat:'Hair Care', speed:13900, labor: 8700, oee: 3800, scrap: 800 },
+  { code:'1073', name:'Hair Mask 200ml',       plant:'Oevel',    cat:'Hair Care', speed:11800, labor: 7300, oee: 3100, scrap: 600 },
+  { code:'1074', name:'Dry Shampoo',           plant:'Oevel',    cat:'Hair Care', speed: 9800, labor: 6100, oee: 2600, scrap: 500 },
+  { code:'1075', name:'Hair Serum',            plant:'Oevel',    cat:'Hair Care', speed: 7900, labor: 4900, oee: 2100, scrap: 400 },
+  { code:'1076', name:'Leave-In Conditioner',  plant:'Oevel',    cat:'Hair Care', speed: 6400, labor: 4000, oee: 1700, scrap: 300 },
+  { code:'1077', name:'Anti-Frizz Spray',      plant:'Oevel',    cat:'Hair Care', speed: 5100, labor: 3200, oee: 1300, scrap: 200 },
+  { code:'1078', name:'Color-Protect Shampoo', plant:'Oevel',    cat:'Hair Care', speed: 3900, labor: 2400, oee:  900, scrap: 100 },
+  { code:'1079', name:'Scalp Treatment',       plant:'Oevel',    cat:'Hair Care', speed: 3100, labor: 1900, oee:  700, scrap:  80 },
+  // Other — Mixed
+  { code:'1091', name:'Hand Cream 75ml',       plant:'Oevel',    cat:'Other',     speed: 8200, labor: 5100, oee: 2200, scrap: 350 },
+  { code:'1092', name:'Body Scrub 200ml',      plant:'Oevel',    cat:'Other',     speed: 6300, labor: 3900, oee: 1600, scrap: 250 },
+  { code:'1093', name:'Deodorant Roll-On',     plant:'Zaventem', cat:'Other',     speed: 5100, labor: 3200, oee: 1300, scrap: 180 },
+  { code:'1094', name:'Lip Balm SPF15',        plant:'Zaventem', cat:'Other',     speed: 3800, labor: 2400, oee:  900, scrap: 120 },
+];
+
+let cgSortCol = 'total';
+let cgSortAsc = false;
+let cgPage    = 0;
+const CG_PAGE_SIZE = 20;
+
+function showCombinedGap() {
+  activeKPI = 'combined';
+  document.querySelectorAll('.kpi-nav-card').forEach(c => c.classList.remove('active'));
+  const knc = document.getElementById('knc-total');
+  if (knc) knc.classList.add('active');
+  const subtabNav = document.getElementById('gs-kpi-subtabs');
+  if (subtabNav) subtabNav.style.display = 'none';
+  document.querySelectorAll('.kpi-cnt').forEach(p => p.classList.remove('active'));
+  const pane = document.getElementById('cnt-combined-gap');
+  if (pane) pane.classList.add('active');
+  cgPage = 0;
+  renderCombinedGapTable();
+}
+
+function showOverview() {
+  activeKPI = null;
+  document.querySelectorAll('.kpi-nav-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.kpi-cnt').forEach(p => p.classList.remove('active'));
+  const subtabNav = document.getElementById('gs-kpi-subtabs');
+  if (subtabNav) subtabNav.style.display = 'none';
+  const overview = document.getElementById('cnt-gs-overview');
+  if (overview) overview.classList.add('active');
+}
+
+function cgGetFilteredData() {
+  const plant = (document.getElementById('gs-plant') || {}).value || '';
+  const allCatsEl = document.getElementById('ms-gs-cat-all');
+  const allCats = !allCatsEl || allCatsEl.checked;
+  const catOpts  = Array.from(document.querySelectorAll('.ms-gs-cat-opt:checked')).map(el => el.value);
+
+  return CG_FAMILIES.filter(f => {
+    if (plant === '3020' && f.plant !== 'Oevel') return false;
+    if (plant === '3030' && f.plant !== 'Zaventem') return false;
+    if (!allCats && catOpts.length > 0 && !catOpts.includes(f.cat)) return false;
+    return true;
+  });
+}
+
+function renderCombinedGapTable() {
+  const pane = document.getElementById('cnt-combined-gap');
+  if (!pane || !pane.classList.contains('active')) return;
+
+  const data = cgGetFilteredData().map(f => ({
+    ...f, total: f.speed + f.labor + f.oee + f.scrap
+  }));
+
+  data.sort((a, b) => {
+    let va, vb;
+    if      (cgSortCol === 'family') { va = a.code;   vb = b.code; }
+    else if (cgSortCol === 'name')   { va = a.name;   vb = b.name; }
+    else if (cgSortCol === 'plant')  { va = a.plant;  vb = b.plant; }
+    else if (cgSortCol === 'pct')    { va = a.total;  vb = b.total; }
+    else                             { va = a[cgSortCol]; vb = b[cgSortCol]; }
+    const cmp = typeof va === 'string' ? va.localeCompare(vb) : (va - vb);
+    return cgSortAsc ? cmp : -cmp;
+  });
+
+  const totalGap  = data.reduce((s, f) => s + f.total, 0);
+  const top10sum  = data.slice(0, 10).reduce((s, f) => s + f.total, 0);
+
+  const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  setTxt('cg-stat-families', data.length);
+  setTxt('cg-stat-total',    '$' + Math.round(totalGap).toLocaleString());
+  setTxt('cg-stat-top10pct', totalGap > 0 ? Math.round(top10sum / totalGap * 100) + '%' : '—');
+
+  const totalPages = Math.max(1, Math.ceil(data.length / CG_PAGE_SIZE));
+  if (cgPage >= totalPages) cgPage = totalPages - 1;
+  const start    = cgPage * CG_PAGE_SIZE;
+  const end      = Math.min(start + CG_PAGE_SIZE, data.length);
+  const pageData = data.slice(start, end);
+
+  const fmtUSD = v => '$' + Math.round(v).toLocaleString();
+  const fmtPct = v  => totalGap > 0 ? (v / totalGap * 100).toFixed(1) + '%' : '—';
+
+  const tbody = document.getElementById('cg-tbody');
+  if (tbody) {
+    tbody.innerHTML = pageData.map((f, i) => `
+      <tr>
+        <td class="rank-col">${start + i + 1}</td>
+        <td style="font-weight:600;">${f.code}</td>
+        <td>${f.name}</td>
+        <td>${f.plant}</td>
+        <td class="right" style="font-weight:700;color:#1565C0;">${fmtUSD(f.total)}</td>
+        <td class="right">${fmtUSD(f.speed)}</td>
+        <td class="right">${fmtUSD(f.labor)}</td>
+        <td class="right">${fmtUSD(f.oee)}</td>
+        <td class="right">${fmtUSD(f.scrap)}</td>
+        <td class="right" style="color:#6B7280;">${fmtPct(f.total)}</td>
+      </tr>`).join('');
+  }
+
+  setTxt('cg-page-info', `Showing ${data.length ? start + 1 : 0}–${end} of ${data.length} families`);
+
+  const prevBtn = document.getElementById('cg-prev-btn');
+  const nextBtn = document.getElementById('cg-next-btn');
+  if (prevBtn) prevBtn.disabled = cgPage === 0;
+  if (nextBtn) nextBtn.disabled = end >= data.length;
+
+  // Update sort arrows
+  ['family','name','plant','total','speed','labor','oee','scrap','pct'].forEach(col => {
+    const el = document.getElementById('cg-sort-' + col);
+    if (!el) return;
+    if (col === cgSortCol) el.textContent = cgSortAsc ? ' ▲' : ' ▼';
+    else el.textContent = '';
+  });
+}
+
+function cgSort(col) {
+  if (cgSortCol === col) {
+    cgSortAsc = !cgSortAsc;
+  } else {
+    cgSortCol = col;
+    cgSortAsc = ['family', 'name', 'plant'].includes(col);
+  }
+  cgPage = 0;
+  renderCombinedGapTable();
+}
+
+function cgChangePage(dir) {
+  cgPage += dir;
+  renderCombinedGapTable();
+}
+
+function exportCombinedGapCSV() {
+  const data = cgGetFilteredData().map(f => ({ ...f, total: f.speed + f.labor + f.oee + f.scrap }));
+  data.sort((a, b) => b.total - a.total);
+  const totalGap = data.reduce((s, f) => s + f.total, 0);
+  const header = ['Rank','Family Code','Family Name','Plant','Total GS Gap $','Speed $','Labor $','OEE $','Scrap $','% of Total'];
+  const rows = data.map((f, i) => [
+    i + 1, f.code, f.name, f.plant,
+    f.total, f.speed, f.labor, f.oee, f.scrap,
+    totalGap > 0 ? (f.total / totalGap * 100).toFixed(1) + '%' : '0%'
+  ]);
+  const csv = [header, ...rows]
+    .map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','))
+    .join('\n');
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(new Blob([csv], { type: 'text/csv' })),
+    download: 'combined-gap-analysis.csv'
+  });
+  a.click();
+}
+</script>
 
 </body>
 </html>
